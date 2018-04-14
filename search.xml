@@ -11,6 +11,52 @@
       
     </entry>
     
+    <entry>
+      <title>Shell 变量简介</title>
+      <link href="/2017/08/20/Linux-Shell-bianliang/"/>
+      <url>/2017/08/20/Linux-Shell-bianliang/</url>
+      <content type="html"><![CDATA[<center><img src="https://houhaiyun.github.io/img/images/Linux-Shell-bianliang.jpg" title="Bash"></center><a id="more"></a><h3 id="什么是变量？"><a href="#什么是变量？" class="headerlink" title="什么是变量？"></a>什么是变量？</h3><p>在程序设计中，变数（英语：<code>variable，scalar</code>）是指一个包含部分已知或未知数值或资讯（即一个值）之储存位址，以及相对应之符号名称（识别字）。通常使用变数名称参照储存值；将名称和内容分开能让被使用的名称独立于所表示的精确讯息之外。电脑源代码中的识别字能在执行期间绑扎一个值，且该变数的值可能在程式执行期间改变。 程序设计中的变数不一定能直接对应到数学中所谓的变数之概念。在程序设计中，变数的值不一定要为方程或数学公式之一部分。程序设计中的变数可使用在一段可重复的程序：在一处赋值，然后使用于另一处，接着在一次赋值，且以相同方式再使用一次（见迭代）。程序设计中的变数通常会给定一个较长的名称，以描述其用途；数学中的变数通常较为简洁，只给定一、两个字母，以方便抄写及操作。</p><h3 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h3><ul><li>强类型：变量不经过强制转换，它永远是这个数据类型，不允许隐式的类型转换。一般定义变量时必须指定类型、参与运算必须符合类型要求；调用未声明变量会产生错误 <ul><li>如：<code>java</code>，<code>c#</code></li></ul></li><li>弱类型：语言的运行时会隐式做数据类型转换。无须指定类型，默认均为字符型；参与运算会自动进行隐式类型转换；变量无须事先定义可直接调用 <ul><li>如：<code>bash</code>不支持浮点数，<code>php</code></li></ul></li></ul><h3 id="shell变量命名规则"><a href="#shell变量命名规则" class="headerlink" title="shell变量命名规则"></a>shell变量命名规则</h3><ol><li>不能使程序中的保留字：例如<code>if</code>, <code>for</code></li><li>只能使用数字、字母及下划线，且不能以数字开头</li><li>见名知义</li><li>统一命名规则：驼峰命名法 </li></ol><h3 id="shell变量种类"><a href="#shell变量种类" class="headerlink" title="shell变量种类"></a>shell变量种类</h3><p><strong>根据变量的生效范围等标准：</strong></p><ul><li>本地变量：生效范围为当前<code>shell</code>进程；对当前<code>shell</code>之外的其它<code>shell</code>进程，包括当前<code>shell</code>的子<code>shell</code>进程均无效 </li><li>环境变量：生效范围为当前<code>shell</code>进程及其子进程 </li><li>局部变量：生效范围为当前<code>shell</code>进程中某代码片断(通常指函数) </li><li>位置变量： <code>$1</code>, <code>$2</code>, …来表示，用于让脚本在脚本代码中调用通过命令行传递给它的参数 </li><li>特殊变量： <code>$?</code>, <code>$0</code>, <code>$*</code>, <code>$@</code>, <code>$#</code>,<code>$$</code> </li></ul><h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="https://zh.wikipedia.org/wiki/%E5%8F%98%E9%87%8F_(%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1" target="_blank" rel="noopener">维基百科：变量</a></p>]]></content>
+      
+      <categories>
+          
+          <category> Linux基础 </category>
+          
+          <category> shell脚本 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Shell变量 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Linux Shell</title>
+      <link href="/2017/07/07/Linux-Shell/"/>
+      <url>/2017/07/07/Linux-Shell/</url>
+      <content type="html"><![CDATA[<p><center><img src="https://houhaiyun.github.io/img/images/Linux-Shell.jpg" title="Linux Shell"></center><br><a id="more"></a></p><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>计算机理解了被称为二进制语言的零语言。在计算的早期，使用二进制语言提供了指令，这对我们所有人来说都是难以阅读和写入的。因此，在操作系统中有一个称为<code>shell</code>的特殊程序。<code>shell</code>接受人类可读命令并将其转换为内核可以读取和处理的内容。</p><h3 id="什么是shell？"><a href="#什么是shell？" class="headerlink" title="什么是shell？"></a>什么是shell？</h3><ul><li><code>shell</code>是一个用户程序，也是为用户交互提供的环境。</li><li>它是一个命令语言解释器，执行从标准输入设备（如键盘或文件）读取的命令。</li><li>当您登录或打开控制台（终端）时，<code>shell</code>将启动。</li><li>快速而脏的方式来执行实用程序。</li><li><code>shell</code>不是系统内核的一部分，而是使用系统内核执行程序，创建文件等。</li></ul><h3 id="Linux提供的shell"><a href="#Linux提供的shell" class="headerlink" title="Linux提供的shell"></a>Linux提供的shell</h3><ul><li><code>BASH</code>（<code>Bourne-Again SHELL</code>） - <code>Linux</code>中最常见的<code>shell</code>。它是开源的，CentOS默认使用 。</li><li><code>CSH</code>（<code>C SHELL</code>） - <code>C shell</code>的语法和用法与<code>C</code>编程语言非常相似。</li><li><code>KSH</code>（<code>Korn shell</code>中） -创建者戴维·科恩在<code>AT＆T</code>贝尔实验室。<code>Korn Shell</code>是<code>POSIX Shell</code>标准规范的基础。</li><li><code>TCSH</code> - 它是<code>Berkeley UNIX C shell</code>（<code>CSH</code>）的增强但完全兼容的版本。</li></ul><p>请注意，每个<code>shell</code>执行相同的作业，但每个<code>shell</code>都会了解不同的命令语法，并提供不同的内置函数。在<code>Windows</code>下，<code>shell</code>名称是<code>cmd.exe</code>，它也用于相同的目的，但它远远不如我们的<code>Linux Shells</code>那么强大！</p><h4 id="显示当前shell"><a href="#显示当前shell" class="headerlink" title="显示当前shell"></a>显示当前shell</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# echo $SHELL#此命令可以显示当前使用的shell，当前使用的为BASH</span><br><span class="line">/bin/bash</span><br></pre></td></tr></table></figure><h4 id="查看当前系统支持的所有shell"><a href="#查看当前系统支持的所有shell" class="headerlink" title="查看当前系统支持的所有shell"></a>查看当前系统支持的所有shell</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# cat /etc/shells </span><br><span class="line">/bin/sh</span><br><span class="line">/bin/bash</span><br><span class="line">/sbin/nologin</span><br><span class="line">/usr/bin/sh</span><br><span class="line">/usr/bin/bash</span><br><span class="line">/usr/sbin/nologin</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/csh</span><br></pre></td></tr></table></figure><h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="https://bash.cyberciti.biz/guide/What_is_Linux_Shell" target="_blank" rel="noopener">维基百科：What is Linux Shell</a></p>]]></content>
+      
+      <categories>
+          
+          <category> Linux基础 </category>
+          
+          <category> Linux Shell </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux Shell </tag>
+            
+        </tags>
+      
+    </entry>
+    
   
   
 </search>
