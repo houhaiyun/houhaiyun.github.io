@@ -215,9 +215,17 @@
     
     <entry>
       <title>Linux 发行版时间线</title>
-      <link href="/2017/07/03/Linux-time_2017_07_03/"/>
-      <url>/2017/07/03/Linux-time_2017_07_03/</url>
-      <content type="html"><![CDATA[<center><img src="http://ovuhiuqqd.bkt.clouddn.com/blog_%E7%AC%AC%E4%B8%89%E7%AB%A0.png"></center><p>​    <strong>时间线请参见：</strong> <a href="https://en.wikipedia.org/wiki/File:Linux_Distribution_Timeline.svg" target="_blank" rel="noopener">Wikipedia</a><br><a id="more"></a></p>]]></content>
+      <link href="/2017/07/03/Linux-time/"/>
+      <url>/2017/07/03/Linux-time/</url>
+      <content type="html"><![CDATA[<center><img src="https://houhaiyun.github.io/img/images/Linux-time-1.png" title="Linux 发行版时间线"></center><a id="more"></a><p><strong>时间线请参见：</strong> <a href="https://en.wikipedia.org/wiki/File:Linux_Distribution_Timeline.svg" target="_blank" rel="noopener">Wikipedia</a></p>]]></content>
+      
+      <categories>
+          
+          <category> Linux基础 </category>
+          
+          <category> Linux发行版时间线 </category>
+          
+      </categories>
       
       
         <tags>
