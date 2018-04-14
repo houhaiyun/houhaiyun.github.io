@@ -294,6 +294,14 @@
       <url>/2017/07/01/Linux-ABI-API/</url>
       <content type="html"><![CDATA[<h3 id="ABI"><a href="#ABI" class="headerlink" title="ABI"></a>ABI</h3><p>应用二进制接口（英语：<code>application binary interface</code>，缩写为 <code>ABI</code>）描述了应用程序（或者其他类型）和操作系统之间或其他应用程序的低级接口。允许编译好的目标代码在使用兼容<code>ABI</code>的系统中无需改动就能运行。<br><a id="more"></a></p><h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>应用程序接口（英语：<code>Application Programming Interface</code>，简称：<code>API</code>），又称为应用编程接口，就是软件系统不同组成部分衔接的约定。</p><p>API定义了源代码和库之间的接口，因此同样的源代码可以在支持这个API的任何系统中编译。</p><center><img src="https://houhaiyun.github.io/img/images/ABI-API.gif" title="ABI and API"></center><h4 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h4><p><a href="https://zh.wikipedia.org/wiki/%E5%BA%94%E7%94%A8%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%8E%A5%E5%8F%A3" target="_blank" rel="noopener">维基百科：应用二进制接口</a></p><p><a href="https://zh.wikipedia.org/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3" target="_blank" rel="noopener">维基百科：应用程序接口</a></p>]]></content>
       
+      <categories>
+          
+          <category> 计算机基础知识 </category>
+          
+          <category> ABI和API </category>
+          
+      </categories>
+      
       
         <tags>
             
