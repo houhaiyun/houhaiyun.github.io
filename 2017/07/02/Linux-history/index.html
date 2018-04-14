@@ -15,20 +15,23 @@
 
 
 
-<meta name="description" content="LVS的调度算法分为静态与动态两类：">
-<meta name="keywords" content="LVS">
+<meta name="description" content="Linux之前的UNIX历史： 1969年以前伟大的梦想-贝尔实验室 （Bell Labs）通用电气（General Electric）和麻省理工学院（MIT）的Multics系统。   1969年Ken Thompson使用汇编语言B语言File Server System。">
+<meta name="keywords" content="Linux历史">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LVS调度算法">
-<meta property="og:url" content="https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa-2017-10-21/index.html">
+<meta property="og:title" content="Linux 历史?">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/07/02/Linux-history/index.html">
 <meta property="og:site_name" content="houhaiyun">
-<meta property="og:description" content="LVS的调度算法分为静态与动态两类：">
+<meta property="og:description" content="Linux之前的UNIX历史： 1969年以前伟大的梦想-贝尔实验室 （Bell Labs）通用电气（General Electric）和麻省理工学院（MIT）的Multics系统。   1969年Ken Thompson使用汇编语言B语言File Server System。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/lvs.jpg">
-<meta property="og:updated_time" content="2018-04-14T03:18:58.681Z">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-history-1.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-history-2.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-history-3.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-history-4.jpg">
+<meta property="og:updated_time" content="2018-04-14T10:34:42.867Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LVS调度算法">
-<meta name="twitter:description" content="LVS的调度算法分为静态与动态两类：">
-<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/lvs.jpg">
+<meta name="twitter:title" content="Linux 历史?">
+<meta name="twitter:description" content="Linux之前的UNIX历史： 1969年以前伟大的梦想-贝尔实验室 （Bell Labs）通用电气（General Electric）和麻省理工学院（MIT）的Multics系统。   1969年Ken Thompson使用汇编语言B语言File Server System。">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Linux-history-1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -58,7 +61,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>LVS调度算法 | houhaiyun</title>
+<title>Linux 历史? | houhaiyun</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -289,11 +292,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Linux-LVS-suanfa-2017-10-21" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="title-Linux-history" class="article article-type-title" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/" class="article-date">
-      <time datetime="2017-10-21T22:50:34.000Z" itemprop="datePublished">2017-10-21</time>
+      <a href="/2017/07/02/Linux-history/" class="article-date">
+      <time datetime="2017-07-02T17:05:33.000Z" itemprop="datePublished">2017-07-02</time>
 </a>
 
 
@@ -308,7 +311,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      LVS调度算法
+      Linux 历史?
     </h1>
   
 
@@ -316,10 +319,14 @@
       
       <div class="article-info article-info-post">
         
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/Linux历史/">Linux历史</a>
+    </div>
+
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LVS/">LVS</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux历史/">Linux历史</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -329,24 +336,45 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="LVS的调度算法分为静态与动态两类："><a href="#LVS的调度算法分为静态与动态两类：" class="headerlink" title="LVS的调度算法分为静态与动态两类："></a>LVS的调度算法分为静态与动态两类：</h3><center><img src="http://ovuhiuqqd.bkt.clouddn.com/lvs.jpg"></center>
+        <h3 id="Linux之前的UNIX历史："><a href="#Linux之前的UNIX历史：" class="headerlink" title="Linux之前的UNIX历史："></a><code>Linux</code>之前的<code>UNIX</code>历史：</h3><ul>
+<li>1969年以前伟大的梦想-贝尔实验室 （<code>Bell Labs</code>）通用电气（<code>General Electric</code>）和麻省理工学院（<code>MIT</code>）的<code>Multics</code>系统。</li>
+</ul>
+<ul>
+<li>1969年<code>Ken Thompson</code>使用汇编语言<code>B</code>语言<code>File Server System</code>。<a id="more"></a>
+</li>
+</ul>
+<ul>
+<li>1973年<code>UNIX</code>正式诞生，<code>Ritchie</code>等人以<code>C</code>语言写出第一个正式内核。</li>
+</ul>
+<ul>
+<li>1977年重要的<code>UNIX</code>分支-<code>BSD</code>诞生。</li>
+</ul>
+<pre><code>伯克利大学的Bill Joy在取得了UNIX的内核源码后，修改成为自己的版本，并重新命名为Berkeley Software Distribution(BSD)。BSD是UNIX很重要的一个分支，Bill Joy也是Sun这家公司的创办者。
+</code></pre><ul>
+<li>1979年重要的<code>System V</code>架构与版权声明。</li>
+</ul>
+<pre><code>由于当时UNIX的高度可移植性与强大的性能，也没有版权纠纷，所以很多商业公司开始了UNIX操作系统的开发。例如：AT&amp;A自家的System V、IBM的AIX等。不过因为AT&amp;T由于商业的考略，于是想将UNIX的版权收回去。因此，AT&amp;T在1979年发行的第七版UNIX中，特别提到了“不可对学生提供源码”的严格限制。
+</code></pre><ul>
+<li><strong>1984年</strong>：</li>
+</ul>
+<pre><code>X86架构的Minix操作系统诞生。关于1979的版权声明中，影响最大的当然就是学校里的教授了。于是荷兰阿姆斯特丹自由大学计算机科学系Andrew S. Tanenbaum开始编写内核程序，到了1986年终于完成，并于次年出版Minix相关书籍，同时雨新闻组（BBS及News）相结合。    - Richard Stallman发起GNU项目和自由软件基金会。
+    创建开源的UNIX实用工具版本
+    创建通用公共许可证（GPL）
+    开源软件许可实施原则
+</code></pre><ul>
+<li>1991年：<code>Linus Torvalds</code>发布<code>Linux</code>创建开放源码，类<code>Unix</code>的内核，在<code>GPL</code>下发布。</li>
+</ul>
+<h3 id="老照片哦"><a href="#老照片哦" class="headerlink" title="老照片哦(^_^)"></a>老照片哦(^_^)</h3><h4 id="Ken-Thompson-和Dennis-Ritchie"><a href="#Ken-Thompson-和Dennis-Ritchie" class="headerlink" title="Ken Thompson 和Dennis Ritchie"></a><center>Ken Thompson 和Dennis Ritchie</center></h4><center><img src="https://houhaiyun.github.io/img/images/Linux-history-1.jpg" title="Ken Thompson 和Dennis Ritchie"></center>
 
-<a id="more"></a>
-<h4 id="1-静态算法（4种）：只根据算法进行调度-而不考虑后端服务器的实际连接情况和负载情况"><a href="#1-静态算法（4种）：只根据算法进行调度-而不考虑后端服务器的实际连接情况和负载情况" class="headerlink" title="1.静态算法（4种）：只根据算法进行调度 而不考虑后端服务器的实际连接情况和负载情况"></a>1.静态算法（4种）：只根据算法进行调度 而不考虑后端服务器的实际连接情况和负载情况</h4><blockquote>
-<p>①.RR：轮叫调度（Round Robin）<br>　 调度器通过”轮叫”调度算法将外部请求按顺序轮流分配到集群中的真实服务器上，它均等地对待每一台服务器，而不管服务器上实际的连接数和系统负载｡</p>
-<p>②.WRR：加权轮叫（Weight RR）<br>　 调度器通过“加权轮叫”调度算法根据真实服务器的不同处理能力来调度访问请求。这样可以保证处理能力强的服务器处理更多的访问流量。调度器可以自动问询真实服务器的负载情况,并动态地调整其权值。</p>
-<p>③.DH：目标地址散列调度（Destination Hash ）<br>　 根据请求的目标IP地址，作为散列键(HashKey)从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。</p>
-<p>④.SH：源地址 hash（Source Hash）<br>　 源地址散列”调度算法根据请求的源IP地址，作为散列键(HashKey)从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空｡</p>
-</blockquote>
-<h4 id="2-动态算法（6种）：前端的调度器会根据后端真实服务器的实际连接情况来分配请求"><a href="#2-动态算法（6种）：前端的调度器会根据后端真实服务器的实际连接情况来分配请求" class="headerlink" title="2.动态算法（6种）：前端的调度器会根据后端真实服务器的实际连接情况来分配请求"></a>2.动态算法（6种）：前端的调度器会根据后端真实服务器的实际连接情况来分配请求</h4><blockquote>
-<p>①.LC：最少链接（Least Connections）<br>　 调度器通过”最少连接”调度算法动态地将网络请求调度到已建立的链接数最少的服务器上。如果集群系统的真实服务器具有相近的系统性能，采用”最小连接”调度算法可以较好地均衡负载。</p>
-<p>②.WLC：加权最少连接(默认采用的就是这种)（Weighted Least Connections）<br>　 在集群系统中的服务器性能差异较大的情况下，调度器采用“加权最少链接”调度算法优化负载均衡性能，具有较高权值的服务器将承受较大比例的活动连接负载｡调度器可以自动问询真实服务器的负载情况,并动态地调整其权值。</p>
-<p>③.SED：最短延迟调度（Shortest Expected Delay ）<br>　 在WLC基础上改进，Overhead = （ACTIVE+1）*256/加权，不再考虑非活动状态，把当前处于活动状态的数目+1来实现，数目最小的，接受下次请求，+1的目的是为了考虑加权的时候，非活动连接过多缺陷：当权限过大的时候，会倒置空闲服务器一直处于无连接状态。</p>
-<p>④.NQ永不排队/最少队列调度（Never Queue Scheduling NQ）<br>　 无需队列。如果有台 realserver的连接数＝0就直接分配过去，不需要再进行sed运算，保证不会有一个主机很空间。在SED基础上无论+几，第二次一定给下一个，保证不会有一个主机不会很空闲着，不考虑非活动连接，才用NQ，SED要考虑活动状态连接，对于DNS的UDP不需要考虑非活动连接，而httpd的处于保持状态的服务就需要考虑非活动连接给服务器的压力。</p>
-<p>⑤.LBLC：基于局部性的最少链接（locality-Based Least Connections）<br>　 基于局部性的最少链接”调度算法是针对目标IP地址的负载均衡，目前主要用于Cache集群系统｡该算法根据请求的目标IP地址找出该目标IP地址最近使用的服务器，若该服务器是可用的且没有超载，将请求发送到该服务器;若服务器不存在，或者该服务器超载且有服务器处于一半的工作负载，则用“最少链接”的原则选出一个可用的服务器，将请求发送到该服务器｡</p>
-<p>⑥. LBLCR：带复制的基于局部性最少连接（Locality-Based Least Connections with Replication）<br>　 带复制的基于局部性最少链接”调度算法也是针对目标IP地址的负载均衡，目前主要用于Cache集群系统｡它与LBLC算法的不同之处是它要维护从一个目标IP地址到一组服务器的映射，而LBLC算法维护从一个目标IP地址到一台服务器的映射｡该算法根据请求的目标IP地址找出该目标IP地址对应的服务器组，按”最小连接”原则从服务器组中选出一台服务器，若服务器没有超载，将请求发送到该服务器；若服务器超载，则按“最小连接”原则从这个集群中选出一台服务器，将该服务器加入到服务器组中，将请求发送到该服务器｡同时，当该服务器组有一段时间没有被修改，将最忙的服务器从服务器组中删除，以降低复制的程度。</p>
-</blockquote>
-<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://www.178linux.com/13570" target="_blank" rel="noopener">本文来自：Linux运维部落-LVS原理详解</a></p>
+<h4 id="Richard-Matthew-Stallman"><a href="#Richard-Matthew-Stallman" class="headerlink" title="Richard Matthew Stallman"></a><center>Richard Matthew Stallman</center></h4><center><img src="https://houhaiyun.github.io/img/images/Linux-history-2.jpg" title="Richard Matthew Stallman"></center>
+
+<h4 id="Linus-Torvalds-1991"><a href="#Linus-Torvalds-1991" class="headerlink" title="Linus Torvalds, 1991"></a><center>Linus Torvalds, 1991</center></h4><center><img src="https://houhaiyun.github.io/img/images/Linux-history-3.jpg" title="Linus Torvalds, 1991"></center>
+
+<h4 id="Linus-Torvalds给Minix新闻组的历史消息"><a href="#Linus-Torvalds给Minix新闻组的历史消息" class="headerlink" title="Linus Torvalds给Minix新闻组的历史消息"></a><center>Linus Torvalds给Minix新闻组的历史消息</center></h4><p><code>Linus Torvalds</code> 在芬兰赫尔辛基开始了 <code>Linux</code> 内核开发，他是为他的硬件-<code>Intel 30386 CPU</code>编写的程序。他也使用<code>Minix</code>和<code>GNU C</code>编译器。下面是<code>Linus Torvalds</code>给<code>Minix</code>新闻组的历史消息：</p>
+<center><img src="https://houhaiyun.github.io/img/images/Linux-history-4.jpg" title="Linus Torvalds给Minix新闻组的历史消息"></center>
+
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="https://linux.cn/article-6469-1.html" target="_blank" rel="noopener">老照片：Linux的24 年历史，一步一个脚印</a></p>
+<p><a href="http://linux.vbird.org/" target="_blank" rel="noopener">鸟哥<code>linux</code>私房菜</a></p>
 
       
     </div>
@@ -355,13 +383,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/">LVS调度算法</a></p>
+        <p><span>本文标题:</span><a href="/2017/07/02/Linux-history/">Linux 历史?</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
-        <p><span>发布时间:</span>2017-10-21, 22:50:34</p>
-        <p><span>最后更新:</span>2018-04-14, 03:18:58</p>
+        <p><span>发布时间:</span>2017-07-02, 17:05:33</p>
+        <p><span>最后更新:</span>2018-04-14, 10:34:42</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/" title="LVS调度算法">https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa-2017-10-21/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa-2017-10-21/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/07/02/Linux-history/" title="Linux 历史?">https://houhaiyun.github.io/2017/07/02/Linux-history/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/07/02/Linux-history/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -373,10 +401,16 @@
 
     <nav id="article-nav">
         
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/07/02/Linux-open-source-2017-07-02/">
+                    常见开源协议
+                </a>
+            </div>
+        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/10/21/Linux-LVS-2017-10-21/">
-                    LVS负载均衡技术
+                <a href="/2017/07/01/Linux/">
+                    什么Linux？
                 </a>
             </div>
         
@@ -388,7 +422,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#LVS的调度算法分为静态与动态两类："><span class="toc-number">1.</span> <span class="toc-text">LVS的调度算法分为静态与动态两类：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-静态算法（4种）：只根据算法进行调度-而不考虑后端服务器的实际连接情况和负载情况"><span class="toc-number">1.1.</span> <span class="toc-text">1.静态算法（4种）：只根据算法进行调度 而不考虑后端服务器的实际连接情况和负载情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-动态算法（6种）：前端的调度器会根据后端真实服务器的实际连接情况来分配请求"><span class="toc-number">1.2.</span> <span class="toc-text">2.动态算法（6种）：前端的调度器会根据后端真实服务器的实际连接情况来分配请求</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">2.</span> <span class="toc-text">致谢</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux之前的UNIX历史："><span class="toc-number">1.</span> <span class="toc-text">Linux之前的UNIX历史：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#老照片哦"><span class="toc-number">2.</span> <span class="toc-text">老照片哦(^_^)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ken-Thompson-和Dennis-Ritchie"><span class="toc-number">2.1.</span> <span class="toc-text">Ken Thompson 和Dennis Ritchie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Richard-Matthew-Stallman"><span class="toc-number">2.2.</span> <span class="toc-text">Richard Matthew Stallman</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linus-Torvalds-1991"><span class="toc-number">2.3.</span> <span class="toc-text">Linus Torvalds, 1991</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linus-Torvalds给Minix新闻组的历史消息"><span class="toc-number">2.4.</span> <span class="toc-text">Linus Torvalds给Minix新闻组的历史消息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">3.</span> <span class="toc-text">致谢</span></a></li></ol>
         
     </div>
     <style>
@@ -424,7 +458,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"LVS调度算法　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"Linux 历史?　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -464,13 +498,15 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+            <a href="/2017/07/02/Linux-open-source-2017-07-02/" title="上一篇: 常见开源协议">
+                <i class="fa fa-angle-left"></i>
+            </a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/10/21/Linux-LVS-2017-10-21/" title="下一篇: LVS负载均衡技术">
+            <a href="/2017/07/01/Linux/" title="下一篇: 什么Linux？">
                 <i class="fa fa-angle-right"></i>
             </a>
         
