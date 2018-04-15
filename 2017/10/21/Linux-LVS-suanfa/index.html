@@ -16,19 +16,19 @@
 
 
 <meta name="description" content="LVS的调度算法分为静态与动态两类：">
-<meta name="keywords" content="LVS">
+<meta name="keywords" content="LVS调度算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LVS调度算法">
-<meta property="og:url" content="https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa-2017-10-21/index.html">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa/index.html">
 <meta property="og:site_name" content="houhaiyun">
 <meta property="og:description" content="LVS的调度算法分为静态与动态两类：">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/lvs.jpg">
-<meta property="og:updated_time" content="2018-04-14T03:18:58.681Z">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-suanfa-1.jpg">
+<meta property="og:updated_time" content="2018-04-15T14:57:37.749Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LVS调度算法">
 <meta name="twitter:description" content="LVS的调度算法分为静态与动态两类：">
-<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/lvs.jpg">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-suanfa-1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -202,7 +202,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS/">LVS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
                     </div>
                 </section>
                 
@@ -289,10 +289,10 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Linux-LVS-suanfa-2017-10-21" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Linux-LVS-suanfa" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/" class="article-date">
+      <a href="/2017/10/21/Linux-LVS-suanfa/" class="article-date">
       <time datetime="2017-10-21T22:50:34.000Z" itemprop="datePublished">2017-10-21</time>
 </a>
 
@@ -316,10 +316,14 @@
       
       <div class="article-info article-info-post">
         
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/负载均衡/">负载均衡</a><a class="article-category-link" href="/categories/负载均衡/LVS调度算法/">LVS调度算法</a>
+    </div>
+
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LVS/">LVS</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -329,7 +333,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="LVS的调度算法分为静态与动态两类："><a href="#LVS的调度算法分为静态与动态两类：" class="headerlink" title="LVS的调度算法分为静态与动态两类："></a>LVS的调度算法分为静态与动态两类：</h3><center><img src="http://ovuhiuqqd.bkt.clouddn.com/lvs.jpg"></center>
+        <h3 id="LVS的调度算法分为静态与动态两类："><a href="#LVS的调度算法分为静态与动态两类：" class="headerlink" title="LVS的调度算法分为静态与动态两类："></a>LVS的调度算法分为静态与动态两类：</h3><center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-suanfa-1.jpg" title="LVS调度算法"></center>
 
 <a id="more"></a>
 <h4 id="1-静态算法（4种）：只根据算法进行调度-而不考虑后端服务器的实际连接情况和负载情况"><a href="#1-静态算法（4种）：只根据算法进行调度-而不考虑后端服务器的实际连接情况和负载情况" class="headerlink" title="1.静态算法（4种）：只根据算法进行调度 而不考虑后端服务器的实际连接情况和负载情况"></a>1.静态算法（4种）：只根据算法进行调度 而不考虑后端服务器的实际连接情况和负载情况</h4><blockquote>
@@ -355,13 +359,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/">LVS调度算法</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
         <p><span>发布时间:</span>2017-10-21, 22:50:34</p>
-        <p><span>最后更新:</span>2018-04-14, 03:18:58</p>
+        <p><span>最后更新:</span>2018-04-15, 14:57:37</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/" title="LVS调度算法">https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa-2017-10-21/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa-2017-10-21/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/21/Linux-LVS-suanfa/" title="LVS调度算法">https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/21/Linux-LVS-suanfa/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -476,7 +480,7 @@
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
 
 
 
