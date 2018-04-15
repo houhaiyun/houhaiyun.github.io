@@ -16,24 +16,24 @@
 
 
 <meta name="description" content="LVS 集群的通用结构LVS集群采用 IP 负载均衡技术，属于 IP 层的交换（L4） , 具有很好的吞吐率。调度器分析客户端到服务器的 IP 报头信息， 将请求均衡地转移到不同的服务器上执行，且调度器自动屏蔽掉服务器的故障，从而将一组服务器构成一个高性能的、高可用的虚拟服务器， LVS 集群系统的通用结构如图所示， 主要包含四大部分：">
-<meta name="keywords" content="LVS">
+<meta name="keywords" content="LVS负载均衡技术">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LVS负载均衡技术">
-<meta property="og:url" content="https://houhaiyun.github.io/2017/10/21/Linux-LVS-2017-10-21/index.html">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/21/Linux-LVS/index.html">
 <meta property="og:site_name" content="houhaiyun">
 <meta property="og:description" content="LVS 集群的通用结构LVS集群采用 IP 负载均衡技术，属于 IP 层的交换（L4） , 具有很好的吞吐率。调度器分析客户端到服务器的 IP 报头信息， 将请求均衡地转移到不同的服务器上执行，且调度器自动屏蔽掉服务器的故障，从而将一组服务器构成一个高性能的、高可用的虚拟服务器， LVS 集群系统的通用结构如图所示， 主要包含四大部分：">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/LVS-%E7%BB%93%E6%9E%84.jpg">
-<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/LVS-NAT.jpg">
-<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/VS-NAT.jpg">
-<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/LVS-DR.jpg">
-<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/VS-DR.jpg">
-<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/VS-TUN.jpg">
-<meta property="og:updated_time" content="2018-04-14T03:18:58.681Z">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-1.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-2.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-3.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-4.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-5.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-6.jpg">
+<meta property="og:updated_time" content="2018-04-15T14:54:01.303Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LVS负载均衡技术">
 <meta name="twitter:description" content="LVS 集群的通用结构LVS集群采用 IP 负载均衡技术，属于 IP 层的交换（L4） , 具有很好的吞吐率。调度器分析客户端到服务器的 IP 报头信息， 将请求均衡地转移到不同的服务器上执行，且调度器自动屏蔽掉服务器的故障，从而将一组服务器构成一个高性能的、高可用的虚拟服务器， LVS 集群系统的通用结构如图所示， 主要包含四大部分：">
-<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/LVS-%E7%BB%93%E6%9E%84.jpg">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Linux-LVS-1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -207,7 +207,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS/">LVS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS/">LVS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
                     </div>
                 </section>
                 
@@ -294,10 +294,10 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Linux-LVS-2017-10-21" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Linux-LVS" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/21/Linux-LVS-2017-10-21/" class="article-date">
+      <a href="/2017/10/21/Linux-LVS/" class="article-date">
       <time datetime="2017-10-21T22:49:55.000Z" itemprop="datePublished">2017-10-21</time>
 </a>
 
@@ -321,10 +321,14 @@
       
       <div class="article-info article-info-post">
         
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/负载均衡/">负载均衡</a><a class="article-category-link" href="/categories/负载均衡/LVS负载均衡技术/">LVS负载均衡技术</a>
+    </div>
+
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LVS/">LVS</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -336,7 +340,7 @@
           
         <h3 id="LVS-集群的通用结构"><a href="#LVS-集群的通用结构" class="headerlink" title="LVS 集群的通用结构"></a>LVS 集群的通用结构</h3><p><code>LVS</code>集群采用 <code>IP</code> 负载均衡技术，属于 <code>IP</code> 层的交换（<code>L4</code>） , 具有很好的吞吐率。调度器分析客户端到服务器的 <code>IP</code> 报头信息， 将请求均衡地转移到不同的服务器上执行，且调度器自动屏蔽掉服务器的故障，从而将一组服务器构成一个高性能的、高可用的虚拟服务器， <code>LVS</code> 集群系统的通用结构如图所示， 主要包含四大部分：</p>
 <a id="more"></a>
-<center><img src="http://ovuhiuqqd.bkt.clouddn.com/LVS-%E7%BB%93%E6%9E%84.jpg"></center>
+<center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-1.jpg" title="LVS 集群的通用结构"></center>
 
 
 <p><strong>负载调度器</strong>（<code>load balancer</code>），它是整个集群对外面的前端机，负责将客户的请求发送到一组服务器上执行，而客户认为服务是来自一个 <code>IP</code> 地址上的。当客户请求到达时，调度器只根据负载情况从服务器池中选出一个服务器，将该请求转发到选出的服务器，并记录这个调度；当这个请求的其他报文到达，也会被转发到前面选出的服务器。因为所有的操作都是在操作系统核心空间中将完成的，它的调度开销很小，所以具有很高的吞吐率</p>
@@ -345,19 +349,19 @@
 <p><strong><code>Graphic Monitor</code></strong> 是为系统管理员提供整个集群系统的监视器，它可以监视系统中每个结点的状况。</p>
 <h3 id="IP-负载均衡技术"><a href="#IP-负载均衡技术" class="headerlink" title="IP 负载均衡技术"></a>IP 负载均衡技术</h3><p>在已有的 <code>IP</code> 负载均衡技术中有三种（据说还有第四种<code>lvs-fullnat</code>，本文中不会涉及），一是通过网络地址转换实现虚拟服务器的 <code>VS/NAT</code> 技术（<code>Virtual Server via Network Address Translation</code>）， 二是通过直接路由的 <code>VS/DR</code> 技术（<code>Virtual Server via Direct Routing</code>），三是通过 <code>IP</code> 隧道实现虚拟服务器的 <code>VS/TUN</code> 技术（<code>Virtual Server via IP Tunneling</code>）。</p>
 <h3 id="通过NAT实现虚拟服务器（VS-NAT）"><a href="#通过NAT实现虚拟服务器（VS-NAT）" class="headerlink" title="通过NAT实现虚拟服务器（VS/NAT）"></a>通过NAT实现虚拟服务器（VS/NAT）</h3><p><code>VS/NAT</code> 的体系结构如下图所示， 在一组服务器前有一个调度器，它们是通过 Switch 相连接的。这些服务器提供相同的网络服务、相同的内容，即不管请求被发送到哪一台服务器，执行结果是一样的。</p>
-<center><img src="http://ovuhiuqqd.bkt.clouddn.com/LVS-NAT.jpg"></center>
+<center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-2.jpg" title="VS/NAT 的体系结构"></center>
 
-<h4 id="通过如下的VS-NAT配置为例，来了解报文的结构："><a href="#通过如下的VS-NAT配置为例，来了解报文的结构：" class="headerlink" title="通过如下的VS/NAT配置为例，来了解报文的结构："></a>通过如下的VS/NAT配置为例，来了解报文的结构：</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/VS-NAT.jpg"></center>
+<h4 id="通过如下的VS-NAT配置为例，来了解报文的结构："><a href="#通过如下的VS-NAT配置为例，来了解报文的结构：" class="headerlink" title="通过如下的VS/NAT配置为例，来了解报文的结构："></a>通过如下的VS/NAT配置为例，来了解报文的结构：</h4><center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-3.jpg" title="报文的结构"></center>
 
 
 <h3 id="通过直接路由实现虚拟服务器（VS-DR）"><a href="#通过直接路由实现虚拟服务器（VS-DR）" class="headerlink" title="通过直接路由实现虚拟服务器（VS/DR）"></a>通过直接路由实现虚拟服务器（VS/DR）</h3><p>在 <code>VS/NAT</code> 的集群系统中，请求和响应的数据报文都需要通过负载调度器，当真实服务器的数目在 10 台和 20 台之间时，负载调度器将成为整个集群系统的新瓶颈。大多数 <code>Internet</code> 服务都有这样的特点：请求报文较短而响应报文往往含大量的数据。如果能将请求和响应分开处理，即在负载调度器中只负责调度请求而响应直接返回给客户，将极大地提高整个集群系统的吞吐量。 <code>VS/DR</code> 的体系结构如下图所示：调度器和服务器组都必须在物理上有一个网卡通过不分断的局域相连，如通过交换机或者高速的 HUB 相连。 <code>VIP</code> 地址为调度器和服务器组共享，调度器配置的 <code>VIP</code> 地址是对外可见的，用于接收虚拟服务的请求报文；所有的服务器把 <code>VIP</code> 地址配置在各自的 <code>Non-ARP</code> 网络设备上，它对外面是不可见的，只是用于处理目标地址为 <code>VIP</code> 的网络请求。</p>
-<center><img src="http://ovuhiuqqd.bkt.clouddn.com/LVS-DR.jpg"></center>
+<center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-4.jpg" title="通过直接路由实现虚拟服务器（VS/DR）"></center>
 
 
-<h4 id="通过如下的VS-DR配置为例，来了解报文的结构："><a href="#通过如下的VS-DR配置为例，来了解报文的结构：" class="headerlink" title="通过如下的VS/DR配置为例，来了解报文的结构："></a>通过如下的VS/DR配置为例，来了解报文的结构：</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/VS-DR.jpg"></center>
+<h4 id="通过如下的VS-DR配置为例，来了解报文的结构："><a href="#通过如下的VS-DR配置为例，来了解报文的结构：" class="headerlink" title="通过如下的VS/DR配置为例，来了解报文的结构："></a>通过如下的VS/DR配置为例，来了解报文的结构：</h4><center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-5.jpg" title="VS/DR配置"></center>
 
 <h3 id="通过-IP-隧道实现虚拟服务器（VS-TUN）"><a href="#通过-IP-隧道实现虚拟服务器（VS-TUN）" class="headerlink" title="通过 IP 隧道实现虚拟服务器（VS/TUN）"></a>通过 IP 隧道实现虚拟服务器（VS/TUN）</h3><p>跟 <code>VS/DR</code> 方法相同， <code>VS/TUN</code> 多数 <code>Internet</code> 服务的非对称特点，负载调度器中只负责调度请求，而服务器直接将响应返回给客户，可以极大地提高整个集群系统的吞吐量。 <code>IP</code> 隧道（<code>IP tunneling</code>）是将一个 <code>IP</code> 报文封装在另一个 <code>IP</code>报文的技术，这可以使得目标为一个 IP 地址的数据报文能被封装和转发到另一个<code>IP</code> 地址。我们利用 <code>IP</code> 隧道技术将请求报文封装转发给后端服务器，响应报文能从后端服务器直接返回给客户。但在这里，后端服务器有一组而非一个，所以我们不可能静态地建立一一对应的隧道，而是动态地选择一台服务器，将请求报文封装和转发给选出的服务器。这样，我们可以利用 <code>IP</code> 隧道的原理将一组服务器上的网络服务组成在一个 <code>IP</code> 地址上的虚拟网络服务。 <code>VS/TUN</code> 的体系结构如图 3.3 所示，各个服务器将 <code>VIP</code> 地址配置在自己的 <code>IP</code> 隧道设备上。 <code>VS/TUN</code> 的体系结构如图 1.7 所示</p>
-<center><img src="http://ovuhiuqqd.bkt.clouddn.com/VS-TUN.jpg"></center>
+<center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-6.jpg" title="通过 IP 隧道实现虚拟服务器（VS/TUN）"></center>
 
 <h3 id="三种IP负载均衡技术比较"><a href="#三种IP负载均衡技术比较" class="headerlink" title="三种IP负载均衡技术比较"></a>三种IP负载均衡技术比较</h3><p>三种 IP 负载均衡技术的优缺点归纳在下表中：</p>
 <table>
@@ -408,13 +412,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/21/Linux-LVS-2017-10-21/">LVS负载均衡技术</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
         <p><span>发布时间:</span>2017-10-21, 22:49:55</p>
-        <p><span>最后更新:</span>2018-04-14, 03:18:58</p>
+        <p><span>最后更新:</span>2018-04-15, 14:54:01</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/21/Linux-LVS-2017-10-21/" title="LVS负载均衡技术">https://houhaiyun.github.io/2017/10/21/Linux-LVS-2017-10-21/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/21/Linux-LVS-2017-10-21/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/21/Linux-LVS/" title="LVS负载均衡技术">https://houhaiyun.github.io/2017/10/21/Linux-LVS/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/21/Linux-LVS/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -537,7 +541,7 @@
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-2017-10-21/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa-2017-10-21/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
 
 
 
