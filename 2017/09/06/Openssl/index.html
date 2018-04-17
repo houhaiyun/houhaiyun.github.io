@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="概念：PKI、CA、X.509PKI: Public Key Infrastructure  公开密钥基础建设： 是一组由硬件、软件、参与者、管理政策与流程组成的基础架构，其目的在于创造、管理、分配、使用、存储以及撤销数字证书。 X.509： 是由ITU-T为了公开密钥基础建设（PKI）与授权管理基础建设（PMI）提出的产业标准。X.509标准，规范了公开密钥认证、证书吊销列表、授权证书、证书路径">
+<meta name="keywords" content="Openssl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Openssl证书请求和自签名">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/09/06/Openssl/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="概念：PKI、CA、X.509PKI: Public Key Infrastructure  公开密钥基础建设： 是一组由硬件、软件、参与者、管理政策与流程组成的基础架构，其目的在于创造、管理、分配、使用、存储以及撤销数字证书。 X.509： 是由ITU-T为了公开密钥基础建设（PKI）与授权管理基础建设（PMI）提出的产业标准。X.509标准，规范了公开密钥认证、证书吊销列表、授权证书、证书路径">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/1f1e9-1f1ea.png?v8">
+<meta property="og:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4bf.png?v8">
+<meta property="og:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4bf.png?v8">
+<meta property="og:updated_time" content="2018-04-17T13:35:03.102Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Openssl证书请求和自签名">
+<meta name="twitter:description" content="概念：PKI、CA、X.509PKI: Public Key Infrastructure  公开密钥基础建设： 是一组由硬件、软件、参与者、管理政策与流程组成的基础架构，其目的在于创造、管理、分配、使用、存储以及撤销数字证书。 X.509： 是由ITU-T为了公开密钥基础建设（PKI）与授权管理基础建设（PMI）提出的产业标准。X.509标准，规范了公开密钥认证、证书吊销列表、授权证书、证书路径">
+<meta name="twitter:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/1f1e9-1f1ea.png?v8">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Openssl证书请求和自签名 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIDE/">AIDE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cron/">Cron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropbear/">Dropbear</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Haproxy/">Haproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KeepAlived/">KeepAlived</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP搭建WordPress/">LNAMP搭建WordPress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Memcached/">Memcached</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装/">Nginx编译安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Openssl/">Openssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vsftp/">Vsftp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/关系型数据概念/">关系型数据概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库简介/">数据库简介</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构模型/">数据结构模型</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/目前流行的开源RDBMS/">目前流行的开源RDBMS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例四/">脚本实例四</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计关系数据库的范式基础概念/">设计关系数据库的范式基础概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/重定向和管道/">重定向和管道</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Openssl" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/06/Openssl/" class="article-date">
+      <time datetime="2017-09-06T12:50:28.000Z" itemprop="datePublished">2017-09-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Openssl证书请求和自签名
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/安全相关/">安全相关</a><a class="article-category-link" href="/categories/安全相关/Openssl证书请求和自签名/">Openssl证书请求和自签名</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Openssl/">Openssl</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h3><h4 id="PKI、CA、X-509"><a href="#PKI、CA、X-509" class="headerlink" title="PKI、CA、X.509"></a>PKI、CA、X.509</h4><p><strong>PKI:</strong> Public Key Infrastructure </p>
+<p><strong>公开密钥基础建设：</strong> 是一组由硬件、软件、参与者、管理政策与流程组成的基础架构，其目的在于创造、管理、分配、使用、存储以及撤销数字证书。</p>
+<p><strong>X.509：</strong> 是由ITU-T为了公开密钥基础建设（PKI）与授权管理基础建设（PMI）提出的产业标准。X.509标准，规范了公开密钥认证、证书吊销列表、授权证书、证书路径验证算法等。</p>
+<p><strong>CA：</strong> 数字证书认证机构(英文全称：Catificate Authority)。主要负责：证书发放、证书更新、证书撤销和证书验证。</p>
+<a id="more"></a>
+<h3 id="证书获取"><a href="#证书获取" class="headerlink" title="证书获取"></a>证书获取</h3><h4 id="获取证书两种方法："><a href="#获取证书两种方法：" class="headerlink" title="获取证书两种方法："></a>获取证书两种方法：</h4><p><strong>使用证书授权机构</strong></p>
+<ul>
+<li>生成签名请求（<code>csr</code>）</li>
+<li>将<code>csr</code>发送给<code>CA</code></li>
+<li>从<code>CA</code>处接收签名</li>
+</ul>
+<p><strong>自签名的证书</strong></p>
+<ul>
+<li>自已签发自己的公钥</li>
+</ul>
+<h3 id="安全协议"><a href="#安全协议" class="headerlink" title="安全协议"></a>安全协议</h3><h4 id="SSL和TLS协议"><a href="#SSL和TLS协议" class="headerlink" title="SSL和TLS协议"></a>SSL和TLS协议</h4><p>SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。TLS与SSL在传输层对网络连接进行加密。</p>
+<ul>
+<li><code>Handshake</code>协议：包括协商安全参数和密码套件、服务器身份认证（客户端身份认证可选）、密钥交换</li>
+<li><code>ChangeCipherSpec</code> 协议：一条消息表明握手协议已经完成</li>
+<li><code>Alert</code> 协议：对握手协议中一些异常的错误提醒，分为<code>fatal`</code>和<code>warning</code>两个级别， <code>fatal</code>类型错误会直接中断<code>SSL</code>链接，而<code>warning</code>级别的错误<code>SSL</code>链接仍可继续，只是会给出错误警告</li>
+<li><code>Record</code> 协议：包括对消息的分段、压缩、消息认证和完整性保护、加密等</li>
+<li><code>HTTPS</code> 协议：就是<code>“HTTP 协议”</code>和<code>“SSL/TLS 协议</code>”的组合。 <code>HTTP over SSL”</code>或<code>“HTTP over TLS”</code>，对<code>http</code>协议的文本数据进行加密处理后，成为二进制形式传输</li>
+</ul>
+<h3 id="OpenSSL"><a href="#OpenSSL" class="headerlink" title="OpenSSL"></a>OpenSSL</h3><h4 id="OpenSSL：开源项目"><a href="#OpenSSL：开源项目" class="headerlink" title="OpenSSL：开源项目"></a>OpenSSL：开源项目</h4><p><code>OpenSSL</code> 是一个安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及<code>SSL</code>协议，并提供丰富的应用程序供测试或其它目的使用。</p>
+<p><strong>三个组件：</strong></p>
+<ul>
+<li><code>openssl</code>: 多用途的命令行工具，包<code>openssl</code></li>
+<li><code>libcrypto</code>: 加密算法库，包<code>openssl-libs</code></li>
+<li><code>libssl</code>：加密模块应用库，实现了<code>ssl</code>及<code>tls</code>，包<code>nss</code></li>
+</ul>
+<h4 id="OpenSSL命令："><a href="#OpenSSL命令：" class="headerlink" title="OpenSSL命令："></a>OpenSSL命令：</h4><ul>
+<li>两种运行模式：交互模式和批处理模式</li>
+<li><code>openssl version</code>：查看<code>OpenSSL</code>程序版本号</li>
+<li>标准命令：enc<code>(对称加密),</code>ca<code>(签署证书),</code>req`(生成自签名证书), …</li>
+</ul>
+<h4 id="对称加密enc："><a href="#对称加密enc：" class="headerlink" title="对称加密enc："></a>对称加密enc：</h4><ul>
+<li>工具： <code>openssl enc</code>, <code>gpg</code></li>
+<li>算法： <code>3des</code>, <code>aes</code>, <code>blowfish</code>, <code>twofish</code></li>
+<li>enc命令：<ul>
+<li>帮助： <code>man enc</code></li>
+<li>加密：<code>openssl enc -e -des3 -a -salt -in testfile -out testfile.cipher</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 app]# openssl enc -e -des3 -a -salt -in testfile -out testfile.cipher	#&lt;==使用des3算法对testfile文件加密，输出为testfile.cipher	</span><br><span class="line">enter des-ede3-cbc encryption password:		#&lt;==输入密码</span><br><span class="line">Verifying - enter des-ede3-cbc encryption password:		#&lt;==再次输入密码</span><br><span class="line">[root@centos7 app]# cat testfile testfile.cipher 		#&lt;==查看加密和未加密的文件</span><br><span class="line">this is a test file</span><br><span class="line">U2FsdGVkX1/a0QHbk2ol6aB39zpO7+yS2cZ+jI7YqUQiKfGhC4SqZg==</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解密：<ul>
+<li><code>openssl enc -d -des3 -a -salt –in testfile.cipher-out testfile</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 app]# rm -f testfile			#&lt;==删除testfile文件</span><br><span class="line">[root@centos7 app]# openssl enc -d -des3 -a -salt -in testfile.cipher -out testfile	#&lt;==使用des3算法对testfile.cipher文件</span><br><span class="line">enter des-ede3-cbc decryption password:		#&lt;==输入密码</span><br><span class="line">[root@centos7 app]# ls				</span><br><span class="line">testfile  testfile.cipher</span><br><span class="line">[root@centos7 app]# cat testfile		#&lt;==查看testfile内容和原来是一样的。</span><br><span class="line">this is a test file</span><br></pre></td></tr></table></figure>
+<pre><code>​
+</code></pre><h4 id="单向加密dgst"><a href="#单向加密dgst" class="headerlink" title="单向加密dgst"></a>单向加密dgst</h4><p><strong>单向加密：</strong></p>
+<ul>
+<li>工具： <code>md5sum</code>, <code>sha1sum</code>, <code>sha224sum</code>,<code>sha256sum</code>openssl dgst<code>…</code>dgst<code>命令：
+  帮助：</code>man dgst<code>`</code>openssl dgst -md5 [-hex默认] /PATH/SOMEFILE<code></code>openssl dgst -md5 testfile<code></code>md5sum /PATH/TO/SOMEFILE<code></code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 app]# openssl dgst -md5 testfile 			#&lt;==计算testfile的md5</span><br><span class="line">MD5(testfile)= 4221d002ceb5d3c9e9137e495ceaa647</span><br><span class="line">[root@centos7 app]# openssl dgst -md5 -hex testfile 	#&lt;==-hex是转换为16进制（默认）</span><br><span class="line">MD5(testfile)= 4221d002ceb5d3c9e9137e495ceaa647	</span><br><span class="line">[root@centos7 app]# md5sum testfile 					#&lt;==计算testfile的md5</span><br><span class="line">4221d002ceb5d3c9e9137e495ceaa647  testfile</span><br></pre></td></tr></table></figure>
+<p>  ​</p>
+<h4 id="生成用户密码和随机数："><a href="#生成用户密码和随机数：" class="headerlink" title="生成用户密码和随机数："></a>生成用户密码和随机数：</h4><p><strong>生成用户密码：</strong></p>
+<ul>
+<li><code>passwd</code>命令:</li>
+<li>帮助： <code>man sslpasswd</code></li>
+<li><code>openssl passwd -1 -salt SALT</code>(最多8位)</li>
+<li><code>openssl passwd -1 –salt centos</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 app]# openssl passwd -1 -salt 12345678		#&lt;==生成openssl对passwd密码加密并加盐</span><br><span class="line">Password: </span><br><span class="line">$1$12345678$tRy4cXc3kmcfRZVj4iFXr/</span><br><span class="line">[root@centos7 app]# openssl passwd -1 -salt 123456789		#&lt;==注：盐最多8位，如果输入9位是不显示的</span><br><span class="line">Password: </span><br><span class="line">$1$12345678$tRy4cXc3kmcfRZVj4iFXr/</span><br></pre></td></tr></table></figure>
+<p>  ​</p>
+<p><strong>生成随机数：</strong></p>
+<ul>
+<li>帮助： <code>man sslrand</code></li>
+<li><code>openssl rand -base64|-hex NUM</code></li>
+<li><code>NUM</code>: 表示字节数；<code>hex</code>时，每个字符为十六进制，相当于4位二进制，出现的字符数为<code>NUM*2</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 app]# openssl rand -hex 16	#&lt;==生成的是32位的随机数</span><br><span class="line">5666c7c5f5369120f0c8c3254fa82abe</span><br><span class="line">[root@centos7 app]# openssl rand -base64 16		#&lt;==生成的是16位的随机数</span><br><span class="line">EHpDSxUBcX/uCvYBfhW61w==</span><br><span class="line">[root@centos7 app]# openssl rand -base64 -hex 16	#&lt;==-hex和-base64是不能放在一块使用的</span><br><span class="line">Usage: rand [options] num</span><br></pre></td></tr></table></figure>
+<p>  ​</p>
+<h4 id="生成密码对儿：man-genresa"><a href="#生成密码对儿：man-genresa" class="headerlink" title="生成密码对儿：man genresa"></a>生成密码对儿：man genresa</h4><p><strong>生成私钥：</strong></p>
+<ul>
+<li><code>openssl genrsa -out /PATH/TO/PRIVATEKEY.FILE NUM_BITS</code></li>
+<li><code>(umask 077; openssl genrsa –out test.key –des 2048)</code><br><strong>从私钥中提取出公钥</strong></li>
+<li><code>openssl rsa -in PRIVATEKEYFILE –pubout –out PUBLICKEYFILE</code></li>
+<li><code>Openssl rsa –in test.key –pubout –out test.key.pub</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 app]# (umask 077 ; openssl genrsa -out test.key -des3 2048)	#&lt;==生成私钥，其权限为600</span><br><span class="line">Generating RSA private key, 2048 bit long modulus</span><br><span class="line">................................+++</span><br><span class="line">.........+++</span><br><span class="line">e is 65537 (0x10001)</span><br><span class="line">Enter pass phrase for test.key:</span><br><span class="line">Verifying - Enter pass phrase for test.key:</span><br><span class="line">[root@centos7 app]# openssl rsa -in test.key -pubout -out test.key.pub		#&lt;==从私钥中，提取出公钥</span><br><span class="line">Enter pass phrase for test.key:</span><br><span class="line">writing RSA key</span><br><span class="line">[root@centos7 app]# ll			#&lt;==查看生成的私钥和提取出来的公钥</span><br><span class="line">total 8</span><br><span class="line">-rw-------. 1 root root 1751 Sep  9 21:29 test.key</span><br><span class="line">-rw-r--r--. 1 root root  451 Sep  9 21:30 test.key.pub</span><br></pre></td></tr></table></figure>
+<p>  ​</p>
+<h4 id="随机数生成器：伪随机数字"><a href="#随机数生成器：伪随机数字" class="headerlink" title="随机数生成器：伪随机数字"></a>随机数生成器：伪随机数字</h4><ul>
+<li>键盘和鼠标</li>
+<li>块设备中断：cp一个大文件可以生成很多随机数</li>
+<li><code>/dev/random</code>：仅从熵池返回随机数；随机数用尽，阻塞</li>
+<li><code>/dev/urandom</code>：从熵池返回随机数；随机数用尽，会利用软件生成伪随机数,非阻塞</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 script]#  head /dev/urandom | cksum 		#&lt;==通过/dev/urandom配合cksum生成随机数</span><br><span class="line">1712568099 3350</span><br><span class="line">[root@centos6 script]#  head /dev/urandom | cksum </span><br><span class="line">1558657086 1998</span><br></pre></td></tr></table></figure>
+<p>  ​</p>
+<h3 id="建立私有CA"><a href="#建立私有CA" class="headerlink" title="建立私有CA"></a>建立私有CA</h3><ul>
+<li><code>openssl</code>的配置文件： <code>/etc/pki/tls/openssl.cnf</code></li>
+<li>三种策略： 匹配、支持和可选</li>
+<li>匹配指要求申请填写的信息跟<code>CA</code>设置信息必须一致， 支持指必须填写这项申请信息， 可选指可有可无</li>
+</ul>
+<h5 id="1-创建所需要的文件"><a href="#1-创建所需要的文件" class="headerlink" title="1. 创建所需要的文件"></a>1. 创建所需要的文件</h5><p><code>touch /etc/pki/CA/index.txt</code> 生成证书索引数据库文件<br><code>echo 01 &gt; /etc/pki/CA/serial</code> 指定第一个颁发证书的序列号</p>
+<h5 id="2-CA自签证书"><a href="#2-CA自签证书" class="headerlink" title="2.  CA自签证书"></a>2.  CA自签证书</h5><p><strong>生成私钥</strong><br><code>cd /etc/pki/CA/</code><br><code>(umask 066; openssl genrsa -out  /etc/pki/CA/private/cakey.pem 2048)</code></p>
+<h5 id="3-生成自签名证书"><a href="#3-生成自签名证书" class="headerlink" title="3. 生成自签名证书"></a>3. 生成自签名证书</h5><p><code>openssl req -new -x509 –key</code><br><code>/etc/pki/CA/private/cakey.pem -days 7300 -out /etc/pki/CA/cacert.pem</code><br>  <code>-new</code>: 生成新证书签署请求<br>  <code>-x509</code>: 专用于<code>CA</code>生成自签证书<br>  <code>-key</code>: 生成请求时用到的私钥文件<br>  <code>-days n</code>：证书的有效期限<br>  <code>-out /PATH/TO/SOMECERTFILE</code>: 证书的保存路径</p>
+<h5 id="4-生成证书的各字段详解："><a href="#4-生成证书的各字段详解：" class="headerlink" title="4. 生成证书的各字段详解："></a>4. 生成证书的各字段详解：</h5><table>
+<thead>
+<tr>
+<th><strong>DN字段名</strong></th>
+<th><strong>缩写</strong></th>
+<th><strong>说明</strong></th>
+<th><strong>填写要求</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Country Name</td>
+<td>C</td>
+<td>证书持有者所在国家</td>
+<td>要求填写国家代码，用2个字母表示</td>
+</tr>
+<tr>
+<td>State or Province Name</td>
+<td>ST</td>
+<td>证书持有者所在州或省份</td>
+<td>填写全称，可省略不填</td>
+</tr>
+<tr>
+<td>Locality Name</td>
+<td>L</td>
+<td>证书持有者所在城市</td>
+<td>可省略不填</td>
+</tr>
+<tr>
+<td>Organization Name</td>
+<td>O</td>
+<td>证书持有者所属组织或公司</td>
+<td>最好还是填一下</td>
+</tr>
+<tr>
+<td>Organizational Unit Name</td>
+<td>OU</td>
+<td>证书持有者所属部门</td>
+<td>可省略不填</td>
+</tr>
+<tr>
+<td>Common Name</td>
+<td>CN</td>
+<td>证书持有者的通用名</td>
+<td>必填。对于非应用证书，它应该在一定程度上具有惟一性；对于应用证书，一般填写服务器域名或通配符样式的域名。</td>
+</tr>
+<tr>
+<td>Email Address</td>
+<td></td>
+<td>证书持有者的通信邮箱</td>
+<td>可省略不填</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# touch /etc/pki/CA/index.txt		#&lt;==生成证书索引数据库文件</span><br><span class="line">[root@centos7 ~]# echo 01 &gt; /etc/pki/CA/serial		#&lt;==指定第一个颁发证书的序列号</span><br><span class="line">[root@centos7 ~]# cd /etc/pki/CA/				</span><br><span class="line">[root@centos7 CA]# (umask 066 ; openssl genrsa -out /etc/pki/CA/private/cakey.pem 2048)		#&lt;== 生成私钥</span><br><span class="line">Generating RSA private key, 2048 bit long modulus</span><br><span class="line">.................................+++</span><br><span class="line">......................................+++</span><br><span class="line">e is 65537 (0x10001)</span><br><span class="line">[root@centos7 CA]# openssl req -new -x509 -key /etc/pki/CA/private/cakey.pem -days 7300 -out /etc/pki/CA/cacert.pem 		#&lt;==生成自签名证书</span><br><span class="line">You are about to be asked to enter information that will be incorporated</span><br><span class="line">into your certificate request.</span><br><span class="line">What you are about to enter is what is called a Distinguished Name or a DN.</span><br><span class="line">There are quite a few fields but you can leave some blank</span><br><span class="line">For some fields there will be a default value,</span><br><span class="line">If you enter '.', the field will be left blank.</span><br><span class="line">-----</span><br><span class="line">Country Name (2 letter code) [XX]:CN		</span><br><span class="line">State or Province Name (full name) []:beijing	</span><br><span class="line">Locality Name (eg, city) [Default City]:haidian  	</span><br><span class="line">Organization Name (eg, company) [Default Company Ltd]:iav18.com	</span><br><span class="line">Organizational Unit Name (eg, section) []:opt	</span><br><span class="line">Common Name (eg, your name or your server's hostname) []:ca.iav18.com	</span><br><span class="line">Email Address []:</span><br></pre></td></tr></table></figure>
+<h3 id="证书申请过程："><a href="#证书申请过程：" class="headerlink" title="证书申请过程："></a>证书申请过程：</h3><h4 id="证书申请及签署步骤："><a href="#证书申请及签署步骤：" class="headerlink" title="证书申请及签署步骤："></a>证书申请及签署步骤：</h4><ol>
+<li>生成申请请求</li>
+<li><code>RA</code>核验</li>
+<li><code>CA</code>签署</li>
+<li>获取证书</li>
+</ol>
+<h4 id="创建CA和申请证书"><a href="#创建CA和申请证书" class="headerlink" title="创建CA和申请证书"></a>创建CA和申请证书</h4><h5 id="1-在需要使用证书的主机生成证书请求"><a href="#1-在需要使用证书的主机生成证书请求" class="headerlink" title="1. 在需要使用证书的主机生成证书请求"></a>1. 在需要使用证书的主机生成证书请求</h5><p>  给<code>web</code>服务器生成私钥<br>  <code>(umask 066; openssl genrsa -out /etc/pki/tls/private/test.key 2048)</code><br>  生成证书申请文件<br>  <code>openssl req -new -key /etc/pki/tls/private/test.key -days 365 -out etc/pki/tls/test.csr</code></p>
+<p>将证书请求文件传输给<code>CA</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# (umask 066 ; openssl genrsa -out /etc/pki/tls/private/test.key 2048)		#&lt;== 生成私钥</span><br><span class="line">Generating RSA private key, 2048 bit long modulus</span><br><span class="line">...............................................+++</span><br><span class="line">..................................................................................................................................+++</span><br><span class="line">e is 65537 (0x10001)</span><br><span class="line">[root@centos6 ~]# openssl req -new -key /etc/pki/tls/private/test.key -days 365 -out /etc/pki/tls/test.csr		#&lt;==生成证书申请文件</span><br><span class="line">[root@centos6 ~]# openssl req -new -key /etc/pki/CA/private/test.key -out test.csr </span><br><span class="line">You are about to be asked to enter information that will be incorporated</span><br><span class="line">into your certificate request.</span><br><span class="line">What you are about to enter is what is called a Distinguished Name or a DN.</span><br><span class="line">There are quite a few fields but you can leave some blank</span><br><span class="line">For some fields there will be a default value,</span><br><span class="line">If you enter '.', the field will be left blank.</span><br><span class="line">-----</span><br><span class="line">Country Name (2 letter code) [XX]:CN			#&lt;==此项必须一样</span><br><span class="line">State or Province Name (full name) []:beijing	#&lt;==此项必须一样</span><br><span class="line">Locality Name (eg, city) [Default City]:caoyang</span><br><span class="line">Organization Name (eg, company) [Default Company Ltd]:iav18.com	#&lt;==此项必须一样</span><br><span class="line">Organizational Unit Name (eg, section) []:opt</span><br><span class="line">Common Name (eg, your name or your server's hostname) []:www.ihaiyun.com</span><br><span class="line">Email Address []:</span><br><span class="line"></span><br><span class="line">Please enter the following 'extra' attributes</span><br><span class="line">to be sent with your certificate request</span><br><span class="line">A challenge password []:		#&lt;==是否添加密码</span><br><span class="line">An optional company name []:	#&lt;==公司名称</span><br><span class="line">[root@centos6 ~]# scp test.csr 192.168.8.129:/etc/pki/CA		#&lt;==将证书请求文件传输给CA</span><br><span class="line">root@192.168.8.129's password: </span><br><span class="line">test.csr                      100% 1013     1.0KB/s   00:00</span><br></pre></td></tr></table></figure>
+<h5 id="2-RA核验与CA签署"><a href="#2-RA核验与CA签署" class="headerlink" title="2. RA核验与CA签署"></a>2. <code>RA</code>核验与<code>CA</code>签署</h5><p><code>CA</code>签署证书<br>  <code>openssl ca -in /tmp/test.csr –out /etc/pki/CA/certs/test.crt -days 365</code><br>  同一个请求默认是不能签署两次的，修改配文件也能允许修改两次（还未截图，需要截图）<br>注意：默认国家，省，公司名称三项必须和<code>CA</code>一致   </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 CA]# openssl ca -in /etc/pki/CA/test.csr -out /etc/pki/CA/certs/test.crt		#&lt;==CA签署认证</span><br><span class="line">Using configuration from /etc/pki/tls/openssl.cnf</span><br><span class="line">Check that the request matches the signature</span><br><span class="line">Signature ok</span><br><span class="line">Certificate Details:</span><br><span class="line">        Serial Number: 1 (0x1)</span><br><span class="line">        Validity</span><br><span class="line">            Not Before: Sep  9 16:31:14 2017 GMT</span><br><span class="line">            Not After : Sep  9 16:31:14 2018 GMT</span><br><span class="line">        Subject:</span><br><span class="line">            countryName               = CN</span><br><span class="line">            stateOrProvinceName       = beijing</span><br><span class="line">            localityName              = caoyang</span><br><span class="line">            organizationName          = iav18.com</span><br><span class="line">            organizationalUnitName    = opt</span><br><span class="line">            commonName                = www.ihaiyun.com</span><br><span class="line">        X509v3 extensions:</span><br><span class="line">            X509v3 Basic Constraints: </span><br><span class="line">                CA:FALSE</span><br><span class="line">            Netscape Comment: </span><br><span class="line">                OpenSSL Generated Certificate</span><br><span class="line">            X509v3 Subject Key Identifier: </span><br><span class="line">                C6:DC:8C:69:C1:5F:D2:53:D3:F4:74:D7:AE:4F:0D:8E:4E:5D:3B:13</span><br><span class="line">            X509v3 Authority Key Identifier: </span><br><span class="line">                keyid:58:76:AE:27:21:CB:7F:FF:7F:BC:B7:BA:31:72:E2:BF:12:AF:78:6A</span><br><span class="line"></span><br><span class="line">Certificate is to be certified until Sep  9 16:31:14 2018 GMT (365 days)</span><br><span class="line">Sign the certificate? [y/n]:y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1 out of 1 certificate requests certified, commit? [y/n]y</span><br><span class="line">Write out database with 1 new entries</span><br><span class="line">Data Base Updated</span><br><span class="line">[root@centos7 CA]# tree </span><br><span class="line">.</span><br><span class="line">├── cacert.pem</span><br><span class="line">├── certs</span><br><span class="line">│   └── test.crt		#&lt;==可以看到证书生成到certs目录下</span><br><span class="line">├── crl</span><br><span class="line">├── index.txt</span><br><span class="line">├── index.txt.attr</span><br><span class="line">├── index.txt.old</span><br><span class="line">├── newcerts</span><br><span class="line">│   └── 01.pem			#&lt;==此处也是证书</span><br><span class="line">├── private</span><br><span class="line">│   └── cakey.pem</span><br><span class="line">├── serial</span><br><span class="line">├── serial.old</span><br><span class="line">└── test.csr</span><br><span class="line"></span><br><span class="line">4 directories, 10 files</span><br><span class="line">[root@centos7 CA]# diff certs/test.crt newcerts/01.pem 		#&lt;==比较这两个文件是相同的</span><br></pre></td></tr></table></figure>
+<h5 id="3-获取证书"><a href="#3-获取证书" class="headerlink" title="3. 获取证书"></a>3. 获取证书</h5><p>安装证书：需要在客户端安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 CA]# scp certs/test.crt 192.168.8.128:/etc/pki/tls/certs	#&lt;==复制证书到客户端</span><br><span class="line">root@192.168.8.128's password: </span><br><span class="line">test.crt                      100% 4508     4.4KB/s   00:00    </span><br><span class="line">[root@centos6 ~]# ls -l  /etc/pki/tls/certs/test.crt 		#&lt;==在客户端确认证书是否存在</span><br><span class="line">-rw-r--r--. 1 root root 4508 Sep 10 00:17 /etc/pki/tls/certs/test.crt</span><br></pre></td></tr></table></figure>
+<p>查看证书中的信息：</p>
+<ul>
+<li><code>openssl x509 -in /PATH/FROM/CERT_FILE -noout -text|issuer|subject|serial|dates</code></li>
+<li><code>penssl ca -status SERIAL</code>查看指定编号的证书状态</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# openssl x509 -in /etc/pki/tls/certs/test.crt -text	#&lt;==查看证书内容</span><br><span class="line">Certificate:</span><br><span class="line">    Data:</span><br><span class="line">        Version: 3 (0x2)</span><br><span class="line">        Serial Number: 1 (0x1)</span><br><span class="line">    Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">        Issuer: C=CN, ST=beijing, L=haidian, O=iav18.com, OU=opt, CN=ca.iav18.com</span><br><span class="line">        Validity</span><br><span class="line">            Not Before: Sep  9 16:31:14 2017 GMT</span><br><span class="line">            Not After : Sep  9 16:31:14 2018 GMT</span><br><span class="line">        Subject: C=CN, ST=beijing, L=caoyang, O=iav18.com, OU=opt, CN=www.ihaiyun.com</span><br><span class="line">        Subject Public Key Info:</span><br><span class="line">            Public Key Algorithm: rsaEncryption</span><br><span class="line">                Public-Key: (2048 bit)</span><br><span class="line">                Modulus:</span><br><span class="line">                    00<img class="github-emoji" title="de" alt="de" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f1e9-1f1ea.png?v8" height="20" width="20">2c:75:19:dd:13:a2:14:ac:9d:2e:23:59:43:</span><br><span class="line">                    1e:3e:68:40:2b:0f:98:a4:10:23:9d:62:5e:bb:af:</span><br><span class="line">                    51:e6:f2:ff:a6:3a:87:df:7c:a7:05:33:7c:16:86:</span><br><span class="line">                    5d:6b:c7:c6:19:bb:71:2c:1e:0a:3d:13:61:6b:ae:</span><br><span class="line">                    47:5b:08:b3:66:c7:60:44:5d:14:d9:e0:50:64:26:</span><br><span class="line">                    40:24:3f:a2:4b:6a:a1:19:e6:6f:5c:76:1e:7e:81:</span><br><span class="line">                    91:b7:ca:97:66:50:dc:40:4b:2f:3d:d3:1b:b8:26:</span><br><span class="line">                    79:4d:00:69:d9:8c:51:3e:24:36:14:14:33:a2:86:</span><br><span class="line">                    57:ed:70:6c:52:b8:0a:c2:5a:51:9b:36:5b:33:72:</span><br><span class="line">                    79<img class="github-emoji" title="cd" alt="cd" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4bf.png?v8" height="20" width="20">13:1d:a4:13:64:5b:20:46:04:a2:62:e8:0b:</span><br><span class="line">                    e9:06:5f:04:b4:3a:b9:15:b0:14:f5:a1:5d:29:3a:</span><br><span class="line">                    71:9c:bb:5b:b5:7a:77:c5:72:fc:b9:79:e9:df:07:</span><br><span class="line">                    91:6c:df:60:b2:41:72:6b:9d:2c:54:b5:35:dc:84:</span><br><span class="line">                    de:a4:1b:80:15:48:16:40:c2:42:95:bb:ff:0e:d0:</span><br><span class="line">                    66:22:01:4e:02:30:64:53:13:7a:75:5d:37:58:50:</span><br><span class="line">                    df:33:e7:72:f2:97:66:ac:90:ed:22:73:84:ac:88:</span><br><span class="line">                    c7:dd:0e:1c:86:ce:18:bf:2f:fe:b0:c4:42:bb:a9:</span><br><span class="line">                    b1:a9</span><br><span class="line">                Exponent: 65537 (0x10001)</span><br><span class="line">        X509v3 extensions:</span><br><span class="line">            X509v3 Basic Constraints: </span><br><span class="line">                CA:FALSE</span><br><span class="line">            Netscape Comment: </span><br><span class="line">                OpenSSL Generated Certificate</span><br><span class="line">            X509v3 Subject Key Identifier: </span><br><span class="line">                C6:DC:8C:69:C1:5F:D2:53:D3:F4:74:D7:AE:4F:0D:8E:4E:5D:3B:13</span><br><span class="line">            X509v3 Authority Key Identifier: </span><br><span class="line">                keyid:58:76:AE:27:21:CB:7F:FF:7F:BC:B7:BA:31:72:E2:BF:12:AF:78:6A</span><br><span class="line"></span><br><span class="line">    Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">         9a:12:6a:92:f7:c1:b3:fb:fe:2b:f5:89:24:86:b4:b0:8f:af:</span><br><span class="line">         8d:c7:06:92:aa:76:6b:f8:6b:5c:45:5f:21:41:a8:e0:41:00:</span><br><span class="line">         f7:57:51:55:88:f9:0f:cc:2b:7d:c0:b0:99:65:d4:f4:56:e0:</span><br><span class="line">         39:3b:bf:45:db:f1:4a:80:7a:d5:2e:1c:0f:ac:9b:02:ac:28:</span><br><span class="line">         70:19:6d:ba:36:c7:56:0b:7e:96:ea:55:ae:e3:f0:5c:2a:10:</span><br><span class="line">         f4:7e:ea:60:48:63:9e:04:26:d2:92:76:d7:f2:9a:3a:8e:5a:</span><br><span class="line">         20:aa:69:20:d9:25:ec:f5:3d:91:c3:84:fb:8c:50:bf:93:47:</span><br><span class="line">         ff:9a:3e:1a:f2:da:9e:36:f2:3f:81:a8:cc:d5:23:19:ad:b3:</span><br><span class="line">         ee:e2:87:ca:3f:10:3f:9c:bf:72:bd:9c:c8:73:56:28:1f:75:</span><br><span class="line">         fb:f5:10:16:37:6f:ce:b7:56:68:49:e5:8b:24:9c:02:63:67:</span><br><span class="line">         bb:e0:7c:7b:06:f1:82:1a:59:21:06:d9:9f:8d:e4:4e:e6:25:</span><br><span class="line">         cf:96:40:9a:39:69:8b:7e:70:aa:df:93:40:66:e8:8e:3b:52:</span><br><span class="line">         c6:58:2a:ad:54:a6:1d:a2:e6:b6:0a:1d:c3:9c:92:b1:c6:2b:</span><br><span class="line">         7d:30:3a:42:36:57:4a:9e:d9:b0:75:05:9d:19:4b:cf:eb:8d:</span><br><span class="line">         9a:61:0a:b7</span><br><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line">MIIDzTCCArWgAwIBAgIBATANBgkqhkiG9w0BAQsFADBqMQswCQYDVQQGEwJDTjEQ</span><br><span class="line">MA4GA1UECAwHYmVpamluZzEQMA4GA1UEBwwHaGFpZGlhbjESMBAGA1UECgwJaWF2</span><br><span class="line">MTguY29tMQwwCgYDVQQLDANvcHQxFTATBgNVBAMMDGNhLmlhdjE4LmNvbTAeFw0x</span><br><span class="line">NzA5MDkxNjMxMTRaFw0xODA5MDkxNjMxMTRaMG0xCzAJBgNVBAYTAkNOMRAwDgYD</span><br><span class="line">VQQIDAdiZWlqaW5nMRAwDgYDVQQHDAdjYW95YW5nMRIwEAYDVQQKDAlpYXYxOC5j</span><br><span class="line">b20xDDAKBgNVBAsMA29wdDEYMBYGA1UEAwwPd3d3LmloYWl5dW4uY29tMIIBIjAN</span><br><span class="line">BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3ix1Gd0TohSsnS4jWUMePmhAKw+Y</span><br><span class="line">pBAjnWJeu69R5vL/pjqH33ynBTN8FoZda8fGGbtxLB4KPRNha65HWwizZsdgRF0U</span><br><span class="line">2eBQZCZAJD+iS2qhGeZvXHYefoGRt8qXZlDcQEsvPdMbuCZ5TQBp2YxRPiQ2FBQz</span><br><span class="line">ooZX7XBsUrgKwlpRmzZbM3J5zRMdpBNkWyBGBKJi6AvpBl8EtDq5FbAU9aFdKTpx</span><br><span class="line">nLtbtXp3xXL8uXnp3weRbN9gskFya50sVLU13ITepBuAFUgWQMJClbv/DtBmIgFO</span><br><span class="line">AjBkUxN6dV03WFDfM+dy8pdmrJDtInOErIjH3Q4chs4Yvy/+sMRCu6mxqQIDAQAB</span><br><span class="line">o3sweTAJBgNVHRMEAjAAMCwGCWCGSAGG+EIBDQQfFh1PcGVuU1NMIEdlbmVyYXRl</span><br><span class="line">ZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQUxtyMacFf0lPT9HTXrk8Njk5dOxMwHwYD</span><br><span class="line">VR0jBBgwFoAUWHauJyHLf/9/vLe6MXLivxKveGowDQYJKoZIhvcNAQELBQADggEB</span><br><span class="line">AJoSapL3wbP7/iv1iSSGtLCPr43HBpKqdmv4a1xFXyFBqOBBAPdXUVWI+Q/MK33A</span><br><span class="line">sJll1PRW4Dk7v0Xb8UqAetUuHA+smwKsKHAZbbo2x1YLfpbqVa7j8FwqEPR+6mBI</span><br><span class="line">Y54EJtKSdtfymjqOWiCqaSDZJez1PZHDhPuMUL+TR/+aPhry2p428j+BqMzVIxmt</span><br><span class="line">s+7ih8o/ED+cv3K9nMhzVigfdfv1EBY3b863VmhJ5YsknAJjZ7vgfHsG8YIaWSEG</span><br><span class="line">2Z+N5E7mJc+WQJo5aYt+cKrfk0Bm6I47UsZYKq1Uph2i5rYKHcOckrHGK30wOkI2</span><br><span class="line">V0qe2bB1BZ0ZS8/rjZphCrc=</span><br><span class="line">-----END CERTIFICATE-----</span><br></pre></td></tr></table></figure>
+<h4 id="吊销证书"><a href="#吊销证书" class="headerlink" title="吊销证书"></a>吊销证书</h4><h5 id="1-在客户端获取要吊销的证书的serial"><a href="#1-在客户端获取要吊销的证书的serial" class="headerlink" title="1. 在客户端获取要吊销的证书的serial"></a>1. 在客户端获取要吊销的证书的<code>serial</code></h5><p><code>openssl x509 -in /PATH/FROM/CERT_FILE -noout -serial -subject</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# openssl x509 -in /etc/pki/tls/certs/test.crt -noout -serial -subject</span><br><span class="line">serial=01</span><br><span class="line">subject= /C=CN/ST=beijing/L=caoyang/O=iav18.com/OU=opt/CN=www.ihaiyun.com</span><br></pre></td></tr></table></figure>
+<h5 id="2-在CA上，根据客户提交的serial与subject信息，对比检验是否与index-txt文件中的信息一致，吊销证书："><a href="#2-在CA上，根据客户提交的serial与subject信息，对比检验是否与index-txt文件中的信息一致，吊销证书：" class="headerlink" title="2. 在CA上，根据客户提交的serial与subject信息，对比检验是否与index.txt文件中的信息一致，吊销证书："></a>2. 在CA上，根据客户提交的<code>serial</code>与<code>subject</code>信息，对比检验是否与<code>index.txt</code>文件中的信息一致，吊销证书：</h5><p><code>openssl ca -revoke /etc/pki/CA/newcerts/SERIAL.pem</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 CA]# openssl ca -revoke /etc/pki/CA/newcerts/01.pem </span><br><span class="line">Using configuration from /etc/pki/tls/openssl.cnf</span><br><span class="line">Revoking Certificate 01.</span><br><span class="line">Data Base Updated</span><br></pre></td></tr></table></figure>
+<h5 id="3-指定第一个吊销证书的编号"><a href="#3-指定第一个吊销证书的编号" class="headerlink" title="3. 指定第一个吊销证书的编号"></a>3. 指定第一个吊销证书的编号</h5><p>注意：第一次更新证书吊销列表前，才需要执行<br>echo 01 &gt; /etc/pki/CA/crlnumber</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 CA]# echo 01 &gt; /etc/pki/CA/crlnumber</span><br></pre></td></tr></table></figure>
+<h5 id="4-更新证书吊销列表"><a href="#4-更新证书吊销列表" class="headerlink" title="4. 更新证书吊销列表"></a>4. 更新证书吊销列表</h5><p>更新证书吊销列</p>
+<p>openssl ca -gencrl -out /etc/pki/CA/crl/crl.pem<br>查看crl文件：<br>openssl crl -in /etc/pki/CA/crl/crl.pem -noout -text </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 CA]# openssl ca -gencrl -out /etc/pki/CA/crl/crl.pem		#&lt;==更新证书吊销列表</span><br><span class="line">Using configuration from /etc/pki/tls/openssl.cnf</span><br><span class="line">[root@centos7 CA]# openssl crl -in /etc/pki/CA/crl/crl.pem -noout -text		#&lt;==查看crl文件</span><br><span class="line">Certificate Revocation List (CRL):</span><br><span class="line">        Version 2 (0x1)</span><br><span class="line">    Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">        Issuer: /C=CN/ST=beijing/L=haidian/O=iav18.com/OU=opt/CN=ca.iav18.com</span><br><span class="line">        Last Update: Sep  9 17:10:46 2017 GMT</span><br><span class="line">        Next Update: Oct  9 17:10:46 2017 GMT</span><br><span class="line">        CRL extensions:</span><br><span class="line">            X509v3 CRL Number: </span><br><span class="line">                1</span><br><span class="line">Revoked Certificates:</span><br><span class="line">    Serial Number: 01</span><br><span class="line">        Revocation Date: Sep  9 17:07:32 2017 GMT</span><br><span class="line">    Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">         0c:64:a1:42:af:0d:e0:32:f3:3c:29:80:bb:cf:a3:10:dc:e4:</span><br><span class="line">         b5:61:f1:8c:c0:a2:8d:92:03:82:83:0a:b2:5f:e7:37:a1:7d:</span><br><span class="line">         e2:e9:a7:3c:4b:95:e3:0e:57:b7:f3:af:cf:ba:7c:ce:e6:a5:</span><br><span class="line">         be:cc:78:cb:2b:3e:73:a7:0e:c8:d8:f7:a5:5b:5b:61:70:fe:</span><br><span class="line">         94:1a:41:6f:cb:fb:29:5d:04:56:e4:a1:44:85:d9:69:56:a5:</span><br><span class="line">         01:2e:a1:f8:35:97:e3:ba:91:31:ab:e3:9b:f7:e2:34:03:3b:</span><br><span class="line">         9e:b7:19:8c:96<img class="github-emoji" title="cd" alt="cd" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4bf.png?v8" height="20" width="20">89:e7:47:42:49:5b:8e:24:e6:10:d5:4b:</span><br><span class="line">         e6:8d:c2:73:42:e5:eb:a9:87:6b:20:52:66:47:f4:55:2b:09:</span><br><span class="line">         78:a6:d0:17:0d:39:d2:6b:4e:c4:d4:61:98:31:28:19:d3:b7:</span><br><span class="line">         c1:3f:08:09:2b:61:b7:87:a3:f4:4a:10:fa:59:e8:6f:06:db:</span><br><span class="line">         8d:89:7c:10:29:fc:bc:37:52:4b:35:48:1c:4d:af:a9:fd:f2:</span><br><span class="line">         38:69:d7:e0:4f:45:98:61:f8:03:cf:ca:a5:8e:3b:f2:ca:0d:</span><br><span class="line">         d7:b0:de:81:ec:65:8f:39:41:1d:f1:98:46:6a:a9:3d:7e:72:</span><br><span class="line">         b1:13:4d:fd:e6:a8:20:57:06:e7:51:98:dd:e1:a1:49:95:5c:</span><br><span class="line">         9c:ce:10:0f</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-09-06, 12:50:28</p>
+        <p><span>最后更新:</span>2018-04-17, 13:35:03</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/06/Openssl/" title="Openssl证书请求和自签名">https://houhaiyun.github.io/2017/09/06/Openssl/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/09/06/Openssl/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/10/AIDE/">
+                    AIDE
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/01/Linux-IP-Address/">
+                    IP地址
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概念："><span class="toc-number">1.</span> <span class="toc-text">概念：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PKI、CA、X-509"><span class="toc-number">1.1.</span> <span class="toc-text">PKI、CA、X.509</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#证书获取"><span class="toc-number">2.</span> <span class="toc-text">证书获取</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#获取证书两种方法："><span class="toc-number">2.1.</span> <span class="toc-text">获取证书两种方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全协议"><span class="toc-number">3.</span> <span class="toc-text">安全协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SSL和TLS协议"><span class="toc-number">3.1.</span> <span class="toc-text">SSL和TLS协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenSSL"><span class="toc-number">4.</span> <span class="toc-text">OpenSSL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenSSL：开源项目"><span class="toc-number">4.1.</span> <span class="toc-text">OpenSSL：开源项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenSSL命令："><span class="toc-number">4.2.</span> <span class="toc-text">OpenSSL命令：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对称加密enc："><span class="toc-number">4.3.</span> <span class="toc-text">对称加密enc：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#单向加密dgst"><span class="toc-number">4.4.</span> <span class="toc-text">单向加密dgst</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成用户密码和随机数："><span class="toc-number">4.5.</span> <span class="toc-text">生成用户密码和随机数：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成密码对儿：man-genresa"><span class="toc-number">4.6.</span> <span class="toc-text">生成密码对儿：man genresa</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#随机数生成器：伪随机数字"><span class="toc-number">4.7.</span> <span class="toc-text">随机数生成器：伪随机数字</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立私有CA"><span class="toc-number">5.</span> <span class="toc-text">建立私有CA</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-创建所需要的文件"><span class="toc-number">5.0.1.</span> <span class="toc-text">1. 创建所需要的文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-CA自签证书"><span class="toc-number">5.0.2.</span> <span class="toc-text">2.  CA自签证书</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-生成自签名证书"><span class="toc-number">5.0.3.</span> <span class="toc-text">3. 生成自签名证书</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-生成证书的各字段详解："><span class="toc-number">5.0.4.</span> <span class="toc-text">4. 生成证书的各字段详解：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#证书申请过程："><span class="toc-number">6.</span> <span class="toc-text">证书申请过程：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#证书申请及签署步骤："><span class="toc-number">6.1.</span> <span class="toc-text">证书申请及签署步骤：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建CA和申请证书"><span class="toc-number">6.2.</span> <span class="toc-text">创建CA和申请证书</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-在需要使用证书的主机生成证书请求"><span class="toc-number">6.2.1.</span> <span class="toc-text">1. 在需要使用证书的主机生成证书请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-RA核验与CA签署"><span class="toc-number">6.2.2.</span> <span class="toc-text">2. RA核验与CA签署</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-获取证书"><span class="toc-number">6.2.3.</span> <span class="toc-text">3. 获取证书</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#吊销证书"><span class="toc-number">6.3.</span> <span class="toc-text">吊销证书</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-在客户端获取要吊销的证书的serial"><span class="toc-number">6.3.1.</span> <span class="toc-text">1. 在客户端获取要吊销的证书的serial</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-在CA上，根据客户提交的serial与subject信息，对比检验是否与index-txt文件中的信息一致，吊销证书："><span class="toc-number">6.3.2.</span> <span class="toc-text">2. 在CA上，根据客户提交的serial与subject信息，对比检验是否与index.txt文件中的信息一致，吊销证书：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-指定第一个吊销证书的编号"><span class="toc-number">6.3.3.</span> <span class="toc-text">3. 指定第一个吊销证书的编号</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-更新证书吊销列表"><span class="toc-number">6.3.4.</span> <span class="toc-text">4. 更新证书吊销列表</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Openssl证书请求和自签名　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/10/AIDE/" title="上一篇: AIDE">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/01/Linux-IP-Address/" title="下一篇: IP地址">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
