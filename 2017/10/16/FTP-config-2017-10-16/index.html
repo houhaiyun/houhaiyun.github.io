@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="Vsftpdvsftpd:Very Secure FTP Daemon， CentOS默认FTP服务器。">
+<meta name="keywords" content="Vsftp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vsftp常用配置">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/16/FTP-config-2017-10-16/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="Vsftpdvsftpd:Very Secure FTP Daemon， CentOS默认FTP服务器。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/vsftpd_logo.png">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/test-ftp1.gif">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/test-ftp2.gif">
+<meta property="og:updated_time" content="2018-04-17T11:35:06.607Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vsftp常用配置">
+<meta name="twitter:description" content="Vsftpdvsftpd:Very Secure FTP Daemon， CentOS默认FTP服务器。">
+<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/vsftpd_logo.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Vsftp常用配置 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIDE/">AIDE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropbear/">Dropbear</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP搭建WordPress/">LNAMP搭建WordPress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Memcached/">Memcached</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装/">Nginx编译安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vsftp/">Vsftp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/关系型数据概念/">关系型数据概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库简介/">数据库简介</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构模型/">数据结构模型</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/目前流行的开源RDBMS/">目前流行的开源RDBMS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例四/">脚本实例四</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计关系数据库的范式基础概念/">设计关系数据库的范式基础概念</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-FTP-config-2017-10-16" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/16/FTP-config-2017-10-16/" class="article-date">
+      <time datetime="2017-10-16T08:23:00.000Z" itemprop="datePublished">2017-10-16</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vsftp常用配置
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vsftp/">Vsftp</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <center><img src="http://ovuhiuqqd.bkt.clouddn.com/vsftpd_logo.png"></center>
+
+<h3 id="Vsftpd"><a href="#Vsftpd" class="headerlink" title="Vsftpd"></a>Vsftpd</h3><p><code>vsftpd</code>:<code>Very Secure FTP Daemon</code>， <code>CentOS</code>默认FTP服务器。</p>
+<a id="more"></a>
+<ul>
+<li>用户认证配置文件:<code>/etc/pam.d/vsftpd</code></li>
+<li>服务脚本： <code>/usr/lib/systemd/system/vsftpd.service</code> <code>/etc/rc.d/init.d/vsftpd</code></li>
+<li>配置文件:<code>/etc/vsftpd/vsftpd.conf</code><ul>
+<li><code>man 5 vsftpd.conf</code></li>
+<li>格式： <code>option=value</code></li>
+<li>注意： <code>=</code>前后不要有空格</li>
+</ul>
+</li>
+<li>匿名用户（映射为系统用户<code>ftp</code> ）共享文件位置： <code>/var/ftp</code></li>
+<li>系统用户共享文件位置：用户家目录</li>
+<li>虚拟用户共享文件位置：为其映射的系统用户的家目录</li>
+</ul>
+<h3 id="Vsftpd服务配置"><a href="#Vsftpd服务配置" class="headerlink" title="Vsftpd服务配置"></a>Vsftpd服务配置</h3><h3 id="命令端口"><a href="#命令端口" class="headerlink" title="命令端口"></a>命令端口</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# systemctl start vsftpd        # 启动vsftpd服务</span><br><span class="line">[root@centos7 ~]# ss -tnul          # 默认开启端口为21</span><br><span class="line">Netid  State      Recv-Q Send-Q Local Address:Port                Peer Address:Port              </span><br><span class="line">udp    UNCONN     0      0          127.0.0.1:323                            *:*                  </span><br><span class="line">udp    UNCONN     0      0                  *:27830                          *:*                  </span><br><span class="line">udp    UNCONN     0      0                  *:68                             *:*                  </span><br><span class="line">udp    UNCONN     0      0                ::1:323                           :::*                  </span><br><span class="line">udp    UNCONN     0      0                 :::61443                         :::*                  </span><br><span class="line">tcp    LISTEN     0      128                *:22                             *:*                  </span><br><span class="line">tcp    LISTEN     0      100        127.0.0.1:25                             *:*                  </span><br><span class="line">tcp    LISTEN     0      80                :::3306                          :::*                  </span><br><span class="line">tcp    LISTEN     0      32                :::21                            :::*                  </span><br><span class="line">tcp    LISTEN     0      128               :::22                            :::*                  </span><br><span class="line">tcp    LISTEN     0      100              ::1:25                            :::*     </span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.bak      # 备份配置文件</span><br><span class="line">[root@centos7 ~]# cd /etc/vsftpd/</span><br><span class="line">[root@centos7 vsftpd]# ls</span><br><span class="line">ftpusers  user_list  vsftpd.conf  vsftpd.conf.bak  vsftpd_conf_migrate.sh</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# vim vsftpd.conf      # 修改配置文件把端口修改为123</span><br><span class="line">listen_port=123             # 添加此行</span><br><span class="line">[root@centos7 vsftpd]# systemctl restart vsftpd</span><br><span class="line">[root@centos7 vsftpd]# ss -tnul </span><br><span class="line">Netid  State      Recv-Q Send-Q Local Address:Port                Peer Address:Port              </span><br><span class="line">udp    UNCONN     0      0          127.0.0.1:323                            *:*                  </span><br><span class="line">udp    UNCONN     0      0                  *:27830                          *:*                  </span><br><span class="line">udp    UNCONN     0      0                  *:68                             *:*                  </span><br><span class="line">udp    UNCONN     0      0                ::1:323                           :::*                  </span><br><span class="line">udp    UNCONN     0      0                 :::61443                         :::*                  </span><br><span class="line">tcp    LISTEN     0      128                *:22                             *:*                  </span><br><span class="line">tcp    LISTEN     0      100        127.0.0.1:25                             *:*                  </span><br><span class="line">tcp    LISTEN     0      80                :::3306                          :::*                  </span><br><span class="line">tcp    LISTEN     0      128               :::22                            :::*                  </span><br><span class="line">tcp    LISTEN     0      100              ::1:25                            :::*                  </span><br><span class="line">tcp    LISTEN     0      32                :::123                           :::*</span><br></pre></td></tr></table></figure>
+<h3 id="主动和被动模式"><a href="#主动和被动模式" class="headerlink" title="主动和被动模式"></a>主动和被动模式</h3><h4 id="配置文件：主动模式端口"><a href="#配置文件：主动模式端口" class="headerlink" title="配置文件：主动模式端口"></a>配置文件：主动模式端口</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">connect_from_port_20=YES 主动模式端口为20</span><br><span class="line">ftp_data_port=20 指定主动模式的端口</span><br></pre></td></tr></table></figure>
+<h4 id="实现主动模式端口"><a href="#实现主动模式端口" class="headerlink" title="实现主动模式端口"></a>实现主动模式端口</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# cd /var/ftp/pub/              # 现在ftp服务器上面创建一个大文件</span><br><span class="line">[root@centos7 ftp]# dd if=/dev/zero of=f1 bs=1G count=1</span><br><span class="line">1+0 records in</span><br><span class="line">1+0 records out</span><br><span class="line">1073741824 bytes (1.1 GB) copied, 15.2404 s, 70.5 MB/s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140         # 使用gcentos6区连接ftp服务器</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): ftp              # 使用匿名账户</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls             # 列出</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,42,104).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">-rw-r--r--    1 0        0        1073741824 Oct 13 01:26 f1</span><br><span class="line">drwxr-xr-x    2 0        0               6 Nov 05  2016 pub</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; ?          # 查看帮助</span><br><span class="line">Commands may be abbreviated.  Commands are:</span><br><span class="line"></span><br><span class="line">!		debug		mdir		sendport	site</span><br><span class="line">$		dir		mget		put		size</span><br><span class="line">account		disconnect	mkdir		pwd		status</span><br><span class="line">append		exit		mls		quit		struct</span><br><span class="line">ascii		form		mode		quote		system</span><br><span class="line">bell		get		modtime		recv		sunique</span><br><span class="line">binary		glob		mput		reget		tenex</span><br><span class="line">bye		hash		newer		rstatus		tick</span><br><span class="line">case		help		nmap		rhelp		trace</span><br><span class="line">cd		idle		nlist		rename		type</span><br><span class="line">cdup		image		ntrans		reset		user</span><br><span class="line">chmod		lcd		open		restart		umask</span><br><span class="line">close		ls		prompt		rmdir		verbose</span><br><span class="line">cr		macdef		passive		runique		?</span><br><span class="line">delete		mdelete		proxy		send</span><br><span class="line">ftp&gt; passive            # 关闭被动模式，就相当于开启主动模式</span><br><span class="line">Passive mode off.</span><br><span class="line">ftp&gt; get f1         # 下载f1文件</span><br><span class="line">local: f1 remote: f1</span><br><span class="line">200 PORT command successful. Consider using PASV.</span><br><span class="line">150 Opening BINARY mode data connection for f1 (1073741824 bytes).</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# netstat -anp | grep ftp          # 回到ftp服务器上面查看，已经打开20端口传输数据</span><br><span class="line">tcp6       0      0 :::21                   :::*                    LISTEN      2186/vsftpd         </span><br><span class="line">tcp6       0 4039920 192.168.8.140:20        192.168.8.128:46817     ESTABLISHED 2222/vsftpd         </span><br><span class="line">tcp6       0      0 192.168.8.140:21        192.168.8.128:35124     ESTABLISHED 2220/vsftpd         </span><br><span class="line">unix  3      [ ]         STREAM     CONNECTED     20963    2220/vsftpd          </span><br><span class="line">unix  3      [ ]         STREAM     CONNECTED     20964    2222/vsftpd          </span><br><span class="line">unix  2      [ ]         DGRAM                    21608    2220/vsftpd</span><br></pre></td></tr></table></figure>
+<h4 id="使用主动模式的端口为123"><a href="#使用主动模式的端口为123" class="headerlink" title="使用主动模式的端口为123"></a>使用主动模式的端口为123</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf</span><br><span class="line">connect_from_port_20=YES</span><br><span class="line">ftp_data_port=123       # 修改主动模式的端口为123</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140         # 再次连接ftp服务器</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; passive        # 开启主动模式</span><br><span class="line">Passive mode off.</span><br><span class="line">ftp&gt; get f1 </span><br><span class="line">local: f1 remote: f1</span><br><span class="line">200 PORT command successful. Consider using PASV.</span><br><span class="line">150 Opening BINARY mode data connection for f1 (1073741824 bytes).</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# netstat -anp | grep ftp      # 查看数据传输端口已经为123</span><br><span class="line">tcp6       0      0 :::21                   :::*                    LISTEN      2248/vsftpd         </span><br><span class="line">tcp6       0      0 192.168.8.140:21        192.168.8.128:35126     ESTABLISHED 2249/vsftpd         </span><br><span class="line">tcp6       0 3601472 192.168.8.140:123       192.168.8.128:39712     ESTABLISHED 2251/vsftpd         </span><br><span class="line">unix  3      [ ]         STREAM     CONNECTED     22784    2249/vsftpd          </span><br><span class="line">unix  2      [ ]         DGRAM                    21760    2249/vsftpd          </span><br><span class="line">unix  3      [ ]         STREAM     CONNECTED     22785    2251/vsftpd</span><br></pre></td></tr></table></figure>
+<h4 id="被动模式端口范围"><a href="#被动模式端口范围" class="headerlink" title="被动模式端口范围"></a>被动模式端口范围</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">linux客户端默认使用被动模式</span><br><span class="line">windows 客户端默认使用主动模式</span><br><span class="line">pasv_min_port=6000 0为随机分配</span><br><span class="line">pasv_max_port=6010</span><br></pre></td></tr></table></figure>
+<h4 id="使用被动模式传输"><a href="#使用被动模式传输" class="headerlink" title="使用被动模式传输"></a>使用被动模式传输</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# !ftp          # 直接访问ftp服务器</span><br><span class="line">ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,193,204).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">-rw-r--r--    1 0        0        1073741824 Oct 13 01:26 f1</span><br><span class="line">drwxr-xr-x    2 0        0               6 Nov 05  2016 pub</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; get f1         # 下载f1文件</span><br><span class="line">local: f1 remote: f1</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,78,255).</span><br><span class="line">150 Opening BINARY mode data connection for f1 (1073741824 bytes).</span><br><span class="line">    </span><br><span class="line">[root@centos7 vsftpd]# netstat -anp | grep ftp      # 在centos7上面查看开启的端口是随机开启的</span><br><span class="line">tcp6       0      0 :::21                   :::*                    LISTEN      2271/vsftpd         </span><br><span class="line">tcp6       0      0 192.168.8.140:20223     :::*                    LISTEN      2272/vsftpd         </span><br><span class="line">tcp6       0 3714120 192.168.8.140:20223     192.168.8.128:44845     ESTABLISHED 2274/vsftpd         </span><br><span class="line">tcp6       0      0 192.168.8.140:21        192.168.8.128:35128     ESTABLISHED 2272/vsftpd</span><br><span class="line"></span><br><span class="line">ftp&gt; !rm -f f1      # 删除本地文件f1，加上!可以执行本地命令</span><br><span class="line">ftp&gt; get f1         # 下载f1文件</span><br><span class="line">local: f1 remote: f1</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,73,74).</span><br><span class="line">150 Opening BINARY mode data connection for f1 (1073741824 bytes).</span><br><span class="line">226 Transfer complete.</span><br><span class="line">1073741824 bytes received in 6.76 secs (158891.58 Kbytes/sec)</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# netstat -anp | grep ftp          # 查看端口是随机打开的</span><br><span class="line">tcp6       0      0 192.168.8.140:18762     :::*                    LISTEN      2272/vsftpd         </span><br><span class="line">tcp6       0      0 :::21                   :::*                    LISTEN      2271/vsftpd         </span><br><span class="line">tcp6       0 3991160 192.168.8.140:18762     192.168.8.128:58139     ESTABLISHED 2274/vsftpd         </span><br><span class="line">tcp6       0      0 192.168.8.140:21        192.168.8.128:35128     ESTABLISHED 2272/vsftpd</span><br></pre></td></tr></table></figure>
+<h4 id="指定被动模式端口范围"><a href="#指定被动模式端口范围" class="headerlink" title="指定被动模式端口范围"></a>指定被动模式端口范围</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf</span><br><span class="line">pasv_min_port=8000      # 最小端口为8000</span><br><span class="line">pasv_max_port=8001      # 最大端口为8001</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# !sys         #重启服务让其生效</span><br><span class="line">systemctl restart vsftpd</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# !ftp          # 连接下载数据</span><br><span class="line">ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; get f1</span><br><span class="line">local: f1 remote: f1</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,31,65).</span><br><span class="line">150 Opening BINARY mode data connection for f1 (1073741824 bytes).</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# netstat -anp | grep ftp      # 查看端口已经是我们打开的8001</span><br><span class="line">tcp6       0      0 :::21                   :::*                    LISTEN      2289/vsftpd         </span><br><span class="line">tcp6       0      0 192.168.8.140:8001      :::*                    LISTEN      2291/vsftpd         </span><br><span class="line">tcp6       0 3844440 192.168.8.140:8001      192.168.8.128:39485     ESTABLISHED 2293/vsftpd         </span><br><span class="line">tcp6       0      0 192.168.8.140:21        192.168.8.128:35130     ESTABLISHED 2291/vsftpd</span><br></pre></td></tr></table></figure>
+<h3 id="使用当地时间"><a href="#使用当地时间" class="headerlink" title="使用当地时间"></a>使用当地时间</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf</span><br><span class="line">use_localtime=YES     # 使用当地时间（默认为NO，使用GMT）</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# !sys</span><br><span class="line">systemctl restart vsftpd</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls         # 看的不是特别明显，因为原来时间就是对的</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,169,47).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">-rw-r--r--    1 0        0        1073741824 Oct 13 09:26 f1</span><br><span class="line">drwxr-xr-x    2 0        0               6 Nov 06  2016 pub</span><br><span class="line">226 Directory send OK.</span><br></pre></td></tr></table></figure>
+<h3 id="匿名用户"><a href="#匿名用户" class="headerlink" title="匿名用户"></a>匿名用户</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">anonymous_enable=YES 支持匿名用户</span><br><span class="line">no_anon_password=YES(默认NO) 匿名用户略过口令检查</span><br><span class="line">anon_world_readable_only (默认YES)只能下载全部读的文件</span><br><span class="line">anon_upload_enable=YES 匿名上传，注意:文件系统权限</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_other_write_enable=YES 可删除和修改上传的文件</span><br><span class="line">anon_umask=077 指定匿名上传umask</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">chown_uploads=YES(默认NO)</span><br><span class="line">chown_username=wang     指定上传文件的默认的所有者</span><br><span class="line">chown_upload_mode=0644  指定上传文件的默认的权限</span><br></pre></td></tr></table></figure>
+<h4 id="使匿名可以用户上传文件"><a href="#使匿名可以用户上传文件" class="headerlink" title="使匿名可以用户上传文件"></a>使匿名可以用户上传文件</h4><p>解决方法为：</p>
+<ol>
+<li>修改配置文件使匿名用户可以上传和创建文件</li>
+<li>因为ftp默认是不支持登陆根就有w权限的，所以在ftp创建一个可以上传的目录，并对其设置ACL，让其拥有rwx权限，就可以了。</li>
+<li>ftp上传文件需要注意：文件系统上面的权限和vsftpd上面配置的权限。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# dd if=/dev/zero of=f2 bs=1G count=1       # 先创建一个测试文件f2</span><br><span class="line">1+0 records in</span><br><span class="line">1+0 records out</span><br><span class="line">1073741824 bytes (1.1 GB) copied, 14.6191 s, 73.4 MB/s</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140             # 连接ftp</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,176,223).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">-rw-r--r--    1 0        0        1073741824 Oct 13 01:26 f1</span><br><span class="line">drwxr-xr-x    2 0        0               6 Nov 05  2016 pub</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; put f2         # 传输文件失败，权限被拒绝</span><br><span class="line">local: f2 remote: f2</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,173,117).</span><br><span class="line">550 Permission denied.      </span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 修改配置文件</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# !sys</span><br><span class="line">systemctl restart vsftpd</span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; put f2         # 上传还是失败</span><br><span class="line">local: f2 remote: f2</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,122,54).</span><br><span class="line">550 Permission denied.</span><br><span class="line"></span><br><span class="line">[root@centos7 ftp]# setfacl -m u:ftp:rwx pub        # 使ftp用户对pub目录拥有rwx权限</span><br><span class="line">[root@centos7 ftp]# ll</span><br><span class="line">total 1048576</span><br><span class="line">-rw-r--r--  1 root root 1073741824 Oct 13 09:26 f1</span><br><span class="line">drwxrwxr-x+ 2 root root          6 Oct 13 10:51 pub</span><br><span class="line">[root@centos7 ftp]# getfacl pub</span><br><span class="line"># file: pub</span><br><span class="line"># owner: root</span><br><span class="line"># group: root</span><br><span class="line">user::rwx</span><br><span class="line">user:ftp:rwx</span><br><span class="line">group::r-x</span><br><span class="line">mask::rwx</span><br><span class="line">other::r-x</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; cd pub</span><br><span class="line">250 Directory successfully changed.</span><br><span class="line">ftp&gt; put f2         # 已经可以上传</span><br><span class="line">local: f2 remote: f2</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,122,181).</span><br><span class="line">150 Ok to send data.</span><br><span class="line">226 Transfer complete.</span><br><span class="line">1073741824 bytes sent in 13.4 secs (79893.42 Kbytes/sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Linux系统用户"><a href="#Linux系统用户" class="headerlink" title="Linux系统用户"></a>Linux系统用户</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">guest_enable=YES 所有系统用户都映射成guest用户</span><br><span class="line">guest_username=ftp 配合上面选项才生效，指定guest用户</span><br><span class="line">local_enable=YES 是否允许linux用户登录</span><br><span class="line">write_enable-YES 允许linux用户上传文件</span><br><span class="line">local_umask=022 指定系统用户上传文件的默认权限</span><br><span class="line">local_root=/ftproot 非匿名用户登录所在目录</span><br></pre></td></tr></table></figure>
+<h4 id="所有系统用户都映射成guest用户"><a href="#所有系统用户都映射成guest用户" class="headerlink" title="所有系统用户都映射成guest用户"></a>所有系统用户都映射成guest用户</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 修改配置文件</span><br><span class="line">guest_enable=YES</span><br><span class="line">guest_username=ftp</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# useradd haiyun</span><br><span class="line">[root@centos7 vsftpd]# passwd haiyun</span><br><span class="line">Changing password for user haiyun.</span><br><span class="line">New password: </span><br><span class="line">BAD PASSWORD: The password is shorter than 8 characters</span><br><span class="line">Retype new password: </span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# !sys</span><br><span class="line">systemctl restart vsftpd</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): haiyun</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">530 Login incorrect.</span><br><span class="line">Login failed.</span><br><span class="line">ftp&gt; 221 Goodbye.</span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): haiyun</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,154,38).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">-rw-r--r--    1 0        0        1073741824 Oct 13 01:26 f1</span><br><span class="line">drwxrwxr-x    2 0        0              16 Oct 13 02:53 pub</span><br><span class="line">226 Directory send OK.</span><br></pre></td></tr></table></figure>
+<h3 id="禁锢所有系统用户在家目录中"><a href="#禁锢所有系统用户在家目录中" class="headerlink" title="禁锢所有系统用户在家目录中"></a>禁锢所有系统用户在家目录中</h3><p><code>chroot_local_user=YES（默认NO，不禁锢）禁锢系统用户</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ftp&gt; [root@centos6 ~]# ftp 192.168.8.140            # 默认是可以切换到根目录的</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): haiyun</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,97,169).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; pwd</span><br><span class="line">257 &quot;/home/haiyun&quot;</span><br><span class="line">ftp&gt; cd /</span><br><span class="line">250 Directory successfully changed.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,135,197).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">drwxr-xr-x    2 0        0               6 Oct 05 16:31 app</span><br><span class="line">lrwxrwxrwx    1 0        0               7 Oct 05 16:31 bin -&gt; usr/bin</span><br><span class="line">dr-xr-xr-x    4 0        0            4096 Oct 10 13:52 boot</span><br><span class="line">drwxr-xr-x   19 0        0            3200 Oct 13 01:21 dev</span><br><span class="line">drwxr-xr-x   80 0        0            8192 Oct 13 03:21 etc</span><br><span class="line">drwxr-xr-x    3 0        0              20 Oct 13 03:20 home</span><br><span class="line">lrwxrwxrwx    1 0        0               7 Oct 05 16:31 lib -&gt; usr/lib</span><br><span class="line">lrwxrwxrwx    1 0        0               9 Oct 05 16:31 lib64 -&gt; usr/lib64</span><br><span class="line">drwxr-xr-x    2 0        0               6 Nov 05  2016 media</span><br><span class="line">drwxr-xr-x    2 0        0               6 Nov 05  2016 mnt</span><br><span class="line">drwxr-xr-x    2 0        0               6 Nov 05  2016 opt</span><br><span class="line">dr-xr-xr-x  128 0        0               0 Oct 13  2017 proc</span><br><span class="line">dr-xr-x---    2 0        0             142 Oct 13 03:20 root</span><br><span class="line">drwxr-xr-x   20 0        0             560 Oct 13 01:29 run</span><br><span class="line">lrwxrwxrwx    1 0        0               8 Oct 05 16:31 sbin -&gt; usr/sbin</span><br><span class="line">drwxr-xr-x    2 0        0               6 Oct 05 16:31 script</span><br><span class="line">drwxr-xr-x    2 0        0               6 Nov 05  2016 srv</span><br><span class="line">dr-xr-xr-x   13 0        0               0 Oct 13  2017 sys</span><br><span class="line">drwxrwxrwt    8 0        0             236 Oct 13 02:51 tmp</span><br><span class="line">drwxr-xr-x   13 0        0             155 Oct 05 16:31 usr</span><br><span class="line">drwxr-xr-x   20 0        0             278 Oct 13 01:24 var</span><br><span class="line">226 Directory send OK.</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 修改配置文件</span><br><span class="line">chroot_local_user=YES</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# !sys</span><br><span class="line">systemctl restart vsftpd</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root)haiyun   </span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">500 OOPS: vsftpd: refusing to run with writable root inside chroot()</span><br><span class="line">Login failed.</span><br><span class="line">421 Service not available, remote server has closed connection</span><br><span class="line">ftp&gt; [root@centos6 ~]# ftp 192.168.8.140            # 连接失败</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): </span><br><span class="line">530 Permission denied.</span><br><span class="line">Login failed.</span><br><span class="line"></span><br><span class="line">[root@centos7 home]# ll </span><br><span class="line">total 0</span><br><span class="line">drwx------ 2 haiyun haiyun 62 Oct 13 11:20 haiyun</span><br><span class="line">[root@centos7 home]# chmod -w haiyun/           # 去掉w权限就可以了</span><br><span class="line">[root@centos7 home]# ll </span><br><span class="line">total 0</span><br><span class="line">dr-x------ 2 haiyun haiyun 62 Oct 13 11:20 haiyun</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): haiyun</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,87,198).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; pwd</span><br><span class="line">257 &quot;/&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="禁锢或不禁锢特定的系统用户在家目录中，与上面设置功能相反"><a href="#禁锢或不禁锢特定的系统用户在家目录中，与上面设置功能相反" class="headerlink" title="禁锢或不禁锢特定的系统用户在家目录中，与上面设置功能相反"></a>禁锢或不禁锢特定的系统用户在家目录中，与上面设置功能相反</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chroot_list_enable=YES</span><br><span class="line">chroot_list_file=/etc/vsftpd/chroot_list</span><br><span class="line">当chroot_local_user=YES时，则chroot_list中用户不禁锢</span><br><span class="line">当chroot_local_user=NO时， 则chroot_list中用户禁锢</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 home]# useradd test           # 添加测试用户</span><br><span class="line">[root@centos7 home]# passwd test</span><br><span class="line">Changing password for user test.</span><br><span class="line">New password: </span><br><span class="line">BAD PASSWORD: The password is shorter than 8 characters</span><br><span class="line">Retype new password: </span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 修改配置文件</span><br><span class="line">chroot_local_user=YES</span><br><span class="line">chroot_list_enable=YES</span><br><span class="line">chroot_list_file=/etc/vsftpd/chroot_list</span><br><span class="line"></span><br><span class="line">[root@centos7 ftp]# cd /etc/vsftpd/         # 把test用户添加到chroot_list中</span><br><span class="line">[root@centos7 vsftpd]# echo &quot;test&quot; &gt; chroot_list</span><br><span class="line">[root@centos7 vsftpd]# cat chroot_list </span><br><span class="line">test</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140         # 连接测试</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): haiyun</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; pwd</span><br><span class="line">257 &quot;/&quot;</span><br><span class="line">ftp&gt; 221 Goodbye.</span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140     # 连接测试</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): test</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; pwd</span><br><span class="line">257 &quot;/home/test&quot;</span><br><span class="line">ftp&gt; 221 Goodbye.</span><br></pre></td></tr></table></figure>
+<h3 id="wu-ftp日志：默认启动"><a href="#wu-ftp日志：默认启动" class="headerlink" title="wu-ftp日志：默认启动"></a>wu-ftp日志：默认启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xferlog_enable=YES （默认） 启用记录上传下载日志</span><br><span class="line">xferlog_std_format=YES （默认）使用wu-ftp日志格式</span><br><span class="line">xferlog_file=/var/log/xferlog （默认）可自动生成</span><br></pre></td></tr></table></figure>
+<h4 id="查看wu-ftp日志"><a href="#查看wu-ftp日志" class="headerlink" title="查看wu-ftp日志"></a>查看wu-ftp日志</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 home]# tail /var/log/xferlog </span><br><span class="line">Fri Oct 13 09:38:48 2017 8 ::ffff:192.168.8.128 1073741824 /f1 b _ o a ? ftp 0 * c</span><br><span class="line">Fri Oct 13 09:39:29 2017 8 ::ffff:192.168.8.128 1073741824 /f1 b _ o a ? ftp 0 * c</span><br><span class="line">Fri Oct 13 09:45:31 2017 9 ::ffff:192.168.8.128 1073741824 /f1 b _ o a ? ftp 0 * c</span><br><span class="line">Fri Oct 13 09:47:48 2017 7 ::ffff:192.168.8.128 1073741824 /f1 b _ o a ? ftp 0 * c</span><br><span class="line">Fri Oct 13 09:51:31 2017 8 ::ffff:192.168.8.128 1073741824 /f1 b _ o a ? ftp 0 * c</span><br><span class="line">Fri Oct 13 10:36:19 2017 1 ::ffff:192.168.8.128 0 /f2 b _ i a ? ftp 0 * i</span><br><span class="line">Fri Oct 13 10:36:23 2017 1 ::ffff:192.168.8.128 0 /f2 b _ i a ? ftp 0 * i</span><br><span class="line">Fri Oct 13 10:48:52 2017 1 ::ffff:192.168.8.128 0 /pub/f2 b _ o a ? ftp 0 * i</span><br><span class="line">Fri Oct 13 10:51:12 2017 2 ::ffff:192.168.8.128 357091608 /pub/f2 b _ i a ? ftp 0 * c</span><br><span class="line">Fri Oct 13 10:54:02 2017 14 ::ffff:192.168.8.128 1073741824 /pub/f2 b _ i a ? ftp 0 * c</span><br></pre></td></tr></table></figure>
+<h3 id="vsftpd日志：默认不启用"><a href="#vsftpd日志：默认不启用" class="headerlink" title="vsftpd日志：默认不启用"></a>vsftpd日志：默认不启用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dual_log_enable=YES 使用vsftpd日志格式，默认不启用</span><br><span class="line">vsftpd_log_file=/var/log/vsftpd.log（默认）可自动生成</span><br></pre></td></tr></table></figure>
+<h4 id="开启vsftpd日志并查看"><a href="#开启vsftpd日志并查看" class="headerlink" title="开启vsftpd日志并查看"></a>开启vsftpd日志并查看</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 修改配置文件</span><br><span class="line">dual_log_enable=YES</span><br><span class="line">vsftpd_log_file=/var/log/vsftpd.log</span><br><span class="line"></span><br><span class="line">[root@centos7 home]# !sys</span><br><span class="line">systemctl restart vsftpd</span><br><span class="line"></span><br><span class="line">root@centos6 ~]# ftp 192.168.8.140          # 访问测试</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 (vsFTPd 3.0.2)</span><br><span class="line">Name (192.168.8.140:root): haiyun</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,254,209).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,73,11).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,225,241).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; get f1</span><br><span class="line">local: f1 remote: f1</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,169,98).</span><br><span class="line">550 Failed to open file.</span><br><span class="line">ftp&gt; 221 Goodbye.</span><br><span class="line"></span><br><span class="line">[root@centos7 home]# tail /var/log/vsftpd.log       # 查看日志</span><br><span class="line">Fri Oct 13 11:42:41 2017 [pid 11671] CONNECT: Client &quot;::ffff:192.168.8.128&quot;</span><br><span class="line">Fri Oct 13 11:42:45 2017 [pid 11670] [haiyun] OK LOGIN: Client &quot;::ffff:192.168.8.128&quot;</span><br><span class="line">Fri Oct 13 11:43:07 2017 [pid 11672] [haiyun] FAIL DOWNLOAD: Client &quot;::ffff:192.168.8.128&quot;, &quot;/home/haiyun/f1&quot;, 0.00Kbyte/sec</span><br></pre></td></tr></table></figure>
+<h3 id="登陆提示信息"><a href="#登陆提示信息" class="headerlink" title="登陆提示信息"></a>登陆提示信息</h3><h4 id="两种方法"><a href="#两种方法" class="headerlink" title="两种方法"></a>两种方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ftpd_banner=“welcome to mage ftp server&quot;</span><br><span class="line">banner_file=/etc/vsftpd/ftpbanner.txt 优先上面项生效</span><br></pre></td></tr></table></figure>
+<h4 id="方法一，优先生效"><a href="#方法一，优先生效" class="headerlink" title="方法一，优先生效"></a>方法一，优先生效</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 修改配置文件</span><br><span class="line">ftpd_banner=&quot;Welcome to blah haiyun FTP service.&quot;</span><br><span class="line"></span><br><span class="line">[root@centos7 home]# systemctl restart vsftpd</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220 &quot;Welcome to blah haiyun FTP service.&quot;</span><br><span class="line">Name (192.168.8.140:root): haiyun</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 修改配置文件</span><br><span class="line">banner_file=/etc/vsftpd/ftpbanner.txt</span><br><span class="line"></span><br><span class="line">[root@centos7 vsftpd]# pwd</span><br><span class="line">/etc/vsftpd</span><br><span class="line">[root@centos7 vsftpd]# touch ftpbanner.txt</span><br><span class="line">[root@centos7 vsftpd]# echo &quot;http://www.ihaiyun.cc/&quot;  &gt; ftpbanner.txt</span><br><span class="line"></span><br><span class="line">[root@centos7 home]# systemctl restart vsftpd</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220-http://www.ihaiyun.cc/</span><br><span class="line">220 </span><br><span class="line">Name (192.168.8.140:root): haiyun </span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="目录访问提示信息"><a href="#目录访问提示信息" class="headerlink" title="目录访问提示信息"></a>目录访问提示信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dirmessage_enable=YES (默认)</span><br><span class="line">message_file=.message(默认)信息存放在指定目录下.message</span><br></pre></td></tr></table></figure>
+<h4 id="目录访问提示信息实现"><a href="#目录访问提示信息实现" class="headerlink" title="目录访问提示信息实现"></a>目录访问提示信息实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 查看配置文件，因为此项默认就是开启的</span><br><span class="line">dirmessage_enable=YES</span><br><span class="line">message_file=.message       # 此项可以修改文件名</span><br><span class="line"></span><br><span class="line">root@centos7 home]# cd /var/ftp/</span><br><span class="line">[root@centos7 ftp]# mkdir test      # 创建测试目录</span><br><span class="line">[root@centos7 ftp]# echo &quot;This is a test dir&quot; &gt; test/.message       # 测试信息</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ftp 192.168.8.140</span><br><span class="line">Connected to 192.168.8.140 (192.168.8.140).</span><br><span class="line">220-http://www.ihaiyun.cc/</span><br><span class="line">220 </span><br><span class="line">Name (192.168.8.140:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls</span><br><span class="line">227 Entering Passive Mode (192,168,8,140,125,170).</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">-rw-r--r--    1 0        0        1073741824 Oct 13 01:26 f1</span><br><span class="line">drwxrwxr-x    2 0        0              16 Oct 13 02:53 pub</span><br><span class="line">drwxr-xr-x    2 0        0              22 Oct 13 03:53 test</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; cd test    </span><br><span class="line">250-This is a test dir          # 已经看到测试信息</span><br><span class="line">250 Directory successfully changed.</span><br><span class="line">ftp&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="传输速率：-字节-秒"><a href="#传输速率：-字节-秒" class="headerlink" title="传输速率： 字节/秒"></a>传输速率： 字节/秒</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">传输速率： 字节/秒</span><br><span class="line">anon_max_rate=0 匿名用户的最大传输速率</span><br><span class="line">local_max_rate=0 本地用户的最大传输速率</span><br></pre></td></tr></table></figure>
+<h4 id="传输速率实现"><a href="#传输速率实现" class="headerlink" title="传输速率实现"></a>传输速率实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 vsftpd]# vim /etc/vsftpd/vsftpd.conf      # 修改配置文件</span><br><span class="line">anon_max_rate=1024000</span><br><span class="line">local_max_rate=1024000000</span><br><span class="line"></span><br><span class="line">[root@centos7 ftp]# systemctl restart vsftpd</span><br><span class="line"></span><br><span class="line">[root@centos7 ftp]# dd if=/dev/zero of=ftest bs=1024M count=2       # 生成测试文件</span><br><span class="line">2+0 records in</span><br><span class="line">2+0 records out</span><br><span class="line">2147483648 bytes (2.1 GB) copied, 25.5866 s, 83.9 MB/s</span><br><span class="line"></span><br><span class="line">[root@centos7 haiyun]# ln /var/ftp/ftest ftest</span><br><span class="line">[root@centos7 haiyun]# pwd</span><br><span class="line">/home/haiyun</span><br></pre></td></tr></table></figure>
+<h4 id="匿名用户测速"><a href="#匿名用户测速" class="headerlink" title="匿名用户测速"></a>匿名用户测速</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/test-ftp1.gif"></center>
+
+<h4 id="普通用户测速"><a href="#普通用户测速" class="headerlink" title="普通用户测速"></a>普通用户测速</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/test-ftp2.gif"></center>
+
+
+<h3 id="连接时间：秒为单位"><a href="#连接时间：秒为单位" class="headerlink" title="连接时间：秒为单位"></a>连接时间：秒为单位</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">connect_timeout=60 主动模式数据连接超时时长</span><br><span class="line">accept_timeout=60 被动模式数据连接超时时长</span><br><span class="line">data_connection_timeout=300 数据连接无数据输超时时长</span><br><span class="line">idle_session_timeout=60 无命令操作超时时长</span><br></pre></td></tr></table></figure>
+<h3 id="优先以文本方式传输"><a href="#优先以文本方式传输" class="headerlink" title="优先以文本方式传输"></a>优先以文本方式传输</h3><ul>
+<li>ascii：文本方式传输数据，可能会破坏数据。例如：把windows的文本文件通过ftp下载到linux上面，会进行转换。那么如果传输一个图片的话可能会把图片破坏。</li>
+<li>binary：二进制方式传输数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ascii_upload_enable=YES</span><br><span class="line">ascii_download_enable=YES</span><br></pre></td></tr></table></figure>
+<h3 id="Centos-6-配置VSFTPD为非独立服务"><a href="#Centos-6-配置VSFTPD为非独立服务" class="headerlink" title="Centos 6 配置VSFTPD为非独立服务"></a>Centos 6 配置VSFTPD为非独立服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# vim /etc/vsftpd/vsftpd.conf       # 修改配置文件</span><br><span class="line">listen=NO</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# cat /etc/xinetd.d/vsftpd          # 此文件默认是不存在的，需要手动写一份</span><br><span class="line">service ftp</span><br><span class="line">&#123;</span><br><span class="line">flags = REUSE</span><br><span class="line">socket_type = stream</span><br><span class="line">wait = no</span><br><span class="line">user = root</span><br><span class="line">server = /usr/sbin/vsftpd</span><br><span class="line">log_on_failure += USERID</span><br><span class="line">disable = no</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ss -tnul </span><br><span class="line">Netid  State      Recv-Q Send-Q          Local Address:Port            Peer Address:Port </span><br><span class="line">udp    UNCONN     0      0                           *:68                         *:*     </span><br><span class="line">tcp    LISTEN     0      128                        :::22                        :::*     </span><br><span class="line">tcp    LISTEN     0      128                         *:22                         *:*     </span><br><span class="line">tcp    LISTEN     0      100                       ::1:25                        :::*     </span><br><span class="line">tcp    LISTEN     0      100                 127.0.0.1:25                         *:*     </span><br><span class="line">[root@centos6 ~]# service xinetd start </span><br><span class="line">Starting xinetd:                                           [  OK  ]</span><br><span class="line">[root@centos6 ~]# ss -tnul          #端口已经打开</span><br><span class="line">Netid  State      Recv-Q Send-Q          Local Address:Port            Peer Address:Port </span><br><span class="line">udp    UNCONN     0      0                           *:68                         *:*     </span><br><span class="line">tcp    LISTEN     0      64                         :::21                        :::*     </span><br><span class="line">tcp    LISTEN     0      128                        :::22                        :::*     </span><br><span class="line">tcp    LISTEN     0      128                         *:22                         *:*     </span><br><span class="line">tcp    LISTEN     0      100                       ::1:25                        :::*     </span><br><span class="line">tcp    LISTEN     0      100                 127.0.0.1:25                         *:*  </span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# netstat -anp | grep 21        # 可以看到21端口是有xinetd服务监听的</span><br><span class="line">tcp        0      0 :::21                       :::*                        LISTEN      1891/xinetd         </span><br><span class="line">unix  3      [ ]         DGRAM                    10021  492/udevd   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# ftp 192.168.8.128         # </span><br><span class="line">Connected to 192.168.8.128 (192.168.8.128).</span><br><span class="line">220 (vsFTPd 2.2.2)</span><br><span class="line">Name (192.168.8.128:root): ftp</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# netstat -anp | grep 21        # 再次查看21端口是由vsftpd提供服务的</span><br><span class="line">tcp        0      0 192.168.8.128:21            192.168.8.140:46626         ESTABLISHED 1901/vsftpd         </span><br><span class="line">tcp        0      0 :::21                       :::*                        LISTEN      1891/xinetd         </span><br><span class="line">unix  3      [ ]         DGRAM                    10021  492/udevd</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/16/FTP-config-2017-10-16/">Vsftp常用配置</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-10-16, 08:23:00</p>
+        <p><span>最后更新:</span>2018-04-17, 11:35:06</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/16/FTP-config-2017-10-16/" title="Vsftp常用配置">https://houhaiyun.github.io/2017/10/16/FTP-config-2017-10-16/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/16/FTP-config-2017-10-16/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/16/FTP-SSL/">
+                    实现基于SSL的FTPS
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/11/Dropbear/">
+                    Dropbear-轻量级SSH服务器和客户端
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vsftpd"><span class="toc-number">1.</span> <span class="toc-text">Vsftpd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vsftpd服务配置"><span class="toc-number">2.</span> <span class="toc-text">Vsftpd服务配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令端口"><span class="toc-number">3.</span> <span class="toc-text">命令端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主动和被动模式"><span class="toc-number">4.</span> <span class="toc-text">主动和被动模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置文件：主动模式端口"><span class="toc-number">4.1.</span> <span class="toc-text">配置文件：主动模式端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现主动模式端口"><span class="toc-number">4.2.</span> <span class="toc-text">实现主动模式端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用主动模式的端口为123"><span class="toc-number">4.3.</span> <span class="toc-text">使用主动模式的端口为123</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#被动模式端口范围"><span class="toc-number">4.4.</span> <span class="toc-text">被动模式端口范围</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用被动模式传输"><span class="toc-number">4.5.</span> <span class="toc-text">使用被动模式传输</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#指定被动模式端口范围"><span class="toc-number">4.6.</span> <span class="toc-text">指定被动模式端口范围</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用当地时间"><span class="toc-number">5.</span> <span class="toc-text">使用当地时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#匿名用户"><span class="toc-number">6.</span> <span class="toc-text">匿名用户</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使匿名可以用户上传文件"><span class="toc-number">6.1.</span> <span class="toc-text">使匿名可以用户上传文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux系统用户"><span class="toc-number">7.</span> <span class="toc-text">Linux系统用户</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#所有系统用户都映射成guest用户"><span class="toc-number">7.1.</span> <span class="toc-text">所有系统用户都映射成guest用户</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#禁锢所有系统用户在家目录中"><span class="toc-number">8.</span> <span class="toc-text">禁锢所有系统用户在家目录中</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#禁锢或不禁锢特定的系统用户在家目录中，与上面设置功能相反"><span class="toc-number">8.1.</span> <span class="toc-text">禁锢或不禁锢特定的系统用户在家目录中，与上面设置功能相反</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wu-ftp日志：默认启动"><span class="toc-number">9.</span> <span class="toc-text">wu-ftp日志：默认启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#查看wu-ftp日志"><span class="toc-number">9.1.</span> <span class="toc-text">查看wu-ftp日志</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vsftpd日志：默认不启用"><span class="toc-number">10.</span> <span class="toc-text">vsftpd日志：默认不启用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#开启vsftpd日志并查看"><span class="toc-number">10.1.</span> <span class="toc-text">开启vsftpd日志并查看</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#登陆提示信息"><span class="toc-number">11.</span> <span class="toc-text">登陆提示信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#两种方法"><span class="toc-number">11.1.</span> <span class="toc-text">两种方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方法一，优先生效"><span class="toc-number">11.2.</span> <span class="toc-text">方法一，优先生效</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方法二"><span class="toc-number">11.3.</span> <span class="toc-text">方法二</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#目录访问提示信息"><span class="toc-number">12.</span> <span class="toc-text">目录访问提示信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#目录访问提示信息实现"><span class="toc-number">12.1.</span> <span class="toc-text">目录访问提示信息实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#传输速率：-字节-秒"><span class="toc-number">13.</span> <span class="toc-text">传输速率： 字节/秒</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#传输速率实现"><span class="toc-number">13.1.</span> <span class="toc-text">传输速率实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#匿名用户测速"><span class="toc-number">13.2.</span> <span class="toc-text">匿名用户测速</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#普通用户测速"><span class="toc-number">13.3.</span> <span class="toc-text">普通用户测速</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连接时间：秒为单位"><span class="toc-number">14.</span> <span class="toc-text">连接时间：秒为单位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优先以文本方式传输"><span class="toc-number">15.</span> <span class="toc-text">优先以文本方式传输</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Centos-6-配置VSFTPD为非独立服务"><span class="toc-number">16.</span> <span class="toc-text">Centos 6 配置VSFTPD为非独立服务</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Vsftp常用配置　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/16/FTP-SSL/" title="上一篇: 实现基于SSL的FTPS">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/11/Dropbear/" title="下一篇: Dropbear-轻量级SSH服务器和客户端">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config-2017-10-16/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
