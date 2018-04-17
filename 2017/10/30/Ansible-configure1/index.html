@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="模块帮助">
+<meta name="keywords" content="Ansible">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ansible常用模块一">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/30/Ansible-configure1/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="模块帮助">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/274c.png?v8">
+<meta property="og:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/274c.png?v8">
+<meta property="og:updated_time" content="2018-04-17T08:18:50.462Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ansible常用模块一">
+<meta name="twitter:description" content="模块帮助">
+<meta name="twitter:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/274c.png?v8">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Ansible常用模块一 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIDE/">AIDE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP搭建WordPress/">LNAMP搭建WordPress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Memcached/">Memcached</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装/">Nginx编译安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/关系型数据概念/">关系型数据概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库简介/">数据库简介</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构模型/">数据结构模型</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/目前流行的开源RDBMS/">目前流行的开源RDBMS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计关系数据库的范式基础概念/">设计关系数据库的范式基础概念</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Ansible-configure1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/30/Ansible-configure1/" class="article-date">
+      <time datetime="2017-10-30T22:44:41.000Z" itemprop="datePublished">2017-10-30</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Ansible常用模块一
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/自动化运维/">自动化运维</a><a class="article-category-link" href="/categories/自动化运维/Ansible常用模块一/">Ansible常用模块一</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="模块帮助"><a href="#模块帮助" class="headerlink" title="模块帮助"></a>模块帮助</h3><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">ansible-doc -l      # 获取列表</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible-doc -l        # 列出模块</span><br><span class="line">a10_server                         Manage A10 Networks AX/SoftAX/Thunder/vThunder devices</span><br><span class="line">a10_service_group                  Manage A10 Networks devices&apos; service groups           </span><br><span class="line">a10_virtual_server                 Manage A10 Networks devices&apos; virtual servers          </span><br><span class="line">acl                                Sets and retrieves file ACL information.              </span><br><span class="line">add_host                           add a host (and alternatively a group) to the ansible-...</span><br><span class="line">airbrake_deployment                Notify airbrake about app deployments                 </span><br><span class="line">alternatives                       Manages alternative programs for common commands      </span><br><span class="line">apache2_mod_proxy                  Set and/or get members&apos; attributes of an Apache httpd ...</span><br><span class="line">apache2_module                     enables/disables a module of the Apache2 webserver    </span><br><span class="line">apk                                Manages apk packages                                  </span><br><span class="line">apt                                Manages apt-packages                                  </span><br><span class="line">apt_key                            Add or remove an apt key                              </span><br><span class="line">apt_repository                     Add and remove APT repositories                       </span><br><span class="line">apt_rpm                            apt_rpm package manager                               </span><br><span class="line">asa_acl                            Manage access-lists on a Cisco ASA                    </span><br><span class="line">asa_command                        Run arbitrary commands on Cisco ASA devices.          </span><br><span class="line">asa_config                         Manage Cisco ASA configuration sections               </span><br><span class="line">assemble                           Assembles a configuration file from fragments         </span><br><span class="line">assert                             Asserts given expressions are true                    </span><br><span class="line">async_status                       Obtain status of asynchronous task                    </span><br><span class="line">at                                 Schedule the execution of a command or script file via...</span><br><span class="line">atomic_host                        Manage the atomic host platform                       </span><br><span class="line">atomic_image                       Manage the container images on the atomic host platfor...</span><br><span class="line">authorized_key                     Adds or removes an SSH authorized key                 </span><br><span class="line">。。。省略后面内容</span><br><span class="line"></span><br><span class="line">ansible-doc -s  module_name     # 获取指定模块的使用信息</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible-doc -s at     # -s 指定查看at模块的帮助</span><br><span class="line">- name: Schedule the execution of a command or script file via the at command.</span><br><span class="line">  action: at</span><br><span class="line">      command                # A command to be executed in the future.</span><br><span class="line">      count=                 # The count of units in the future to execute the command or</span><br><span class="line">                               script file.</span><br><span class="line">      script_file            # An existing script file to be executed in the future.</span><br><span class="line">      state                  # The state dictates if the command or script file should be</span><br><span class="line">                               evaluated as present(added) or</span><br><span class="line">                               absent(deleted).</span><br><span class="line">      unique                 # If a matching job is present a new job will not be added.</span><br><span class="line">      units=                 # The type of units in the future to execute the command or</span><br><span class="line">                               script file.</span><br></pre></td></tr></table></figure>
+<h3 id="ansible命令"><a href="#ansible命令" class="headerlink" title="ansible命令"></a>ansible命令</h3><h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><p><code>ansible &lt;host-pattern&gt; [-f forks] [-m module_name] [-a args] [options]</code></p>
+<h4 id=""><a href="#" class="headerlink" title=""></a><host-pattern></host-pattern></h4><p><code>&lt;host-pattern&gt;</code>指明管控主机，以模式形式表示或者直接给定<code>IP</code>，必须事先定义在文件中；<code>all</code>设置所有</p>
+<h4 id="f-forks"><a href="#f-forks" class="headerlink" title="[-f forks]"></a>[-f forks]</h4><p><code>[-f forks]</code>：指明每批管控多少主机，默认为5个主机一批次</p>
+<h4 id="m-module-name"><a href="#m-module-name" class="headerlink" title="[-m module_name]"></a>[-m module_name]</h4><p><code>[-m module_name]</code>：使用何种模块管理操作，所有的操作都需要通过模块来指定</p>
+<h4 id="a-args"><a href="#a-args" class="headerlink" title="[-a args]"></a>[-a args]</h4><p><code>[-a args]</code>：指明模块专用参数；<code>args</code>一般为<code>key=value</code>格式</p>
+<h3 id="command模块"><a href="#command模块" class="headerlink" title="command模块"></a>command模块</h3><p><code>command</code> ：命令模块，默认模块，用于在远程执行命令。</p>
+<h4 id="帮助信息"><a href="#帮助信息" class="headerlink" title="帮助信息"></a>帮助信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible-doc -s command</span><br><span class="line">- name: Executes a command on a remote node</span><br><span class="line">  action: command</span><br><span class="line">      chdir                  # cd into this directory before running the command</span><br><span class="line">      creates                # a filename or (since 2.0) glob pattern, when it already exists, this step will *not* be run.</span><br><span class="line">      executable             # change the shell used to execute the command. Should be an absolute path to the executable.</span><br><span class="line">      free_form=             # the command module takes a free form command to run.  There is no parameter actually named &apos;free form&apos;. See the examples!</span><br><span class="line">      removes                # a filename or (since 2.0) glob pattern, when it does not exist, this step will *not* be run.</span><br><span class="line">      warn                   # if command warnings are on in ansible.cfg, do not warn about this particular line if set to no/false.</span><br></pre></td></tr></table></figure>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible web1 -a &quot;date&quot;        # 因为command是默认模块，所以可以不用指定</span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">Mon Oct 30 19:21:52 CST 2017</span><br><span class="line"></span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">Mon Oct 30 19:21:53 CST 2017</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m command -a &quot;/bin/echo hello world&quot;        # 执行命令echo hello world  </span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">hello world</span><br><span class="line"></span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">hello world</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m command -a &quot;useradd testuser&quot;         # 执行命令添加用户testuser</span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m command -a &quot;userdel -r  testuser&quot;     # 执行命令删除testuser</span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible 192.168.8.12 -m command -a &quot;echo hello&quot;       # 也可以指定主机IP来使用</span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+<h3 id="cron模块"><a href="#cron模块" class="headerlink" title="cron模块"></a>cron模块</h3><h4 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h4><p><code>state</code>：</p>
+<ul>
+<li><code>present</code>：安装(默认)</li>
+<li><code>absent</code>：移除</li>
+</ul>
+<h4 id="帮助信息-1"><a href="#帮助信息-1" class="headerlink" title="帮助信息"></a>帮助信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible-doc -s cron</span><br><span class="line">- name: Manage cron.d and crontab entries.</span><br><span class="line">  action: cron</span><br><span class="line">      backup                 # If set, create a backup of the crontab before it is modified. The location of the backup is returned in the `backup_file&apos; variable by this module.</span><br><span class="line">      cron_file              # If specified, uses this file instead of an individual user&apos;s crontab. If this is a relative path, it is interpreted with respect to /etc/cron.d. (If it is</span><br><span class="line">                               absolute, it will typically be /etc/crontab). To use the `cron_file&apos; parameter you must specify the `user&apos; as well.</span><br><span class="line">      day                    # Day of the month the job should run ( 1-31, *, */2, etc )</span><br><span class="line">      disabled               # If the job should be disabled (commented out) in the crontab. Only has effect if state=present</span><br><span class="line">      env                    # If set, manages a crontab&apos;s environment variable. New variables are added on top of crontab. &quot;name&quot; and &quot;value&quot; parameters are the name and the value of</span><br><span class="line">                               environment variable.</span><br><span class="line">      hour                   # Hour when the job should run ( 0-23, *, */2, etc )</span><br><span class="line">      insertafter            # Used with `state=present&apos; and `env&apos;. If specified, the environment variable will be inserted after the declaration of specified environment variable.</span><br><span class="line">      insertbefore           # Used with `state=present&apos; and `env&apos;. If specified, the environment variable will be inserted before the declaration of specified environment variable.</span><br><span class="line">      job                    # The command to execute or, if env is set, the value of environment variable. Required if state=present.</span><br><span class="line">      minute                 # Minute when the job should run ( 0-59, *, */2, etc )</span><br><span class="line">      month                  # Month of the year the job should run ( 1-12, *, */2, etc )</span><br><span class="line">      name                   # Description of a crontab entry or, if env is set, the name of environment variable. Required if state=absent. Note that if name is not set and state=present,</span><br><span class="line">                               then a new crontab entry will always be created, regardless of existing ones.</span><br><span class="line">      reboot                 # If the job should be run at reboot. This option is deprecated. Users should use special_time.</span><br><span class="line">      special_time           # Special time specification nickname.</span><br><span class="line">      state                  # Whether to ensure the job or environment variable is present or absent.</span><br><span class="line">      user                   # The specific user whose crontab should be modified.</span><br><span class="line">      weekday                # Day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )</span><br></pre></td></tr></table></figure>
+<h4 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible web1 -m cron  -a &quot;minute=&quot;*/10&quot; job=&apos;/bin/bash /etc/backup.sh&apos; name=&apos;This is a bakcup cron&apos;&quot;       # 指定每10分钟执行/etc/backup.sh，name为This is a bakcup cron</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;envs&quot;: [], </span><br><span class="line">    &quot;jobs&quot;: [</span><br><span class="line">        &quot;This is a bakcup cron&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;envs&quot;: [], </span><br><span class="line">    &quot;jobs&quot;: [</span><br><span class="line">        &quot;This is a bakcup cron&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -a &quot;crontab -l&quot;          # 查看执行状态已经执行成功</span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">#Ansible: This is a bakcup cron</span><br><span class="line">*/10 * * * * /bin/bash /etc/backup.sh</span><br><span class="line"></span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">#Ansible: This is a bakcup cron</span><br><span class="line">*/10 * * * * /bin/bash /etc/backup.sh</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m cron -a &quot;minute=&apos;*/10&apos; job=&apos;/bin/bash /etc/backup.sh&apos; name=&apos;This is a bakcup cron&apos; state=&apos;absent&apos;&quot;        # 删除此计划任务，删除和创建的state是不同，创建为present，删除为absent，其它都是相同的。</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;envs&quot;: [], </span><br><span class="line">    &quot;jobs&quot;: []</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;envs&quot;: [], </span><br><span class="line">    &quot;jobs&quot;: []</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">[root@centos6 ~]# ansible web1 -a &quot;crontab -l&quot;          # 计划任务已经被删除</span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="user模块"><a href="#user模块" class="headerlink" title="user模块"></a>user模块</h3><h4 id="常用参数-1"><a href="#常用参数-1" class="headerlink" title="常用参数"></a>常用参数</h4><ul>
+<li><code>name</code>：指明创建用户的名字</li>
+</ul>
+<h4 id="帮助信息-2"><a href="#帮助信息-2" class="headerlink" title="帮助信息"></a>帮助信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible-doc -s user</span><br><span class="line">- name: Manage user accounts</span><br><span class="line">  action: user</span><br><span class="line">      append                 # If `yes&apos;, will only add groups, not set them to just the list in `groups&apos;.</span><br><span class="line">      comment                # Optionally sets the description (aka `GECOS&apos;) of user account.</span><br><span class="line">      createhome             # Unless set to `no&apos;, a home directory will be made for the user when the account is created or if the home directory does not exist.</span><br><span class="line">      expires                # An expiry time for the user in epoch, it will be ignored on platforms that do not support this. Currently supported on Linux and FreeBSD.</span><br><span class="line">      force                  # When used with `state=absent&apos;, behavior is as with `userdel --force&apos;.</span><br><span class="line">      generate_ssh_key       # Whether to generate a SSH key for the user in question. This will *not* overwrite an existing SSH key.</span><br><span class="line">      group                  # Optionally sets the user&apos;s primary group (takes a group name).</span><br><span class="line">      groups                 # Puts the user in this comma-delimited list of groups. When set to the empty string (&apos;groups=&apos;), the user is removed from all groups except the primary group.</span><br><span class="line">      home                   # Optionally set the user&apos;s home directory.</span><br><span class="line">      login_class            # Optionally sets the user&apos;s login class for FreeBSD, OpenBSD and NetBSD systems.</span><br><span class="line">      move_home              # If set to `yes&apos; when used with `home=&apos;, attempt to move the user&apos;s home directory to the specified directory if it isn&apos;t there already.</span><br><span class="line">      name=                  # Name of the user to create, remove or modify.</span><br><span class="line">      non_unique             # Optionally when used with the -u option, this option allows to change the user ID to a non-unique value.</span><br><span class="line">      password               # Optionally set the user&apos;s password to this crypted value.  See the user example in the github examples directory for what this looks like in a playbook. See</span><br><span class="line">                               http://docs.ansible.com/ansible/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module for details on various ways to</span><br><span class="line">                               generate these password values. Note on Darwin system, this value has to be cleartext. Beware of security issues.</span><br><span class="line">      remove                 # When used with `state=absent&apos;, behavior is as with `userdel --remove&apos;.</span><br><span class="line">      seuser                 # Optionally sets the seuser type (user_u) on selinux enabled systems.</span><br><span class="line">      shell                  # Optionally set the user&apos;s shell.</span><br><span class="line">      skeleton               # Optionally set a home skeleton directory. Requires createhome option!</span><br><span class="line">      ssh_key_bits           # Optionally specify number of bits in SSH key to create.</span><br><span class="line">      ssh_key_comment        # Optionally define the comment for the SSH key.</span><br><span class="line">      ssh_key_file           # Optionally specify the SSH key filename. If this is a relative filename then it will be relative to the user&apos;s home directory.</span><br><span class="line">      ssh_key_passphrase     # Set a passphrase for the SSH key.  If no passphrase is provided, the SSH key will default to having no passphrase.</span><br><span class="line">      ssh_key_type           # Optionally specify the type of SSH key to generate. Available SSH key types will depend on implementation present on target host.</span><br><span class="line">      state                  # Whether the account should exist or not, taking action if the state is different from what is stated.</span><br><span class="line">      system                 # When creating an account, setting this to `yes&apos; makes the user a system account.  This setting cannot be changed on existing users.</span><br><span class="line">      uid                    # Optionally sets the `UID&apos; of the user.</span><br><span class="line">      update_password        # `always&apos; will update passwords if they differ.  `on_create&apos; will only set the password for newly created users.</span><br></pre></td></tr></table></figure>
+<h4 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible web1 -m user -a &quot;name=&apos;mysql&apos; shell=&apos;/sbin/nologin&apos; uid=&apos;2222&apos; &quot;      # 创建用户mysql，shell为/sbin/nologin，uid为2222</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;comment&quot;: &quot;&quot;, </span><br><span class="line">    &quot;createhome&quot;: true, </span><br><span class="line">    &quot;group&quot;: 2222, </span><br><span class="line">    &quot;home&quot;: &quot;/home/mysql&quot;, </span><br><span class="line">    &quot;name&quot;: &quot;mysql&quot;, </span><br><span class="line">    &quot;shell&quot;: &quot;/sbin/nologin&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;present&quot;, </span><br><span class="line">    &quot;system&quot;: false, </span><br><span class="line">    &quot;uid&quot;: 2222</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;comment&quot;: &quot;&quot;, </span><br><span class="line">    &quot;createhome&quot;: true, </span><br><span class="line">    &quot;group&quot;: 2222, </span><br><span class="line">    &quot;home&quot;: &quot;/home/mysql&quot;, </span><br><span class="line">    &quot;name&quot;: &quot;mysql&quot;, </span><br><span class="line">    &quot;shell&quot;: &quot;/sbin/nologin&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;present&quot;, </span><br><span class="line">    &quot;system&quot;: false, </span><br><span class="line">    &quot;uid&quot;: 2222</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m user -a &quot;name=&apos;test&apos; system=&quot;yes&quot;   uid=&apos;321&apos; &quot;       # 创建test用户为系统用户UID为321</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;comment&quot;: &quot;&quot;, </span><br><span class="line">    &quot;createhome&quot;: true, </span><br><span class="line">    &quot;group&quot;: 321, </span><br><span class="line">    &quot;home&quot;: &quot;/home/test&quot;, </span><br><span class="line">    &quot;name&quot;: &quot;test&quot;, </span><br><span class="line">    &quot;shell&quot;: &quot;/bin/bash&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;present&quot;, </span><br><span class="line">    &quot;system&quot;: true, </span><br><span class="line">    &quot;uid&quot;: 321</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;comment&quot;: &quot;&quot;, </span><br><span class="line">    &quot;createhome&quot;: true, </span><br><span class="line">    &quot;group&quot;: 321, </span><br><span class="line">    &quot;home&quot;: &quot;/home/test&quot;, </span><br><span class="line">    &quot;name&quot;: &quot;test&quot;, </span><br><span class="line">    &quot;shell&quot;: &quot;/bin/bash&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;present&quot;, </span><br><span class="line">    &quot;system&quot;: true, </span><br><span class="line">    &quot;uid&quot;: 321</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -a &quot;id test&quot;         # 查看test用户ID信息，321是对的</span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">uid=321(test) gid=321(test) groups=321(test)</span><br><span class="line"></span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">uid=321(test) gid=321(test) groups=321(test)</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m user -a &quot;name=&apos;test&apos; state=&apos;absent&apos;&quot;          # 删除用户tset</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;force&quot;: false, </span><br><span class="line">    &quot;name&quot;: &quot;test&quot;, </span><br><span class="line">    &quot;remove&quot;: false, </span><br><span class="line">    &quot;state&quot;: &quot;absent&quot;</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;force&quot;: false, </span><br><span class="line">    &quot;name&quot;: &quot;test&quot;, </span><br><span class="line">    &quot;remove&quot;: false, </span><br><span class="line">    &quot;state&quot;: &quot;absent&quot;</span><br><span class="line">&#125;</span><br><span class="line">[root@centos6 ~]# ansible web1 -a &quot;id test&quot;         # 确认用户被删除</span><br><span class="line">192.168.8.13 | FAILED | rc=1 &gt;&gt;</span><br><span class="line">id: test: No such user</span><br><span class="line"></span><br><span class="line">192.168.8.12 | FAILED | rc=1 &gt;&gt;</span><br><span class="line">id: test: no such user</span><br></pre></td></tr></table></figure>
+<h3 id="group模块"><a href="#group模块" class="headerlink" title="group模块"></a>group模块</h3><h4 id="帮助信息-3"><a href="#帮助信息-3" class="headerlink" title="帮助信息"></a>帮助信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible-doc -s group</span><br><span class="line">- name: Add or remove groups</span><br><span class="line">  action: group</span><br><span class="line">      gid                    # Optional `GID&apos; to set for the group.</span><br><span class="line">      name=                  # Name of the group to manage.</span><br><span class="line">      state                  # Whether the group should be present or not on the remote host.</span><br><span class="line">      system                 # If `yes&apos;, indicates that the group created is a system group.</span><br></pre></td></tr></table></figure>
+<h4 id="实例-3"><a href="#实例-3" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible web1  -m group -a &quot;name=&apos;test&apos; gid=&apos;456&apos; system=&apos;yes&apos; state=&apos;present&apos;&quot;        # 添加组test，gid为456，是系统组</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;gid&quot;: 456, </span><br><span class="line">    &quot;name&quot;: &quot;test&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;present&quot;, </span><br><span class="line">    &quot;system&quot;: true</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;gid&quot;: 456, </span><br><span class="line">    &quot;name&quot;: &quot;test&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;present&quot;, </span><br><span class="line">    &quot;system&quot;: true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -a &quot;getent group test&quot;           # test用户已创建</span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">test<img class="github-emoji" title="x" alt="x" src="https://assets-cdn.github.com/images/icons/emoji/unicode/274c.png?v8" height="20" width="20">456:</span><br><span class="line"></span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">test<img class="github-emoji" title="x" alt="x" src="https://assets-cdn.github.com/images/icons/emoji/unicode/274c.png?v8" height="20" width="20">456:</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m group -a &quot;name=&apos;test&apos; state=&apos;absent&apos;&quot;     # 删除test组</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;name&quot;: &quot;test&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;absent&quot;</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;name&quot;: &quot;test&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;absent&quot;</span><br><span class="line">&#125;</span><br><span class="line">[root@centos6 ~]# ansible web1 -a &quot;getent group test&quot;           # 组已经被删除</span><br><span class="line">192.168.8.13 | FAILED | rc=2 &gt;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">192.168.8.12 | FAILED | rc=2 &gt;&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="copy模块"><a href="#copy模块" class="headerlink" title="copy模块"></a>copy模块</h3><p>用来复制文件。</p>
+<h4 id="帮助信息-4"><a href="#帮助信息-4" class="headerlink" title="帮助信息"></a>帮助信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]#  ansible-doc -s copy</span><br><span class="line">- name: Copies files to remote locations.</span><br><span class="line">  action: copy</span><br><span class="line">      backup                 # Create a backup file including the timestamp information so you can get the original file back if you somehow clobbered it incorrectly.</span><br><span class="line">      content                # When used instead of &apos;src&apos;, sets the contents of a file directly to the specified value. This is for simple values, for anything complex or with formatting</span><br><span class="line">                               please switch to the template module.</span><br><span class="line">      dest=                  # Remote absolute path where the file should be copied to. If src is a directory, this must be a directory too.</span><br><span class="line">      directory_mode         # When doing a recursive copy set the mode for the directories. If this is not set we will use the system defaults. The mode is only set on directories which are</span><br><span class="line">                               newly created, and will not affect those that already existed.</span><br><span class="line">      follow                 # This flag indicates that filesystem links, if they exist, should be followed.</span><br><span class="line">      force                  # the default is `yes&apos;, which will replace the remote file when contents are different than the source. If `no&apos;, the file will only be transferred if the</span><br><span class="line">                               destination does not exist.</span><br><span class="line">      group                  # name of the group that should own the file/directory, as would be fed to `chown&apos;</span><br><span class="line">      mode                   # mode the file or directory should be. For those used to `/usr/bin/chmod&apos; remember that modes are actually octal numbers (like 0644). Leaving off the leading</span><br><span class="line">                               zero will likely have unexpected results. As of version 1.8, the mode may be specified as a symbolic mode (for example, `u+rwx&apos;</span><br><span class="line">                               or `u=rw,g=r,o=r&apos;).</span><br><span class="line">      owner                  # name of the user that should own the file/directory, as would be fed to `chown&apos;</span><br><span class="line">      remote_src             # If False, it will search for src at originating/master machine, if True it will go to the remote/target machine for the src. Default is False. Currently</span><br><span class="line">                               remote_src does not support recursive copying.</span><br><span class="line">      selevel                # level part of the SELinux file context. This is the MLS/MCS attribute, sometimes known as the `range&apos;. `_default&apos; feature works as for `seuser&apos;.</span><br><span class="line">      serole                 # role part of SELinux file context, `_default&apos; feature works as for `seuser&apos;.</span><br><span class="line">      setype                 # type part of SELinux file context, `_default&apos; feature works as for `seuser&apos;.</span><br><span class="line">      seuser                 # user part of SELinux file context. Will default to system policy, if applicable. If set to `_default&apos;, it will use the `user&apos; portion of the policy if available</span><br><span class="line">      src                    # Local path to a file to copy to the remote server; can be absolute or relative. If path is a directory, it is copied recursively. In this case, if path ends</span><br><span class="line">                               with &quot;/&quot;, only inside contents of that directory are copied to destination. Otherwise, if it does not end with &quot;/&quot;, the directory</span><br><span class="line">                               itself with all contents is copied. This behavior is similar to Rsync.</span><br><span class="line">      unsafe_writes          # Normally this module uses atomic operations to prevent data corruption or inconsistent reads from the target files, sometimes systems are configured or just</span><br><span class="line">                               broken in ways that prevent this. One example are docker mounted files, they cannot be updated atomically and can only be done in</span><br><span class="line">                               an unsafe manner. This boolean option allows ansible to fall back to unsafe methods of updating files for those cases in which</span><br><span class="line">                               you do not have any other choice. Be aware that this is subject to race conditions and can lead to data corruption.</span><br><span class="line">      validate               # The validation command to run before copying into place. The path to the file to validate is passed in via &apos;%s&apos; which must be present as in the example below.</span><br><span class="line">                               The command is passed securely so shell features like expansion and pipes won&apos;t work.</span><br></pre></td></tr></table></figure>
+<h4 id="实例-4"><a href="#实例-4" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible web1 -m copy -a &apos;src=/etc/issue dest=/tmp/issue.test owner=root mode=600&apos;     # 复制/etc/issue文件到/tmp/issue.test，属主为root，权限为600</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;checksum&quot;: &quot;4bcf51306f70feaba156df3a40057c7f39291b0e&quot;, </span><br><span class="line">    &quot;dest&quot;: &quot;/tmp/issue.test&quot;, </span><br><span class="line">    &quot;gid&quot;: 0, </span><br><span class="line">    &quot;group&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;md5sum&quot;: &quot;311289dd6930cf0c2c1239db2005977c&quot;, </span><br><span class="line">    &quot;mode&quot;: &quot;0600&quot;, </span><br><span class="line">    &quot;owner&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;size&quot;: 87, </span><br><span class="line">    &quot;src&quot;: &quot;/root/.ansible/tmp/ansible-tmp-1509368382.57-193403017102094/source&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;file&quot;, </span><br><span class="line">    &quot;uid&quot;: 0</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;checksum&quot;: &quot;4bcf51306f70feaba156df3a40057c7f39291b0e&quot;, </span><br><span class="line">    &quot;dest&quot;: &quot;/tmp/issue.test&quot;, </span><br><span class="line">    &quot;gid&quot;: 0, </span><br><span class="line">    &quot;group&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;md5sum&quot;: &quot;311289dd6930cf0c2c1239db2005977c&quot;, </span><br><span class="line">    &quot;mode&quot;: &quot;0600&quot;, </span><br><span class="line">    &quot;owner&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;size&quot;: 87, </span><br><span class="line">    &quot;src&quot;: &quot;/root/.ansible/tmp/ansible-tmp-1509368382.61-233451926726318/source&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;file&quot;, </span><br><span class="line">    &quot;uid&quot;: 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -a &quot;ls -l /tmp/issue.test&quot;       # 查看上面拷贝的issue.text文件，权限是600，属主600，ok</span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">-rw------- 1 root root 87 Oct 30 20:59 /tmp/issue.test</span><br><span class="line"></span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">-rw------- 1 root root 87 Oct 30 20:59 /tmp/issue.test</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m copy -a &apos;content=&quot;hello world\nwww.ihaiyun.cc\n&quot; dest=&apos;/tmp/file&apos;&apos;        # 生成文本内容到指定文件</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;checksum&quot;: &quot;fbc4006923a9a0d66b58d32f363b6b00e33d71db&quot;, </span><br><span class="line">    &quot;dest&quot;: &quot;/tmp/file&quot;, </span><br><span class="line">    &quot;gid&quot;: 0, </span><br><span class="line">    &quot;group&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;md5sum&quot;: &quot;7efb37bf97c9e50207309ec306f2b261&quot;, </span><br><span class="line">    &quot;mode&quot;: &quot;0644&quot;, </span><br><span class="line">    &quot;owner&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;size&quot;: 27, </span><br><span class="line">    &quot;src&quot;: &quot;/root/.ansible/tmp/ansible-tmp-1509369457.92-279733809519544/source&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;file&quot;, </span><br><span class="line">    &quot;uid&quot;: 0</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;checksum&quot;: &quot;fbc4006923a9a0d66b58d32f363b6b00e33d71db&quot;, </span><br><span class="line">    &quot;dest&quot;: &quot;/tmp/file&quot;, </span><br><span class="line">    &quot;gid&quot;: 0, </span><br><span class="line">    &quot;group&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;md5sum&quot;: &quot;7efb37bf97c9e50207309ec306f2b261&quot;, </span><br><span class="line">    &quot;mode&quot;: &quot;0644&quot;, </span><br><span class="line">    &quot;owner&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;size&quot;: 27, </span><br><span class="line">    &quot;src&quot;: &quot;/root/.ansible/tmp/ansible-tmp-1509369457.91-73533303521348/source&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;file&quot;, </span><br><span class="line">    &quot;uid&quot;: 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -a &quot;cat /tmp/file&quot;       # 查看生成的文本，ok</span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">hello world</span><br><span class="line">www.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">hello world</span><br><span class="line">www.ihaiyun.cc</span><br></pre></td></tr></table></figure>
+<h3 id="file模块"><a href="#file模块" class="headerlink" title="file模块"></a>file模块</h3><p>用来设定文件属性。</p>
+<h4 id="帮助信息-5"><a href="#帮助信息-5" class="headerlink" title="帮助信息"></a>帮助信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible-doc -s file</span><br><span class="line">- name: Sets attributes of files</span><br><span class="line">  action: file</span><br><span class="line">      follow                 # This flag indicates that filesystem links, if they exist, should be followed.</span><br><span class="line">      force                  # force the creation of the symlinks in two cases: the source file does not exist (but will appear later); the destination exists and is a file (so, we need to</span><br><span class="line">                               unlink the &quot;path&quot; file and create symlink to the &quot;src&quot; file in place of it).</span><br><span class="line">      group                  # name of the group that should own the file/directory, as would be fed to `chown&apos;</span><br><span class="line">      mode                   # mode the file or directory should be. For those used to `/usr/bin/chmod&apos; remember that modes are actually octal numbers (like 0644). Leaving off the leading</span><br><span class="line">                               zero will likely have unexpected results. As of version 1.8, the mode may be specified as a symbolic mode (for example, `u+rwx&apos;</span><br><span class="line">                               or `u=rw,g=r,o=r&apos;).</span><br><span class="line">      owner                  # name of the user that should own the file/directory, as would be fed to `chown&apos;</span><br><span class="line">      path=                  # path to the file being managed.  Aliases: `dest&apos;, `name&apos;</span><br><span class="line">      recurse                # recursively set the specified file attributes (applies only to state=directory)</span><br><span class="line">      selevel                # level part of the SELinux file context. This is the MLS/MCS attribute, sometimes known as the `range&apos;. `_default&apos; feature works as for `seuser&apos;.</span><br><span class="line">      serole                 # role part of SELinux file context, `_default&apos; feature works as for `seuser&apos;.</span><br><span class="line">      setype                 # type part of SELinux file context, `_default&apos; feature works as for `seuser&apos;.</span><br><span class="line">      seuser                 # user part of SELinux file context. Will default to system policy, if applicable. If set to `_default&apos;, it will use the `user&apos; portion of the policy if available</span><br><span class="line">      src                    # path of the file to link to (applies only to `state=link&apos;). Will accept absolute, relative and nonexisting paths. Relative paths are not expanded.</span><br><span class="line">      state                  # If `directory&apos;, all immediate subdirectories will be created if they do not exist, since 1.7 they will be created with the supplied permissions. If `file&apos;, the</span><br><span class="line">                               file will NOT be created if it does not exist, see the [copy] or [template] module if you want that behavior.  If `link&apos;, the</span><br><span class="line">                               symbolic link will be created or changed. Use `hard&apos; for hardlinks. If `absent&apos;, directories will be recursively deleted, and</span><br><span class="line">                               files or symlinks will be unlinked. Note that [file] will not fail if the `path&apos; does not exist as the state did not change. If</span><br><span class="line">                               `touch&apos; (new in 1.4), an empty file will be created if the `path&apos; does not exist, while an existing file or directory will</span><br><span class="line">                               receive updated file access and modification times (similar to the way `touch` works from the command line).</span><br><span class="line">      unsafe_writes          # Normally this module uses atomic operations to prevent data corruption or inconsistent reads from the target files, sometimes systems are configured or just</span><br><span class="line">                               broken in ways that prevent this. One example are docker mounted files, they cannot be updated atomically and can only be done in</span><br><span class="line">                               an unsafe manner. This boolean option allows ansible to fall back to unsafe methods of updating files for those cases in which</span><br><span class="line">                               you do not have any other choice. Be aware that this is subject to race conditions and can lead to data corruption.</span><br></pre></td></tr></table></figure>
+<h4 id="实例-5"><a href="#实例-5" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible web1 -m file -a &apos;path=&quot;/tmp/file&quot; owner=&quot;mysql&quot; group=&quot;mysql&quot; mode=&quot;400&quot;&apos;         # 修改/tmp/file文件，用户和组为mysql，权限为400</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;gid&quot;: 2222, </span><br><span class="line">    &quot;group&quot;: &quot;mysql&quot;, </span><br><span class="line">    &quot;mode&quot;: &quot;0400&quot;, </span><br><span class="line">    &quot;owner&quot;: &quot;mysql&quot;, </span><br><span class="line">    &quot;path&quot;: &quot;/tmp/file&quot;, </span><br><span class="line">    &quot;size&quot;: 27, </span><br><span class="line">    &quot;state&quot;: &quot;file&quot;, </span><br><span class="line">    &quot;uid&quot;: 2222</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;gid&quot;: 2222, </span><br><span class="line">    &quot;group&quot;: &quot;mysql&quot;, </span><br><span class="line">    &quot;mode&quot;: &quot;0400&quot;, </span><br><span class="line">    &quot;owner&quot;: &quot;mysql&quot;, </span><br><span class="line">    &quot;path&quot;: &quot;/tmp/file&quot;, </span><br><span class="line">    &quot;size&quot;: 27, </span><br><span class="line">    &quot;state&quot;: &quot;file&quot;, </span><br><span class="line">    &quot;uid&quot;: 2222</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -a &apos;ls -l /tmp/file&apos;         # 查看/tmp/file文件，用户和组为mysql，权限为400</span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">-r-------- 1 mysql mysql 27 Oct 30 21:17 /tmp/file</span><br><span class="line"></span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">-r-------- 1 mysql mysql 27 Oct 30 21:17 /tmp/file</span><br><span class="line"></span><br><span class="line">[root@centos6 ~]# ansible web1 -m file -m file -a &apos;src=&quot;/etc/fstab&quot; path=&quot;/tmp/fstab&quot; state=&quot;link&quot;&apos;         # 创建符号链接文件</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;dest&quot;: &quot;/tmp/fstab&quot;, </span><br><span class="line">    &quot;gid&quot;: 0, </span><br><span class="line">    &quot;group&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;mode&quot;: &quot;0777&quot;, </span><br><span class="line">    &quot;owner&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;size&quot;: 10, </span><br><span class="line">    &quot;src&quot;: &quot;/etc/fstab&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;link&quot;, </span><br><span class="line">    &quot;uid&quot;: 0</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: true, </span><br><span class="line">    &quot;dest&quot;: &quot;/tmp/fstab&quot;, </span><br><span class="line">    &quot;gid&quot;: 0, </span><br><span class="line">    &quot;group&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;mode&quot;: &quot;0777&quot;, </span><br><span class="line">    &quot;owner&quot;: &quot;root&quot;, </span><br><span class="line">    &quot;size&quot;: 10, </span><br><span class="line">    &quot;src&quot;: &quot;/etc/fstab&quot;, </span><br><span class="line">    &quot;state&quot;: &quot;link&quot;, </span><br><span class="line">    &quot;uid&quot;: 0</span><br><span class="line">&#125;</span><br><span class="line">[root@centos6 ~]# ansible web1 -a &apos;ls -l /tmp/fstab&apos;        # 确认创建</span><br><span class="line">192.168.8.13 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">lrwxrwxrwx 1 root root 10 Oct 30 21:31 /tmp/fstab -&gt; /etc/fstab</span><br><span class="line"></span><br><span class="line">192.168.8.12 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">lrwxrwxrwx 1 root root 10 Oct 30 21:31 /tmp/fstab -&gt; /etc/fstab</span><br></pre></td></tr></table></figure>
+<h3 id="ping模块"><a href="#ping模块" class="headerlink" title="ping模块"></a>ping模块</h3><p>测试远程主机的连通性。</p>
+<h4 id="帮助信息-6"><a href="#帮助信息-6" class="headerlink" title="帮助信息"></a>帮助信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible-doc -s ping</span><br><span class="line">- name: Try to connect to host, verify a usable python and return `pong&apos; on success.</span><br><span class="line">  action: ping</span><br></pre></td></tr></table></figure>
+<h4 id="实例-6"><a href="#实例-6" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ansible web1 -m ping          # 测试如果能ping同就pong</span><br><span class="line">192.168.8.12 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: false, </span><br><span class="line">    &quot;ping&quot;: &quot;pong&quot;</span><br><span class="line">&#125;</span><br><span class="line">192.168.8.13 | SUCCESS =&gt; &#123;</span><br><span class="line">    &quot;changed&quot;: false, </span><br><span class="line">    &quot;ping&quot;: &quot;pong&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-10-30, 22:44:41</p>
+        <p><span>最后更新:</span>2018-04-17, 08:18:50</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/30/Ansible-configure1/" title="Ansible常用模块一">https://houhaiyun.github.io/2017/10/30/Ansible-configure1/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/30/Ansible-configure1/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/30/Ansible-configure2/">
+                    Ansible常用模块二
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/30/Ansible-Install/">
+                    Ansible安装与使用
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#模块帮助"><span class="toc-number">1.</span> <span class="toc-text">模块帮助</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ansible命令"><span class="toc-number">2.</span> <span class="toc-text">ansible命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#语法"><span class="toc-number">2.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-number">2.2.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#f-forks"><span class="toc-number">2.3.</span> <span class="toc-text">[-f forks]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#m-module-name"><span class="toc-number">2.4.</span> <span class="toc-text">[-m module_name]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#a-args"><span class="toc-number">2.5.</span> <span class="toc-text">[-a args]</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#command模块"><span class="toc-number">3.</span> <span class="toc-text">command模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#帮助信息"><span class="toc-number">3.1.</span> <span class="toc-text">帮助信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例"><span class="toc-number">3.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cron模块"><span class="toc-number">4.</span> <span class="toc-text">cron模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#常用参数"><span class="toc-number">4.1.</span> <span class="toc-text">常用参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#帮助信息-1"><span class="toc-number">4.2.</span> <span class="toc-text">帮助信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-1"><span class="toc-number">4.3.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#user模块"><span class="toc-number">5.</span> <span class="toc-text">user模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#常用参数-1"><span class="toc-number">5.1.</span> <span class="toc-text">常用参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#帮助信息-2"><span class="toc-number">5.2.</span> <span class="toc-text">帮助信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-2"><span class="toc-number">5.3.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#group模块"><span class="toc-number">6.</span> <span class="toc-text">group模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#帮助信息-3"><span class="toc-number">6.1.</span> <span class="toc-text">帮助信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-3"><span class="toc-number">6.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#copy模块"><span class="toc-number">7.</span> <span class="toc-text">copy模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#帮助信息-4"><span class="toc-number">7.1.</span> <span class="toc-text">帮助信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-4"><span class="toc-number">7.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#file模块"><span class="toc-number">8.</span> <span class="toc-text">file模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#帮助信息-5"><span class="toc-number">8.1.</span> <span class="toc-text">帮助信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-5"><span class="toc-number">8.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ping模块"><span class="toc-number">9.</span> <span class="toc-text">ping模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#帮助信息-6"><span class="toc-number">9.1.</span> <span class="toc-text">帮助信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-6"><span class="toc-number">9.2.</span> <span class="toc-text">实例</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Ansible常用模块一　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/30/Ansible-configure2/" title="上一篇: Ansible常用模块二">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/30/Ansible-Install/" title="下一篇: Ansible安装与使用">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
