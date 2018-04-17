@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="拓扑     服务 IP 功能     LVS+KeepALived(master/backup) RIP：192.168.8.138 VIP：192.168.8.8 实现LVS高可用   LVS+KeepALived(backup/master) RIP：192.168.8.140 VIP：192.168.8.6 实现LVS高可用   Apache1 RIP：192.168.8.128 VIP：">
+<meta name="keywords" content="KeepAlived">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现LVS+KeepAlived双主模式">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/29/KeepAlived-Shuangzhu-LVS-2017-10-29/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="拓扑     服务 IP 功能     LVS+KeepALived(master/backup) RIP：192.168.8.138 VIP：192.168.8.8 实现LVS高可用   LVS+KeepALived(backup/master) RIP：192.168.8.140 VIP：192.168.8.6 实现LVS高可用   Apache1 RIP：192.168.8.128 VIP：">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/Keepalived%E5%8F%8C%E4%B8%BB+LVS-%E6%8B%93%E6%89%91.jpg">
+<meta property="og:updated_time" content="2018-04-17T12:57:36.712Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="实现LVS+KeepAlived双主模式">
+<meta name="twitter:description" content="拓扑     服务 IP 功能     LVS+KeepALived(master/backup) RIP：192.168.8.138 VIP：192.168.8.8 实现LVS高可用   LVS+KeepALived(backup/master) RIP：192.168.8.140 VIP：192.168.8.6 实现LVS高可用   Apache1 RIP：192.168.8.128 VIP：">
+<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/Keepalived%E5%8F%8C%E4%B8%BB+LVS-%E6%8B%93%E6%89%91.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>实现LVS+KeepAlived双主模式 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIDE/">AIDE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cron/">Cron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropbear/">Dropbear</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Haproxy/">Haproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KeepAlived/">KeepAlived</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP搭建WordPress/">LNAMP搭建WordPress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Memcached/">Memcached</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装/">Nginx编译安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vsftp/">Vsftp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/关系型数据概念/">关系型数据概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库简介/">数据库简介</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构模型/">数据结构模型</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/目前流行的开源RDBMS/">目前流行的开源RDBMS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例四/">脚本实例四</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计关系数据库的范式基础概念/">设计关系数据库的范式基础概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/重定向和管道/">重定向和管道</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-KeepAlived-Shuangzhu-LVS-2017-10-29" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/29/KeepAlived-Shuangzhu-LVS-2017-10-29/" class="article-date">
+      <time datetime="2017-10-29T21:52:51.000Z" itemprop="datePublished">2017-10-29</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      实现LVS+KeepAlived双主模式
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KeepAlived/">KeepAlived</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="拓扑"><a href="#拓扑" class="headerlink" title="拓扑"></a>拓扑</h3><center><img src="http://ovuhiuqqd.bkt.clouddn.com/Keepalived%E5%8F%8C%E4%B8%BB+LVS-%E6%8B%93%E6%89%91.jpg"></center>
+
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LVS+KeepALived(master/backup)</td>
+<td>RIP：192.168.8.138 VIP：192.168.8.8</td>
+<td>实现LVS高可用</td>
+</tr>
+<tr>
+<td>LVS+KeepALived(backup/master)</td>
+<td>RIP：192.168.8.140 VIP：192.168.8.6</td>
+<td>实现LVS高可用</td>
+</tr>
+<tr>
+<td>Apache1</td>
+<td>RIP：192.168.8.128 VIP：192.168.8.8</td>
+<td>提供web服务</td>
+</tr>
+<tr>
+<td>Apache2</td>
+<td>RIP：192.168.8.136 VIP：192.168.8.8</td>
+<td>提供web服务</td>
+</tr>
+<tr>
+<td>Apache3</td>
+<td>RIP：192.168.8.137 VIP：192.168.8.6</td>
+<td>提供web服务</td>
+</tr>
+<tr>
+<td>Apache4</td>
+<td>RIP：192.168.8.139 VIP：192.168.8.6</td>
+<td>提供web服务</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h3 id="Real-Server配置"><a href="#Real-Server配置" class="headerlink" title="Real Server配置"></a>Real Server配置</h3><h4 id="Apache1配置"><a href="#Apache1配置" class="headerlink" title="Apache1配置"></a>Apache1配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">[root@Web1 ~]# hostname Apache1</span><br><span class="line">[root@Apache1 ~]# cat lvs_dr_rs.sh          # 执行real server 脚本</span><br><span class="line">#!/bin/bash</span><br><span class="line"># Author: haiyun</span><br><span class="line"># Date: 2017-08-13</span><br><span class="line"></span><br><span class="line">vip=&apos;192.168.8.8&apos;</span><br><span class="line">mask=&apos;255.255.255.255&apos;</span><br><span class="line">dev=lo:1</span><br><span class="line">rpm -q httpd &amp;&gt; /dev/null || yum -y install httpd &amp;&gt;/dev/null</span><br><span class="line">service httpd start &amp;&gt; /dev/null &amp;&amp; echo &quot;The httpd Server is Ready!&quot;</span><br><span class="line">echo &quot;&lt;h1&gt;`hostname`&lt;/h1&gt;&quot; &gt; /var/www/html/index.html</span><br><span class="line"></span><br><span class="line">case $1 in</span><br><span class="line">start)</span><br><span class="line">    echo 1 &gt; /proc/sys/net/ipv4/conf/all/arp_ignore</span><br><span class="line">    echo 1 &gt; /proc/sys/net/ipv4/conf/lo/arp_ignore</span><br><span class="line">    echo 2 &gt; /proc/sys/net/ipv4/conf/all/arp_announce</span><br><span class="line">    echo 2 &gt; /proc/sys/net/ipv4/conf/lo/arp_announce</span><br><span class="line">    ifconfig $dev $vip netmask $mask broadcast $vip up</span><br><span class="line">    #route add -host $vip dev $dev</span><br><span class="line">    echo &quot;The RS Server is Ready!&quot;</span><br><span class="line">    ;;</span><br><span class="line">stop)</span><br><span class="line">    ifconfig $dev down</span><br><span class="line">    echo 0 &gt; /proc/sys/net/ipv4/conf/all/arp_ignore</span><br><span class="line">    echo 0 &gt; /proc/sys/net/ipv4/conf/lo/arp_ignore</span><br><span class="line">    echo 0 &gt; /proc/sys/net/ipv4/conf/all/arp_announce</span><br><span class="line">    echo 0 &gt; /proc/sys/net/ipv4/conf/lo/arp_announce</span><br><span class="line">    echo &quot;The RS Server is Canceled!&quot;</span><br><span class="line">    ;;</span><br><span class="line">*) </span><br><span class="line">    echo &quot;Usage: $(basename $0) start|stop&quot;</span><br><span class="line">    exit 1</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line">[root@Apache1 ~]# bash lvs_dr_rs.sh start</span><br><span class="line">The httpd Server is Ready!</span><br><span class="line">The RS Server is Ready!</span><br><span class="line">[root@Apache1 ~]# ifconfig      # 虚拟IP已经配置</span><br><span class="line">eth1      Link encap:Ethernet  HWaddr 00:0C:29:DE:D2:8C  </span><br><span class="line">          inet addr:192.168.8.128  Bcast:192.168.8.255  Mask:255.255.255.0</span><br><span class="line">          inet6 addr: fe80::20c:29ff:fede:d28c/64 Scope:Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:32600 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:25885 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:2694652 (2.5 MiB)  TX bytes:3566219 (3.4 MiB)</span><br><span class="line"></span><br><span class="line">lo        Link encap:Local Loopback  </span><br><span class="line">          inet addr:127.0.0.1  Mask:255.0.0.0</span><br><span class="line">          inet6 addr: ::1/128 Scope:Host</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line">          RX packets:20 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:20 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:0 </span><br><span class="line">          RX bytes:2168 (2.1 KiB)  TX bytes:2168 (2.1 KiB)</span><br><span class="line"></span><br><span class="line">lo:1      Link encap:Local Loopback  </span><br><span class="line">          inet addr:192.168.8.8  Mask:255.255.255.255</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line"></span><br><span class="line">[root@Apache1 ~]# curl 192.168.8.128        # 本地测试，ok</span><br><span class="line">&lt;h1&gt;Apache1&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Apache2配置"><a href="#Apache2配置" class="headerlink" title="Apache2配置"></a>Apache2配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@Web2 ~]# hostname Apache2</span><br><span class="line">[root@Apache2 ~]# bash lvs_dr_rs.sh start           # 执行real server 脚本，此脚本的内容和Apache1中是相同的</span><br><span class="line">The httpd Server is Ready!</span><br><span class="line">The RS Server is Ready!</span><br><span class="line">[root@Apache2 ~]# ifconfig          # 虚拟IP已经配置</span><br><span class="line">eth1      Link encap:Ethernet  HWaddr 00:0C:29:23:DB:AF  </span><br><span class="line">          inet addr:192.168.8.136  Bcast:192.168.8.255  Mask:255.255.255.0</span><br><span class="line">          inet6 addr: fe80::20c:29ff:fe23:dbaf/64 Scope:Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:32677 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:26075 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:2696522 (2.5 MiB)  TX bytes:3582485 (3.4 MiB)</span><br><span class="line"></span><br><span class="line">lo        Link encap:Local Loopback  </span><br><span class="line">          inet addr:127.0.0.1  Mask:255.0.0.0</span><br><span class="line">          inet6 addr: ::1/128 Scope:Host</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line">          RX packets:20 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:20 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:0 </span><br><span class="line">          RX bytes:2168 (2.1 KiB)  TX bytes:2168 (2.1 KiB)</span><br><span class="line"></span><br><span class="line">lo:1      Link encap:Local Loopback  </span><br><span class="line">          inet addr:192.168.8.8  Mask:255.255.255.255</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line"></span><br><span class="line">[root@Apache2 ~]# curl 192.168.8.136         # 本地测试，ok</span><br><span class="line">&lt;h1&gt;Apache2&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Apache3配置"><a href="#Apache3配置" class="headerlink" title="Apache3配置"></a>Apache3配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# hostname Apache3</span><br><span class="line">[root@localhost ~]# bash</span><br><span class="line">[root@Apache3 ~]# cat lvs_dr_rs.sh          # 查看你real server 脚本和Apache1的虚拟IP是不同的</span><br><span class="line">#!/bin/bash</span><br><span class="line">#Author:wangxiaochun</span><br><span class="line">#Date:2017-08-13</span><br><span class="line">vip=&apos;192.168.8.6&apos;       # 虚拟IP已改变</span><br><span class="line">mask=&apos;255.255.255.255&apos;</span><br><span class="line">dev=lo:1</span><br><span class="line">rpm -q httpd &amp;&gt; /dev/null || yum -y install httpd &amp;&gt;/dev/null</span><br><span class="line">service httpd start &amp;&gt; /dev/null &amp;&amp; echo &quot;The httpd Server is Ready!&quot;</span><br><span class="line">echo &quot;&lt;h1&gt;`hostname`&lt;/h1&gt;&quot; &gt; /var/www/html/index.html</span><br><span class="line"></span><br><span class="line">case $1 in</span><br><span class="line">start)</span><br><span class="line">    echo 1 &gt; /proc/sys/net/ipv4/conf/all/arp_ignore</span><br><span class="line">    echo 1 &gt; /proc/sys/net/ipv4/conf/lo/arp_ignore</span><br><span class="line">    echo 2 &gt; /proc/sys/net/ipv4/conf/all/arp_announce</span><br><span class="line">    echo 2 &gt; /proc/sys/net/ipv4/conf/lo/arp_announce</span><br><span class="line">    ifconfig $dev $vip netmask $mask broadcast $vip up</span><br><span class="line">    #route add -host $vip dev $dev</span><br><span class="line">    echo &quot;The RS Server is Ready!&quot;</span><br><span class="line">    ;;</span><br><span class="line">stop)</span><br><span class="line">    ifconfig $dev down</span><br><span class="line">    echo 0 &gt; /proc/sys/net/ipv4/conf/all/arp_ignore</span><br><span class="line">    echo 0 &gt; /proc/sys/net/ipv4/conf/lo/arp_ignore</span><br><span class="line">    echo 0 &gt; /proc/sys/net/ipv4/conf/all/arp_announce</span><br><span class="line">    echo 0 &gt; /proc/sys/net/ipv4/conf/lo/arp_announce</span><br><span class="line">    echo &quot;The RS Server is Canceled!&quot;</span><br><span class="line">    ;;</span><br><span class="line">*) </span><br><span class="line">    echo &quot;Usage: $(basename $0) start|stop&quot;</span><br><span class="line">    exit 1</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line">[root@Apache3 ~]# bash lvs_dr_rs.sh start</span><br><span class="line">The httpd Server is Ready!</span><br><span class="line">The RS Server is Ready!</span><br><span class="line">[root@Apache3 ~]# ifconfig          # 虚拟IP已配置</span><br><span class="line">eth1      Link encap:Ethernet  HWaddr 00:0C:29:FC:14:0C  </span><br><span class="line">          inet addr:192.168.8.137  Bcast:192.168.8.255  Mask:255.255.255.0</span><br><span class="line">          inet6 addr: fe80::20c:29ff:fefc:140c/64 Scope:Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:260 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:204 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:28838 (28.1 KiB)  TX bytes:32999 (32.2 KiB)</span><br><span class="line"></span><br><span class="line">lo        Link encap:Local Loopback  </span><br><span class="line">          inet addr:127.0.0.1  Mask:255.0.0.0</span><br><span class="line">          inet6 addr: ::1/128 Scope:Host</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line">          RX packets:0 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:0 </span><br><span class="line">          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)</span><br><span class="line"></span><br><span class="line">lo:1      Link encap:Local Loopback  </span><br><span class="line">          inet addr:192.168.8.6  Mask:255.255.255.255</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line"></span><br><span class="line">[root@Apache3 ~]# curl 192.168.8.137        # 本地访问测试，ok</span><br><span class="line">&lt;h1&gt;Apache3&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Apache4配置"><a href="#Apache4配置" class="headerlink" title="Apache4配置"></a>Apache4配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">[root@Client ~]# hostname Apache4</span><br><span class="line">[root@Client ~]# bash</span><br><span class="line">[root@Apache4 ~]# bash lvs_dr_rs.sh start       # 执行real server脚本，此脚本的内容和Apache3中是相同的</span><br><span class="line">The httpd Server is Ready!</span><br><span class="line">The RS Server is Ready!</span><br><span class="line"></span><br><span class="line">[root@Apache4 ~]# ifconfig </span><br><span class="line">eth1      Link encap:Ethernet  HWaddr 00:0C:29:E3:36:5F  </span><br><span class="line">          inet addr:192.168.8.139  Bcast:192.168.8.255  Mask:255.255.255.0</span><br><span class="line">          inet6 addr: fe80::20c:29ff:fee3:365f/64 Scope:Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:1326 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:1026 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:121526 (118.6 KiB)  TX bytes:133312 (130.1 KiB)</span><br><span class="line"></span><br><span class="line">lo        Link encap:Local Loopback  </span><br><span class="line">          inet addr:127.0.0.1  Mask:255.0.0.0</span><br><span class="line">          inet6 addr: ::1/128 Scope:Host</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line">          RX packets:0 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:0 </span><br><span class="line">          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)</span><br><span class="line"></span><br><span class="line">lo:1      Link encap:Local Loopback  </span><br><span class="line">          inet addr:192.168.8.6  Mask:255.255.255.255</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</span><br><span class="line"></span><br><span class="line">[root@Apache4 ~]# curl 192.168.8.139        # 本地访问测试，ok</span><br><span class="line">&lt;h1&gt;Apache4&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="KeepAlived配置"><a href="#KeepAlived配置" class="headerlink" title="KeepAlived配置"></a>KeepAlived配置</h3><h4 id="master-192-168-8-138-配置"><a href="#master-192-168-8-138-配置" class="headerlink" title="master(192.168.8.138)配置"></a>master(192.168.8.138)配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# vim /etc/keepalived/keepalived.conf</span><br><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   notification_email &#123;</span><br><span class="line">     root@localhost</span><br><span class="line">   &#125;   </span><br><span class="line">   notification_email_from keepalived@localhost</span><br><span class="line">   smtp_server 127.0.0.1</span><br><span class="line">   smtp_connect_timeout 30</span><br><span class="line">   router_id master</span><br><span class="line">   vrrp_mcast_group 224.18.100.100</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER</span><br><span class="line">    interface ens34</span><br><span class="line">    virtual_router_id 8</span><br><span class="line">    priority 100 </span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass psdfuhg</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.8.8/24 dev ens34 label ens34:0</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">virtual_server 192.168.8.8 80 &#123;</span><br><span class="line">    delay_loop 3 </span><br><span class="line">    lb_algo rr</span><br><span class="line">    lb_kind DR</span><br><span class="line">    protocol TCP </span><br><span class="line">    </span><br><span class="line">    sorry_server 127.0.0.1 80  </span><br><span class="line">    </span><br><span class="line">    real_server 192.168.8.128 80 &#123;</span><br><span class="line">        weight 1</span><br><span class="line">        HTTP_GET &#123;</span><br><span class="line">        url &#123;</span><br><span class="line">            path /</span><br><span class="line">            status_code 200 </span><br><span class="line">        &#125;   </span><br><span class="line">        connect_timeout 1</span><br><span class="line">        nb_get_retry 3 </span><br><span class="line">        delay_before_retyr 1</span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    real_server 192.168.8.136 80 &#123;</span><br><span class="line">            weight 1</span><br><span class="line">            HTTP_GET &#123;</span><br><span class="line">            url &#123;</span><br><span class="line">                path /</span><br><span class="line">                status_code 200</span><br><span class="line">            &#125;</span><br><span class="line">            connect_timeout 1</span><br><span class="line">            nb_get_retry 3</span><br><span class="line">            delay_before_retyr 1</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_2 &#123;</span><br><span class="line">    state BACKUP</span><br><span class="line">    interface ens34</span><br><span class="line">    virtual_router_id 6</span><br><span class="line">    priority 90</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass dsdfuhg</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.8.6/24 dev ens34 label ens34:1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">virtual_server 192.168.8.6 80 &#123;</span><br><span class="line">    delay_loop 3</span><br><span class="line">    lb_algo rr</span><br><span class="line">    lb_kind DR</span><br><span class="line">    protocol TCP</span><br><span class="line"></span><br><span class="line">    sorry_server 127.0.0.1 80</span><br><span class="line"></span><br><span class="line">    real_server 192.168.8.137 80 &#123;</span><br><span class="line">        weight 1</span><br><span class="line">        HTTP_GET &#123;</span><br><span class="line">        url &#123;</span><br><span class="line">            path /</span><br><span class="line">            status_code 200</span><br><span class="line">        &#125;</span><br><span class="line">        connect_timeout 1</span><br><span class="line">        nb_get_retry 3</span><br><span class="line">        delay_before_retyr 1</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    real_server 192.168.8.139 80 &#123;</span><br><span class="line">            weight 1</span><br><span class="line">            HTTP_GET &#123;</span><br><span class="line">            url &#123;</span><br><span class="line">                path /</span><br><span class="line">                status_code 200</span><br><span class="line">            &#125;</span><br><span class="line">            connect_timeout 1</span><br><span class="line">            nb_get_retry 3</span><br><span class="line">            delay_before_retyr 1</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="backup-192-168-8-140-配置"><a href="#backup-192-168-8-140-配置" class="headerlink" title="backup(192.168.8.140)配置"></a>backup(192.168.8.140)配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">[root@backup ~]# vim /etc/keepalived/keepalived.conf</span><br><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   notification_email &#123;</span><br><span class="line">     root@localhost</span><br><span class="line">   &#125;   </span><br><span class="line">   notification_email_from keepalived@localhost</span><br><span class="line">   smtp_server 127.0.0.1</span><br><span class="line">   smtp_connect_timeout 30</span><br><span class="line">   router_id master</span><br><span class="line">   vrrp_mcast_group 224.18.100.100</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP</span><br><span class="line">    interface ens34</span><br><span class="line">    virtual_router_id 8</span><br><span class="line">    priority 99</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass psdfuhg</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.8.8/24 dev ens34 label ens34:0</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">virtual_server 192.168.8.8 80 &#123;</span><br><span class="line">    delay_loop 3 </span><br><span class="line">    lb_algo rr</span><br><span class="line">    lb_kind DR</span><br><span class="line">    protocol TCP </span><br><span class="line">    </span><br><span class="line">    sorry_server 127.0.0.1 80  </span><br><span class="line">    </span><br><span class="line">    real_server 192.168.8.128 80 &#123;</span><br><span class="line">        weight 1</span><br><span class="line">        HTTP_GET &#123;</span><br><span class="line">        url &#123;</span><br><span class="line">            path /</span><br><span class="line">            status_code 200 </span><br><span class="line">        &#125;   </span><br><span class="line">        connect_timeout 1</span><br><span class="line">        nb_get_retry 3 </span><br><span class="line">        delay_before_retyr 1</span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    real_server 192.168.8.136 80 &#123;</span><br><span class="line">            weight 1</span><br><span class="line">            HTTP_GET &#123;</span><br><span class="line">            url &#123;</span><br><span class="line">                path /</span><br><span class="line">                status_code 200</span><br><span class="line">            &#125;</span><br><span class="line">            connect_timeout 1</span><br><span class="line">            nb_get_retry 3</span><br><span class="line">            delay_before_retyr 1</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_2 &#123;</span><br><span class="line">    state MASTER</span><br><span class="line">    interface ens34</span><br><span class="line">    virtual_router_id 6</span><br><span class="line">    priority 100</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass dsdfuhg</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.8.6/24 dev ens34 label ens34:1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">virtual_server 192.168.8.6 80 &#123;</span><br><span class="line">    delay_loop 3</span><br><span class="line">    lb_algo rr</span><br><span class="line">    lb_kind DR</span><br><span class="line">    protocol TCP</span><br><span class="line"></span><br><span class="line">    sorry_server 127.0.0.1 80</span><br><span class="line"></span><br><span class="line">    real_server 192.168.8.137 80 &#123;</span><br><span class="line">        weight 1</span><br><span class="line">        HTTP_GET &#123;</span><br><span class="line">        url &#123;</span><br><span class="line">            path /</span><br><span class="line">            status_code 200</span><br><span class="line">        &#125;</span><br><span class="line">        connect_timeout 1</span><br><span class="line">        nb_get_retry 3</span><br><span class="line">        delay_before_retyr 1</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    real_server 192.168.8.139 80 &#123;</span><br><span class="line">            weight 1</span><br><span class="line">            HTTP_GET &#123;</span><br><span class="line">            url &#123;</span><br><span class="line">                path /</span><br><span class="line">                status_code 200</span><br><span class="line">            &#125;</span><br><span class="line">            connect_timeout 1</span><br><span class="line">            nb_get_retry 3</span><br><span class="line">            delay_before_retyr 1</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="查看ipvs规则"><a href="#查看ipvs规则" class="headerlink" title="查看ipvs规则"></a>查看ipvs规则</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# ipvsadm -Ln            # master</span><br><span class="line">IP Virtual Server version 1.2.1 (size=4096)</span><br><span class="line">Prot LocalAddress:Port Scheduler Flags</span><br><span class="line">  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn</span><br><span class="line">TCP  192.168.8.6:80 rr</span><br><span class="line">  -&gt; 192.168.8.137:80             Route   1      0          0         </span><br><span class="line">  -&gt; 192.168.8.139:80             Route   1      0          0         </span><br><span class="line">TCP  192.168.8.8:80 rr</span><br><span class="line">  -&gt; 192.168.8.128:80             Route   1      0          0         </span><br><span class="line">  -&gt; 192.168.8.136:80             Route   1      0          0    </span><br><span class="line"></span><br><span class="line">[root@backup ~]# ipvsadm -Ln        # backup</span><br><span class="line">IP Virtual Server version 1.2.1 (size=4096)</span><br><span class="line">Prot LocalAddress:Port Scheduler Flags</span><br><span class="line">  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn</span><br><span class="line">TCP  192.168.8.6:80 rr</span><br><span class="line">  -&gt; 192.168.8.137:80             Route   1      0          0         </span><br><span class="line">  -&gt; 192.168.8.139:80             Route   1      0          0         </span><br><span class="line">TCP  192.168.8.8:80 rr</span><br><span class="line">  -&gt; 192.168.8.128:80             Route   1      0          0         </span><br><span class="line">  -&gt; 192.168.8.136:80             Route   1      0          0</span><br></pre></td></tr></table></figure>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# ifconfig           # 目前192.168.8.8是在master上面的</span><br><span class="line">ens34: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.8.138  netmask 255.255.255.0  broadcast 192.168.8.255</span><br><span class="line">        inet6 fe80::20c:29ff:feba:2438  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 00:0c:29:ba:24:38  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 21907  bytes 2653801 (2.5 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 29003  bytes 2770719 (2.6 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">ens34:0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.8.8  netmask 255.255.255.0  broadcast 0.0.0.0</span><br><span class="line">        ether 00:0c:29:ba:24:38  txqueuelen 1000  (Ethernet)</span><br><span class="line"></span><br><span class="line">[root@backup ~]# ifconfig       # 目前192.168.8.6是在backup上面的</span><br><span class="line">ens34: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.8.140  netmask 255.255.255.0  broadcast 192.168.8.255</span><br><span class="line">        inet6 fe80::250:56ff:fe37:a834  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 00:50:56:37:a8:34  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 52094  bytes 6502536 (6.2 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 68423  bytes 5624418 (5.3 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">ens34:0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.8.6  netmask 255.255.255.0  broadcast 0.0.0.0</span><br><span class="line">        ether 00:50:56:37:a8:34  txqueuelen 1000  (Ethernet)</span><br><span class="line"></span><br><span class="line">[root@Client ~]# curl 192.168.8.8           # 测试192.168.8.8没问题</span><br><span class="line">&lt;h1&gt;Apache2&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.8</span><br><span class="line">&lt;h1&gt;Apache1&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.8</span><br><span class="line">&lt;h1&gt;Apache2&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.8</span><br><span class="line">&lt;h1&gt;Apache1&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">[root@Client ~]# curl 192.168.8.6           # 测试192.168.8.6没问题</span><br><span class="line">&lt;h1&gt;Apache4&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.6</span><br><span class="line">&lt;h1&gt;Apache3&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.6</span><br><span class="line">&lt;h1&gt;Apache4&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.6</span><br><span class="line">&lt;h1&gt;Apache3&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">[root@master ~]# systemctl stop keepalived          # 停止keepalived</span><br><span class="line">[root@master ~]# ifconfig           # 查看IP，已经没有192.168.8.8了</span><br><span class="line">ens34: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.8.138  netmask 255.255.255.0  broadcast 192.168.8.255</span><br><span class="line">        inet6 fe80::20c:29ff:feba:2438  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 00:0c:29:ba:24:38  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 23569  bytes 2859248 (2.7 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 30953  bytes 2932185 (2.7 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">[root@backup ~]# ifconfig           # 查看IP，已经全部飘到backup上面了</span><br><span class="line">ens34: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.8.140  netmask 255.255.255.0  broadcast 192.168.8.255</span><br><span class="line">        inet6 fe80::250:56ff:fe37:a834  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 00:50:56:37:a8:34  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 54253  bytes 6771078 (6.4 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 71125  bytes 5855084 (5.5 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">ens34:0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.8.8  netmask 255.255.255.0  broadcast 0.0.0.0</span><br><span class="line">        ether 00:50:56:37:a8:34  txqueuelen 1000  (Ethernet)</span><br><span class="line"></span><br><span class="line">ens34:1: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.8.6  netmask 255.255.255.0  broadcast 0.0.0.0</span><br><span class="line">        ether 00:50:56:37:a8:34  txqueuelen 1000  (Ethernet)</span><br><span class="line"></span><br><span class="line">[root@Client ~]# curl 192.168.8.6           # 测试访问，依旧可以</span><br><span class="line">&lt;h1&gt;Apache3&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.6</span><br><span class="line">&lt;h1&gt;Apache4&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.6</span><br><span class="line">&lt;h1&gt;Apache3&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.6</span><br><span class="line">&lt;h1&gt;Apache4&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">[root@Client ~]# curl 192.168.8.8           # 测试访问，依旧可以</span><br><span class="line">&lt;h1&gt;Apache2&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.8</span><br><span class="line">&lt;h1&gt;Apache1&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.8</span><br><span class="line">&lt;h1&gt;Apache2&lt;/h1&gt;</span><br><span class="line">[root@Client ~]# curl 192.168.8.8</span><br><span class="line">&lt;h1&gt;Apache1&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/29/KeepAlived-Shuangzhu-LVS-2017-10-29/">实现LVS+KeepAlived双主模式</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-10-29, 21:52:51</p>
+        <p><span>最后更新:</span>2018-04-17, 12:57:36</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/29/KeepAlived-Shuangzhu-LVS-2017-10-29/" title="实现LVS+KeepAlived双主模式">https://houhaiyun.github.io/2017/10/29/KeepAlived-Shuangzhu-LVS-2017-10-29/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/29/KeepAlived-Shuangzhu-LVS-2017-10-29/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/29/KeepAlived-Log-2017-10-29/">
+                    KeepAlived单独记录日志
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/29/KeepAlived-Danzhu-LVS-2017-10-29/">
+                    实现LVS+KeepAlived单主模式
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#拓扑"><span class="toc-number">1.</span> <span class="toc-text">拓扑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Real-Server配置"><span class="toc-number">2.</span> <span class="toc-text">Real Server配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache1配置"><span class="toc-number">2.1.</span> <span class="toc-text">Apache1配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache2配置"><span class="toc-number">2.2.</span> <span class="toc-text">Apache2配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache3配置"><span class="toc-number">2.3.</span> <span class="toc-text">Apache3配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache4配置"><span class="toc-number">2.4.</span> <span class="toc-text">Apache4配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KeepAlived配置"><span class="toc-number">3.</span> <span class="toc-text">KeepAlived配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#master-192-168-8-138-配置"><span class="toc-number">3.1.</span> <span class="toc-text">master(192.168.8.138)配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#backup-192-168-8-140-配置"><span class="toc-number">3.2.</span> <span class="toc-text">backup(192.168.8.140)配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看ipvs规则"><span class="toc-number">4.</span> <span class="toc-text">查看ipvs规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">5.</span> <span class="toc-text">测试</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"实现LVS+KeepAlived双主模式　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/29/KeepAlived-Log-2017-10-29/" title="上一篇: KeepAlived单独记录日志">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/29/KeepAlived-Danzhu-LVS-2017-10-29/" title="下一篇: 实现LVS+KeepAlived单主模式">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx-2017-10-29/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log-2017-10-29/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS-2017-10-29/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS-2017-10-29/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-2017-10-29/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File-2017-10-29/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
