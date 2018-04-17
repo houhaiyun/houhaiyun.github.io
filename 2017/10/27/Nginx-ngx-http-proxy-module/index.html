@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="简介The ngx_http_proxy_module module allows passing requests to another server. 该ngx_http_proxy_module模块允许将请求传递给另一个服务器。 官网帮助文档：http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass">
+<meta name="keywords" content="Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模块 ngx_http_proxy_module">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/27/Nginx-ngx-http-proxy-module/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="简介The ngx_http_proxy_module module allows passing requests to another server. 该ngx_http_proxy_module模块允许将请求传递给另一个服务器。 官网帮助文档：http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/nginx-proxy-php.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/nginx-proxy-php2.jpg">
+<meta property="og:updated_time" content="2018-04-17T02:08:59.988Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="模块 ngx_http_proxy_module">
+<meta name="twitter:description" content="简介The ngx_http_proxy_module module allows passing requests to another server. 该ngx_http_proxy_module模块允许将请求传递给另一个服务器。 官网帮助文档：http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass">
+<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/nginx-proxy-php.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>模块 ngx_http_proxy_module | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">I want to be a CTO</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP/">LNAMP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">I want to be a CTO</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Nginx-ngx-http-proxy-module" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/27/Nginx-ngx-http-proxy-module/" class="article-date">
+      <time datetime="2017-10-27T23:29:12.000Z" itemprop="datePublished">2017-10-27</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      模块 ngx_http_proxy_module
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>The ngx_http_proxy_module module allows passing requests to another server.</p>
+<p>该<code>ngx_http_proxy_module</code>模块允许将请求传递给另一个服务器。</p>
+<p><a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass" target="_blank" rel="noopener">官网帮助文档：http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass</a></p>
+<a id="more"></a>
+<h3 id="proxy-pass-URL"><a href="#proxy-pass-URL" class="headerlink" title="proxy_pass URL;"></a>proxy_pass URL;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_pass URL;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	location, if in location, limit_except</span><br></pre></td></tr></table></figure></p>
+<p>设置代理服务器的协议和地址以及位置应映射到的可选<code>URI</code>。作为协议，可以指定<code>“ http”</code>或<code>“ https”</code>。该地址可以指定为域名或<code>IP</code>地址，也可以指定为可选端口：</p>
+<h4 id="实现反向代理服务"><a href="#实现反向代理服务" class="headerlink" title="实现反向代理服务"></a>实现反向代理服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">[root@Apache ~]# ifconfig eth1      # 查看Real Server的IP</span><br><span class="line">eth1      Link encap:Ethernet  HWaddr 00:0C:29:23:DB:AF  </span><br><span class="line">          inet addr:192.168.8.136  Bcast:192.168.8.255  Mask:255.255.255.0</span><br><span class="line">          inet6 addr: fe80::20c:29ff:fe23:dbaf/64 Scope:Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:216 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:153 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:22726 (22.1 KiB)  TX bytes:23032 (22.4 KiB)</span><br><span class="line">[root@Apache ~]# yum install -y httpd        # 安装httpd服务</span><br><span class="line">[root@Apache ~]# service httpd start    </span><br><span class="line">[root@Apache ~]# echo &quot;Apache server 192.168.8.136&quot; &gt; /var/www/html/index.html </span><br><span class="line">[root@Apache ~]# curl localhost</span><br><span class="line">Apache server 192.168.8.136</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf </span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ; </span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ; </span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ; </span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line">    location / &#123; </span><br><span class="line">        proxy_pass http://192.168.8.136 ; </span><br><span class="line">    &#125;   </span><br><span class="line">     </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx </span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# curl www.a.com       # 访问测试，ok</span><br><span class="line">Apache server 192.168.8.136</span><br><span class="line"></span><br><span class="line">[root@Apache ~]# tail -1  /var/log/httpd/access_log         # 查看APache服务器的日志，apache认为是代理服务器访问的</span><br><span class="line">192.168.8.140 - - [27/Oct/2017:14:19:30 +0800] &quot;GET / HTTP/1.0&quot; 200 28 &quot;-&quot; &quot;curl/7.29.0&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="实现访问以-php结尾的文件都代理到192-168-8-136"><a href="#实现访问以-php结尾的文件都代理到192-168-8-136" class="headerlink" title="实现访问以.php结尾的文件都代理到192.168.8.136"></a>实现访问以.php结尾的文件都代理到192.168.8.136</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 我们接着上面的实验来做</span><br><span class="line">[root@Apache ~]# yum install -y php</span><br><span class="line">[root@Apache ~]# service httpd restart</span><br><span class="line">Stopping httpd:                                            [  OK  ]</span><br><span class="line">Starting httpd:                                            [  OK  ]</span><br><span class="line">[root@Apache ~]# vim /var/www/html/a.php        # 编写php页面</span><br><span class="line">&lt;?php</span><br><span class="line">phpinfo();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>本地访问php测试，可以访问</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/nginx-proxy-php.jpg"></center>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf      # 修改配置文件</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ;</span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ;</span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ;</span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line"></span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">        proxy_pass http://192.168.8.136 ; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx</span><br></pre></td></tr></table></figure>
+<p>访问测试，ok</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/nginx-proxy-php2.jpg"></center>
+
+
+<h4 id="代理服务器加-和不加-的区别？"><a href="#代理服务器加-和不加-的区别？" class="headerlink" title="代理服务器加/和不加/的区别？"></a>代理服务器加/和不加/的区别？</h4><h5 id="不加"><a href="#不加" class="headerlink" title="不加/"></a>不加/</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[root@Apache ~]# mkdir /var/www/html/html/          #创建测试文件夹</span><br><span class="line">[root@Apache ~]# echo &quot;This is test file&quot; &gt; /var/www/html/html/index.html       # 创建测试文件</span><br><span class="line">[root@Apache ~]# cat /var/www/html/html/index.html</span><br><span class="line">This is test file</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf          #修改配置文件</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ;</span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ;</span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ;</span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line">    location /html &#123;</span><br><span class="line">        proxy_pass http://192.168.8.136;        # 先来个不加/的</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx </span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# curl www.a.com/html/     # 访问测试，看到的是192.168.8.136/html/index.html的内容</span><br><span class="line">This is test file</span><br><span class="line">[root@Nginx-Server ~]# curl 192.168.8.136/html/     # 直接访问192.168.8.136/html和上面效果是相同的</span><br><span class="line">This is test file</span><br><span class="line"># 由此我们可以得出：不加/的话，访问的就是代理服务和location中定义的路径的组合。</span><br><span class="line"># 例如：</span><br><span class="line">location /img &#123;</span><br><span class="line">    proxy_pass http://192.168.8.136 ; </span><br><span class="line">&#125;</span><br><span class="line"># 那么，我们访问的应该是那个目录呢？ 当然是http://192.168.8.8.136/img了。</span><br></pre></td></tr></table></figure>
+<h5 id="加"><a href="#加" class="headerlink" title="加/"></a>加/</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf      # 修改配置文件</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ;</span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ;</span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ;</span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line">    location /html &#123;</span><br><span class="line">        proxy_pass http://192.168.8.136/;       # 注意：这次我们加/了</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx </span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# curl www.a.com/html/     # 访问测试，看到的是192.168.8.136/index.html的内容</span><br><span class="line">Apache server 192.168.8.136</span><br><span class="line">[root@Nginx-Server ~]# curl 192.168.8.136       # 直接访问192.168.8.136和上面效果是相同的</span><br><span class="line">Apache server 192.168.8.136</span><br><span class="line"></span><br><span class="line"># 由此，我们得出，如果加上/的话，访问的就是加上/后的内容了，和location中定义的路径已经被替换为/了。</span><br><span class="line"># 例如</span><br><span class="line">location /img &#123;</span><br><span class="line">    proxy_pass http://192.168.8.136/; </span><br><span class="line">&#125;</span><br><span class="line"># 上面这个例子，应该访问那个路径呢？ 当然是http://192.168.8.136/了。</span><br><span class="line"></span><br><span class="line">如果location定义其uri时使用了正则表达式的模式，则proxy_pass之后必须不能使用uri; 用户请求时传递的uri将直</span><br><span class="line">接附加代理到的服务的之后server &#123;</span><br><span class="line">    ...</span><br><span class="line">    server_name HOSTNAME;</span><br><span class="line">    location ~|~* /uri/ &#123;</span><br><span class="line">    proxy_pass http://host; 不能加/</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">http://HOSTNAME/uri/ --&gt; http://host/uri/</span><br></pre></td></tr></table></figure>
+<h3 id="proxy-set-header-field-value"><a href="#proxy-set-header-field-value" class="headerlink" title="proxy_set_header field value;"></a>proxy_set_header field value;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_set_header field value;</span><br><span class="line">Default:	</span><br><span class="line">proxy_set_header Host $proxy_host;</span><br><span class="line">proxy_set_header Connection close;</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>设定发往后端主机的请求报文的请求首部的值</p>
+<p>设定发往后端主机的请求报文的请求首部的值</p>
+<ul>
+<li><code>Context: http, server, location</code></li>
+<li><code>proxy_set_header X-Real-IP $remote_addr;</code></li>
+<li><code>proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</code><br>标准格式如下：</li>
+<li><p><code>X-Forwarded-For: client1, proxy1, proxy2</code></p>
+</li>
+<li><p><code>$remote_addr</code>是一个变量代表<code>client address</code></p>
+</li>
+<li><code>X-Forwarded-For</code>也是一个变量代表“X-Forwarded-For”客户机请求头域，$remote_addr附加变量，用逗号分隔。如果客户端请求头中不存在“X-Forwarded-For”字段，则该$proxy_add_x_forwarded_for变量等于该$remote_addr变量。</li>
+</ul>
+<h4 id="实现proxy-set-header-field-value"><a href="#实现proxy-set-header-field-value" class="headerlink" title="实现proxy_set_header field value;"></a>实现proxy_set_header field value;</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf          # 修改配置文件</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ;</span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ;</span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ;</span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line">    location /html &#123;</span><br><span class="line">        proxy_set_header Real-server $remote_addr ;     # 添加真实服务器地址</span><br><span class="line">        proxy_pass http://192.168.8.136/;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx </span><br><span class="line"></span><br><span class="line">[root@Apache ~]# vim /etc/httpd/conf/httpd.conf         # 修改apache服务的配置文件</span><br><span class="line">LogFormat &quot;%&#123;Real-server&#125;i %h %l %u %t \&quot;%r\&quot; %&gt;s %b \&quot;%&#123;Referer&#125;i\&quot; \&quot;%&#123;User-Agent&#125;i\&quot;&quot; Nginx-proxy        # 定义一个新的日志格式，使apache能够识别代理服务器发过来的真实IP</span><br><span class="line">CustomLog logs/access_log Nginx-proxy       # 使用新的服务器IP</span><br><span class="line"></span><br><span class="line">[root@Apache ~]# service httpd restart</span><br><span class="line">Stopping httpd:                                            [  OK  ]</span><br><span class="line">Starting httpd:                                            [  OK  ]</span><br><span class="line"></span><br><span class="line">[root@CLIENT ~]# ifconfig eth1      # 测试客户端IP</span><br><span class="line">eth1      Link encap:Ethernet  HWaddr 00:0C:29:DE:D2:8C  </span><br><span class="line">          inet addr:192.168.8.128  Bcast:192.168.8.255  Mask:255.255.255.0</span><br><span class="line">          inet6 addr: fe80::20c:29ff:fede:d28c/64 Scope:Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:3446 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:1197 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:316040 (308.6 KiB)  TX bytes:93833 (91.6 KiB)</span><br><span class="line"></span><br><span class="line">[root@CLIENT ~]# curl 192.168.8.140/html/       # 测试访问代理服务器</span><br><span class="line">Apache server 192.168.8.136</span><br><span class="line"></span><br><span class="line">[root@Apache ~]# tail -1 /var/log/httpd/access_log      # 查看Apache的访问日志，已经将真实服务器的iP添加进来</span><br><span class="line">192.168.8.128 192.168.8.140 - - [27/Oct/2017:15:56:20 +0800] &quot;GET // HTTP/1.0&quot; 200 28 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.21 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="proxy-cache-use-stale-error"><a href="#proxy-cache-use-stale-error" class="headerlink" title="proxy_cache_use_stale error"></a>proxy_cache_use_stale error</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_cache_use_stale error | timeout | invalid_header | updating | http_500 | http_502 | http_503 | http_504 | http_403 | http_404 | http_429 | off ...;</span><br><span class="line">Default:	</span><br><span class="line">proxy_cache_use_stale off;</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>在被代理的后端服务器出现哪种情况下，可以真接使用过期的缓存响应客户端</p>
+<h3 id="proxy-cache-methods-GET-HEAD-POST-…"><a href="#proxy-cache-methods-GET-HEAD-POST-…" class="headerlink" title="proxy_cache_methods GET | HEAD | POST …;"></a>proxy_cache_methods GET | HEAD | POST …;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_cache_methods GET | HEAD | POST ...;</span><br><span class="line">Default:	</span><br><span class="line">proxy_cache_methods GET HEAD;</span><br><span class="line">Context:	http, server, location</span><br><span class="line">This directive appeared in version 0.7.59.</span><br></pre></td></tr></table></figure></p>
+<p>如果客户端请求方法在此指令中列出，则响应将被缓存。<code>“ GET”</code>和<code>“HEAD”</code>方法总是添加到列表中，尽管建议明确指定它们。</p>
+<h3 id="proxy-hide-header-field"><a href="#proxy-hide-header-field" class="headerlink" title="proxy_hide_header field;"></a>proxy_hide_header field;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_hide_header field;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>默认情况下，<code>nginx</code>不会将代理服务器的响应中的头字段<code>“Date”</code>，<code>“Server”</code>，<code>“X-Pad”</code>和<code>“X-Accel -...”</code>传递给客户端。该<code>proxy_hide_header</code>指令设置不会传递的其他字段。如果相反，需要允许字段的传递，则可以使用<code>proxy_pass_header</code>指令。</p>
+<p>用于隐藏后端服务器特定的响应首部</p>
+<h3 id="proxy-connect-timeout-time"><a href="#proxy-connect-timeout-time" class="headerlink" title="proxy_connect_timeout time;"></a>proxy_connect_timeout time;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_connect_timeout time;</span><br><span class="line">Default:	</span><br><span class="line">proxy_connect_timeout 60s;</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>定义与后端服务器建立连接的超时时长，如超时会出现502错误，默认为60s，一般不建议超出75s，</p>
+<h3 id="proxy-send-timeout-time"><a href="#proxy-send-timeout-time" class="headerlink" title="proxy_send_timeout time;"></a>proxy_send_timeout time;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_send_timeout time;</span><br><span class="line">Default:	</span><br><span class="line">proxy_send_timeout 60s;</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>设置将代理服务器发送请求的超时时间。超时仅在两个连续的写入操作之间设置，而不是传输整个请求。如果代理服务器在此时间内没有收到任何内容，则连接被关闭。</p>
+<p>把请求发送给后端服务器的超时时长；默认为60s</p>
+<h3 id="proxy-read-timeout-time"><a href="#proxy-read-timeout-time" class="headerlink" title="proxy_read_timeout time;"></a>proxy_read_timeout time;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_read_timeout time;</span><br><span class="line">Default:	</span><br><span class="line">proxy_read_timeout 60s;</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>定义从代理服务器读取响应的超时。超时仅在两个连续读操作之间设置，而不是传输整个响应。如果代理的服务器在此时间内没有传输任何内容，则连接被关闭。</p>
+<p>等待后端服务器发送响应报文的超时时长， 默认为60s</p>
+<h3 id="proxy-cache-key-string"><a href="#proxy-cache-key-string" class="headerlink" title="proxy_cache_key string;"></a>proxy_cache_key string;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_cache_key string;</span><br><span class="line">Default:	</span><br><span class="line">proxy_cache_key $scheme$proxy_host$request_uri;</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>缓存中用于“键”的内容</li>
+<li>默认值：<code>proxy_cache_key $scheme$proxy_host$request_uri;</code></li>
+</ul>
+<h3 id="proxy-cache-valid-code-…-time"><a href="#proxy-cache-valid-code-…-time" class="headerlink" title="proxy_cache_valid [code …] time;"></a>proxy_cache_valid [code …] time;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	proxy_cache_valid [code ...] time;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>定义对特定响应码的响应内容的缓存时长</li>
+<li>定义在http{…}中</li>
+<li>示例:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">proxy_cache_valid 200 302 10m;</span><br><span class="line">proxy_cache_valid 404 1m;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="实现代理缓存"><a href="#实现代理缓存" class="headerlink" title="实现代理缓存"></a>实现代理缓存</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br></pre></td><td class="code"><pre><span class="line">[root@Apache ~]# cp /var/log/messages /var/www/html/html/index.html &amp;&amp; chmod a+r /var/www/html/html/index.html       # 准备测试网页</span><br><span class="line">[root@Apache ~]# ll -h /var/www/html/html/index.html</span><br><span class="line">-rw-r--r-- 1 root root 492K Oct 27 16:52 /var/www/html/html/index.html</span><br><span class="line"></span><br><span class="line">[root@CLIENT ~]# ab -c 100 -n 2000 http://192.168.8.140/html/       # 没启用缓存功能测试，平均每秒170个</span><br><span class="line">This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;</span><br><span class="line">Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/</span><br><span class="line">Licensed to The Apache Software Foundation, http://www.apache.org/</span><br><span class="line"></span><br><span class="line">Benchmarking 192.168.8.140 (be patient)</span><br><span class="line">Completed 200 requests</span><br><span class="line">Completed 400 requests</span><br><span class="line">Completed 600 requests</span><br><span class="line">Completed 800 requests</span><br><span class="line">Completed 1000 requests</span><br><span class="line">Completed 1200 requests</span><br><span class="line">Completed 1400 requests</span><br><span class="line">Completed 1600 requests</span><br><span class="line">Completed 1800 requests</span><br><span class="line">Completed 2000 requests</span><br><span class="line">Finished 2000 requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Server Software:        nginx/1.10.2</span><br><span class="line">Server Hostname:        192.168.8.140</span><br><span class="line">Server Port:            80</span><br><span class="line"></span><br><span class="line">Document Path:          /html/</span><br><span class="line">Document Length:        503737 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      100</span><br><span class="line">Time taken for tests:   11.739 seconds</span><br><span class="line">Complete requests:      2000</span><br><span class="line">Failed requests:        0</span><br><span class="line">Write errors:           0</span><br><span class="line">Total transferred:      1008004000 bytes</span><br><span class="line">HTML transferred:       1007474000 bytes</span><br><span class="line">Requests per second:    170.38 [#/sec] (mean)</span><br><span class="line">Time per request:       586.938 [ms] (mean)</span><br><span class="line">Time per request:       5.869 [ms] (mean, across all concurrent requests)</span><br><span class="line">Transfer rate:          83857.12 [Kbytes/sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  mean[+/-sd] median   max</span><br><span class="line">Connect:        0    4  38.9      1    1001</span><br><span class="line">Processing:    48  573 240.2    554    1986</span><br><span class="line">Waiting:        2  280 207.4    306    1076</span><br><span class="line">Total:         54  577 243.8    557    1987</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%    557</span><br><span class="line">  66%    605</span><br><span class="line">  75%    641</span><br><span class="line">  80%    670</span><br><span class="line">  90%    775</span><br><span class="line">  95%   1014</span><br><span class="line">  98%   1419</span><br><span class="line">  99%   1521</span><br><span class="line"> 100%   1987 (longest request)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# mkdir -p  /var/cache/nginx/proxy_cache       # 创建缓存目录</span><br><span class="line">[root@Nginx-Server ~]# vim /etc/nginx/nginx.conf        # 在http配置定义缓存信</span><br><span class="line">http &#123;</span><br><span class="line">    proxy_cache_path /var/cache/nginx/proxy_cache</span><br><span class="line">    levels=1:1:2 keys_zone=proxycache:20m</span><br><span class="line">    inactive=120s max_size=1g;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf      # 调用缓存功能，需要定义在相应的配置段</span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ;</span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ;</span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ;</span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line">    location /html &#123;</span><br><span class="line">        proxy_set_header Real-server $remote_addr ;</span><br><span class="line">        proxy_pass http://192.168.8.136;</span><br><span class="line">    &#125;</span><br><span class="line">    proxy_cache proxycache ;</span><br><span class="line">    proxy_cache_key $request_uri ;</span><br><span class="line">    proxy_cache_valid 200 302 301 1h ;</span><br><span class="line">    proxy_cache_valid any 1m ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx </span><br><span class="line">[root@CLIENT ~]# ab -c 100 -n 2000 http://192.168.8.140/html/       # 速度已经明显加快，平均每秒294个，已经快了一倍多</span><br><span class="line">This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;</span><br><span class="line">Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/</span><br><span class="line">Licensed to The Apache Software Foundation, http://www.apache.org/</span><br><span class="line"></span><br><span class="line">Benchmarking 192.168.8.140 (be patient)</span><br><span class="line">Completed 200 requests</span><br><span class="line">Completed 400 requests</span><br><span class="line">Completed 600 requests</span><br><span class="line">Completed 800 requests</span><br><span class="line">Completed 1000 requests</span><br><span class="line">Completed 1200 requests</span><br><span class="line">Completed 1400 requests</span><br><span class="line">Completed 1600 requests</span><br><span class="line">Completed 1800 requests</span><br><span class="line">Completed 2000 requests</span><br><span class="line">Finished 2000 requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Server Software:        nginx/1.10.2</span><br><span class="line">Server Hostname:        192.168.8.140</span><br><span class="line">Server Port:            80</span><br><span class="line"></span><br><span class="line">Document Path:          /html/</span><br><span class="line">Document Length:        503737 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      100</span><br><span class="line">Time taken for tests:   6.794 seconds</span><br><span class="line">Complete requests:      2000</span><br><span class="line">Failed requests:        0</span><br><span class="line">Write errors:           0</span><br><span class="line">Total transferred:      1008004000 bytes</span><br><span class="line">HTML transferred:       1007474000 bytes</span><br><span class="line">Requests per second:    294.36 [#/sec] (mean)</span><br><span class="line">Time per request:       339.718 [ms] (mean)</span><br><span class="line">Time per request:       3.397 [ms] (mean, across all concurrent requests)</span><br><span class="line">Transfer rate:          144881.64 [Kbytes/sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  mean[+/-sd] median   max</span><br><span class="line">Connect:        0   11   5.1     10      50</span><br><span class="line">Processing:   229  328  32.3    316     440</span><br><span class="line">Waiting:        1   13   8.6     11      52</span><br><span class="line">Total:        241  339  32.7    329     454</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%    329</span><br><span class="line">  66%    346</span><br><span class="line">  75%    354</span><br><span class="line">  80%    367</span><br><span class="line">  90%    378</span><br><span class="line">  95%    408</span><br><span class="line">  98%    432</span><br><span class="line">  99%    433</span><br><span class="line"> 100%    454 (longest request)</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# cd /var/cache/nginx/proxy_cache/     # 查看缓存目录</span><br><span class="line">[root@Nginx-Server proxy_cache]# tree       # 可以看到目录其实就是去文件的后1，1，2</span><br><span class="line">.</span><br><span class="line">└── f</span><br><span class="line">    └── f</span><br><span class="line">        └── ed</span><br><span class="line">            └── 2232907628d080965cf7017637f5edff</span><br><span class="line"></span><br><span class="line">3 directories, 1 file</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-10-27, 23:29:12</p>
+        <p><span>最后更新:</span>2018-04-17, 02:08:59</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/27/Nginx-ngx-http-proxy-module/" title="模块 ngx_http_proxy_module">https://houhaiyun.github.io/2017/10/27/Nginx-ngx-http-proxy-module/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/27/Nginx-ngx-http-proxy-module/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/27/Nginx-ngx-http-headers-module/">
+                    模块 ngx_http_headers_module
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/27/Nginx-ngx-http-rewrite-module/">
+                    模块 ngx_http_rewrite_module
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-pass-URL"><span class="toc-number">2.</span> <span class="toc-text">proxy_pass URL;</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现反向代理服务"><span class="toc-number">2.1.</span> <span class="toc-text">实现反向代理服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现访问以-php结尾的文件都代理到192-168-8-136"><span class="toc-number">2.2.</span> <span class="toc-text">实现访问以.php结尾的文件都代理到192.168.8.136</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代理服务器加-和不加-的区别？"><span class="toc-number">2.3.</span> <span class="toc-text">代理服务器加/和不加/的区别？</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#不加"><span class="toc-number">2.3.1.</span> <span class="toc-text">不加/</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#加"><span class="toc-number">2.3.2.</span> <span class="toc-text">加/</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-set-header-field-value"><span class="toc-number">3.</span> <span class="toc-text">proxy_set_header field value;</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现proxy-set-header-field-value"><span class="toc-number">3.1.</span> <span class="toc-text">实现proxy_set_header field value;</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-cache-use-stale-error"><span class="toc-number">4.</span> <span class="toc-text">proxy_cache_use_stale error</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-cache-methods-GET-HEAD-POST-…"><span class="toc-number">5.</span> <span class="toc-text">proxy_cache_methods GET | HEAD | POST …;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-hide-header-field"><span class="toc-number">6.</span> <span class="toc-text">proxy_hide_header field;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-connect-timeout-time"><span class="toc-number">7.</span> <span class="toc-text">proxy_connect_timeout time;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-send-timeout-time"><span class="toc-number">8.</span> <span class="toc-text">proxy_send_timeout time;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-read-timeout-time"><span class="toc-number">9.</span> <span class="toc-text">proxy_read_timeout time;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-cache-key-string"><span class="toc-number">10.</span> <span class="toc-text">proxy_cache_key string;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proxy-cache-valid-code-…-time"><span class="toc-number">11.</span> <span class="toc-text">proxy_cache_valid [code …] time;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现代理缓存"><span class="toc-number">12.</span> <span class="toc-text">实现代理缓存</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"模块 ngx_http_proxy_module　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/27/Nginx-ngx-http-headers-module/" title="上一篇: 模块 ngx_http_headers_module">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/27/Nginx-ngx-http-rewrite-module/" title="下一篇: 模块 ngx_http_rewrite_module">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2-2017-10-28/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make-2017-10-28/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">搭建LNAMP</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module-2017-10-26/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module-2017-10-25/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>

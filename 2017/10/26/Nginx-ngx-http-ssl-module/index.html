@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="Syntax:    ssl on | off;官网帮助：1234Syntax:	ssl on | off;Default:	ssl off;Context:	http, server 为指定虚拟机启用HTTPS protocol， 建议用listen指令代替">
+<meta name="keywords" content="Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模块 ngx_http_ssl_module">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/26/Nginx-ngx-http-ssl-module/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="Syntax:    ssl on | off;官网帮助：1234Syntax:	ssl on | off;Default:	ssl off;Context:	http, server 为指定虚拟机启用HTTPS protocol， 建议用listen指令代替">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/Nginx-https.gif">
+<meta property="og:updated_time" content="2018-04-17T02:08:59.989Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="模块 ngx_http_ssl_module">
+<meta name="twitter:description" content="Syntax:    ssl on | off;官网帮助：1234Syntax:	ssl on | off;Default:	ssl off;Context:	http, server 为指定虚拟机启用HTTPS protocol， 建议用listen指令代替">
+<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/Nginx-https.gif">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>模块 ngx_http_ssl_module | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">I want to be a CTO</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP/">LNAMP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">I want to be a CTO</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Nginx-ngx-http-ssl-module" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/26/Nginx-ngx-http-ssl-module/" class="article-date">
+      <time datetime="2017-10-26T23:18:19.000Z" itemprop="datePublished">2017-10-26</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      模块 ngx_http_ssl_module
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="Syntax-ssl-on-off"><a href="#Syntax-ssl-on-off" class="headerlink" title="Syntax:    ssl on | off;"></a>Syntax:    ssl on | off;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	ssl on | off;</span><br><span class="line">Default:	</span><br><span class="line">ssl off;</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure></p>
+<p>为指定虚拟机启用HTTPS protocol， 建议用listen指令代替</p>
+<a id="more"></a>
+<h3 id="ssl-certificate-file"><a href="#ssl-certificate-file" class="headerlink" title="ssl_certificate file;"></a>ssl_certificate file;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	ssl_certificate file;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure></p>
+<p>当前虚拟主机使用PEM格式的证书文件</p>
+<h3 id="ssl-certificate-key-file"><a href="#ssl-certificate-key-file" class="headerlink" title="ssl_certificate_key file;"></a>ssl_certificate_key file;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	ssl_certificate_key file;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure></p>
+<p>当前虚拟主机上与其证书匹配的私钥文件</p>
+<h3 id="ssl-protocols-SSLv2-…"><a href="#ssl-protocols-SSLv2-…" class="headerlink" title="ssl_protocols [SSLv2] …;"></a>ssl_protocols [SSLv2] …;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	ssl_protocols [SSLv2] [SSLv3] [TLSv1] [TLSv1.1] [TLSv1.2] [TLSv1.3];</span><br><span class="line">Default:	</span><br><span class="line">ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure></p>
+<p>支持<code>ssl</code>协议版本，默认为后三个</p>
+<h3 id="ssl-session-cache-off-none-…"><a href="#ssl-session-cache-off-none-…" class="headerlink" title="ssl_session_cache off | none …;"></a>ssl_session_cache off | none …;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	ssl_session_cache off | none | [builtin[:size]] [shared:name:size];</span><br><span class="line">Default:	</span><br><span class="line">ssl_session_cache none;</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure></p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p>设置存储会话参数的高速缓存的类型和大小。缓存可以是以下类型之一：</p>
+<p>-<code>off</code></p>
+<pre><code>- 严格禁止使用会话缓存：`nginx`明确告诉客户端会话可能不被重用。
+</code></pre><ul>
+<li><code>none</code><ul>
+<li>会话缓存的使用被轻轻地禁止：<code>nginx</code>告诉客户端会话可能被重用，但实际上并没有将会话参数存储在缓存中。</li>
+</ul>
+</li>
+<li><code>builtin</code><ul>
+<li>一个内置<code>OpenSSL</code>的缓存; 仅由一个工作进程使用。缓存大小在会话中指定。如果没有给出大小，则等于<code>20480</code>次会话。使用内置缓存可能会导致内存碎片。</li>
+</ul>
+</li>
+<li><p><code>shared</code></p>
+<ul>
+<li>在所有工作进程之间共享缓存。缓存大小以字节为单位指定; 一兆字节可以存储约4000个会话。每个共享缓存应具有任意名称。具有相同名称的缓存可用于多个虚拟服务器。</li>
+</ul>
+</li>
+<li><p>两种缓存类型可以同时使用，例如：</p>
+<ul>
+<li><code>ssl_session_cache builtin:1000 shared:SSL:10m;</code></li>
+</ul>
+</li>
+<li><p>但只使用共享缓存而不使用内置缓存应该更有效率。</p>
+</li>
+<li><p><code>builtin[:size]</code>：使用<code>OpenSSL</code>内建缓存，为每worker进程私有</p>
+</li>
+<li><code>[shared:name:size]</code>：在各<code>worker</code>之间使用一个共享的缓存73</li>
+</ul>
+<h3 id="ssl-session-timeout-time"><a href="#ssl-session-timeout-time" class="headerlink" title="ssl_session_timeout time;"></a>ssl_session_timeout time;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	ssl_session_timeout time;</span><br><span class="line">Default:	</span><br><span class="line">ssl_session_timeout 5m;</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure></p>
+<p>客户端连接可以复用<code>ssl session cache</code>中缓存的<code>ssl</code>参数的有效时长，默认<code>5m</code></p>
+<h3 id="实现SSL"><a href="#实现SSL" class="headerlink" title="实现SSL"></a>实现SSL</h3><h4 id="1-创建证书"><a href="#1-创建证书" class="headerlink" title="1. 创建证书"></a>1. 创建证书</h4><p><a href="http://blog.csdn.net/hai__yun/article/details/77921134" target="_blank" rel="noopener">关于创建证书可以查看我的另外一篇博客：http://blog.csdn.net/hai__yun/article/details/77921134</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server ~]# cd /etc/pki/tls/certs/</span><br><span class="line">[root@Nginx-Server certs]# make nginx.crt</span><br><span class="line">umask 77 ; \</span><br><span class="line">/usr/bin/openssl genrsa -aes128 2048 &gt; nginx.key</span><br><span class="line">Generating RSA private key, 2048 bit long modulus</span><br><span class="line">...........................+++</span><br><span class="line">....+++</span><br><span class="line">e is 65537 (0x10001)</span><br><span class="line">Enter pass phrase:</span><br><span class="line">Verifying - Enter pass phrase:</span><br><span class="line">umask 77 ; \</span><br><span class="line">/usr/bin/openssl req -utf8 -new -key nginx.key -x509 -days 365 -out nginx.crt -set_serial 0</span><br><span class="line">Enter pass phrase for nginx.key:</span><br><span class="line">You are about to be asked to enter information that will be incorporated</span><br><span class="line">into your certificate request.</span><br><span class="line">What you are about to enter is what is called a Distinguished Name or a DN.</span><br><span class="line">There are quite a few fields but you can leave some blank</span><br><span class="line">For some fields there will be a default value,</span><br><span class="line">If you enter &apos;.&apos;, the field will be left blank.</span><br><span class="line">-----</span><br><span class="line">Country Name (2 letter code) [XX]:CN  </span><br><span class="line">State or Province Name (full name) []:BJ</span><br><span class="line">Locality Name (eg, city) [Default City]:haidian</span><br><span class="line">Organization Name (eg, company) [Default Company Ltd]:haiyun</span><br><span class="line">Organizational Unit Name (eg, section) []:opt</span><br><span class="line">Common Name (eg, your name or your server&apos;s hostname) []:www.a.com</span><br><span class="line">Email Address []:</span><br></pre></td></tr></table></figure>
+<h4 id="2-解密私钥"><a href="#2-解密私钥" class="headerlink" title="2. 解密私钥"></a>2. 解密私钥</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server certs]# ls</span><br><span class="line">ca-bundle.crt        make-dummy-cert  nginx.crt  renew-dummy-cert</span><br><span class="line">ca-bundle.trust.crt  Makefile         nginx.key</span><br><span class="line">[root@Nginx-Server certs]# openssl rsa -in nginx.key -out nginx.key </span><br><span class="line">Enter pass phrase for nginx.key:</span><br><span class="line">writing RSA key</span><br><span class="line">[root@Nginx-Server certs]# ls</span><br><span class="line">ca-bundle.crt        make-dummy-cert  nginx.crt  renew-dummy-cert</span><br><span class="line">ca-bundle.trust.crt  Makefile         nginx.key</span><br></pre></td></tr></table></figure>
+<h4 id="3-创建证书目录和拷贝证书"><a href="#3-创建证书目录和拷贝证书" class="headerlink" title="3. 创建证书目录和拷贝证书"></a>3. 创建证书目录和拷贝证书</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server certs]# mkdir /etc/nginx/ssl         # 创建存放证书目录</span><br><span class="line">[root@Nginx-Server certs]# cp nginx.* /etc/nginx/ssl/       </span><br><span class="line">[root@Nginx-Server certs]# ls /etc/nginx/ssl/</span><br><span class="line">nginx.crt  nginx.key</span><br></pre></td></tr></table></figure>
+<h4 id="4-修改配置文件"><a href="#4-修改配置文件" class="headerlink" title="4. 修改配置文件"></a>4. 修改配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server ~]# vim /etc/nginx/conf.d/vhost.conf</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl  default_server ; </span><br><span class="line">    server_name www.a.com ; </span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    gzip on; </span><br><span class="line">    gzip_comp_level 9;</span><br><span class="line">    gzip_min_length 64; </span><br><span class="line">    gzip_proxied any;</span><br><span class="line">    gzip_types text/xml text/css application/javascript ;</span><br><span class="line">        </span><br><span class="line">    ssl_certificate /etc/nginx/ssl/nginx.crt;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/nginx.key;</span><br><span class="line">    ssl_session_cache shared:sslcache:20m;</span><br><span class="line">    ssl_session_timeout 10m;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="启动服务，测试"><a href="#启动服务，测试" class="headerlink" title="启动服务，测试"></a>启动服务，测试</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">nginx: configuration file /etc/nginx/nginx.conf test failed</span><br><span class="line">[root@Nginx-Server ~]# nginx -t </span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx </span><br><span class="line">[root@Nginx-Server ~]# ss -tnul             # 查看端口是否打开</span><br><span class="line">Netid State      Recv-Q Send-Q Local Address:Port               Peer Address:Port              </span><br><span class="line">udp   UNCONN     0      0        127.0.0.1:323                          *:*                  </span><br><span class="line">udp   UNCONN     0      0                *:50190                        *:*                  </span><br><span class="line">udp   UNCONN     0      0                *:68                           *:*                  </span><br><span class="line">udp   UNCONN     0      0              ::1:323                         :::*                  </span><br><span class="line">udp   UNCONN     0      0               :::31402                       :::*                  </span><br><span class="line">tcp   LISTEN     0      128              *:80                           *:*                  </span><br><span class="line">tcp   LISTEN     0      128              *:22                           *:*                  </span><br><span class="line">tcp   LISTEN     0      100      127.0.0.1:25                           *:*                  </span><br><span class="line">tcp   LISTEN     0      128              *:443                          *:*                  </span><br><span class="line">tcp   LISTEN     0      128             :::80                          :::*                  </span><br><span class="line">tcp   LISTEN     0      128             :::22                          :::*                  </span><br><span class="line">tcp   LISTEN     0      100            ::1:25                          :::*</span><br></pre></td></tr></table></figure>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/Nginx-https.gif"></center>
+
+<h3 id="实现多虚拟主机支持https"><a href="#实现多虚拟主机支持https" class="headerlink" title="实现多虚拟主机支持https"></a>实现多虚拟主机支持https</h3><h4 id="1-创建证书-1"><a href="#1-创建证书-1" class="headerlink" title="1. 创建证书"></a>1. 创建证书</h4><p>上面实验已经创建一个虚拟主机了，所以我们就直接用了。这次再创建一个就OK了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server ~]# cd /etc/pki/tls/certs/</span><br><span class="line">[root@Nginx-Server certs]# make nginx2.crt</span><br><span class="line">umask 77 ; \</span><br><span class="line">/usr/bin/openssl genrsa -aes128 2048 &gt; nginx2.key</span><br><span class="line">Generating RSA private key, 2048 bit long modulus</span><br><span class="line">.....................+++</span><br><span class="line">........+++</span><br><span class="line">e is 65537 (0x10001)</span><br><span class="line">Enter pass phrase:</span><br><span class="line">Verifying - Enter pass phrase:</span><br><span class="line">umask 77 ; \</span><br><span class="line">/usr/bin/openssl req -utf8 -new -key nginx2.key -x509 -days 365 -out nginx2.crt -set_serial 0</span><br><span class="line">Enter pass phrase for nginx2.key:</span><br><span class="line">You are about to be asked to enter information that will be incorporated</span><br><span class="line">into your certificate request.</span><br><span class="line">What you are about to enter is what is called a Distinguished Name or a DN.</span><br><span class="line">There are quite a few fields but you can leave some blank</span><br><span class="line">For some fields there will be a default value,</span><br><span class="line">If you enter &apos;.&apos;, the field will be left blank.</span><br><span class="line">-----</span><br><span class="line">Country Name (2 letter code) [XX]:CN</span><br><span class="line">State or Province Name (full name) []:BJ</span><br><span class="line">Locality Name (eg, city) [Default City]:haidian</span><br><span class="line">Organization Name (eg, company) [Default Company Ltd]:haiyun</span><br><span class="line">Organizational Unit Name (eg, section) []:cto</span><br><span class="line">Common Name (eg, your name or your server&apos;s hostname) []:www.b.com</span><br><span class="line">Email Address []:</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-解密私钥-1"><a href="#2-解密私钥-1" class="headerlink" title="2. 解密私钥"></a>2. 解密私钥</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server certs]# openssl rsa -in nginx2.key -out nginx2.key </span><br><span class="line">Enter pass phrase for nginx2.key:</span><br><span class="line">writing RSA key</span><br><span class="line">[root@Nginx-Server certs]# ls</span><br><span class="line">ca-bundle.crt        make-dummy-cert  nginx2.crt  nginx.crt  renew-dummy-cert</span><br><span class="line">ca-bundle.trust.crt  Makefile         nginx2.key  nginx.key</span><br></pre></td></tr></table></figure>
+<h4 id="3-拷贝证书"><a href="#3-拷贝证书" class="headerlink" title="3. 拷贝证书"></a>3. 拷贝证书</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server certs]# cp nginx2.* /etc/nginx/ssl/</span><br><span class="line">[root@Nginx-Server certs]# ls /etc/nginx/ssl/</span><br><span class="line">nginx2.crt  nginx2.key  nginx.crt  nginx.key</span><br></pre></td></tr></table></figure>
+<h4 id="4-创建访问目录"><a href="#4-创建访问目录" class="headerlink" title="4. 创建访问目录"></a>4. 创建访问目录</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server ~]# cat /app/website2/index.html         # 注意此文件是需要创建</span><br><span class="line">Nginx-Server --&gt; website2</span><br></pre></td></tr></table></figure>
+<h4 id="5-修改配置文件"><a href="#5-修改配置文件" class="headerlink" title="5. 修改配置文件"></a>5. 修改配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server ~]# vim /etc/nginx/conf.d/vhost.conf</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl  default_server ; </span><br><span class="line">    server_name www.a.com ; </span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/nginx.crt;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/nginx.key;</span><br><span class="line">    ssl_session_cache shared:sslcache:20m;</span><br><span class="line">    ssl_session_timeout 10m;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl  ;</span><br><span class="line">    server_name www.b.com ;</span><br><span class="line">    root /app/website2 ;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/nginx2.crt;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/nginx2.key;</span><br><span class="line">    ssl_session_cache shared:sslcache:20m;</span><br><span class="line">    ssl_session_timeout 10m;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="6-配置hosts文件"><a href="#6-配置hosts文件" class="headerlink" title="6. 配置hosts文件"></a>6. 配置hosts文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server ~]# cat /etc/hosts</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.8.140 www.a.com www.b.com</span><br></pre></td></tr></table></figure>
+<h4 id="7-启动服务，测试"><a href="#7-启动服务，测试" class="headerlink" title="7. 启动服务，测试"></a>7. 启动服务，测试</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server ~]# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx </span><br><span class="line">[root@Nginx-Server ~]# ss -tnul             # 端口已监听</span><br><span class="line">Netid State      Recv-Q Send-Q Local Address:Port               Peer Address:Port              </span><br><span class="line">udp   UNCONN     0      0        127.0.0.1:323                          *:*                  </span><br><span class="line">udp   UNCONN     0      0                *:50190                        *:*                  </span><br><span class="line">udp   UNCONN     0      0                *:68                           *:*                  </span><br><span class="line">udp   UNCONN     0      0              ::1:323                         :::*                  </span><br><span class="line">udp   UNCONN     0      0               :::31402                       :::*                  </span><br><span class="line">tcp   LISTEN     0      128              *:80                           *:*                  </span><br><span class="line">tcp   LISTEN     0      128              *:22                           *:*                  </span><br><span class="line">tcp   LISTEN     0      100      127.0.0.1:25                           *:*                  </span><br><span class="line">tcp   LISTEN     0      128              *:443                          *:*                  </span><br><span class="line">tcp   LISTEN     0      128             :::80                          :::*                  </span><br><span class="line">tcp   LISTEN     0      128             :::22                          :::*                  </span><br><span class="line">tcp   LISTEN     0      100            ::1:25                          :::*      </span><br><span class="line">[root@Nginx-Server ~]# curl -k https://www.a.com/       # 可以访问，ok</span><br><span class="line">Nginx-Server --&gt; website1   </span><br><span class="line">[root@Nginx-Server ~]# curl -k https://www.b.com/       # 可以访问，ok</span><br><span class="line">Nginx-Server --&gt; website2</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-10-26, 23:18:19</p>
+        <p><span>最后更新:</span>2018-04-17, 02:08:59</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/26/Nginx-ngx-http-ssl-module/" title="模块 ngx_http_ssl_module">https://houhaiyun.github.io/2017/10/26/Nginx-ngx-http-ssl-module/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/26/Nginx-ngx-http-ssl-module/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/27/Nginx-ngx-http-referer-module/">
+                    模块 ngx_http_referer_module
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/26/Nginx-ngx-http-gzip-module/">
+                    模块 ngx_http_gzip_module
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Syntax-ssl-on-off"><span class="toc-number">1.</span> <span class="toc-text">Syntax:    ssl on | off;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssl-certificate-file"><span class="toc-number">2.</span> <span class="toc-text">ssl_certificate file;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssl-certificate-key-file"><span class="toc-number">3.</span> <span class="toc-text">ssl_certificate_key file;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssl-protocols-SSLv2-…"><span class="toc-number">4.</span> <span class="toc-text">ssl_protocols [SSLv2] …;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssl-session-cache-off-none-…"><span class="toc-number">5.</span> <span class="toc-text">ssl_session_cache off | none …;</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数"><span class="toc-number">5.1.</span> <span class="toc-text">参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssl-session-timeout-time"><span class="toc-number">6.</span> <span class="toc-text">ssl_session_timeout time;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现SSL"><span class="toc-number">7.</span> <span class="toc-text">实现SSL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-创建证书"><span class="toc-number">7.1.</span> <span class="toc-text">1. 创建证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-解密私钥"><span class="toc-number">7.2.</span> <span class="toc-text">2. 解密私钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-创建证书目录和拷贝证书"><span class="toc-number">7.3.</span> <span class="toc-text">3. 创建证书目录和拷贝证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-修改配置文件"><span class="toc-number">7.4.</span> <span class="toc-text">4. 修改配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#启动服务，测试"><span class="toc-number">7.5.</span> <span class="toc-text">启动服务，测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现多虚拟主机支持https"><span class="toc-number">8.</span> <span class="toc-text">实现多虚拟主机支持https</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-创建证书-1"><span class="toc-number">8.1.</span> <span class="toc-text">1. 创建证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-解密私钥-1"><span class="toc-number">8.2.</span> <span class="toc-text">2. 解密私钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-拷贝证书"><span class="toc-number">8.3.</span> <span class="toc-text">3. 拷贝证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-创建访问目录"><span class="toc-number">8.4.</span> <span class="toc-text">4. 创建访问目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-修改配置文件"><span class="toc-number">8.5.</span> <span class="toc-text">5. 修改配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-配置hosts文件"><span class="toc-number">8.6.</span> <span class="toc-text">6. 配置hosts文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-启动服务，测试"><span class="toc-number">8.7.</span> <span class="toc-text">7. 启动服务，测试</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"模块 ngx_http_ssl_module　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/27/Nginx-ngx-http-referer-module/" title="上一篇: 模块 ngx_http_referer_module">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/26/Nginx-ngx-http-gzip-module/" title="下一篇: 模块 ngx_http_gzip_module">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2-2017-10-28/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make-2017-10-28/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">搭建LNAMP</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module-2017-10-26/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module-2017-10-25/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>

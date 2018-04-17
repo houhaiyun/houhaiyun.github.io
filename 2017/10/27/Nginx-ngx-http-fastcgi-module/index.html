@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="简介该ngx_http_fastcgi_module模块允许将请求传递给FastCGI服务器。 fastcgi_pass address;官网帮助123Syntax:	fastcgi_pass address;Default:	—Context:	location, if in location 设置FastCGI服务器的地址。地址可以指定为域名或IP地址，端口号：">
+<meta name="keywords" content="Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模块 ngx_http_fastcgi_module">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/27/Nginx-ngx-http-fastcgi-module/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="简介该ngx_http_fastcgi_module模块允许将请求传递给FastCGI服务器。 fastcgi_pass address;官网帮助123Syntax:	fastcgi_pass address;Default:	—Context:	location, if in location 设置FastCGI服务器的地址。地址可以指定为域名或IP地址，端口号：">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/nginx-fastcgi-php.gif">
+<meta property="og:updated_time" content="2018-04-17T02:08:59.988Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="模块 ngx_http_fastcgi_module">
+<meta name="twitter:description" content="简介该ngx_http_fastcgi_module模块允许将请求传递给FastCGI服务器。 fastcgi_pass address;官网帮助123Syntax:	fastcgi_pass address;Default:	—Context:	location, if in location 设置FastCGI服务器的地址。地址可以指定为域名或IP地址，端口号：">
+<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/nginx-fastcgi-php.gif">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>模块 ngx_http_fastcgi_module | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">I want to be a CTO</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP/">LNAMP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">I want to be a CTO</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Nginx-ngx-http-fastcgi-module" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/27/Nginx-ngx-http-fastcgi-module/" class="article-date">
+      <time datetime="2017-10-27T23:34:58.000Z" itemprop="datePublished">2017-10-27</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      模块 ngx_http_fastcgi_module
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>该<code>ngx_http_fastcgi_module</code>模块允许将请求传递给<code>FastCGI</code>服务器。</p>
+<h3 id="fastcgi-pass-address"><a href="#fastcgi-pass-address" class="headerlink" title="fastcgi_pass address;"></a>fastcgi_pass address;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_pass address;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	location, if in location</span><br></pre></td></tr></table></figure></p>
+<p>设置<code>FastCGI</code>服务器的地址。地址可以指定为域名或<code>IP</code>地址，端口号：</p>
+<a id="more"></a>
+<h3 id="fastcgi-index-name"><a href="#fastcgi-index-name" class="headerlink" title="fastcgi_index name;"></a>fastcgi_index name;</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_index name;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p><code>fastcgi</code>默认的主页资源</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fastcgi_index index.php;</span><br><span class="line">fastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;</span><br></pre></td></tr></table></figure>
+<p>和“ /page.php”请求，SCRIPT_FILENAME参数将等于“ /home/www/scripts/php/page.php”，并且“ /”请求将等于“ /home/www/scripts/php/index.php”。</p>
+<h3 id="fastcgi-param-parameter-value-if-not-empty"><a href="#fastcgi-param-parameter-value-if-not-empty" class="headerlink" title="fastcgi_param parameter value [if_not_empty];"></a>fastcgi_param parameter value [if_not_empty];</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_param parameter value [if_not_empty];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>设置传递给 <code>FastCGI</code>服务器的参数值，可以是文本，变量或组合</p>
+<p>以下示例显示了PHP的最低要求设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fastcgi_param SCRIPT_FILENAME / home / www / scripts / php $ fastcgi_script_name; </span><br><span class="line">fastcgi_param QUERY_STRING $ query_string;</span><br></pre></td></tr></table></figure></p>
+<h3 id="实现fast-cgi"><a href="#实现fast-cgi" class="headerlink" title="实现fast-cgi"></a>实现fast-cgi</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[root@fast-cgi ~]# yum -y install php php-fpm mariadb-server</span><br><span class="line"></span><br><span class="line">[root@fast-cgi ~]# vim /etc/php-fpm.d/www.conf          #修改fast-cgi配置文件</span><br><span class="line">listen = 9000           # 监听所有IP的9000端口</span><br><span class="line">listen.allowed_clients = 127.0.0.1,192.168.8.140        # 允许192.168.8.140控制fast-cgi</span><br><span class="line"></span><br><span class="line">[root@fast-cgi ~]# systemctl start php-fpm          # 启动php-fpm程序</span><br><span class="line">[root@fast-cgi ~]# mkdir /app/php</span><br><span class="line">[root@fast-cgi ~]# vim /app/php/test.php        # 编写php测试页</span><br><span class="line">&lt;?php</span><br><span class="line">phpinfo();</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf          # 修改代理服务器的配置文件</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ; </span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ; </span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ; </span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">        fastcgi_pass 192.168.8.138:9000;        # 定义处理.php结尾的服务器</span><br><span class="line">        fastcgi_index index.php ;           # 默认fastcgi的默认主页资源</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME /app/php$fastcgi_script_name;     # /app/php代表fastcgi服务器php网页的根目录</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    proxy_cache proxycache ; </span><br><span class="line">    proxy_cache_key $request_uri ;</span><br><span class="line">    proxy_cache_valid 200 302 301 1h ;</span><br><span class="line">    proxy_cache_valid any 1m ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx</span><br></pre></td></tr></table></figure>
+<p>测试访问，ok</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/nginx-fastcgi-php.gif"></center>
+
+<h3 id="通过-pm-status和-ping来获取fpm-server状态信息"><a href="#通过-pm-status和-ping来获取fpm-server状态信息" class="headerlink" title="通过/pm_status和/ping来获取fpm server状态信息"></a>通过/pm_status和/ping来获取fpm server状态信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br></pre></td><td class="code"><pre><span class="line">[root@fast-cgi ~]# vim /etc/php-fpm.d/www.conf          # 修改fast-cgi的配置文件</span><br><span class="line">ping.path = /ping       # 开启ping</span><br><span class="line">pm.status_path = /status    # 开启status</span><br><span class="line">[root@fast-cgi ~]# systemctl restart php-fpm</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf          # 修改nginx代理服务器的配置文件</span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ; </span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ; </span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ; </span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">        fastcgi_pass 192.168.8.138:9000;</span><br><span class="line">        fastcgi_index index.php ;</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME /app/php$fastcgi_script_name;</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">    &#125;   </span><br><span class="line">    location ~* ^/(status|ping)$ &#123;          # 定义如果访问stats和ping目录就转发到php来处理</span><br><span class="line">        fastcgi_pass 192.168.8.138:9000;</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME $fastcgi_script_name ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx </span><br><span class="line"></span><br><span class="line">[root@CLIENT ~]# curl 192.168.8.140/status      # 测试状态</span><br><span class="line">pool:                 www</span><br><span class="line">process manager:      dynamic</span><br><span class="line">start time:           27/Oct/2017:19:12:38 +0800</span><br><span class="line">start since:          258</span><br><span class="line">accepted conn:        4</span><br><span class="line">listen queue:         0</span><br><span class="line">max listen queue:     0</span><br><span class="line">listen queue len:     128</span><br><span class="line">idle processes:       4</span><br><span class="line">active processes:     1</span><br><span class="line">total processes:      5</span><br><span class="line">max active processes: 1</span><br><span class="line">max children reached: 0</span><br><span class="line">slow requests:        0</span><br><span class="line"></span><br><span class="line">[root@CLIENT ~]# curl 192.168.8.140/ping        # 测试ping，ok</span><br><span class="line">pong</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@CLIENT ~]# curl http://192.168.8.140/status?xml       # 测试status，以xml格式显示</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; ?&gt;</span><br><span class="line">&lt;status&gt;</span><br><span class="line">&lt;pool&gt;www&lt;/pool&gt;</span><br><span class="line">&lt;process-manager&gt;dynamic&lt;/process-manager&gt;</span><br><span class="line">&lt;start-time&gt;1509102758&lt;/start-time&gt;</span><br><span class="line">&lt;start-since&gt;476&lt;/start-since&gt;</span><br><span class="line">&lt;accepted-conn&gt;12344&lt;/accepted-conn&gt;</span><br><span class="line">&lt;listen-queue&gt;0&lt;/listen-queue&gt;</span><br><span class="line">&lt;max-listen-queue&gt;124&lt;/max-listen-queue&gt;</span><br><span class="line">&lt;listen-queue-len&gt;128&lt;/listen-queue-len&gt;</span><br><span class="line">&lt;idle-processes&gt;7&lt;/idle-processes&gt;</span><br><span class="line">&lt;active-processes&gt;1&lt;/active-processes&gt;</span><br><span class="line">&lt;total-processes&gt;8&lt;/total-processes&gt;</span><br><span class="line">&lt;max-active-processes&gt;8&lt;/max-active-processes&gt;</span><br><span class="line">&lt;max-children-reached&gt;0&lt;/max-children-reached&gt;</span><br><span class="line">&lt;slow-requests&gt;0&lt;/slow-requests&gt;</span><br><span class="line">&lt;/status&gt;</span><br><span class="line"></span><br><span class="line">[root@CLIENT ~]# curl http://192.168.8.140/status?json      # 以json格式显示</span><br><span class="line">&#123;&quot;pool&quot;:&quot;www&quot;,&quot;process manager&quot;:&quot;dynamic&quot;,&quot;start time&quot;:1509102758,&quot;start since&quot;:508,&quot;accepted conn&quot;:12346,&quot;listen queue&quot;:0,&quot;max listen queue&quot;:124,&quot;listen queue len&quot;:128,&quot;idle processes&quot;:7,&quot;active processes&quot;:1,&quot;total processes&quot;:8,&quot;max active processes&quot;:8,&quot;max children reached&quot;:0,&quot;slow requests&quot;:0&#125;</span><br><span class="line"></span><br><span class="line">[root@CLIENT ~]# curl http://192.168.8.140/status?full          # 完整格式显示</span><br><span class="line">pool:                 www</span><br><span class="line">process manager:      dynamic</span><br><span class="line">start time:           27/Oct/2017:19:12:38 +0800</span><br><span class="line">start since:          576</span><br><span class="line">accepted conn:        12347</span><br><span class="line">listen queue:         0</span><br><span class="line">max listen queue:     124</span><br><span class="line">listen queue len:     128</span><br><span class="line">idle processes:       7</span><br><span class="line">active processes:     1</span><br><span class="line">total processes:      8</span><br><span class="line">max active processes: 8</span><br><span class="line">max children reached: 0</span><br><span class="line">slow requests:        0</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  19275</span><br><span class="line">state:                Running</span><br><span class="line">start time:           27/Oct/2017:19:12:38 +0800</span><br><span class="line">start since:          576</span><br><span class="line">requests:             1925</span><br><span class="line">request duration:     175</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          /status?full</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  0</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  19276</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           27/Oct/2017:19:12:38 +0800</span><br><span class="line">start since:          576</span><br><span class="line">requests:             1667</span><br><span class="line">request duration:     109</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          /status</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  262144</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  19277</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           27/Oct/2017:19:12:38 +0800</span><br><span class="line">start since:          576</span><br><span class="line">requests:             1748</span><br><span class="line">request duration:     188</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          /status?php</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  262144</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  19278</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           27/Oct/2017:19:12:38 +0800</span><br><span class="line">start since:          576</span><br><span class="line">requests:             2057</span><br><span class="line">request duration:     268</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          /status?xml</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  262144</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  19279</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           27/Oct/2017:19:12:38 +0800</span><br><span class="line">start since:          576</span><br><span class="line">requests:             2157</span><br><span class="line">request duration:     173</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          /status?json</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  262144</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  19281</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           27/Oct/2017:19:18:50 +0800</span><br><span class="line">start since:          204</span><br><span class="line">requests:             1717</span><br><span class="line">request duration:     139</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          /status</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  262144</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  19282</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           27/Oct/2017:19:19:01 +0800</span><br><span class="line">start since:          193</span><br><span class="line">requests:             678</span><br><span class="line">request duration:     737</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          /status</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  262144</span><br><span class="line"></span><br><span class="line">************************</span><br><span class="line">pid:                  19283</span><br><span class="line">state:                Idle</span><br><span class="line">start time:           27/Oct/2017:19:19:07 +0800</span><br><span class="line">start since:          187</span><br><span class="line">requests:             398</span><br><span class="line">request duration:     320</span><br><span class="line">request method:       GET</span><br><span class="line">request URI:          /status</span><br><span class="line">content length:       0</span><br><span class="line">user:                 -</span><br><span class="line">script:               -</span><br><span class="line">last request cpu:     0.00</span><br><span class="line">last request memory:  262144</span><br></pre></td></tr></table></figure>
+<h3 id="fastcgi-cache-path-path…"><a href="#fastcgi-cache-path-path…" class="headerlink" title="fastcgi_cache_path path…;"></a>fastcgi_cache_path path…;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_cache_path path [levels=levels] [use_temp_path=on|off] keys_zone=name:size [inactive=time] [max_size=size] [manager_files=number] [manager_sleep=time] [manager_threshold=time] [loader_files=number] [loader_sleep=time] [loader_threshold=time] [purger=on|off] [purger_files=number] [purger_sleep=time] [purger_threshold=time];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http</span><br></pre></td></tr></table></figure></p>
+<p>定义<code>fastcgi</code>的缓存；</p>
+<ul>
+<li><code>path</code> 缓存位置为磁盘上的文件系统</li>
+<li><code>max_size=size</code><ul>
+<li>磁盘<code>path</code>路径中用于缓存数据的缓存空间上限</li>
+</ul>
+</li>
+<li><code>levels=levels</code>：缓存目录的层级数量，以及每一级的目录数量</li>
+<li><code>levels=ONE:TWO:THREE</code></li>
+</ul>
+<p>示例：<code>leves=1:2:2</code></p>
+<ul>
+<li><code>keys_zone=name:size</code><ul>
+<li><code>k/v</code>映射的内存空间的名称及大小</li>
+</ul>
+</li>
+<li><code>inactive=time`</code><ul>
+<li>非活动时长</li>
+</ul>
+</li>
+</ul>
+<h3 id="fastcgi-cache-zone-off"><a href="#fastcgi-cache-zone-off" class="headerlink" title="fastcgi_cache zone | off;"></a>fastcgi_cache zone | off;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_cache zone | off;</span><br><span class="line">Default:	</span><br><span class="line">fastcgi_cache off;</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>定义用于缓存的共享内存区域。相同的区域可以在几个地方使用。参数值可以包含变量（1.7.9）。该<code>off</code>参数禁用从先前配置级别继承的缓存。</p>
+<p>调用指定的缓存空间来缓存数据</p>
+<h3 id="fastcgi-cache-key-string"><a href="#fastcgi-cache-key-string" class="headerlink" title="fastcgi_cache_key string;"></a>fastcgi_cache_key string;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_cache_key string;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>定义用作缓存项的<code>key</code>的字符串<br>示例：<code>fastcgi_cache_key $request_rui;</code></p>
+<h3 id="fastcgi-cache-methods-GET-HEAD-POST-…"><a href="#fastcgi-cache-methods-GET-HEAD-POST-…" class="headerlink" title="fastcgi_cache_methods GET | HEAD | POST …;"></a>fastcgi_cache_methods GET | HEAD | POST …;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_cache_methods GET | HEAD | POST ...;</span><br><span class="line">Default:	</span><br><span class="line">fastcgi_cache_methods GET HEAD;</span><br><span class="line">Context:	http, server, location</span><br><span class="line">This directive appeared in version 0.7.59.</span><br></pre></td></tr></table></figure></p>
+<p>为哪些请求方法使用缓存</p>
+<p>如果客户端请求方法在此指令中列出，则响应将被缓存。<code>“ GET”</code>和<code>“ HEAD”</code>方法总是添加到列表中，尽管建议明确指定它们。</p>
+<h3 id="fastcgi-cache-min-uses-number"><a href="#fastcgi-cache-min-uses-number" class="headerlink" title="fastcgi_cache_min_uses number;"></a>fastcgi_cache_min_uses number;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_cache_min_uses number;</span><br><span class="line">Default:	</span><br><span class="line">fastcgi_cache_min_uses 1;</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>缓存空间中的缓存项在<code>inactive</code>定义的非活动时间内至少要被访问到此处所指定的次数方可被认作活动项</p>
+<h3 id="fastcgi-keep-conn-on-off"><a href="#fastcgi-keep-conn-on-off" class="headerlink" title="fastcgi_keep_conn on | off;"></a>fastcgi_keep_conn on | off;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_keep_conn on | off;</span><br><span class="line">Default:	</span><br><span class="line">fastcgi_keep_conn off;</span><br><span class="line">Context:	http, server, location</span><br><span class="line">This directive appeared in version 1.1.4.</span><br></pre></td></tr></table></figure></p>
+<p>收到后端服务器响应后， <code>fastcgi</code>服务器是否关闭连接，建议启用长连接</p>
+<h3 id="fastcgi-cache-valid-code-…-time"><a href="#fastcgi-cache-valid-code-…-time" class="headerlink" title="fastcgi_cache_valid [code …] time;"></a>fastcgi_cache_valid [code …] time;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	fastcgi_cache_valid [code ...] time;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, location</span><br></pre></td></tr></table></figure></p>
+<p>不同的响应码各自的缓存时长</p>
+<h3 id="实现fastcgi缓存"><a href="#实现fastcgi缓存" class="headerlink" title="实现fastcgi缓存"></a>实现fastcgi缓存</h3><p>还是使用上面的实验环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx-Server ~]# mkdir -p  /var/cache/nginx/fcgi_cache        # 创建缓存目录</span><br><span class="line">[root@Nginx-Server ~]# vim /etc/nginx/nginx.conf        # 在nginx主配置文件中添加如下，是在http中</span><br><span class="line">http &#123;</span><br><span class="line">    fastcgi_cache_path /var/cache/nginx/fcgi_cache</span><br><span class="line">    levels=1:1:2 keys_zone=fcgicache:20m</span><br><span class="line">    inactive=120s max_size=1g;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/conf.d/vhost.conf          # 修改配置文件</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen   default_server ; </span><br><span class="line">    listen 80  ;</span><br><span class="line">    server_name www.a.com ; </span><br><span class="line">    root /app/website1 ;</span><br><span class="line">    error_log /var/log/nginx/a.com.error.log ; </span><br><span class="line">    access_log /var/log/nginx/a.com.access.log main ;</span><br><span class="line">    </span><br><span class="line">        location ~ \.php$ &#123;</span><br><span class="line">        fastcgi_pass 192.168.8.138:9000;</span><br><span class="line">        fastcgi_index index.php ;</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME /app/php$fastcgi_script_name;</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">        fastcgi_cache fcgicache ;</span><br><span class="line">        fastcgi_cache_key $request_uri; </span><br><span class="line">        fastcgi_cache_valid 301 1h ;</span><br><span class="line">        fastcgi_cache_valid any 1m ;</span><br><span class="line">        &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">[root@Nginx-Server ~]# nginx -s stop</span><br><span class="line">[root@Nginx-Server ~]# nginx</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# curl 192.168.8.140/test.php</span><br><span class="line">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;DTD/xhtml1-transitional.dtd&quot;&gt;</span><br><span class="line">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;&lt;head&gt;</span><br><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">body &#123;background-color: #ffffff; color: #000000;&#125;</span><br><span class="line">body, td, th, h1, h2 &#123;font-family: sans-serif;&#125;</span><br><span class="line">pre &#123;margin: 0px; font-family: monospace;&#125;</span><br><span class="line">a:link &#123;color: #000099; text-decoration: none; background-color: #ffffff;&#125;</span><br><span class="line">a:hover &#123;text-decoration: underline;&#125;</span><br><span class="line">table &#123;border-collapse: collapse;&#125;</span><br><span class="line">.center &#123;text-align: center;&#125;</span><br><span class="line">.center table &#123; margin-left: auto; margin-right: auto; text-align: left;&#125;</span><br><span class="line">.center th &#123; text-align: center !important; &#125;</span><br><span class="line">td, th &#123; border: 1px solid #000000; font-size: 75%; vertical-align: baseline;&#125;</span><br><span class="line">h1 &#123;font-size: 150%;&#125;</span><br><span class="line">h2 &#123;font-size: 125%;&#125;</span><br><span class="line">.p &#123;text-align: left;&#125;</span><br><span class="line">.e &#123;background-color: #ccccff; font-weight: bold; color: #000000;&#125;</span><br><span class="line">.h &#123;background-color: #9999cc; font-weight: bold; color: #000000;&#125;</span><br><span class="line">.v &#123;background-color: #cccccc; color: #000000;&#125;</span><br><span class="line">.vr &#123;background-color: #cccccc; text-align: right; color: #000000;&#125;</span><br><span class="line">img &#123;float: right; border: 0px;&#125;</span><br><span class="line">hr &#123;width: 600px; background-color: #cccccc; border: 0px; height: 1px; color: #000000;&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;title&gt;phpinfo()&lt;/title&gt;&lt;meta name=&quot;ROBOTS&quot; content=&quot;NOINDEX,NOFOLLOW,NOARCHIVE&quot; /&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;&lt;div class=&quot;center&quot;&gt;</span><br><span class="line">&lt;table border=&quot;0&quot; cellpadding=&quot;3&quot; width=&quot;600&quot;&gt;</span><br><span class="line">&lt;tr class=&quot;h&quot;&gt;&lt;td&gt;</span><br><span class="line">&lt;a href=&quot;http://www.php.net/&quot;&gt;&lt;img border=&quot;0&quot; src=&quot;/test.php?=PHPE9568F34-D428-11d2-A769-00AA001ACF42&quot; alt=&quot;PHP Logo&quot; /&gt;&lt;/a&gt;&lt;h1 class=&quot;p&quot;&gt;PHP Version 5.4.16&lt;/h1&gt;</span><br><span class="line">&lt;/td&gt;&lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;&lt;br /&gt;</span><br><span class="line">。。。省略</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server ~]# cd /var/cache/nginx/fcgi_cache/      ＃进入缓存目录</span><br><span class="line">[root@Nginx-Server fcgi_cache]# ls      # 已经缓存</span><br><span class="line">1  7  b</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server fcgi_cache]# tree        #查看目录结构</span><br><span class="line">.</span><br><span class="line">├── 1</span><br><span class="line">│   └── a</span><br><span class="line">│       └── ed</span><br><span class="line">│           └── 05d649e04370121f2343846df6b2eda1</span><br><span class="line">├── 7</span><br><span class="line">│   └── 5</span><br><span class="line">│       └── 6f</span><br><span class="line">│           └── 1c4d0ba4e0548244739027d15ed56f57</span><br><span class="line">└── b</span><br><span class="line">    └── d</span><br><span class="line">        └── 77</span><br><span class="line">            └── bf6813c2bc0becb369a8d8367b6b77db</span><br><span class="line"></span><br><span class="line">9 directories, 3 files</span><br><span class="line"></span><br><span class="line">[root@Nginx-Server fcgi_cache]# ll      </span><br><span class="line">total 0</span><br><span class="line">drwx------ 3 nginx nginx 15 Oct 27 21:21 1</span><br><span class="line">drwx------ 3 nginx nginx 15 Oct 27 21:21 7</span><br><span class="line">drwx------ 3 nginx nginx 15 Oct 27 21:21 b</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-10-27, 23:34:58</p>
+        <p><span>最后更新:</span>2018-04-17, 02:08:59</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/" title="模块 ngx_http_fastcgi_module">https://houhaiyun.github.io/2017/10/27/Nginx-ngx-http-fastcgi-module/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/27/Nginx-ngx-http-fastcgi-module/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/27/Nginx-LNAMP/">
+                    搭建LNAMP
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/27/Nginx-ngx-http-headers-module/">
+                    模块 ngx_http_headers_module
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-pass-address"><span class="toc-number">2.</span> <span class="toc-text">fastcgi_pass address;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-index-name"><span class="toc-number">3.</span> <span class="toc-text">fastcgi_index name;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-param-parameter-value-if-not-empty"><span class="toc-number">4.</span> <span class="toc-text">fastcgi_param parameter value [if_not_empty];</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现fast-cgi"><span class="toc-number">5.</span> <span class="toc-text">实现fast-cgi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过-pm-status和-ping来获取fpm-server状态信息"><span class="toc-number">6.</span> <span class="toc-text">通过/pm_status和/ping来获取fpm server状态信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-cache-path-path…"><span class="toc-number">7.</span> <span class="toc-text">fastcgi_cache_path path…;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-cache-zone-off"><span class="toc-number">8.</span> <span class="toc-text">fastcgi_cache zone | off;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-cache-key-string"><span class="toc-number">9.</span> <span class="toc-text">fastcgi_cache_key string;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-cache-methods-GET-HEAD-POST-…"><span class="toc-number">10.</span> <span class="toc-text">fastcgi_cache_methods GET | HEAD | POST …;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-cache-min-uses-number"><span class="toc-number">11.</span> <span class="toc-text">fastcgi_cache_min_uses number;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-keep-conn-on-off"><span class="toc-number">12.</span> <span class="toc-text">fastcgi_keep_conn on | off;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastcgi-cache-valid-code-…-time"><span class="toc-number">13.</span> <span class="toc-text">fastcgi_cache_valid [code …] time;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现fastcgi缓存"><span class="toc-number">14.</span> <span class="toc-text">实现fastcgi缓存</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"模块 ngx_http_fastcgi_module　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/27/Nginx-LNAMP/" title="上一篇: 搭建LNAMP">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/27/Nginx-ngx-http-headers-module/" title="下一篇: 模块 ngx_http_headers_module">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2-2017-10-28/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make-2017-10-28/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">搭建LNAMP</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module-2017-10-26/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module-2017-10-25/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>

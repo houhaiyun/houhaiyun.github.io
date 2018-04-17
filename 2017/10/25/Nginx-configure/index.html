@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="配置文件组成部分 主配置文件： nginx.conf 子配置文件 include conf.d/*.conf   fastcgi， uwsgi， scgi等协议相关的配置文件 mime.types：支持的mime类型">
+<meta name="keywords" content="Nginx配置文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx配置文件">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/10/25/Nginx-configure/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="配置文件组成部分 主配置文件： nginx.conf 子配置文件 include conf.d/*.conf   fastcgi， uwsgi， scgi等协议相关的配置文件 mime.types：支持的mime类型">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-04-17T02:13:18.087Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx配置文件">
+<meta name="twitter:description" content="配置文件组成部分 主配置文件： nginx.conf 子配置文件 include conf.d/*.conf   fastcgi， uwsgi， scgi等协议相关的配置文件 mime.types：支持的mime类型">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Nginx配置文件 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">I want to be a CTO</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP/">LNAMP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">I want to be a CTO</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Nginx-configure" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/Nginx-configure/" class="article-date">
+      <time datetime="2017-10-25T17:37:07.000Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Nginx配置文件
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/Nginx配置文件/">Nginx配置文件</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="配置文件组成部分"><a href="#配置文件组成部分" class="headerlink" title="配置文件组成部分"></a>配置文件组成部分</h3><ul>
+<li>主配置文件： nginx.conf<ul>
+<li>子配置文件 include conf.d/*.conf</li>
+</ul>
+</li>
+<li>fastcgi， uwsgi， scgi等协议相关的配置文件</li>
+<li>mime.types：支持的mime类型</li>
+</ul>
+<a id="more"></a>
+<h4 id="主配置文件的配置指令"><a href="#主配置文件的配置指令" class="headerlink" title="主配置文件的配置指令"></a>主配置文件的配置指令</h4><p><code>directive value [value2 ...];</code>     (directive：指令)</p>
+<ul>
+<li>注意：</li>
+</ul>
+<ol>
+<li>指令必须以分号结尾</li>
+<li>支持使用配置变量<ul>
+<li>自建变量：由Nginx模块引入，可直接引用</li>
+<li>自定义变量：由用户使用set命令定义<ul>
+<li><code>set variable_name value;</code></li>
+</ul>
+</li>
+<li>引用变量：<code>$variable_name</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="Nginx配置文件"><a href="#Nginx配置文件" class="headerlink" title="Nginx配置文件"></a>Nginx配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">main block：主配置段，即全局配置段，对http,mail都有效</span><br><span class="line">    event &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#125; 事件驱动相关的配置</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#125; http/https 协议相关配置段</span><br><span class="line"></span><br><span class="line">mail &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#125; mail 协议相关配置段</span><br><span class="line"></span><br><span class="line">stream &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#125; stream 服务器相关配置段</span><br></pre></td></tr></table></figure>
+<h4 id="http协议相关的配置结构"><a href="#http协议相关的配置结构" class="headerlink" title="http协议相关的配置结构"></a>http协议相关的配置结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    ...</span><br><span class="line">    ... 各server的公共配置</span><br><span class="line">    server &#123; 每个server用于定义一个虚拟主机</span><br><span class="line">        ...</span><br><span class="line">        &#125;</span><br><span class="line">    server &#123;</span><br><span class="line">        ...</span><br><span class="line">        server_name 虚拟主机名</span><br><span class="line">        root 主目录</span><br><span class="line">        alias 路径别名</span><br><span class="line">        location [OPERATOR] URL &#123; 指定URL的特性</span><br><span class="line">            ...</span><br><span class="line">            if CONDITION &#123;</span><br><span class="line">            ...</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Nginx全局配置分类："><a href="#Nginx全局配置分类：" class="headerlink" title="Nginx全局配置分类："></a>Nginx全局配置分类：</h3><p><strong>Main全局配置段常见的配置指令分类：</strong></p>
+<ul>
+<li>正常运行必备的配置</li>
+<li>优化性能相关的配置</li>
+<li>用于调试及定位问题相关的配置</li>
+<li>事件驱动相关的配置</li>
+<li>帮助文档<ul>
+<li><a href="http://nginx.org/en/docs/" target="_blank" rel="noopener">http://nginx.org/en/docs/</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="Nginx全局配置main：正常运行必备的配置"><a href="#Nginx全局配置main：正常运行必备的配置" class="headerlink" title="Nginx全局配置main：正常运行必备的配置"></a>Nginx全局配置main：正常运行必备的配置</h3><p><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html" target="_blank" rel="noopener">帮助文档：http://nginx.org/en/docs/http/ngx_http_core_module.html</a></p>
+<h4 id="1-user"><a href="#1-user" class="headerlink" title="1. user"></a>1. user</h4><p><a href="http://nginx.org/en/docs/ngx_core_module.html#user" target="_blank" rel="noopener">官网帮助：http://nginx.org/en/docs/ngx_core_module.html#user</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">官网帮助：如下</span><br><span class="line">Syntax:	user user [group];</span><br><span class="line">Default:	</span><br><span class="line">user nobody nobody;</span><br><span class="line">Context:	main</span><br></pre></td></tr></table></figure></p>
+<p>指定worker进程的运行身份，如组不指定，默认和用户名同名</p>
+<h4 id="2-pid-PATH-TO-PID-FILE"><a href="#2-pid-PATH-TO-PID-FILE" class="headerlink" title="2. pid /PATH/TO/PID_FILE"></a>2. pid /PATH/TO/PID_FILE</h4><p>指定存储nginx主进程PID的文件路径</p>
+<p>yum安装默认的PID文件路径为：<code>pid /run/nginx.pid;</code></p>
+<h5 id="查看PID文件"><a href="#查看PID文件" class="headerlink" title="查看PID文件"></a>查看PID文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# nginx </span><br><span class="line">[root@centos7 ~]# ss -tnul      # 端口已经打开</span><br><span class="line">Netid State      Recv-Q Send-Q Local Address:Port                Peer Address:Port              </span><br><span class="line">udp   UNCONN     0      0          127.0.0.1:323                            *:*                  </span><br><span class="line">tcp   LISTEN     0      128                *:80                             *:*                  </span><br><span class="line">tcp   LISTEN     0      128               :::80                            :::*                  </span><br><span class="line">tcp   LISTEN     0      128               :::22                            :::*                  </span><br><span class="line">[root@centos7 ~]# cat  /run/nginx.pid </span><br><span class="line">11278</span><br><span class="line">[root@centos7 ~]# ps -ef | grep nginx       # 主进程的PID为11278</span><br><span class="line">root      11253   1431  0 22:43 pts/0    00:00:00 vim /etc/nginx/nginx.conf</span><br><span class="line">root      11278      1  0 22:45 ?        00:00:00 nginx: master process nginx</span><br><span class="line">nginx     11279  11278  0 22:45 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx     11280  11278  0 22:45 ?        00:00:00 nginx: worker process</span><br><span class="line">root      11292  11257  0 22:46 pts/1    00:00:00 grep --color=auto nginx</span><br></pre></td></tr></table></figure>
+<h4 id="3-include-file-mask"><a href="#3-include-file-mask" class="headerlink" title="3. include file | mask"></a>3. include file | mask</h4><p><a href="http://nginx.org/en/docs/ngx_core_module.html#include" target="_blank" rel="noopener">官网帮助：http://nginx.org/en/docs/ngx_core_module.html#include</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	include file | mask;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	any</span><br></pre></td></tr></table></figure></p>
+<p>指明包含进来的其它配置文件片断</p>
+<h5 id="指定绝对路径"><a href="#指定绝对路径" class="headerlink" title="指定绝对路径"></a>指定绝对路径</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf</span><br><span class="line">include /usr/share/nginx/modules/*.conf;        # 此处就是一个绝对路径</span><br></pre></td></tr></table></figure>
+<h5 id="指定相对路径"><a href="#指定相对路径" class="headerlink" title="指定相对路径"></a>指定相对路径</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf</span><br><span class="line">include vhost/a.conf;           # 此处就是一个绝对路径，这个相对路径是不存在的</span><br><span class="line">[root@centos7 ~]# nginx -t      # 检查配置文件，提示我们配置文件不存在，需要创建，由此我们知道了，nginx是以/etc/nginx/这个目录下作为相对路径的开始</span><br><span class="line">nginx: [emerg] open() &quot;/etc/nginx/vhost/a.conf&quot; failed (2: No such file or directory) in /etc/nginx/nginx.conf:12</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test failed</span><br></pre></td></tr></table></figure>
+<h5 id="相对路径的路径"><a href="#相对路径的路径" class="headerlink" title="相对路径的路径"></a>相对路径的路径</h5><p>yum安装的相对路径的路径为：<code>/etc/nginx/</code></p>
+<h4 id="4-load-module-file"><a href="#4-load-module-file" class="headerlink" title="4. load_module file"></a>4. load_module file</h4><ul>
+<li>模块加载配置文件： <code>/usr/share/nginx/modules/*.conf</code></li>
+<li>指明要装载的动态模块路径: <code>/usr/lib64/nginx/modules</code></li>
+</ul>
+<h5 id="查看-usr-share-nginx-modules下的配置文件"><a href="#查看-usr-share-nginx-modules下的配置文件" class="headerlink" title="查看/usr/share/nginx/modules下的配置文件"></a>查看/usr/share/nginx/modules下的配置文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 nginx]# ls /usr/share/nginx/modules       # 查看/usr/share/nginx/modules下的配置文件</span><br><span class="line">mod-http-geoip.conf         mod-http-perl.conf         mod-mail.conf</span><br><span class="line">mod-http-image-filter.conf  mod-http-xslt-filter.conf  mod-stream.conf</span><br><span class="line"></span><br><span class="line">[root@centos7 nginx]# cat /usr/share/nginx/modules/mod-mail.conf        # 随便查看一个配置文件，加载了一个模块</span><br><span class="line">load_module &quot;/usr/lib64/nginx/modules/ngx_mail_module.so&quot;;</span><br></pre></td></tr></table></figure>
+<h3 id="Nginx全局配置main：性能优化相关的配置："><a href="#Nginx全局配置main：性能优化相关的配置：" class="headerlink" title="Nginx全局配置main：性能优化相关的配置："></a>Nginx全局配置main：性能优化相关的配置：</h3><h4 id="1-worker-processes-number-auto"><a href="#1-worker-processes-number-auto" class="headerlink" title="1.  worker_processes number | auto"></a>1.  worker_processes number | auto</h4><p><a href="http://nginx.org/en/docs/ngx_core_module.html#worker_processes" target="_blank" rel="noopener">官网帮助：http://nginx.org/en/docs/ngx_core_module.html#worker_processes</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[link](http://note.youdao.com/)</span><br><span class="line">Syntax:	worker_processes number | auto;</span><br><span class="line">Default:	</span><br><span class="line">worker_processes 1;</span><br><span class="line">Context:	main</span><br></pre></td></tr></table></figure></p>
+<p>worker进程的数量；通常应该为当前主机的cpu的物理核心数</p>
+<h5 id="查看当前主机CPU的物理核心数"><a href="#查看当前主机CPU的物理核心数" class="headerlink" title="查看当前主机CPU的物理核心数"></a>查看当前主机CPU的物理核心数</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# lscpu | grep &quot;^CPU(s)&quot;</span><br><span class="line">CPU(s):                2</span><br></pre></td></tr></table></figure>
+<h5 id="配置worker-processes-number"><a href="#配置worker-processes-number" class="headerlink" title="配置worker_processes number"></a>配置worker_processes number</h5><ul>
+<li>官网对<code>worker_processes</code> 给出的解释如下：<ul>
+<li><code>最优值取决于许多因素，包括（但不限于）CPU内核数，存储数据的硬盘驱动器数量以及加载模式。当有疑问时，将其设置为可用CPU内核的数量将是一个好的开始（值“ auto”将尝试自动检测它）。</code></li>
+<li>worker进程的数量；通常应该为当前主机的cpu的物理核心数</li>
+</ul>
+</li>
+</ul>
+<p><strong>注意</strong>：下面的实验仅用于实验，具体还得根据情况而定哦！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# !lscpu        # 查看当前主机CPU的物理核心数</span><br><span class="line">lscpu | grep &quot;^CPU(s)&quot;</span><br><span class="line">CPU(s):                2</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 我们故意将值调大，用于测试哦</span><br><span class="line">worker_processes 4;</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# nginx -s stop         </span><br><span class="line">[root@centos7 ~]# nginx </span><br><span class="line">[root@centos7 ~]# !ps       # 查看进程开启数量已经开启4个进程</span><br><span class="line">ps -ef | grep nginx</span><br><span class="line">root      11253   1431  0 22:43 pts/0    00:00:00 vim /etc/nginx/nginx.conf</span><br><span class="line">root      11412      1  0 23:24 ?        00:00:00 nginx: master process nginx</span><br><span class="line">nginx     11413  11412  0 23:24 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx     11414  11412  0 23:24 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx     11415  11412  0 23:24 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx     11416  11412  0 23:24 ?        00:00:00 nginx: worker process</span><br><span class="line">root      11418  11257  0 23:24 pts/1    00:00:00 grep --color=auto nginx</span><br></pre></td></tr></table></figure>
+<h4 id="2-worker-cpu-affinity-cpumask-…"><a href="#2-worker-cpu-affinity-cpumask-…" class="headerlink" title="2. worker_cpu_affinity cpumask …"></a>2. worker_cpu_affinity cpumask …</h4><p>官网帮助：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	worker_cpu_affinity cpumask ...;</span><br><span class="line">worker_cpu_affinity auto [cpumask];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	main</span><br></pre></td></tr></table></figure></p>
+<p>将工作流程绑定到一组CPU。每个CPU组由允许的CPU的位掩码表示。应为每个工作进程定义一个单独的集合。默认情况下，工作进程没有绑定到任何特定的CPU。</p>
+<h4 id="CPU-MASK"><a href="#CPU-MASK" class="headerlink" title="CPU MASK"></a>CPU MASK</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CPU MASK： </span><br><span class="line">00000001： 0号CPU</span><br><span class="line">00000010： 1号CPU</span><br><span class="line">00000100： 2号CPU</span><br><span class="line">10000000： 8号CPU</span><br><span class="line">那么n号CPU就是，n后面跟n-1个0</span><br></pre></td></tr></table></figure>
+<h4 id="将workeri进程绑定CPU"><a href="#将workeri进程绑定CPU" class="headerlink" title="将workeri进程绑定CPU"></a>将workeri进程绑定CPU</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">worker_cpu_affinity auto [cpumask] 提高缓存命中率</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件</span><br><span class="line">worker_cpu_affinity 0001 0010 0100 1000;        # 将进程绑定到0号，1号，2号，3号CPU上面</span><br><span class="line">worker_cpu_affinity 0101 1010;          # 将进程绑定到0号和2号 2号和4号CPU上面；</span><br></pre></td></tr></table></figure>
+<h4 id="3-worker-priority-number"><a href="#3-worker-priority-number" class="headerlink" title="3. worker_priority number"></a>3. worker_priority number</h4><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	worker_priority number;</span><br><span class="line">Default:	</span><br><span class="line">worker_priority 0;</span><br><span class="line">Context:	main</span><br></pre></td></tr></table></figure></p>
+<p>指定worker进程的nice值，设定worker进程优先级： [-20,20]；数越小代表者优先级越高。</p>
+<h5 id="修改worker-priority"><a href="#修改worker-priority" class="headerlink" title="修改worker_priority"></a>修改worker_priority</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件</span><br><span class="line">worker_priority -10;</span><br></pre></td></tr></table></figure>
+<h4 id="4-worker-rlimit-nofile-number"><a href="#4-worker-rlimit-nofile-number" class="headerlink" title="4. worker_rlimit_nofile number"></a>4. worker_rlimit_nofile number</h4><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	worker_rlimit_nofile number;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	main</span><br></pre></td></tr></table></figure></p>
+<p>worker进程所能够打开的文件数量上限,如65535</p>
+<p>变化对打开文件的最大数量的限制（rlimit_nofile）工作流程。用来增加限制而无需重新启动的主要过程。</p>
+<h5 id="修改worker-rlimit-nofile-number"><a href="#修改worker-rlimit-nofile-number" class="headerlink" title="修改worker_rlimit_nofile number"></a>修改worker_rlimit_nofile number</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件</span><br><span class="line">worker_rlimit_nofile 65535;</span><br></pre></td></tr></table></figure>
+<h3 id="Nginx事件驱动相关的配置"><a href="#Nginx事件驱动相关的配置" class="headerlink" title="Nginx事件驱动相关的配置"></a>Nginx事件驱动相关的配置</h3><h4 id="1-worker-connections-number"><a href="#1-worker-connections-number" class="headerlink" title="1. worker_connections number"></a>1. worker_connections number</h4><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	worker_connections number;</span><br><span class="line">Default:	</span><br><span class="line">worker_connections 512;</span><br><span class="line">Context:	events</span><br></pre></td></tr></table></figure></p>
+<p>每个worker进程所能够打开的最大并发连接数数量，如10240</p>
+<p>总最大并发数： worker_processes * worker_connections</p>
+<h5 id="将worker-connections-number调大"><a href="#将worker-connections-number调大" class="headerlink" title="将worker_connections number调大"></a>将worker_connections number调大</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件，将值调为102400</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections 10240;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-use-method"><a href="#2-use-method" class="headerlink" title="2. use method"></a>2. use method</h4><p>指明并发连接请求的处理方法,默认自动选择最优方法<br><code>use epoll;</code></p>
+<h5 id="将并发连接请求的处理方法调为epoll"><a href="#将并发连接请求的处理方法调为epoll" class="headerlink" title="将并发连接请求的处理方法调为epoll"></a>将并发连接请求的处理方法调为epoll</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections 10240;</span><br><span class="line">    use epoll;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-accept-mutex-on-off-互斥"><a href="#3-accept-mutex-on-off-互斥" class="headerlink" title="3. accept_mutex on | off 互斥"></a>3. accept_mutex on | off 互斥</h4><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	accept_mutex on | off;</span><br><span class="line">Default:	</span><br><span class="line">accept_mutex off;</span><br><span class="line">Context:	events</span><br></pre></td></tr></table></figure></p>
+<p>处理新的连接请求的方法； on指由各个worker轮流处理新请求，Off指每个新请求的到达都会通知(唤醒)所有的worker进程，但只有一个进程可获得连接，造成“惊群”，影响性能，默认on</p>
+<h5 id="启用accept-mutex"><a href="#启用accept-mutex" class="headerlink" title="启用accept_mutex"></a>启用accept_mutex</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections 10240;</span><br><span class="line">    use epoll;</span><br><span class="line">    accept_mutex on ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Nginx：调试和定位问题"><a href="#Nginx：调试和定位问题" class="headerlink" title="Nginx：调试和定位问题"></a>Nginx：调试和定位问题</h3><h4 id="1-daemon-on-off"><a href="#1-daemon-on-off" class="headerlink" title="1. daemon on|off"></a>1. daemon on|off</h4><p>是否以守护进程方式运行nignx，默认是守护进程方式</p>
+<h4 id="修改为非守护进程运行nginx"><a href="#修改为非守护进程运行nginx" class="headerlink" title="修改为非守护进程运行nginx"></a>修改为非守护进程运行nginx</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件</span><br><span class="line">daemon off ;</span><br><span class="line">[root@centos7 ~]# nginx -s stop</span><br><span class="line">[root@centos7 ~]# nginx         # 启动nginx就在前台运行了</span><br><span class="line"></span><br><span class="line">^C[root@centos7 ~]#             # Ctrl+C就停止了</span><br></pre></td></tr></table></figure>
+<h4 id="2-master-process-on-off"><a href="#2-master-process-on-off" class="headerlink" title="2. master_process on|off"></a>2. master_process on|off</h4><p>是否以master/worker模型运行nginx；默认为on，off 将不启动worker</p>
+<h5 id="修改nginx不以master-worker模型启动"><a href="#修改nginx不以master-worker模型启动" class="headerlink" title="修改nginx不以master/worker模型启动"></a>修改nginx不以master/worker模型启动</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件</span><br><span class="line">master_process off ;</span><br><span class="line">[root@centos7 ~]# nginx             # 只启动了master进程</span><br><span class="line">[root@centos7 ~]# ps -ef | grep nginx</span><br><span class="line">root       2117   2077  0 08:47 pts/0    00:00:00 vim /etc/nginx/nginx.conf</span><br><span class="line">root       2390      1  0 09:42 ?        00:00:00 nginx</span><br><span class="line">root       2392   2120  0 09:43 pts/1    00:00:00 grep --color=auto nginx</span><br></pre></td></tr></table></figure>
+<h4 id="3-error-log-file-level"><a href="#3-error-log-file-level" class="headerlink" title="3. error_log file [level]"></a>3. error_log file [level]</h4><p>错误日志文件及其级别；出于调试需要， 可设定为debug；但debug仅在编译时使用了“–with-debug”选项时才有效<br>方式： file /path/logfile;</p>
+<ul>
+<li><p>stderr:发送到标准错误</p>
+<ul>
+<li>syslog:server-address[,parameter=values]:发送到syslog</li>
+</ul>
+</li>
+<li><p>memory:size 内存</p>
+<ul>
+<li>level:debug|info|notice|warn|error|crit|alter|emerg</li>
+</ul>
+</li>
+</ul>
+<h5 id="将日志级别调为debug"><a href="#将日志级别调为debug" class="headerlink" title="将日志级别调为debug"></a>将日志级别调为debug</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/nginx/nginx.conf         # 修改配置文件</span><br><span class="line">error_log /var/log/nginx/error.log debug ;</span><br><span class="line">[root@centos7 ~]# nginx -s stop </span><br><span class="line">[root@centos7 ~]# nginx </span><br><span class="line">[root@centos7 ~]# tail /var/log/nginx/error.log </span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: *2002 free: 00007F5246F24010, unused: 1</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: *2002 free: 00007F5246F25020, unused: 3068</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: *2002 close http connection: 13</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: *2002 event timer del: 13: 1508896505040</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: *2002 reusable connection: 0</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: *2002 free: 00007F5246E759D0</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: *2002 free: 00007F5246EB3040, unused: 128</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: timer delta: 1</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: worker cycle</span><br><span class="line">2017/10/25 09:55:00 [debug] 2398#0: epoll timer: -1</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-10-25, 17:37:07</p>
+        <p><span>最后更新:</span>2018-04-17, 02:13:18</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/25/Nginx-configure/" title="Nginx配置文件">https://houhaiyun.github.io/2017/10/25/Nginx-configure/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/10/25/Nginx-configure/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/25/Nginx-configure2/">
+                    Nginx配置文件2
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/21/Linux-LVS-suanfa/">
+                    LVS调度算法
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置文件组成部分"><span class="toc-number">1.</span> <span class="toc-text">配置文件组成部分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主配置文件的配置指令"><span class="toc-number">1.1.</span> <span class="toc-text">主配置文件的配置指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx配置文件"><span class="toc-number">2.</span> <span class="toc-text">Nginx配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#http协议相关的配置结构"><span class="toc-number">2.1.</span> <span class="toc-text">http协议相关的配置结构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx全局配置分类："><span class="toc-number">3.</span> <span class="toc-text">Nginx全局配置分类：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx全局配置main：正常运行必备的配置"><span class="toc-number">4.</span> <span class="toc-text">Nginx全局配置main：正常运行必备的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-user"><span class="toc-number">4.1.</span> <span class="toc-text">1. user</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-pid-PATH-TO-PID-FILE"><span class="toc-number">4.2.</span> <span class="toc-text">2. pid /PATH/TO/PID_FILE</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#查看PID文件"><span class="toc-number">4.2.1.</span> <span class="toc-text">查看PID文件</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-include-file-mask"><span class="toc-number">4.3.</span> <span class="toc-text">3. include file | mask</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#指定绝对路径"><span class="toc-number">4.3.1.</span> <span class="toc-text">指定绝对路径</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#指定相对路径"><span class="toc-number">4.3.2.</span> <span class="toc-text">指定相对路径</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#相对路径的路径"><span class="toc-number">4.3.3.</span> <span class="toc-text">相对路径的路径</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-load-module-file"><span class="toc-number">4.4.</span> <span class="toc-text">4. load_module file</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#查看-usr-share-nginx-modules下的配置文件"><span class="toc-number">4.4.1.</span> <span class="toc-text">查看/usr/share/nginx/modules下的配置文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx全局配置main：性能优化相关的配置："><span class="toc-number">5.</span> <span class="toc-text">Nginx全局配置main：性能优化相关的配置：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-worker-processes-number-auto"><span class="toc-number">5.1.</span> <span class="toc-text">1.  worker_processes number | auto</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#查看当前主机CPU的物理核心数"><span class="toc-number">5.1.1.</span> <span class="toc-text">查看当前主机CPU的物理核心数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#配置worker-processes-number"><span class="toc-number">5.1.2.</span> <span class="toc-text">配置worker_processes number</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-worker-cpu-affinity-cpumask-…"><span class="toc-number">5.2.</span> <span class="toc-text">2. worker_cpu_affinity cpumask …</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU-MASK"><span class="toc-number">5.3.</span> <span class="toc-text">CPU MASK</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将workeri进程绑定CPU"><span class="toc-number">5.4.</span> <span class="toc-text">将workeri进程绑定CPU</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-worker-priority-number"><span class="toc-number">5.5.</span> <span class="toc-text">3. worker_priority number</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#修改worker-priority"><span class="toc-number">5.5.1.</span> <span class="toc-text">修改worker_priority</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-worker-rlimit-nofile-number"><span class="toc-number">5.6.</span> <span class="toc-text">4. worker_rlimit_nofile number</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#修改worker-rlimit-nofile-number"><span class="toc-number">5.6.1.</span> <span class="toc-text">修改worker_rlimit_nofile number</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx事件驱动相关的配置"><span class="toc-number">6.</span> <span class="toc-text">Nginx事件驱动相关的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-worker-connections-number"><span class="toc-number">6.1.</span> <span class="toc-text">1. worker_connections number</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#将worker-connections-number调大"><span class="toc-number">6.1.1.</span> <span class="toc-text">将worker_connections number调大</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-use-method"><span class="toc-number">6.2.</span> <span class="toc-text">2. use method</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#将并发连接请求的处理方法调为epoll"><span class="toc-number">6.2.1.</span> <span class="toc-text">将并发连接请求的处理方法调为epoll</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-accept-mutex-on-off-互斥"><span class="toc-number">6.3.</span> <span class="toc-text">3. accept_mutex on | off 互斥</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#启用accept-mutex"><span class="toc-number">6.3.1.</span> <span class="toc-text">启用accept_mutex</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx：调试和定位问题"><span class="toc-number">7.</span> <span class="toc-text">Nginx：调试和定位问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-daemon-on-off"><span class="toc-number">7.1.</span> <span class="toc-text">1. daemon on|off</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改为非守护进程运行nginx"><span class="toc-number">7.2.</span> <span class="toc-text">修改为非守护进程运行nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-master-process-on-off"><span class="toc-number">7.3.</span> <span class="toc-text">2. master_process on|off</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#修改nginx不以master-worker模型启动"><span class="toc-number">7.3.1.</span> <span class="toc-text">修改nginx不以master/worker模型启动</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-error-log-file-level"><span class="toc-number">7.4.</span> <span class="toc-text">3. error_log file [level]</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#将日志级别调为debug"><span class="toc-number">7.4.1.</span> <span class="toc-text">将日志级别调为debug</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Nginx配置文件　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/25/Nginx-configure2/" title="上一篇: Nginx配置文件2">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/21/Linux-LVS-suanfa/" title="下一篇: LVS调度算法">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2-2017-10-28/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make-2017-10-28/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">搭建LNAMP</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module-2017-10-26/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module-2017-10-25/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
