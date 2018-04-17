@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="什么是数据库？数据库，简单来说可视为电子化的文件柜——存储电子文件的处所，用户可以对文件中的数据运行新增、截取、更新、删除等操作。">
+<meta name="keywords" content="数据库简介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库简介">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/11/11/MySQL-DataBase/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="什么是数据库？数据库，简单来说可视为电子化的文件柜——存储电子文件的处所，用户可以对文件中的数据运行新增、截取、更新、删除等操作。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/MySQL-DataBase-1.png">
+<meta property="og:updated_time" content="2018-04-17T07:06:05.621Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库简介">
+<meta name="twitter:description" content="什么是数据库？数据库，简单来说可视为电子化的文件柜——存储电子文件的处所，用户可以对文件中的数据运行新增、截取、更新、删除等操作。">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/MySQL-DataBase-1.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>数据库简介 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP搭建WordPress/">LNAMP搭建WordPress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装/">Nginx编译安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库简介/">数据库简介</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-MySQL-DataBase" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/11/MySQL-DataBase/" class="article-date">
+      <time datetime="2017-11-11T14:45:11.000Z" itemprop="datePublished">2017-11-11</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据库简介
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库简介/">数据库简介</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <center><img src="https://houhaiyun.github.io/img/images/MySQL-DataBase-1.png" title="数据库"></center>
+
+<h3 id="什么是数据库？"><a href="#什么是数据库？" class="headerlink" title="什么是数据库？"></a>什么是数据库？</h3><p><strong>数据库，简单来说可视为电子化的文件柜——存储电子文件的处所，用户可以对文件中的数据运行新增、截取、更新、删除等操作。</strong></p>
+<a id="more"></a>
+<p><strong>数据库指的是以一定方式储存在一起、能为多个用户共享、具有尽可能小的冗余度、与应用程序彼此独立的数据集合。</strong></p>
+<h3 id="数据库管理系统"><a href="#数据库管理系统" class="headerlink" title="数据库管理系统"></a>数据库管理系统</h3><p>数据库管理系统（英语：<code>Database Management System</code>，简称<code>DBMS</code>）是为管理数据库而设计的电脑软件系统，一般具有存储、截取、安全保障、备份等基础功能。数据库管理系统可以依据它所支持的数据库模型来作分类，例如关系式、<code>XML</code>；或依据所支持的电脑类型来作分类，例如服务器群集、移动电话；或依据所用查询语言来作分类，例如<code>SQL</code>、<code>XQuery</code>；或依据性能冲量重点来作分类，例如最大规模、最高运行速度；亦或其他的分类方式。不论使用哪种分类方式，一些<code>DBMS</code>能够跨类别，例如，同时支持多种查询语言。</p>
+<h3 id="数据库基本结构"><a href="#数据库基本结构" class="headerlink" title="数据库基本结构"></a>数据库基本结构</h3><ul>
+<li><strong>物理数据层</strong><ul>
+<li>它是数据库的最内层，是物理存贮设备上实际存储的数据的集合。这些数据是原始数据，是用户加工的对象，由内部模式描述的指令操作处理的位串、字符和字组成。</li>
+</ul>
+</li>
+<li><strong>概念数据层</strong><ul>
+<li>它是数据库的中间一层，是数据库的整体逻辑表示。指出了每个数据的逻辑定义及数据间的逻辑联系，是存贮记录的集合。它所涉及的是数据库所有对象的逻辑关系，而不是它们的物理情况，是数据库管理员概念下的数据库。</li>
+</ul>
+</li>
+<li><strong>用户数据层</strong><ul>
+<li>它是用户所看到和使用的数据库，表示了一个或一些特定用户使用的数据集合，即逻辑记录的集合。 数据库不同层次之间的联系是通过映射进行转换的。</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据库主要特点"><a href="#数据库主要特点" class="headerlink" title="数据库主要特点"></a>数据库主要特点</h3><ul>
+<li><strong>实现数据共享</strong><ul>
+<li>数据共享包含所有用户可同时存取数据库中的数据，也包括用户可以用各种方式通过接口使用数据库，并提供数据共享。</li>
+</ul>
+</li>
+<li><strong>减少数据的冗余度</strong></li>
+<li><strong>数据的独立性</strong></li>
+<li><strong>数据实现几种控制</strong><ul>
+<li>文件管理方式中，数据处于一种分散的状态，不同的用户或同一用户在不同处理中其文件之间毫无关系。利用数据库可对数据进行集中控制和管理，并通过数据模型表示各种数据的组织以及数据间的联系。</li>
+</ul>
+</li>
+<li><strong>数据一致性和可维护性</strong><ul>
+<li>主要包括：①安全性控制：以防止数据丢失、错误更新和越权使用；②完整性控制：保证数据的正确性、有效性和相容性；③并发控制：使在同一时间周期内，允许对数据实现多路存取，又能防止用户之间的不正常交互作用。</li>
+</ul>
+</li>
+<li><strong>故障恢复</strong><ul>
+<li>由数据库管理系统提供一套方法，可及时发现故障和修复故障，从而防止数据被破坏。数据库系统能尽快恢复数据库系统运行时出现的故障，可能是物理上或是逻辑上的错误。比如对系统的误操作造成的数据错误等。</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据库发展阶段"><a href="#数据库发展阶段" class="headerlink" title="数据库发展阶段"></a>数据库发展阶段</h3><h4 id="1-人工管理"><a href="#1-人工管理" class="headerlink" title="1. 人工管理"></a>1. 人工管理</h4><p>这一阶段的主要特征可归纳为如下几点：</p>
+<ul>
+<li>计算机中没有支持数据管理的软件。 </li>
+<li>数据组织面向应用，数据不能共享，数据重复。 </li>
+<li>在程序中要规定数据的逻辑结构和物理结构，数据与程序不独立。 </li>
+<li>数据处理方式——批处理。</li>
+</ul>
+<h4 id="2-文件系统"><a href="#2-文件系统" class="headerlink" title="2. 文件系统"></a>2. 文件系统</h4><p>这一阶段的主要标志是计算机中有了专门管理数据库的软件——操作系统（文件管理）。</p>
+<h4 id="3-数据系统阶段"><a href="#3-数据系统阶段" class="headerlink" title="3. 数据系统阶段"></a>3. 数据系统阶段</h4><ul>
+<li>面向企业或部门，以数据为中心组织数据，形成综合性的数据库，为各应用共享。 </li>
+<li>采用一定的数据模型。数据模型不仅要描述数据本身的特点，而且要描述数据之间的联系。 </li>
+<li>数据冗余小，易修改、易扩充。不同的应用程序根据处理要求，从数据库中获取需要的数据，这样就减少了数据的重复存储，也便于增加新的数据结构，便于维护数据的一致性。 </li>
+<li>程序和数据有较高的独立性。 </li>
+<li>具有良好的用户接口，用户可方便地开发和使用数据库。 </li>
+<li>对数据进行统一管理和控制，提供了数据的安全性、完整性、以及并发控制。</li>
+</ul>
+<h4 id="4-高级数据系统阶段"><a href="#4-高级数据系统阶段" class="headerlink" title="4. 高级数据系统阶段"></a>4. 高级数据系统阶段</h4><p>由于现在数据成爆炸式增长，在传统型的数据系统已经不能满足人们的需要，为存储海量的数据现阶段引入了分布式文件系统以及<code>nosql</code>等新的高级数据系统。</p>
+<h3 id="数据库系统软件"><a href="#数据库系统软件" class="headerlink" title="数据库系统软件"></a>数据库系统软件</h3><ul>
+<li><strong>关系型数据库管理系统（<code>RDBMS</code>）</strong><ul>
+<li><code>Oracle</code></li>
+<li><code>SQLServer</code></li>
+<li><code>MySQL</code></li>
+<li><code>MariaDB</code>（开源免费使用）</li>
+<li><code>DB2</code></li>
+<li><code>Sybase</code></li>
+<li><code>PostgreSQL</code></li>
+<li><code>SQLITE</code>（适用于嵌入式系统）</li>
+</ul>
+</li>
+<li><strong>非关系型数据库管理系统（<code>nosql</code>）</strong><ul>
+<li>基于键值：<code>Redis</code></li>
+<li>基于列存储数据库：<code>HBase</code></li>
+<li>基于文档数据库：<code>MongoDB</code></li>
+<li>基于图形数据库：<code>Neo4J</code></li>
+</ul>
+</li>
+</ul>
+<p>关于关系型及非关系型数据库这里只列举了一部分常见的，特别是非关系型数据库还有很多，这里就不多做介绍了。这里我们主要讨论关系型数据库<code>MySQL</code>。</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E5%BA%93" target="_blank" rel="noopener">维基百科：数据库</a></p>
+<p><a href="http://cuchadanfan.blog.51cto.com/9940284/1688364" target="_blank" rel="noopener">粗茶淡饭：MySQL（一）之通用二进制格式安装MySQL及数据库基本概念</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/11/11/MySQL-DataBase/">数据库简介</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-11-11, 14:45:11</p>
+        <p><span>最后更新:</span>2018-04-17, 07:06:05</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/11/MySQL-DataBase/" title="数据库简介">https://houhaiyun.github.io/2017/11/11/MySQL-DataBase/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/11/11/MySQL-DataBase/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/11/11/MySQL-Data-Jiegou-2017-11-11/">
+                    数据结构模型
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/28/Nginx-ngx-stream-core-module/">
+                    模块  ngx_stream_core_module
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是数据库？"><span class="toc-number">1.</span> <span class="toc-text">什么是数据库？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库管理系统"><span class="toc-number">2.</span> <span class="toc-text">数据库管理系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库基本结构"><span class="toc-number">3.</span> <span class="toc-text">数据库基本结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库主要特点"><span class="toc-number">4.</span> <span class="toc-text">数据库主要特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库发展阶段"><span class="toc-number">5.</span> <span class="toc-text">数据库发展阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-人工管理"><span class="toc-number">5.1.</span> <span class="toc-text">1. 人工管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-文件系统"><span class="toc-number">5.2.</span> <span class="toc-text">2. 文件系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-数据系统阶段"><span class="toc-number">5.3.</span> <span class="toc-text">3. 数据系统阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-高级数据系统阶段"><span class="toc-number">5.4.</span> <span class="toc-text">4. 高级数据系统阶段</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库系统软件"><span class="toc-number">6.</span> <span class="toc-text">数据库系统软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">7.</span> <span class="toc-text">致谢</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"数据库简介　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/11/11/MySQL-Data-Jiegou-2017-11-11/" title="上一篇: 数据结构模型">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/28/Nginx-ngx-stream-core-module/" title="下一篇: 模块  ngx_stream_core_module">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum-2017-11-11/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary-2017-11-11/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-2017-11-11/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database-2017-11-11/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database-2017-11-11/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi-2017-11-11/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou-2017-11-11/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
