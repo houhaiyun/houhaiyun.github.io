@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="环境准备     服务 IP 系统版本 软件版本 功能     Nginx 192.168.8.17/24 CentOS Linux release 7.3.1611 (Core) nginx.x86_64 1:1.10.2 反向代理   Tomcat1 192.168.8.12/24 CentOS Linux release 7.3.1611 (Core) tomcat-7.0.69(java-">
+<meta name="keywords" content="Memcached">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tomcat + memcached session manager共享session">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="环境准备     服务 IP 系统版本 软件版本 功能     Nginx 192.168.8.17/24 CentOS Linux release 7.3.1611 (Core) nginx.x86_64 1:1.10.2 反向代理   Tomcat1 192.168.8.12/24 CentOS Linux release 7.3.1611 (Core) tomcat-7.0.69(java-">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/Session-Server-Memcached.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/memcached-session-manager%E5%85%B1%E4%BA%ABsession3.gif">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/memcached-session-manager%E5%85%B1%E4%BA%ABsession2.gif">
+<meta property="og:updated_time" content="2018-04-17T07:36:33.244Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tomcat + memcached session manager共享session">
+<meta name="twitter:description" content="环境准备     服务 IP 系统版本 软件版本 功能     Nginx 192.168.8.17/24 CentOS Linux release 7.3.1611 (Core) nginx.x86_64 1:1.10.2 反向代理   Tomcat1 192.168.8.12/24 CentOS Linux release 7.3.1611 (Core) tomcat-7.0.69(java-">
+<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/Session-Server-Memcached.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>tomcat + memcached session manager共享session | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP搭建WordPress/">LNAMP搭建WordPress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Memcached/">Memcached</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装/">Nginx编译安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/关系型数据概念/">关系型数据概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库简介/">数据库简介</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构模型/">数据结构模型</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/目前流行的开源RDBMS/">目前流行的开源RDBMS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计关系数据库的范式基础概念/">设计关系数据库的范式基础概念</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Memcached-Tomcat-Session-Manager-2017-11-09" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/" class="article-date">
+      <time datetime="2017-11-09T16:33:03.000Z" itemprop="datePublished">2017-11-09</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tomcat + memcached session manager共享session
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Memcached/">Memcached</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="http://ovuhiuqqd.bkt.clouddn.com/Session-Server-Memcached.jpg"></center>
+
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>系统版本</th>
+<th>软件版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nginx</td>
+<td>192.168.8.17/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>nginx.x86_64 1:1.10.2</td>
+<td>反向代理</td>
+</tr>
+<tr>
+<td>Tomcat1</td>
+<td>192.168.8.12/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Tomcat2</td>
+<td>192.168.8.15/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Memcached1</td>
+<td>192.168.8.11/24</td>
+<td>CentOS release 6.9 (Final)</td>
+<td>memcached.x86_64 0:1.4.4-5</td>
+<td>缓存服务</td>
+</tr>
+<tr>
+<td>Memcached2</td>
+<td>192.168.8.13/24</td>
+<td>CentOS release 6.9 (Final)</td>
+<td>memcached.x86_64 0:1.4.4-5</td>
+<td>缓存服务</td>
+</tr>
+</tbody>
+</table>
+<p>简单说明下：<code>tomcat1</code>为主要把它的<code>session</code>存储到<code>memcached2</code>上，而<code>memcache2</code>是运行在另一台主机上的（一般情况下，<code>memcached</code>是存<code>tomcat1</code>的<code>session</code>），只有当<code>memcached2</code>不可用时，<code>tomcat1</code>才会把<code>session</code>存在<code>memcached1</code>上，也就是说<code>memcached1</code>是为了<code>tomcat1</code>做故障切换用的节点。这要的话，当<code>machine1</code>挂了的时候，<code>session</code>是不会丢失的。</p>
+<a id="more"></a>
+<h4 id="1-修改主机名"><a href="#1-修改主机名" class="headerlink" title="1. 修改主机名"></a>1. 修改主机名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># Nginx调度器配置</span><br><span class="line">[root@Nginx ~]# hostname Nginx.ihaiyun.cc &amp;&amp; exec bash</span><br><span class="line"></span><br><span class="line"># Tomcat1配置</span><br><span class="line">[root@Tomcat1 ~]# hostname Tomcat1.ihaiyun.cc &amp;&amp; exec bash</span><br><span class="line"></span><br><span class="line"># Tomcat2配置</span><br><span class="line">[root@Tomcat2 ~]# hostname Tomcat2.ihaiyun.cc &amp;&amp; exec bash</span><br><span class="line"></span><br><span class="line"># Memcached1配置</span><br><span class="line">[root@Memcached1 ~]# hostname Memcached1.ihaiyun.cc &amp;&amp; exec bash</span><br><span class="line"></span><br><span class="line"># Memcached2配置</span><br><span class="line">[root@Memcached2 ~]# hostname Memcached2.ihaiyun.cc &amp;&amp; exec bash</span><br></pre></td></tr></table></figure>
+<h4 id="2-同步所有sever时间"><a href="#2-同步所有sever时间" class="headerlink" title="2. 同步所有sever时间"></a>2. 同步所有sever时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># Nginx调度器配置</span><br><span class="line">[root@Nginx ~]# ntpdate 172.18.0.1</span><br><span class="line"> 9 Nov 11:41:08 ntpdate[11275]: step time server 172.18.0.1 offset 2.684816 sec</span><br><span class="line">[root@Nginx ~]# date</span><br><span class="line">Thu Nov  9 11:41:13 CST 2017</span><br><span class="line"></span><br><span class="line"># Tomcat1配置</span><br><span class="line">[root@Tomcat1 ~]# ntpdate 172.18.0.1</span><br><span class="line"> 9 Nov 11:41:08 ntpdate[11272]: step time server 172.18.0.1 offset 1.247753 sec</span><br><span class="line">[root@Tomcat1 ~]# date</span><br><span class="line">Thu Nov  9 11:41:13 CST 2017</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Tomcat2配置</span><br><span class="line">[root@Tomcat2 ~]# ntpdate 172.18.0.1</span><br><span class="line"> 9 Nov 11:41:08 ntpdate[2200]: step time server 172.18.0.1 offset 0.937129 sec</span><br><span class="line">[root@Tomcat2 ~]# date</span><br><span class="line">Thu Nov  9 11:41:13 CST 2017</span><br><span class="line"></span><br><span class="line"># Memcached1配置</span><br><span class="line">[root@Memcached1 ~]# ntpdate 172.18.0.1</span><br><span class="line"> 9 Nov 11:41:02 ntpdate[1722]: step time server 172.18.0.1 offset -21.159589 sec</span><br><span class="line">[root@Memcached1 ~]# date</span><br><span class="line">Thu Nov  9 11:41:13 CST 2017</span><br><span class="line"></span><br><span class="line"># Memcached2配置</span><br><span class="line">[root@Memcached2 ~]# ntpdate 172.18.0.1</span><br><span class="line"> 9 Nov 11:41:02 ntpdate[1941]: step time server 172.18.0.1 offset 2.332137 sec</span><br><span class="line">[root@Memcached2 ~]# date</span><br><span class="line">Thu Nov  9 11:41:13 CST 2017</span><br></pre></td></tr></table></figure>
+<h3 id="准备Tomcat-server"><a href="#准备Tomcat-server" class="headerlink" title="准备Tomcat server"></a>准备Tomcat server</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"># Tomcat1配置</span><br><span class="line">[root@Tomcat1 ~]# yum -y install java-1.8.0-openjdk-devel</span><br><span class="line">[root@Tomcat1 ~]# yum -y  install tomcat</span><br><span class="line">[root@Tomcat1 ~]# cd /usr/share/tomcat/webapps/</span><br><span class="line">[root@Tomcat1 webapps]# mkdir -p  myapp/WEB-INF</span><br><span class="line">[root@Tomcat1 webapps]# cd myapp/</span><br><span class="line">[root@Tomcat1 myapp]# vim index.jsp </span><br><span class="line">&lt;%@ page language=&quot;java&quot; %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">	&lt;head&gt;&lt;title&gt;Tomcat1&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">	&lt;body&gt;</span><br><span class="line">		&lt;h1&gt;&lt;font color=&quot;red&quot;&gt;Tomcat1.ihaiyun.cc&lt;/font&gt;&lt;/h1&gt;</span><br><span class="line">		&lt;table align=&quot;centre&quot; border=&quot;1&quot;&gt;</span><br><span class="line">			&lt;tr&gt;</span><br><span class="line">				&lt;td&gt;Session ID&lt;/td&gt;</span><br><span class="line">			&lt;% session.setAttribute(&quot;ihaiyun.cc&quot;,&quot;magedu.com&quot;); %&gt;</span><br><span class="line">				&lt;td&gt;&lt;%= session.getId() %&gt;&lt;/td&gt;</span><br><span class="line">			&lt;/tr&gt;</span><br><span class="line">			&lt;tr&gt;</span><br><span class="line">				&lt;td&gt;Created on&lt;/td&gt;</span><br><span class="line">				&lt;td&gt;&lt;%= session.getCreationTime() %&gt;&lt;/td&gt;</span><br><span class="line">			&lt;/tr&gt;</span><br><span class="line">		&lt;/table&gt;</span><br><span class="line">	&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line">[root@Tomcat1 ~]# systemctl start tomcat        # 启动tomcat服务；</span><br><span class="line">[root@Tomcat1 ~]# elinks -dump http://192.168.8.12:8080/myapp/      # 访问测试，ok；</span><br><span class="line">                               Tomcat1.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | CDB3C77782AFEB964DD6172FBFA708A8 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510199505033                    |</span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line"></span><br><span class="line"># Tomcat2配置</span><br><span class="line">[root@Tomcat2 ~]# yum -y install java-1.8.0-openjdk-devel</span><br><span class="line">[root@Tomcat2 ~]# yum -y  install tomcat</span><br><span class="line">[root@Tomcat2 ~]# cd /usr/share/tomcat/webapps/</span><br><span class="line">[root@Tomcat2 webapps]# mkdir -p  myapp/WEB-INF</span><br><span class="line">[root@Tomcat2 webapps]# cd myapp/</span><br><span class="line">[root@Tomcat2 myapp]# vim index.jsp </span><br><span class="line">&lt;%@ page language=&quot;java&quot; %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">	&lt;head&gt;&lt;title&gt;Tomcat1&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">	&lt;body&gt;</span><br><span class="line">		&lt;h1&gt;&lt;font color=&quot;blue&quot;&gt;Tomcat2.ihaiyun.cc&lt;/font&gt;&lt;/h1&gt;</span><br><span class="line">		&lt;table align=&quot;centre&quot; border=&quot;1&quot;&gt;</span><br><span class="line">			&lt;tr&gt;</span><br><span class="line">				&lt;td&gt;Session ID&lt;/td&gt;</span><br><span class="line">			&lt;% session.setAttribute(&quot;ihaiyun.cc&quot;,&quot;magedu.com&quot;); %&gt;</span><br><span class="line">				&lt;td&gt;&lt;%= session.getId() %&gt;&lt;/td&gt;</span><br><span class="line">			&lt;/tr&gt;</span><br><span class="line">			&lt;tr&gt;</span><br><span class="line">				&lt;td&gt;Created on&lt;/td&gt;</span><br><span class="line">				&lt;td&gt;&lt;%= session.getCreationTime() %&gt;&lt;/td&gt;</span><br><span class="line">			&lt;/tr&gt;</span><br><span class="line">		&lt;/table&gt;</span><br><span class="line">	&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">[root@Tomcat2 ~]# systemctl start tomcat</span><br><span class="line">[root@Tomcat2 ~]# elinks -dump http://192.168.8.15:8080/myapp       # 访问测试，ok；</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | 5E1E7AE5B658EDB781276CC37E5B8431 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510199718989                    |</span><br><span class="line">   +-----------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h3 id="准备Memcached-server"><a href="#准备Memcached-server" class="headerlink" title="准备Memcached server"></a>准备Memcached server</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># Memcached1配置</span><br><span class="line">[root@Memcached1 ~]# yum -y  install memcached</span><br><span class="line">[root@Memcached1 ~]# service memcached start</span><br><span class="line">Starting memcached:                                        [  OK  ]</span><br><span class="line">[root@Memcached1 ~]# ss -uln            # 端口已经打开；</span><br><span class="line">State       Recv-Q Send-Q              Local Address:Port                Peer Address:Port </span><br><span class="line">UNCONN      0      0                               *:68                             *:*     </span><br><span class="line">UNCONN      0      0                               *:11211                          *:*     </span><br><span class="line">UNCONN      0      0                              :::11211                         :::*    </span><br><span class="line"></span><br><span class="line"># Memcached2配置</span><br><span class="line">[root@Memcached2 ~]# yum -y  install memcached</span><br><span class="line">[root@Memcached2 ~]# service memcached start</span><br><span class="line">Starting memcached:                                        [  OK  ]</span><br><span class="line">[root@Memcached2 ~]# ss -uln            # 端口已经打开；</span><br><span class="line">State       Recv-Q Send-Q              Local Address:Port                Peer Address:Port </span><br><span class="line">UNCONN      0      0                               *:68                             *:*     </span><br><span class="line">UNCONN      0      0                               *:11211                          *:*     </span><br><span class="line">UNCONN      0      0                              :::11211                         :::*</span><br></pre></td></tr></table></figure>
+<h3 id="将memcached-session-manager配置为-Manager"><a href="#将memcached-session-manager配置为-Manager" class="headerlink" title="将memcached-session-manager配置为 Manager"></a>将memcached-session-manager配置为 <context>Manager</context></h3><p><code>MSM</code>支持<code>tomcat6</code>，<code>tomcat7</code>，<code>tomcat8</code>，<code>MSM</code>支持两种模式:<code>sticky sessions</code>（<code>粘性session</code>）和<code>non-sticky sessions</code>（<code>非粘性session</code>）。我用到的是<code>sticky session</code>。</p>
+<p>软件包简介</p>
+<ul>
+<li><code>javolution-5.4.3.1.jar</code>：流式化工具</li>
+<li><code>msm-javolution-serializer-1.8.3.jar</code>：MSM</li>
+<li><code>memcached-session-manager-1.8.3.jar</code>：memcached会话管理器</li>
+<li><code>memcached-session-manager-tc7-1.8.3.jar</code>：memcached会话管理器（适用于tomcat7）</li>
+<li><code>spymemcached-2.11.1.jar</code>：tomcat连接memcached的驱动</li>
+</ul>
+<p><a href="https://github.com/magro/memcached-session-manager/wiki/SetupAndConfiguration" target="_blank" rel="noopener">软件包下载地址：https://github.com/magro/memcached-session-manager/wiki/SetupAndConfiguration</a></p>
+<p>通过<code>tomcat</code>扩展类，使<code>tomcat</code>支持将本地<code>session</code>通过<code>memcached</code>驱动和流式化工具和会话管理器将<code>session</code>存入<code>memcached</code>服务器中，实现<code>session</code>共享。（个人理解，如有不对，欢迎指出。）</p>
+<p><code>sticky sessions</code>粘性<code>session + kryo</code>序列化。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">[root@Tomcat1 ~]# ls        # 包已经下载好，如下；</span><br><span class="line">javolution-5.4.3.1.jar                   msm-javolution-serializer-1.8.3.jar</span><br><span class="line">memcached-session-manager-1.8.3.jar      spymemcached-2.11.1.jar</span><br><span class="line">memcached-session-manager-tc7-1.8.3.jar</span><br><span class="line">[root@Tomcat1 ~]# cp *.jar /usr/share/tomcat/lib/       # 将下载好的包拷贝到/usr/share/tomcat/lib/目录下；</span><br><span class="line">[root@Tomcat1 ~]# scp *.jar 192.168.8.15:/usr/share/tomcat/lib/         # 将软件包复制到192.168.8.15的对应目录下；</span><br><span class="line">The authenticity of host &apos;192.168.8.15 (192.168.8.15)&apos; can&apos;t be established.</span><br><span class="line">ECDSA key fingerprint is 09:b5:88:63:ef:63:4a:d5:b3:d8:d5:04:73:92:b6:1e.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">Warning: Permanently added &apos;192.168.8.15&apos; (ECDSA) to the list of known hosts.</span><br><span class="line">root@192.168.8.15&apos;s password: </span><br><span class="line">javolution-5.4.3.1.jar                                     100%  442KB 442.1KB/s   00:00    </span><br><span class="line">memcached-session-manager-1.8.3.jar                        100%  144KB 143.6KB/s   00:00    </span><br><span class="line">memcached-session-manager-tc7-1.8.3.jar                    100%   11KB  11.0KB/s   00:00    </span><br><span class="line">msm-javolution-serializer-1.8.3.jar                        100%   69KB  69.4KB/s   00:00    </span><br><span class="line">spymemcached-2.11.1.jar                                    100%  449KB 448.7KB/s   00:00  </span><br><span class="line"></span><br><span class="line"># tomcat1的配置文件</span><br><span class="line">[root@Tomcat1 ~]# vim  /etc/tomcat/server.xml           # 修改配置文件；</span><br><span class="line">      &lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">            &lt;Context path=&quot;/myapp&quot; docBase=&quot;/usr/share/tomcat/webapps/myapp&quot; reloadable=&quot;true&quot;&gt;</span><br><span class="line">              &lt;Manager className=&quot;de.javakaffee.web.msm.MemcachedBackupSessionManager&quot;</span><br><span class="line">                memcachedNodes=&quot;m1:192.168.8.11:11211,m2:192.168.8.13:11211&quot;        # 此处填写的为memcached1和memcached2的IP；</span><br><span class="line">                failoverNodes=&quot;m1&quot;          # 参数failoverNodes=&quot;n1&quot; 是用来告诉 MSM 把session优先存储在 memcached2上，只有当memcached2挂了的时候才会把session存在memcache1也就是配置文件的n1里。假如整个machine1挂了，session还是可用，因为session是存在machine2的memcache2上，可以通过tomcat2对外提供服务。</span><br><span class="line">                requestUriIgnorePattern=&quot;.*\.(ico|png|gif|jpg|css|js)$&quot;</span><br><span class="line">                transcoderFactoryClass=&quot;de.javakaffee.web.msm.serializer.javolution.JavolutionTranscoderFactory&quot;</span><br><span class="line">              /&gt;</span><br><span class="line">             &lt;/Context&gt;</span><br><span class="line">        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;localhost_access_log.&quot; suffix=&quot;.txt&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line"></span><br><span class="line">      &lt;/Host&gt;</span><br><span class="line"></span><br><span class="line"># tomcat2的配置文件</span><br><span class="line">[root@Tomcat2 ~]# vim /etc/tomcat/server.xml        # 修改配置文件；</span><br><span class="line">      &lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">            &lt;Context path=&quot;/myapp&quot; docBase=&quot;/usr/share/tomcat/webapps/myapp&quot; reloadable=&quot;true&quot;&gt;</span><br><span class="line">              &lt;Manager className=&quot;de.javakaffee.web.msm.MemcachedBackupSessionManager&quot;</span><br><span class="line">                memcachedNodes=&quot;m1:192.168.8.11:11211,m2:192.168.8.13:11211&quot;</span><br><span class="line">                failoverNodes=&quot;m2&quot;          # 注意此处为m2；</span><br><span class="line">                requestUriIgnorePattern=&quot;.*\.(ico|png|gif|jpg|css|js)$&quot;</span><br><span class="line">                transcoderFactoryClass=&quot;de.javakaffee.web.msm.serializer.javolution.JavolutionTranscoderFactory&quot;</span><br><span class="line">              /&gt;</span><br><span class="line">             &lt;/Context&gt;</span><br><span class="line">        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;localhost_access_log.&quot; suffix=&quot;.txt&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line"></span><br><span class="line">      &lt;/Host&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="配置Nginx调度器"><a href="#配置Nginx调度器" class="headerlink" title="配置Nginx调度器"></a>配置Nginx调度器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx ~]# yum -y  install nginx</span><br><span class="line">[root@Nginx ~]# vim /etc/nginx/nginx.conf</span><br><span class="line">http &#123;</span><br><span class="line">    log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</span><br><span class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</span><br><span class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</span><br><span class="line">    upstream tcsrvs &#123;</span><br><span class="line">        server 192.168.8.12:8080;       # 定义tomcat1的IP；</span><br><span class="line">        server 192.168.8.15:8080;       # 定义tomcat2的IP；</span><br><span class="line">    &#125;   </span><br><span class="line">    access_log  /var/log/nginx/access.log  main;</span><br><span class="line">    sendfile            on; </span><br><span class="line">    tcp_nopush          on; </span><br><span class="line">    tcp_nodelay         on; </span><br><span class="line">    keepalive_timeout   65; </span><br><span class="line">    types_hash_max_size 2048;</span><br><span class="line">    include             /etc/nginx/mime.types;</span><br><span class="line">    default_type        application/octet-stream;</span><br><span class="line">    include /etc/nginx/conf.d/*.conf;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80 default_server;</span><br><span class="line">        listen       [::]:80 default_server;</span><br><span class="line">        server_name  _;  </span><br><span class="line">        root         /usr/share/nginx/html;</span><br><span class="line">        include /etc/nginx/default.d/*.conf;</span><br><span class="line">        location / &#123; </span><br><span class="line">            proxy_pass http://tcsrvs ;      # 调度；</span><br><span class="line">        &#125;   </span><br><span class="line">        error_page 404 /404.html;</span><br><span class="line">            location = /40x.html &#123;</span><br><span class="line">        &#125;   </span><br><span class="line">        error_page 500 502 503 504 /50x.html;</span><br><span class="line">            location = /50x.html &#123;</span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="启动服务测试"><a href="#启动服务测试" class="headerlink" title="启动服务测试"></a>启动服务测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@Nginx ~]# systemctl start nginx       # 启动nginx调度器；</span><br><span class="line">[root@Tomcat1 ~]# systemctl restart tomcat      # 重启tomcat；</span><br><span class="line">[root@Tomcat2 ~]# systemctl restart tomcat      # 重启tomcat；</span><br></pre></td></tr></table></figure>
+<center>已经实现会话绑定</center>
+
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/memcached-session-manager%E5%85%B1%E4%BA%ABsession3.gif"></center>
+
+<h3 id="停止memcached2测试"><a href="#停止memcached2测试" class="headerlink" title="停止memcached2测试"></a>停止memcached2测试</h3><p>停止memcached2测试，会话是否能够保持。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Memcached2 ~]# service memcached stop             # 停止memcached2；</span><br><span class="line">Stopping memcached:                                        [  OK  ]</span><br></pre></td></tr></table></figure>
+<center>会话可以保持</center><br><center><img src="http://ovuhiuqqd.bkt.clouddn.com/memcached-session-manager%E5%85%B1%E4%BA%ABsession2.gif"></center>
+
+
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://laoxu.blog.51cto.com/4120547/1566477" target="_blank" rel="noopener">老徐的私房菜：tomcat + memcached session manager共享session</a></p>
+<h3 id="实验中用到的配置文件"><a href="#实验中用到的配置文件" class="headerlink" title="实验中用到的配置文件"></a>实验中用到的配置文件</h3><p>把配置文件复制到此，方便大家复制，嘻嘻。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"># tomcat1配置文件</span><br><span class="line">[root@Tomcat1 ~]# vim /etc/tomcat/server.xml        # 注意：复制时要看清楚标签为Host；</span><br><span class="line">      &lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">            &lt;Context path=&quot;/myapp&quot; docBase=&quot;/usr/share/tomcat/webapps/myapp&quot; reloadable=&quot;true&quot;&gt;</span><br><span class="line">              &lt;Manager className=&quot;de.javakaffee.web.msm.MemcachedBackupSessionManager&quot;</span><br><span class="line">                memcachedNodes=&quot;m1:192.168.8.11:11211,m2:192.168.8.13:11211&quot;</span><br><span class="line">                failoverNodes=&quot;m1&quot;</span><br><span class="line">                requestUriIgnorePattern=&quot;.*\.(ico|png|gif|jpg|css|js)$&quot;</span><br><span class="line">                transcoderFactoryClass=&quot;de.javakaffee.web.msm.serializer.javolution.JavolutionTranscoderFactory&quot;</span><br><span class="line">              /&gt;</span><br><span class="line">             &lt;/Context&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- SingleSignOn valve, share authentication between web applications</span><br><span class="line">             Documentation at: /docs/config/valve.html --&gt;</span><br><span class="line">        &lt;!--</span><br><span class="line">        &lt;Valve className=&quot;org.apache.catalina.authenticator.SingleSignOn&quot; /&gt;</span><br><span class="line">        --&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- Access log processes all example.</span><br><span class="line">             Documentation at: /docs/config/valve.html</span><br><span class="line">             Note: The pattern used is equivalent to using pattern=&quot;common&quot; --&gt;</span><br><span class="line">        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;localhost_access_log.&quot; suffix=&quot;.txt&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line"></span><br><span class="line">      &lt;/Host&gt;</span><br><span class="line"></span><br><span class="line"># tomcat2配置文件</span><br><span class="line">[root@Tomcat2 ~]# vim /etc/tomcat/server.xml    # 注意：复制时要看清楚标签为Host；</span><br><span class="line">      &lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">            &lt;Context path=&quot;/myapp&quot; docBase=&quot;/usr/share/tomcat/webapps/myapp&quot; reloadable=&quot;true&quot;&gt;</span><br><span class="line">              &lt;Manager className=&quot;de.javakaffee.web.msm.MemcachedBackupSessionManager&quot;</span><br><span class="line">                memcachedNodes=&quot;m1:192.168.8.11:11211,m2:192.168.8.13:11211&quot;</span><br><span class="line">                failoverNodes=&quot;m2&quot;</span><br><span class="line">                requestUriIgnorePattern=&quot;.*\.(ico|png|gif|jpg|css|js)$&quot;</span><br><span class="line">                transcoderFactoryClass=&quot;de.javakaffee.web.msm.serializer.javolution.JavolutionTranscoderFactory&quot;</span><br><span class="line">              /&gt;</span><br><span class="line">             &lt;/Context&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- SingleSignOn valve, share authentication between web applications</span><br><span class="line">             Documentation at: /docs/config/valve.html --&gt;</span><br><span class="line">        &lt;!--</span><br><span class="line">        &lt;Valve className=&quot;org.apache.catalina.authenticator.SingleSignOn&quot; /&gt;</span><br><span class="line">        --&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- Access log processes all example.</span><br><span class="line">             Documentation at: /docs/config/valve.html</span><br><span class="line">             Note: The pattern used is equivalent to using pattern=&quot;common&quot; --&gt;</span><br><span class="line">        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;localhost_access_log.&quot; suffix=&quot;.txt&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line"></span><br><span class="line">      &lt;/Host&gt;</span><br><span class="line"></span><br><span class="line"># Nginx配置文件</span><br><span class="line">[root@Nginx ~]# vim /etc/nginx/nginx.conf</span><br><span class="line">http &#123;</span><br><span class="line">    log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</span><br><span class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</span><br><span class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</span><br><span class="line">    upstream tcsrvs &#123;</span><br><span class="line">        server 192.168.8.12:8080;</span><br><span class="line">        server 192.168.8.15:8080;</span><br><span class="line">    &#125;   </span><br><span class="line">    access_log  /var/log/nginx/access.log  main;</span><br><span class="line">    sendfile            on; </span><br><span class="line">    tcp_nopush          on; </span><br><span class="line">    tcp_nodelay         on; </span><br><span class="line">    keepalive_timeout   65; </span><br><span class="line">    types_hash_max_size 2048;</span><br><span class="line">    include             /etc/nginx/mime.types;</span><br><span class="line">    default_type        application/octet-stream;</span><br><span class="line">    include /etc/nginx/conf.d/*.conf;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80 default_server;</span><br><span class="line">        listen       [::]:80 default_server;</span><br><span class="line">        server_name  _;  </span><br><span class="line">        root         /usr/share/nginx/html;</span><br><span class="line">        include /etc/nginx/default.d/*.conf;</span><br><span class="line">        location / &#123; </span><br><span class="line">            proxy_pass http://tcsrvs ;</span><br><span class="line">        &#125;   </span><br><span class="line">        error_page 404 /404.html;</span><br><span class="line">            location = /40x.html &#123;</span><br><span class="line">        &#125;   </span><br><span class="line">        error_page 500 502 503 504 /50x.html;</span><br><span class="line">            location = /50x.html &#123;</span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/">tomcat + memcached session manager共享session</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-11-09, 16:33:03</p>
+        <p><span>最后更新:</span>2018-04-17, 07:36:33</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/" title="tomcat + memcached session manager共享session">https://houhaiyun.github.io/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/11/11/MySQL-DataBase/">
+                    数据库简介
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/">
+                    Memcached安装和常用命令
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-修改主机名"><span class="toc-number">1.1.</span> <span class="toc-text">1. 修改主机名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-同步所有sever时间"><span class="toc-number">1.2.</span> <span class="toc-text">2. 同步所有sever时间</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#准备Tomcat-server"><span class="toc-number">2.</span> <span class="toc-text">准备Tomcat server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#准备Memcached-server"><span class="toc-number">3.</span> <span class="toc-text">准备Memcached server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将memcached-session-manager配置为-Manager"><span class="toc-number">4.</span> <span class="toc-text">将memcached-session-manager配置为 Manager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置Nginx调度器"><span class="toc-number">5.</span> <span class="toc-text">配置Nginx调度器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动服务测试"><span class="toc-number">6.</span> <span class="toc-text">启动服务测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#停止memcached2测试"><span class="toc-number">7.</span> <span class="toc-text">停止memcached2测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">8.</span> <span class="toc-text">致谢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实验中用到的配置文件"><span class="toc-number">9.</span> <span class="toc-text">实验中用到的配置文件</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"tomcat + memcached session manager共享session　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/11/11/MySQL-DataBase/" title="上一篇: 数据库简介">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/" title="下一篇: Memcached安装和常用命令">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>

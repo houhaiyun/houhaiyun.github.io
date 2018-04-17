@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="安装安装通过yum直接安装即可，也可去官网下载源码编译。">
+<meta name="keywords" content="Memcached">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Memcached安装和常用命令">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="安装安装通过yum直接安装即可，也可去官网下载源码编译。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-04-17T07:36:33.244Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Memcached安装和常用命令">
+<meta name="twitter:description" content="安装安装通过yum直接安装即可，也可去官网下载源码编译。">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Memcached安装和常用命令 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP搭建WordPress/">LNAMP搭建WordPress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Memcached/">Memcached</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装/">Nginx编译安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/关系型数据概念/">关系型数据概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库简介/">数据库简介</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构模型/">数据结构模型</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/目前流行的开源RDBMS/">目前流行的开源RDBMS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计关系数据库的范式基础概念/">设计关系数据库的范式基础概念</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Memcached-Install-Changyong-Commands-2017-11-09" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/" class="article-date">
+      <time datetime="2017-11-09T16:30:29.000Z" itemprop="datePublished">2017-11-09</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Memcached安装和常用命令
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Memcached/">Memcached</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>安装通过<code>yum</code>直接安装即可，也可去官网下载源码编译。</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Memcached1 ~]# yum -y  install memcached</span><br></pre></td></tr></table></figure>
+<h3 id="启动Memcached常用参数"><a href="#启动Memcached常用参数" class="headerlink" title="启动Memcached常用参数"></a>启动Memcached常用参数</h3><ul>
+<li><code>-p &lt;num&gt;</code>      设置TCP端口号(默认设置为: 11211)</li>
+<li><code>-U &lt;num&gt;</code>      UDP监听端口(默认: 11211, 0 时关闭) </li>
+<li><code>-l &lt;ip_addr&gt;</code>  绑定地址(默认:所有都允许,无论内外网或者本机更换IP，有安全隐患，若设置为127.0.0.1就只能本机访问)</li>
+<li><code>-c &lt;num&gt;</code>      max simultaneous connections (default: 1024)</li>
+<li>`-d            以daemon方式运行</li>
+<li><code>-u &lt;username&gt;</code> 绑定使用指定用于运行进程<username></username></li>
+<li><code>-m &lt;num&gt;</code>      允许最大内存用量，单位M (默认: 64 MB)</li>
+<li><code>-P &lt;file&gt;</code>     将PID写入文件<file>，这样可以使得后边进行快速进程终止, 需要与-d 一起使用</file></li>
+</ul>
+<h3 id="连接和退出"><a href="#连接和退出" class="headerlink" title="连接和退出"></a>连接和退出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@Memcached ~]# service memcached start         # 启动memcached；</span><br><span class="line">Starting memcached:                                        [  OK  ]</span><br><span class="line">[root@Memcached ~]# ss -unl         # 端口已经打开，默认就是UDP 11211；</span><br><span class="line">State       Recv-Q Send-Q                       Local Address:Port                         Peer Address:Port </span><br><span class="line">UNCONN      0      0                                        *:68                                      *:*     </span><br><span class="line">UNCONN      0      0                                        *:11211                                   *:*     </span><br><span class="line">UNCONN      0      0                                       :::11211                                  :::*   </span><br><span class="line"></span><br><span class="line">[root@Memcached ~]# telnet 127.0.0.1 11211      # 连接；</span><br><span class="line">Trying 127.0.0.1...</span><br><span class="line">Connected to 127.0.0.1.</span><br><span class="line">Escape character is &apos;^]&apos;.</span><br><span class="line">quit        # 退出；</span><br><span class="line">Connection closed by foreign host.</span><br></pre></td></tr></table></figure>
+<h3 id="命令行语法"><a href="#命令行语法" class="headerlink" title="命令行语法"></a>命令行语法</h3><p><code>command &lt;key&gt; &lt;flags&gt; &lt;expiration time&gt; &lt;bytes&gt;</code> </p>
+<p><code>&lt;value&gt;</code></p>
+<p>参数说明如下：</p>
+<ul>
+<li><code>command</code>： <code>set/add/replace</code></li>
+<li><code>key</code> key 用于查找缓存值</li>
+<li><code>flags</code>  可以包括键值对的整型参数，客户机使用它存储关于键值对的额外信息</li>
+<li><code>expiration time</code>  在缓存中保存键值对的时间长度（以秒为单位，0 表示永远）</li>
+<li><code>bytes</code>   在缓存中存储的字节点</li>
+<li><code>value</code>   存储的值（始终位于第二行）</li>
+</ul>
+<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><p>五种基本<code>memcached</code>命令执行最简单的操作。这些命令和操作包括：</p>
+<ul>
+<li><code>set</code>：向缓存添加新的键值对，如果键已经存在，则之前的值将被替换；</li>
+<li><code>add</code>：仅当缓存中不存在键时，<code>add</code>命令才会向缓存中添加一个键值对。如果缓存中已经存在键，则之前的值将仍然保持相同，并且您将获得响应 <code>NOT_STORED</code>;</li>
+<li><code>replace</code>：仅当键已经存在时，<code>replace</code> 命令才会替换缓存中的键。如果缓存中不存在键，那么您将从 <code>memcached</code> 服务器接受到一条 <code>NOT_STORED</code> 响应;</li>
+<li><code>get</code>：用于检索与之前添加的键值对相关的值。您将使用 <code>get</code> 执行大多数检索操作;</li>
+<li><code>delete</code>：用于删除 memcached 中的任何现有值；</li>
+</ul>
+<h4 id="set"><a href="#set" class="headerlink" title="set"></a>set</h4><p><code>set</code>命令用于向缓存添加新的键值对。如果键已经存在，则之前的值将被替换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@Memcached ~]# !t</span><br><span class="line">telnet 127.0.0.1 11211</span><br><span class="line">Trying 127.0.0.1...</span><br><span class="line">Connected to 127.0.0.1.</span><br><span class="line">Escape character is &apos;^]&apos;.</span><br><span class="line">set userID 0 0 5 </span><br><span class="line">12345</span><br><span class="line">STORED</span><br></pre></td></tr></table></figure>
+<p>如果使用 <code>set</code> 命令正确设定了键值对，服务器将使用单词 <code>STORED</code> 进行响应。本示例向缓存中添加了一个键值对，其键为<code>userId</code>，其值为<code>12345</code>。并将过期时间设置为 <code>0</code>，这将向 <code>memcached</code> 通知您希望将此值存储在缓存中直到删除它为止。</p>
+<h4 id="add"><a href="#add" class="headerlink" title="add"></a>add</h4><p>仅当缓存中不存在键时，<code>add</code> 命令才会向缓存中添加一个键值对。如果缓存中已经存在键，则之前的值将仍然保持相同，并且您将获得响应 <code>NOT_STORED</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">add userID 0 0 5   </span><br><span class="line">55555</span><br><span class="line">NOT_STORED</span><br><span class="line">add UID 0 0 3</span><br><span class="line">123</span><br><span class="line">STORED</span><br></pre></td></tr></table></figure>
+<h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><p>仅当键已经存在时，<code>replace</code> 命令才会替换缓存中的键。如果缓存中不存在键，那么您将从 <code>memcached</code> 服务器接受到一条 <code>NOT_STORED</code> 响应。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">replace accountID 0 0 5 </span><br><span class="line">67890</span><br><span class="line">NOT_STORED</span><br><span class="line">set accountID 0 0 5 </span><br><span class="line">67890</span><br><span class="line">STORED</span><br><span class="line">replace accountID 0 0 5</span><br><span class="line">66666</span><br><span class="line">STORED</span><br></pre></td></tr></table></figure>
+<h4 id="get"><a href="#get" class="headerlink" title="get"></a>get</h4><p><code>get</code> 命令用于检索与之前添加的键值对相关的值。您将使用 <code>get</code> 执行大多数检索操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set userID 0 0 5</span><br><span class="line">12345</span><br><span class="line">STORED</span><br><span class="line">get userID</span><br><span class="line">VALUE userID 0 5</span><br><span class="line">12345</span><br><span class="line">END</span><br><span class="line">get abc</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>如您所见，<code>get</code> 命令相当简单。您使用一个键来调用 <code>get</code>，如果这个键存在于缓存中，则返回相应的值。如果不存在，则不返回任何内容。</p>
+<h4 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h4><p><code>delete</code> 命令用于删除 <code>memcached</code> 中的任何现有值。您将使用一个键调用<code>delete</code>，如果该键存在于缓存中，则删除该值。如果不存在，则返回一条<code>NOT_FOUND</code> 消息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set userID 0 0 5</span><br><span class="line">12345</span><br><span class="line">STORED</span><br><span class="line">delete bob</span><br><span class="line">NOT_FOUND</span><br><span class="line">delete userID</span><br><span class="line">DELETED</span><br><span class="line">get userID</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<h4 id="gets"><a href="#gets" class="headerlink" title="gets"></a>gets</h4><p><code>gets</code> 命令的功能类似于基本的<code>get</code> 命令。两个命令之间的差异在于，<code>gets</code> 返回的信息稍微多一些：<code>64</code> 位的整型值非常像名称/值对的 “<code>版本</code>” 标识符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">set userID 0 0 5</span><br><span class="line">12345</span><br><span class="line">STORED</span><br><span class="line">get userID</span><br><span class="line">VALUE userID 0 5</span><br><span class="line">12345</span><br><span class="line">END</span><br><span class="line">gets userID</span><br><span class="line">VALUE userID 0 5 7</span><br><span class="line">12345</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>考虑 <code>get</code> 和 <code>gets</code> 命令之间的差异。<code>gets</code> 命令将返回一个额外的值 — 在本例中是整型值 7，用于标识名称/值对。如果对此名称/值对执行另一个<code>set</code> 命令，则<code>gets</code> 返回的额外值将会发生更改，以表明名称/值对已经被更新。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">set userId 0 0 5</span><br><span class="line">33333</span><br><span class="line">STORED</span><br><span class="line">gets userId  </span><br><span class="line">VALUE userId 0 5 8</span><br><span class="line">33333</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>您看到 <code>gets</code> 返回的值了吗？它已经更新为 8。您每次修改名称/值对时，该值都会发生更改。</p>
+<h4 id="缓存管理命令"><a href="#缓存管理命令" class="headerlink" title="缓存管理命令"></a>缓存管理命令</h4><p>最后两个 <code>memcached</code> 命令用于监控和清理 <code>memcached</code> 实例。它们是 <code>stats</code> 和 <code>flush_all</code> 命令。</p>
+<h5 id="stats"><a href="#stats" class="headerlink" title="stats"></a>stats</h5><p><code>stats</code> 命令的功能正如其名：转储所连接的 <code>memcached</code> 实例的当前统计数据。在下例中，执行 <code>stats</code> 命令显示了关于当前 <code>memcached</code> 实例的信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">stats</span><br><span class="line">STAT pid 11019                  # 进程ID</span><br><span class="line">STAT uptime 192                 # 服务器运行秒数</span><br><span class="line">STAT time 1510214121            # 服务器当前unix时间戳</span><br><span class="line">STAT version 1.4.4              # 服务器版本</span><br><span class="line">STAT pointer_size 64            # 操作系统64位的</span><br><span class="line">STAT rusage_user 0.000000       # 进程累计用户时间</span><br><span class="line">STAT rusage_system 0.012998     # 当前累计系统时间</span><br><span class="line">STAT curr_connections 10        # 当前打开连接数</span><br><span class="line">STAT total_connections 12       # 曾打开的连接总数</span><br><span class="line">STAT connection_structures 11   # 服务器分配的连接结构数</span><br><span class="line">STAT cmd_get 54                 # 执行get命令总数</span><br><span class="line">STAT cmd_set 34                 # 执行set命令总数</span><br><span class="line">STAT cmd_flush 3                # 指向flush_all命令总数</span><br><span class="line">STAT get_hits 9                 # get命中次数</span><br><span class="line">STAT get_misses 45              # get未命中次数</span><br><span class="line">STAT delete_misses 5            # delete未命中次数</span><br><span class="line">STAT delete_hits 1              # delete命中次数</span><br><span class="line">STAT incr_misses 0              # incr未命中次数</span><br><span class="line">STAT incr_hits 0                # incr命中次数</span><br><span class="line">STAT decr_misses 0              # decr未命中次数</span><br><span class="line">STAT decr_hits 0                # decr命中次数</span><br><span class="line">STAT cas_misses 0               # cas未命中次数</span><br><span class="line">STAT cas_hits 0                 # cas命中次数</span><br><span class="line">STAT cas_badval 0               # 使用擦拭次数</span><br><span class="line">STAT auth_cmds 0                    </span><br><span class="line">STAT auth_errors 0                  </span><br><span class="line">STAT bytes_read 86              # 读入字节总数              </span><br><span class="line">STAT bytes_written 55           # 写入字节总数</span><br><span class="line">STAT limit_maxbytes 67108864    # 分配的内存数（字节）                </span><br><span class="line">STAT accepting_conns 1          # 目前接受的连接数        </span><br><span class="line">STAT listen_disabled_num 0                  </span><br><span class="line">STAT threads 4                  # 线程数            </span><br><span class="line">STAT conn_yields 0                  </span><br><span class="line">STAT bytes 76                   # 存储item字节数</span><br><span class="line">STAT curr_items 1               # item个数    </span><br><span class="line">STAT total_items 1              # item总数    </span><br><span class="line">STAT evictions 0                # 为获取空间删除item的总数</span><br><span class="line">END</span><br></pre></td></tr></table></figure></p>
+<h5 id="stats-slabs"><a href="#stats-slabs" class="headerlink" title="stats slabs"></a>stats slabs</h5><p><code>stats slabs</code> 显示各个<code>slab</code>的信息，包括<code>chunk</code>的大小、数目、使用情况等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">stats slabs</span><br><span class="line">STAT 1:chunk_size 96</span><br><span class="line">STAT 1:chunks_per_page 10922</span><br><span class="line">STAT 1:total_pages 1</span><br><span class="line">STAT 1:total_chunks 10922</span><br><span class="line">STAT 1:used_chunks 1</span><br><span class="line">STAT 1:free_chunks 1</span><br><span class="line">STAT 1:free_chunks_end 10920</span><br><span class="line">STAT 1:mem_requested 76</span><br><span class="line">STAT 1:get_hits 1</span><br><span class="line">STAT 1:cmd_set 2</span><br><span class="line">STAT 1:delete_hits 0</span><br><span class="line">STAT 1:incr_hits 0</span><br><span class="line">STAT 1:decr_hits 0</span><br><span class="line">STAT 1:cas_hits 0</span><br><span class="line">STAT 1:cas_badval 1</span><br><span class="line">STAT active_slabs 1</span><br><span class="line">STAT total_malloced 1048512</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<h5 id="stats-sizes"><a href="#stats-sizes" class="headerlink" title="stats sizes"></a>stats sizes</h5><p><code>stats sizes</code> 输出所有<code>item</code>的大小和个数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">stats sizes</span><br><span class="line">STAT 96 1</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<h5 id="stats-reset"><a href="#stats-reset" class="headerlink" title="stats reset"></a>stats reset</h5><p><code>stats reset</code> 清空统计数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stats reset</span><br><span class="line">RESET</span><br></pre></td></tr></table></figure>
+<h4 id="flush-all"><a href="#flush-all" class="headerlink" title="flush_all"></a>flush_all</h4><p>这个最简单的命令仅用于清理缓存中的所有名称/值对。如果您需要将缓存重置到干净的状态，则 <code>flush_all</code> 能提供很大的用处。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">set userid 0 0 5</span><br><span class="line">12345</span><br><span class="line">STORED</span><br><span class="line">set id 0 0 3</span><br><span class="line">345</span><br><span class="line">STORED</span><br><span class="line">get userid</span><br><span class="line">VALUE userid 0 5</span><br><span class="line">12345</span><br><span class="line">END</span><br><span class="line">get id</span><br><span class="line">VALUE id 0 3</span><br><span class="line">345</span><br><span class="line">END</span><br><span class="line">flush_all</span><br><span class="line">OK</span><br><span class="line">get id</span><br><span class="line">END</span><br><span class="line">get userid</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<h4 id="append"><a href="#append" class="headerlink" title="append"></a>append</h4><p><code>append</code> 将数据追加到当前缓存数据的之后，当缓存数据存在时才存储。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">set username 0 0 8</span><br><span class="line">wang1234</span><br><span class="line">STORED</span><br><span class="line">get username</span><br><span class="line">VALUE username 0 8</span><br><span class="line">wang1234</span><br><span class="line">END</span><br><span class="line">append username 0 0 5</span><br><span class="line">_ages</span><br><span class="line">STORED</span><br><span class="line">get username</span><br><span class="line">VALUE username 0 13</span><br><span class="line">wang1234_ages</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<h4 id="prepend"><a href="#prepend" class="headerlink" title="prepend"></a>prepend</h4><p><code>prepend</code> 将数据追加到当前缓存数据的之前，当缓存数据存在时才存储。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">set username 0 0 8</span><br><span class="line">wang1234</span><br><span class="line">STORED</span><br><span class="line">get username</span><br><span class="line">VALUE username 0 8</span><br><span class="line">wang1234</span><br><span class="line">END</span><br><span class="line">prepend username 0 0 5</span><br><span class="line">name_</span><br><span class="line">STORED</span><br><span class="line">get username</span><br><span class="line">VALUE username 0 13</span><br><span class="line">name_wang1234</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://www.cnblogs.com/wayne173/p/5652034.html" target="_blank" rel="noopener">達達尼亞：memcached 常用命令及使用说明</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/">Memcached安装和常用命令</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-11-09, 16:30:29</p>
+        <p><span>最后更新:</span>2018-04-17, 07:36:33</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/" title="Memcached安装和常用命令">https://houhaiyun.github.io/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/">
+                    tomcat + memcached session manager共享session
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/11/09/Memcached/">
+                    Memcached
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动Memcached常用参数"><span class="toc-number">2.</span> <span class="toc-text">启动Memcached常用参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连接和退出"><span class="toc-number">3.</span> <span class="toc-text">连接和退出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行语法"><span class="toc-number">4.</span> <span class="toc-text">命令行语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本命令"><span class="toc-number">5.</span> <span class="toc-text">基本命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#set"><span class="toc-number">5.1.</span> <span class="toc-text">set</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#add"><span class="toc-number">5.2.</span> <span class="toc-text">add</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#replace"><span class="toc-number">5.3.</span> <span class="toc-text">replace</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get"><span class="toc-number">5.4.</span> <span class="toc-text">get</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#delete"><span class="toc-number">5.5.</span> <span class="toc-text">delete</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gets"><span class="toc-number">5.6.</span> <span class="toc-text">gets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缓存管理命令"><span class="toc-number">5.7.</span> <span class="toc-text">缓存管理命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#stats"><span class="toc-number">5.7.1.</span> <span class="toc-text">stats</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#stats-slabs"><span class="toc-number">5.7.2.</span> <span class="toc-text">stats slabs</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#stats-sizes"><span class="toc-number">5.7.3.</span> <span class="toc-text">stats sizes</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#stats-reset"><span class="toc-number">5.7.4.</span> <span class="toc-text">stats reset</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#flush-all"><span class="toc-number">5.8.</span> <span class="toc-text">flush_all</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#append"><span class="toc-number">5.9.</span> <span class="toc-text">append</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#prepend"><span class="toc-number">5.10.</span> <span class="toc-text">prepend</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">6.</span> <span class="toc-text">致谢</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Memcached安装和常用命令　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/" title="上一篇: tomcat + memcached session manager共享session">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/11/09/Memcached/" title="下一篇: Memcached">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager-2017-11-09/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands-2017-11-09/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
