@@ -641,9 +641,17 @@
     
     <entry>
       <title>Zabbix：配置触发器trigger</title>
-      <link href="/2017/11/23/Zabbix-Tirigger-Peizhi-2017-11-23/"/>
-      <url>/2017/11/23/Zabbix-Tirigger-Peizhi-2017-11-23/</url>
-      <content type="html"><![CDATA[<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>触发器是“评估”由项目采集的数据并表示当前系统状况的逻辑表达式。</p><p>当监控项用于采集系统的数据时，始终遵循这些数据是非常不切合实际的，因为这些数据始终在等待一个令人担忧或者值得关注的状态。然而这个“评估”数据的工作可以留给触发器表达式。</p><p>触发器表达式允许定义一个什么状况的数据是“可接受”的阈值。因此，如果接收的数据超过了可接受的状态，则触发器会被触发 - 或将状态更改为<code>PROBLEM</code>.</p><a id="more"></a><p>一个触发器可以拥有下面几种状态：</p><table><thead><tr><th>值</th><th>描述</th></tr></thead><tbody><tr><td>OK</td><td>这是一个正常的触发器状态，在旧版本的Zabbix中称为FALSE。</td></tr><tr><td>PROBLEM</td><td>通常意味着触发了某些事情。例如，处理器的负载较高。在旧版本的Zabbix中称为TRUE。</td></tr></tbody></table><p>每当<code>Zabbix server</code>接收到作为表达式一部分的新值时，都会重新计算触发器状态（表达式）。</p><p>如果在表达式中使用基于时间的函数(<code>nodata()</code>, <code>date()</code>, <code>dayofmonth()</code>, <code>dayofweek()</code>, <code>time()</code>, <code>now()</code>)，触发器就会由<code>Zabbix timer</code>进程每30秒重新计算一次。如果在表达式中同时使用基于时间和非基于时间的函数，当接收到一个新值和每隔30秒都会重新计算触发器的状态。</p><h3 id="配置一个触发器"><a href="#配置一个触发器" class="headerlink" title="配置一个触发器"></a>配置一个触发器</h3><p>配置一个触发器，请执行以下操作：</p><ul><li>点击上方菜单栏的<code>Configuration</code> → <code>Hosts</code></li><li>在<code>Host</code>那一行点击<code>Triggers</code></li><li>在右上角点击<code>Create Trigger</code>（或者在触发器名称上编辑一个现有的触发器）</li><li>在打开的页面输入触发器的参数</li></ul><h4 id="点击上方菜单栏的Configuration-→-Hosts-并在Host那一行点击Triggers"><a href="#点击上方菜单栏的Configuration-→-Hosts-并在Host那一行点击Triggers" class="headerlink" title="点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers"></a>点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/Zabbix-Create-Triggers-1.jpg"></center><h4 id="在右上角点击Create-Trigger"><a href="#在右上角点击Create-Trigger" class="headerlink" title="在右上角点击Create Trigger"></a>在右上角点击Create Trigger</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/Zabbix-Create-Triggers-2.jpg"></center><h4 id="在打开的页面输入触发器的参数"><a href="#在打开的页面输入触发器的参数" class="headerlink" title="在打开的页面输入触发器的参数"></a>在打开的页面输入触发器的参数</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/Zabbix-Create-Triggers-3.jpg"></center><p><code>Trigger</code>标签页包含了所有必需的触发器属性。</p><h4 id="依赖关系标签"><a href="#依赖关系标签" class="headerlink" title="依赖关系标签"></a>依赖关系标签</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/Zabbix-Create-Triggers-4.jpg"></center><p>依赖关系标签页包含触发器的所有依赖关系。</p><p>点击<code>Add</code>来添加一个新的依赖关系。</p><blockquote><p>你也可以打开一个现有的触发器，点击Clone按钮，以一个不同的名称保存为新的触发器。</p></blockquote>]]></content>
+      <link href="/2017/11/23/Zabbix-Tirigger-Peizhi/"/>
+      <url>/2017/11/23/Zabbix-Tirigger-Peizhi/</url>
+      <content type="html"><![CDATA[<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>触发器是“评估”由项目采集的数据并表示当前系统状况的逻辑表达式。</p><p>当监控项用于采集系统的数据时，始终遵循这些数据是非常不切合实际的，因为这些数据始终在等待一个令人担忧或者值得关注的状态。然而这个“评估”数据的工作可以留给触发器表达式。</p><p>触发器表达式允许定义一个什么状况的数据是“可接受”的阈值。因此，如果接收的数据超过了可接受的状态，则触发器会被触发 - 或将状态更改为<code>PROBLEM</code>.</p><a id="more"></a><p>一个触发器可以拥有下面几种状态：</p><table><thead><tr><th>值</th><th>描述</th></tr></thead><tbody><tr><td>OK</td><td>这是一个正常的触发器状态，在旧版本的Zabbix中称为FALSE。</td></tr><tr><td>PROBLEM</td><td>通常意味着触发了某些事情。例如，处理器的负载较高。在旧版本的Zabbix中称为TRUE。</td></tr></tbody></table><p>每当<code>Zabbix server</code>接收到作为表达式一部分的新值时，都会重新计算触发器状态（表达式）。</p><p>如果在表达式中使用基于时间的函数(<code>nodata()</code>, <code>date()</code>, <code>dayofmonth()</code>, <code>dayofweek()</code>, <code>time()</code>, <code>now()</code>)，触发器就会由<code>Zabbix timer</code>进程每30秒重新计算一次。如果在表达式中同时使用基于时间和非基于时间的函数，当接收到一个新值和每隔30秒都会重新计算触发器的状态。</p><h3 id="配置一个触发器"><a href="#配置一个触发器" class="headerlink" title="配置一个触发器"></a>配置一个触发器</h3><p>配置一个触发器，请执行以下操作：</p><ul><li>点击上方菜单栏的<code>Configuration</code> → <code>Hosts</code></li><li>在<code>Host</code>那一行点击<code>Triggers</code></li><li>在右上角点击<code>Create Trigger</code>（或者在触发器名称上编辑一个现有的触发器）</li><li>在打开的页面输入触发器的参数</li></ul><h4 id="点击上方菜单栏的Configuration-→-Hosts-并在Host那一行点击Triggers"><a href="#点击上方菜单栏的Configuration-→-Hosts-并在Host那一行点击Triggers" class="headerlink" title="点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers"></a>点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-1.jpg" title="点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers"></center><h4 id="在右上角点击Create-Trigger"><a href="#在右上角点击Create-Trigger" class="headerlink" title="在右上角点击Create Trigger"></a>在右上角点击Create Trigger</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-2.jpg" title="在右上角点击Create Trigger"></center><h4 id="在打开的页面输入触发器的参数"><a href="#在打开的页面输入触发器的参数" class="headerlink" title="在打开的页面输入触发器的参数"></a>在打开的页面输入触发器的参数</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-3.jpg" title="在打开的页面输入触发器的参数"></center><p><code>Trigger</code>标签页包含了所有必需的触发器属性。</p><h4 id="依赖关系标签"><a href="#依赖关系标签" class="headerlink" title="依赖关系标签"></a>依赖关系标签</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-4.jpg" title="依赖关系标签"></center><p>依赖关系标签页包含触发器的所有依赖关系。</p><p>点击<code>Add</code>来添加一个新的依赖关系。</p><blockquote><p>你也可以打开一个现有的触发器，点击Clone按钮，以一个不同的名称保存为新的触发器。</p></blockquote>]]></content>
+      
+      <categories>
+          
+          <category> 监控 </category>
+          
+          <category> 配置触发器trigger </category>
+          
+      </categories>
       
       
         <tags>
@@ -656,9 +664,17 @@
     
     <entry>
       <title>Zabbix：监控项item中自定义key</title>
-      <link href="/2017/11/23/Zabbix-Item-Zidingyi-Keys-2017-11-23/"/>
-      <url>/2017/11/23/Zabbix-Item-Zidingyi-Keys-2017-11-23/</url>
+      <link href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/"/>
+      <url>/2017/11/23/Zabbix-Item-Zidingyi-Keys/</url>
       <content type="html"><![CDATA[<h3 id="用户自定义参数"><a href="#用户自定义参数" class="headerlink" title="用户自定义参数"></a>用户自定义参数</h3><p>有时你可能想要运行一个代理检查，它不是用<code>Zabbix</code>预定义的，这时你会用到用户参数来帮忙。</p><p>我们可以在客户端配置文件 zabbix_angentd.conf 编写一个命令来检索所需的数据，并将其包含在用户参数代理配置文件中 (‘<code>UserParameter</code>‘ 配置参数)。</p><p>用户参数具有以下语法：</p><blockquote><p>UserParameter=<key>,<command></key></p></blockquote><a id="more"></a><p>如你看到的，用户参数还包含一个<code>Key</code>。 一个用户参数包含一个<code>Key</code>。输入你选择的<code>Key</code>，这将很容易引用（它在主机中必须是唯一的）。重新启动代理。</p><p>然后，当 配置一个监控项时, 输入要从执行的用户参数中引用该命令的<code>Key</code>。</p><p>用户参数是由<code>Zabbix</code>代理执行的命令。最多可以返回<code>512KB</code>的数据。 <code>/bin/sh</code> 在<code>UNIX</code>操作系统下用于命令行解释器。用户参数满足代理检查超时，如果达到超时，则分支用户参数进程终止。</p><h4 id="用户参数示例"><a href="#用户参数示例" class="headerlink" title="用户参数示例"></a>用户参数示例</h4><p><strong>简单的命令:</strong></p><blockquote><p>UserParameter=ping,echo 1</p></blockquote><p>代理将始终使用<code>&#39;ping&#39;</code>键为一个监控项返回<code>&#39;1&#39;</code>。</p><p><strong>一个更复杂的例子:</strong></p><blockquote><p>UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive</p></blockquote><p>如果MySQL服务器是活动状态，代理将返回’1’，否则为0。</p><h4 id="灵活的用户参数"><a href="#灵活的用户参数" class="headerlink" title="灵活的用户参数"></a>灵活的用户参数</h4><p>灵活的用户参数使用<code>Key</code>接受参数。这样一个灵活的用户参数可以作为创建几个监控项的基础。</p><p>灵活的用户参数具有以下语法：</p><blockquote><p>UserParameter=key[*],command</p></blockquote><table><thead><tr><th>参数</th><th>描述</th></tr></thead><tbody><tr><td><strong>Key</strong></td><td>唯一的监控项Key。[*]定义该Key接收括号内的参数。在配置监控项时给出参数。</td></tr><tr><td><strong>Command</strong></td><td>执行命令以评估Key的值。<em>仅适用于灵活的用户参数</em>:你可以使用命令中的位置引用$ 1 … $ 9来引用监控项Key中的相应参数。Zabbix解析监控项Key的[]中包含的参数，并相应地替换$ 1，…，$ 9。$ 0将由原始命令（在扩展$ 0，…，$ 9之前）替换为运行。不管它们是用双引号(“)还是单引号(‘)括起来，都会解析位置引用。要使用位置引用不变，请指定双美元符号 - 例如，awk’{print $$2}’。 在这种情况下，执行命令时，“$$2”实际上会变成“$2”。</td></tr></tbody></table><blockquote><p>使用$符号的位置引用仅由灵活的用户参数搜索并由Zabbix代理替代。对于简单的用户参数，跳过此类引用处理，因此任何$号引用都不是必需的。</p></blockquote><blockquote><p>默认情况下，用户参数中不允许使用某些符号。</p></blockquote><h4 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h4><p>有些事情很简单：</p><blockquote><p>UserParameter=ping[*],echo $1</p></blockquote><p>我们可以定义无限数量的监控项，用于监视所有具有格式<code>ping [something]</code>的设置。</p><ul><li><code>ping[0]</code> - 总是返回 <code>&#39;0&#39;</code></li><li><code>ping[aaa]</code> - 总是返回 <code>&#39;aaa&#39;</code></li></ul><h4 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h4><p>让我们增添更多的意义！</p><blockquote><p>UserParameter=mysql.ping[*],mysqladmin -u$1 -p$2 ping | grep -c alive</p></blockquote><p>此参数可用于监视<code>MySQL</code>数据库的可用性。我们可以传递用户名和密码：</p><blockquote><p>mysql.ping[zabbix,our_password]</p></blockquote><h4 id="示例3"><a href="#示例3" class="headerlink" title="示例3"></a>示例3</h4><p>有多少行匹配文件中的正则表达式？</p><blockquote><p>UserParameter=wc[*],grep -c “$2” $1</p></blockquote><p>此参数可用于计算文件中的行数。</p><blockquote><p>wc[/etc/passwd,root]<br>wc[/etc/services,zabbix]</p></blockquote><h4 id="命令结果"><a href="#命令结果" class="headerlink" title="命令结果"></a>命令结果</h4><p>命令的返回值与标准错误一起按照标准输出。</p><blockquote><p>在标准错误输出的情况下，文本（字符、日志或文本信息类型）监控项将被支持。</p></blockquote><p>返回文本（字符、日志、文本信息类型）的用户参数可以返回空格。 在无效结果的情况下，或执行退出代码不匹配0（零）的监控项将不被支持。</p>]]></content>
+      
+      <categories>
+          
+          <category> 监控 </category>
+          
+          <category> 监控项item中自定义key </category>
+          
+      </categories>
       
       
         <tags>
@@ -671,9 +687,17 @@
     
     <entry>
       <title>Zabbix：监控项item中所有agent key</title>
-      <link href="/2017/11/23/Zabbix-Item-All-Keys-2017-11-23/"/>
-      <url>/2017/11/23/Zabbix-Item-All-Keys-2017-11-23/</url>
+      <link href="/2017/11/23/Zabbix-Item-All-Keys/"/>
+      <url>/2017/11/23/Zabbix-Item-All-Keys/</url>
       <content type="html"><![CDATA[<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>这些检查与<code>Zabbix</code>代理进行通信实现数据的采集。</p><p>一共有被动和主动 两种<code>agent</code>模式. 在配置监控项时，你可以选择所需的类型：</p><ul><li><code>Zabbix agent</code> - 被动模式，<code>Zabbix Server</code>向<code>Agent</code>索要数据</li><li><code>Zabbix agent</code> (<code>active</code>) - 主动模式，<code>Agent</code>主动上报数据给<code>Zabbix Server</code></li></ul><p><a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/items/itemtypes/zabbix_agent" target="_blank" rel="noopener">所有agent key请参见：https://www.zabbix.com/documentation/3.4/zh/manual/config/items/itemtypes/zabbix_agent</a></p>]]></content>
+      
+      <categories>
+          
+          <category> 监控 </category>
+          
+          <category> 监控项item中所有agent key </category>
+          
+      </categories>
       
       
         <tags>
@@ -686,9 +710,17 @@
     
     <entry>
       <title>Zabbix：监控项item自定义间隔</title>
-      <link href="/2017/11/23/Zabbix-Item-Time-Jiange-2017-11-23/"/>
-      <url>/2017/11/23/Zabbix-Item-Time-Jiange-2017-11-23/</url>
+      <link href="/2017/11/23/Zabbix-Item-Time-Jiange/"/>
+      <url>/2017/11/23/Zabbix-Item-Time-Jiange/</url>
       <content type="html"><![CDATA[<h3 id="自定义间隔"><a href="#自定义间隔" class="headerlink" title="自定义间隔"></a>自定义间隔</h3><p>可以创建关于选中监控项的自定义时间规则。这两种方式是灵活的时间间隔：允许重新定义默认的更新间隔和调度，从而可以在特定时间或次序执行监控项的检查。</p><a id="more"></a><h4 id="灵活的间隔"><a href="#灵活的间隔" class="headerlink" title="灵活的间隔"></a>灵活的间隔</h4><p>灵活的间隔允许重定义特定时间段的默认更新间隔。灵活的间隔被定义为间隔和周期，其中：</p><ul><li>间隔 – 指定时间段的更新间隔</li><li>周期 – 灵活间隔有效的时间段</li></ul><p>可以定义多达七个灵活的时间间隔。如果多个灵活间隔设置有冲突，则在冲突周期中使用最小的间隔值。请注意，如果灵活间隔的最小值为“0”，则不会进行轮询。在灵活间隔之外，使用默认更新间隔。</p><p>请注意，如果灵活间隔等于周期的长度，则该监控项将被精确检查一次。如果灵活间隔大于周期，则可能会检查该监控项一次，或者完全不检查该监控项（因此不建议这样配置）。如果灵活间隔小于周期，监控项将至少被检查一次。</p><p>如果灵活间隔设置为“0”，则在灵活间隔期间不轮询监控项，并在周期结束后根据默认更新间隔恢复轮询。示例：</p><table><thead><tr><th>间隔</th><th>周期</th><th>描述</th></tr></thead><tbody><tr><td>10</td><td>1-5,09:00-18:00</td><td>监控项将在工作时间内每10秒检查一次。</td></tr><tr><td>0</td><td>1-7,00:00-7:00</td><td>监控项不会在夜间检查。</td></tr><tr><td>0</td><td>7-7,00:00-24:00</td><td>监控项在星期日不会被检查。</td></tr><tr><td>60</td><td>1-7,12:00-12:01</td><td>监控项将在每天12:00点检查。请注意，这种被用作计划检查的一般性方法从Zabbix 3.0开始建议使用调度间隔来实现。</td></tr></tbody></table><h4 id="调度间隔"><a href="#调度间隔" class="headerlink" title="调度间隔"></a>调度间隔</h4><p>调度间隔用于在特定时间检查监控项。虽然灵活间隔被设计为重新定义默认监控项的更新间隔，但是调度间隔用于指定独立执行的检查计划。</p><p>调度间隔定义为: <code>md&lt;filter&gt;wd&lt;filter&gt;h&lt;filter&gt;m&lt;filter&gt;s&lt;filter&gt;</code>其中:</p><ul><li><code>md - month days</code></li><li><code>wd - week days</code></li><li><code>h - hours</code></li><li><code>m - minutes</code></li><li><code>s – seconds</code></li></ul><p><code>&lt;filter&gt;</code> 用于指定其前缀的值(<code>days</code>, <code>hours</code>, <code>minutes</code>, <code>seconds</code>) 并被定义为: <code>[&lt;from&gt;[-&lt;to&gt;]][/&lt;step&gt;][,&lt;filter&gt;]</code> 其中:</p><ul><li><code>&lt;from&gt;</code>和<code>&lt;to&gt;</code>定义匹配值的范围（包括）。 如果忽略<code>&lt;to&gt;</code>，则过滤器匹配<code>&lt;from&gt;</code> - <code>&lt;from&gt;</code>范围。 如果<code>&lt;from&gt;</code>也被省略，则过滤器匹配所有可能的值。</li><li><code>&lt;step&gt;</code>通过该范围定义数字值的跳过。默认情况下，<code>&lt;step&gt;</code>的值为1，这意味着所有定义范围的值都匹配。</li></ul><p>虽然过滤器定义是可选的，但必须至少使用一个过滤器。过滤器必须有一个范围或定义的<code>&lt;step&gt;</code>值。</p><p>如果没有定义低级过滤器，则一个空的<code>filter</code>既与“0”匹配，又匹配所有可能的值。例如，如果省略小时过滤器，仅当分钟和秒的过滤器也被省略则只有“0”小时将匹配，否则空的小时过滤器将匹配所有小时值。</p><p>它们各自的过滤器前缀的有效<code>&lt;from&gt;</code>和<code>&lt;to&gt;</code>值分别为：</p><table><thead><tr><th>前缀</th><th>描述</th><th><em><from></from></em></th><th><em><to></to></em></th></tr></thead><tbody><tr><td>md</td><td>Month days</td><td>1-31</td><td>1-31</td></tr><tr><td>wd</td><td>Week days</td><td>1-7</td><td>1-7</td></tr><tr><td>h</td><td>Hours</td><td>0-23</td><td>0-23</td></tr><tr><td>m</td><td>Minutes</td><td>0-59</td><td>0-59</td></tr><tr><td>s</td><td>Seconds</td><td>0-59</td><td>0-59</td></tr></tbody></table><p><code>&lt;from&gt;</code>值必须小于或等于<code>&lt;to&gt;</code>值。 <code>&lt;step&gt;</code>值必须大于或等于1且小于或等于<code>&lt;to&gt;</code> - <code>&lt;from&gt;</code>。</p><p>单个数字月份、小时、分钟和秒值可以前缀为0.例如<code>md01-31</code>和<code>h/02</code>是有效间隔，但<code>md01-031</code>和<code>wd01-07</code>不是。</p><p>在<code>Zabbix</code>管理<code>Web</code>端，多个调度间隔以单独的行输入。在<code>Zabbix API</code>中，它们以分号“；”连接成单个字符串作为分隔符。</p><p>如果时间匹配了几个间隔，则只执行一次。例如，<code>wd1h9</code>; <code>h9</code>将在星期一上午9点执行一次。</p><p><strong>实例</strong></p><table><thead><tr><th>间隔</th><th>描述</th></tr></thead><tbody><tr><td>m0-59</td><td>每分钟执行一次</td></tr><tr><td>h9-17/2</td><td>从9:00开始每2小时执行一次（9:00，11:00 …）</td></tr><tr><td>m0,30 or m/30</td><td>在每小时的hh:00 和 hh:30执行</td></tr><tr><td>m0,5,10,15,20,25,30,35,40,45,50,55 or m/5</td><td>每5分钟执行</td></tr><tr><td>wd1-5h9</td><td>每周一至周五9:00</td></tr><tr><td>wd1-5h9-18</td><td>每个星期一到星期五在9：00,10：00，…，18:00</td></tr><tr><td>h9,10,11 or h9-11</td><td>每天上午9:00，10:00和11:00</td></tr><tr><td>md1h9m30</td><td>每个月的第一天在9:30</td></tr><tr><td>md1wd1h9m30</td><td>如果是星期一，每个月的第一天在9:30执行</td></tr><tr><td>h9m/30</td><td>在9:00，9:30执行</td></tr><tr><td>h9m0-59/30</td><td>在9:00，9:30执行</td></tr><tr><td>h9,10m/30</td><td>在9:00，9:30，10:00，10:30执行</td></tr><tr><td>h9-10m30</td><td>在9:30，10:30执行</td></tr><tr><td>h9m10-40/30</td><td>在9:10，9:40执行</td></tr><tr><td>h9,10m10-40/30</td><td>在9:10，9:40，10:10，10:40执行</td></tr><tr><td>h9-10m10-40/30</td><td>在9:10，9:40，10:10，10:40执行</td></tr><tr><td>h9m10-40</td><td>在9:10，9:11，9:12，… 9:40执行</td></tr><tr><td>h9m10-40/1</td><td>在9:10，9:11，9:12，… 9:40执行</td></tr><tr><td>h9-12,15</td><td>在9:00，10:00，11:00，12:00，15:00执行</td></tr><tr><td>h9-12,15m0</td><td>在9:00，10:00，11:00，12:00，15:00执行</td></tr><tr><td>h9-12,15m0s30</td><td>在上午9时30分，上午10时30分，11时30分，12时30分，15时30分执行</td></tr><tr><td>h9-12s30</td><td>在9:00:30，9:01:30，9:02:30 … 12:58:30，12:59:30执行</td></tr><tr><td>h9m/30;h10</td><td>在9:00，9:30，10:00执行</td></tr></tbody></table>]]></content>
+      
+      <categories>
+          
+          <category> 监控 </category>
+          
+          <category> 监控项item自定义间隔 </category>
+          
+      </categories>
       
       
         <tags>
