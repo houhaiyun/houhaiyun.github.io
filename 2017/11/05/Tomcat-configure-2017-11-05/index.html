@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="description" content="server.xml12345678910111213141516171819Tomcat的核心组件：server.xml	&amp;lt;Server&amp;gt;		&amp;lt;Service&amp;gt;			&amp;lt;connector/&amp;gt;			&amp;lt;connector/&amp;gt;			...			&amp;lt;Engine&amp;gt;				&amp;lt;Host&amp;gt;					&amp;lt;Context/&amp;gt;">
+<meta name="keywords" content="Tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat常用配置">
+<meta property="og:url" content="https://houhaiyun.github.io/2017/11/05/Tomcat-configure-2017-11-05/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:description" content="server.xml12345678910111213141516171819Tomcat的核心组件：server.xml	&amp;lt;Server&amp;gt;		&amp;lt;Service&amp;gt;			&amp;lt;connector/&amp;gt;			&amp;lt;connector/&amp;gt;			...			&amp;lt;Engine&amp;gt;				&amp;lt;Host&amp;gt;					&amp;lt;Context/&amp;gt;">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-04-23T09:03:58.820Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat常用配置">
+<meta name="twitter:description" content="server.xml12345678910111213141516171819Tomcat的核心组件：server.xml	&amp;lt;Server&amp;gt;		&amp;lt;Service&amp;gt;			&amp;lt;connector/&amp;gt;			&amp;lt;connector/&amp;gt;			...			&amp;lt;Engine&amp;gt;				&amp;lt;Host&amp;gt;					&amp;lt;Context/&amp;gt;">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Tomcat常用配置 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIDE/">AIDE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cron/">Cron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Haproxy/">Haproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KeepAlived/">KeepAlived</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LNAMP搭建WordPress/">LNAMP搭建WordPress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS调度算法/">LVS调度算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS负载均衡技术/">LVS负载均衡技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Memcached/">Memcached</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装/">Nginx编译安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx配置文件/">Nginx配置文件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Openssl/">Openssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/">Tomcat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vsftp/">Vsftp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/关系型数据概念/">关系型数据概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库简介/">数据库简介</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构模型/">数据结构模型</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-access-module/">模块 ngx_http_access_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/目前流行的开源RDBMS/">目前流行的开源RDBMS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本实例四/">脚本实例四</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计关系数据库的范式基础概念/">设计关系数据库的范式基础概念</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/重定向和管道/">重定向和管道</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Tomcat-configure-2017-11-05" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/05/Tomcat-configure-2017-11-05/" class="article-date">
+      <time datetime="2017-11-05T23:33:48.000Z" itemprop="datePublished">2017-11-05</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Tomcat常用配置
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="server-xml"><a href="#server-xml" class="headerlink" title="server.xml"></a>server.xml</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Tomcat的核心组件：server.xml</span><br><span class="line">	&lt;Server&gt;</span><br><span class="line">		&lt;Service&gt;</span><br><span class="line">			&lt;connector/&gt;</span><br><span class="line">			&lt;connector/&gt;</span><br><span class="line">			...</span><br><span class="line">			&lt;Engine&gt;</span><br><span class="line">				&lt;Host&gt;</span><br><span class="line">					&lt;Context/&gt;</span><br><span class="line">					&lt;Context/&gt;</span><br><span class="line">					...</span><br><span class="line">				&lt;/Host&gt;</span><br><span class="line">				&lt;Host&gt;</span><br><span class="line">					...</span><br><span class="line">				&lt;/Host&gt;</span><br><span class="line">				...</span><br><span class="line">			&lt;/Engine&gt;</span><br><span class="line">		&lt;/Service&gt;</span><br><span class="line">	&lt;/Server&gt;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><p><code>&lt;Server port=&quot;8005&quot; shutdown=&quot;SHUTDOWN&quot;&gt;</code></p>
+<p><code>Server</code>：代表<code>tomcat instance</code>，即表现出的一个<code>java</code>进程；监听在8005端口，只接收“<code>SHUTDOWN</code>”（<code>SHUTDOWN</code>代表向本机的8005端口发送<code>SHUTDOWN</code>指令时就代表关闭<code>tomcat</code>服务。）。各<code>server</code>监听的端口不能相同，因此，在同一物理主机启动多个实例时，需要修改其监听端口为不同的端口；</p>
+<p>建议将此功能关闭：</p>
+<ul>
+<li><code>port=-1</code>或将<code>shutdown=&quot;随机数&quot;</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK ~]# ss -tnlp          # 查看端口tomcat服务已经启动；</span><br><span class="line">State      Recv-Q Send-Q Local Address:Port                Peer Address:Port              </span><br><span class="line">LISTEN     0      128                *:22                             *:*                   users:((&quot;sshd&quot;,pid=852,fd=3))</span><br><span class="line">LISTEN     0      100        127.0.0.1:25                             *:*                   users:((&quot;master&quot;,pid=1275,fd=13))</span><br><span class="line">LISTEN     0      100               :::8080                          :::*                   users:((&quot;java&quot;,pid=3278,fd=49))</span><br><span class="line">LISTEN     0      128               :::22                            :::*                   users:((&quot;sshd&quot;,pid=852,fd=4))</span><br><span class="line">LISTEN     0      100              ::1:25                            :::*                   users:((&quot;master&quot;,pid=1275,fd=14))</span><br><span class="line">LISTEN     0      1       ::ffff:127.0.0.1:8005                          :::*                   users:((&quot;java&quot;,pid=3278,fd=55))</span><br><span class="line">LISTEN     0      100               :::8009                          :::*                   users:((&quot;java&quot;,pid=3278,fd=50))</span><br><span class="line">[root@OpenJDK ~]# telnet 127.0.0.1 8005     # telnet本机8005端口，发送SHUTDOWN指令；</span><br><span class="line">Trying 127.0.0.1...</span><br><span class="line">Connected to 127.0.0.1.</span><br><span class="line">Escape character is &apos;^]&apos;.</span><br><span class="line">SHUTDOWN</span><br><span class="line">Connection closed by foreign host.</span><br><span class="line">[root@OpenJDK ~]# ss -tnlp      # tomcat服务已经被关闭；</span><br><span class="line">State      Recv-Q Send-Q Local Address:Port                Peer Address:Port              </span><br><span class="line">LISTEN     0      128                *:22                             *:*                   users:((&quot;sshd&quot;,pid=852,fd=3))</span><br><span class="line">LISTEN     0      100        127.0.0.1:25                             *:*                   users:((&quot;master&quot;,pid=1275,fd=13))</span><br><span class="line">LISTEN     0      128               :::22                            :::*                   users:((&quot;sshd&quot;,pid=852,fd=4))</span><br><span class="line">LISTEN     0      100              ::1:25                            :::*                   users:((&quot;master&quot;,pid=1275,fd=14))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="connector组件"><a href="#connector组件" class="headerlink" title="connector组件"></a>connector组件</h3><p>负责接收请求，常见的有三类http/https/ajp；</p>
+<p>进入tomcat的请求可分为两类：</p>
+<ul>
+<li>(1) standalone : 请求来自于客户端浏览器；</li>
+<li>(2) 由其它的web server反代：来自前端的反代服务器；<ul>
+<li><code>nginx --&gt; http connector --&gt; tomcat</code> </li>
+<li><code>httpd(proxy_http_module) --&gt; http connector --&gt; tomcat</code></li>
+<li><code>httpd(proxy_ajp_module) --&gt; ajp connector --&gt; tomcat</code> </li>
+<li><code>httpd(mod_jk) --&gt; ajp connector --&gt; tomcat</code> </li>
+</ul>
+</li>
+</ul>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot;</span><br><span class="line">           connectionTimeout=&quot;20000&quot;</span><br><span class="line">           redirectPort=&quot;8443&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;</span><br><span class="line">           maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;</span><br><span class="line">           clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>属性：</p>
+<ul>
+<li><code>port</code>=”8080” </li>
+<li><code>protocol</code>=”HTTP/1.1”</li>
+<li><code>connectionTimeout</code>=”20000”</li>
+<li><code>address</code>：监听的IP地址；默认为本机所有可用地址；</li>
+<li><code>maxThreads</code>：最大并发连接数，默认为200；</li>
+<li><code>enableLookups</code>：是否启用DNS查询功能；</li>
+<li><code>acceptCount</code>：等待队列的最大长度；</li>
+<li><code>secure</code>：true 是否使用安全通信</li>
+<li><code>sslProtocol</code>：TLS协议</li>
+</ul>
+<h3 id="Engine"><a href="#Engine" class="headerlink" title="Engine"></a>Engine</h3><p>Engine组件：Servlet实例，即servlet引擎，其内部可以一个或多个host组件来定义站点； 通常需要通过defaultHost来定义默认的虚拟主机；</p>
+<p>属性：</p>
+<ul>
+<li>name=</li>
+<li>defaultHost=”localhost”</li>
+<li>jvmRoute=</li>
+</ul>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;localhost&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="host"><a href="#host" class="headerlink" title="host"></a>host</h3><p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;</span><br><span class="line">      unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">  &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">         prefix=&quot;localhost_access_log.&quot; suffix=&quot;.txt&quot;</span><br><span class="line">         pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/Host&gt;</span><br></pre></td></tr></table></figure></p>
+<p>属性：<br>(1) appBase：此Host的webapps的默认存放目录，指存放非归档的web应用程序的目录或归档的WAR文件目录路径；可以使用基于$CATALINA_BASE变量所定义的路径的相对路径；</p>
+<p>(2) autoDeploy：在Tomcat处于运行状态时，将某webapp放置于appBase所定义的目录中时，是否自动将其部署至tomcat；</p>
+<h4 id="添加虚拟主机"><a href="#添加虚拟主机" class="headerlink" title="添加虚拟主机"></a>添加虚拟主机</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK ~]# vim /etc/tomcat/server.xml        # 修改配置文件；</span><br><span class="line">      &lt;Host name=&quot;www.ihaiyun.cc&quot; appBase=&quot;/data/webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot; /&gt;</span><br><span class="line">[root@OpenJDK ~]# mkdir -pv /data/webapps</span><br><span class="line">mkdir: created directory ‘/data’</span><br><span class="line">mkdir: created directory ‘/data/webapps’</span><br><span class="line">[root@OpenJDK ~]# cp -r test/ /data/webapps/ROOT        # 为虚拟主机提供访问文件；</span><br><span class="line">[root@OpenJDK ~]# cd /data/webapps/ROOT</span><br><span class="line">[root@OpenJDK ROOT]# ls</span><br><span class="line">classes  index.jsp  lib  META-INF  WEB-INF</span><br><span class="line">[root@OpenJDK ROOT]# vim index.jsp </span><br><span class="line">[root@OpenJDK ROOT]# cat index.jsp      # 编辑默认jsp文件；</span><br><span class="line">			&lt;%@ page language=&quot;java&quot; %&gt;</span><br><span class="line">			&lt;%@ page import=&quot;java.util.*&quot; %&gt;</span><br><span class="line">			&lt;html&gt;</span><br><span class="line">				&lt;head&gt;</span><br><span class="line">					&lt;title&gt;Test Page&lt;/title&gt;</span><br><span class="line">				&lt;/head&gt;</span><br><span class="line">				&lt;body&gt;</span><br><span class="line">					&lt;% out.println(&quot;www.ihaiyun.cc&quot;);</span><br><span class="line">					%&gt;</span><br><span class="line">				&lt;/body&gt;</span><br><span class="line">			&lt;/html&gt;		</span><br><span class="line">[root@OpenJDK ROOT]# vim /etc/hosts         # 修改hosts文件；</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.8.12 	www.ihaiyun.cc</span><br><span class="line">[root@OpenJDK ROOT]# curl  http://www.ihaiyun.cc:8080       # 3访问测试，ok；</span><br><span class="line">			</span><br><span class="line">			</span><br><span class="line">			&lt;html&gt;</span><br><span class="line">				&lt;head&gt;</span><br><span class="line">					&lt;title&gt;Test Page&lt;/title&gt;</span><br><span class="line">				&lt;/head&gt;</span><br><span class="line">				&lt;body&gt;</span><br><span class="line">					www.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">				&lt;/body&gt;</span><br><span class="line">			&lt;/html&gt;		</span><br><span class="line">[root@OpenJDK ROOT]# elinks -dump http://www.ihaiyun.cc:8080</span><br><span class="line">   www.ihaiyun.cc</span><br></pre></td></tr></table></figure>
+<h3 id="Context组件"><a href="#Context组件" class="headerlink" title="Context组件:"></a>Context组件:</h3><p><code>&lt;Context path=&quot;/PATH&quot; docBase=&quot;/PATH/TO/SOMEDIR&quot; reloadable=&quot;&quot;/&gt;</code></p>
+<p>包含在Host标签里。</p>
+<p>如果在一个主机上部署多个app的话，Context就可以用来定义不同app对应的路径。</p>
+<p>把/PATH/TO/SOMEDIR映射到 request URI /PATH</p>
+<ul>
+<li>如果/PATH/TO/SOMEDIR不带/，则是相对路径，相对的是Host的appBase。</li>
+<li>如果/PATH/TO/SOMEDIR带/，则是操作系统的绝对路径。</li>
+<li>reloadable：是否支持主机装载。</li>
+</ul>
+<h4 id="定义context"><a href="#定义context" class="headerlink" title="定义context"></a>定义context</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK ~]# vim /etc/tomcat/server.xml        # 在上面刚刚增在的host中添加一个context；</span><br><span class="line">      &lt;Host name=&quot;www.ihaiyun.cc&quot; appBase=&quot;/data/webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot; &gt;</span><br><span class="line">        &lt;context path=&quot;/appserver&quot; docBase=&quot;/data/app&quot; reloadable=&quot;&quot;/&gt;</span><br><span class="line">     &lt;/host&gt;</span><br><span class="line"></span><br><span class="line">[root@OpenJDK ~]# cp -r /root/test/ /data/</span><br><span class="line">[root@OpenJDK ~]# cd /data/test/</span><br><span class="line">[root@OpenJDK test]# vim index.jsp </span><br><span class="line">[root@OpenJDK test]# cat index.jsp </span><br><span class="line">			&lt;%@ page language=&quot;java&quot; %&gt;</span><br><span class="line">			&lt;%@ page import=&quot;java.util.*&quot; %&gt;</span><br><span class="line">			&lt;html&gt;</span><br><span class="line">				&lt;head&gt;</span><br><span class="line">					&lt;title&gt;Test Page&lt;/title&gt;</span><br><span class="line">				&lt;/head&gt;</span><br><span class="line">				&lt;body&gt;</span><br><span class="line">					&lt;% out.println(&quot;/data/test&quot;);</span><br><span class="line">					%&gt;</span><br><span class="line">				&lt;/body&gt;</span><br><span class="line">			&lt;/html&gt;		</span><br><span class="line"></span><br><span class="line">[root@OpenJDK test]# systemctl restart tomcat </span><br><span class="line">[root@OpenJDK test]# elinks -dump http://www.ihaiyun.cc:8080/testapp/       # 测试访问，ok；</span><br><span class="line">   /data/test</span><br></pre></td></tr></table></figure>
+<h3 id="value"><a href="#value" class="headerlink" title="value"></a>value</h3><p>Valve存在多种类型：</p>
+<ul>
+<li>定义访问日志：<code>org.apache.catalina.valves.AccessLogValve</code></li>
+<li>定义访问控制：<code>org.apache.catalina.valves.RemoteAddrValve</code></li>
+</ul>
+<p>访问日志示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;ihaiyun.cc_access_log.&quot; suffix=&quot;.log&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
+<p><code>&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot;</code>为日志格式，<code>&amp;quot</code>表示的是引号。</p>
+<p>访问控制示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h4 id="定义日志"><a href="#定义日志" class="headerlink" title="定义日志"></a>定义日志</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK test]# vim /etc/tomcat/server.xml         # 修改配置文件；</span><br><span class="line">      &lt;Host name=&quot;www.ihaiyun.cc&quot; appBase=&quot;/data/webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">        &lt;Context path=&quot;/testapp&quot; docBase=&quot;/data/test&quot; reloadable=&quot;true&quot;/&gt;</span><br><span class="line">     &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;ihaiyun.cc_access_log.&quot; suffix=&quot;.log&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line"> &lt;/Host&gt;</span><br><span class="line">[root@OpenJDK test]# elinks -dump http://www.ihaiyun.cc:8080        # 访问测试；</span><br><span class="line">   www.ihaiyun.cc</span><br><span class="line">[root@OpenJDK test]# elinks -dump http://www.ihaiyun.cc:8080</span><br><span class="line">   www.ihaiyun.cc</span><br><span class="line">[root@OpenJDK test]# elinks -dump http://www.ihaiyun.cc:8080</span><br><span class="line">   www.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">[root@OpenJDK ~]# cd /usr/share/tomcat/logs/</span><br><span class="line">[root@OpenJDK logs]# ls</span><br><span class="line">catalina.2017-11-04.log      ihaiyun.cc_access_log.2017-11-04.log  manager.2017-11-04.log</span><br><span class="line">catalina.out                 localhost.2017-11-04.log</span><br><span class="line">host-manager.2017-11-04.log  localhost_access_log.2017-11-04.txt</span><br><span class="line">[root@OpenJDK logs]# tail ihaiyun.cc_access_log.2017-11-04.log          # 查看日志；</span><br><span class="line">192.168.8.12 - - [04/Nov/2017:19:53:01 +0800] &quot;GET / HTTP/1.1&quot; 200 132</span><br><span class="line">192.168.8.12 - - [04/Nov/2017:19:53:01 +0800] &quot;GET / HTTP/1.1&quot; 200 132</span><br><span class="line">192.168.8.12 - - [04/Nov/2017:19:53:03 +0800] &quot;GET / HTTP/1.1&quot; 200 132</span><br></pre></td></tr></table></figure>
+<h4 id="定义访问控制，允许某主机"><a href="#定义访问控制，允许某主机" class="headerlink" title="定义访问控制，允许某主机"></a>定义访问控制，允许某主机</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK ~]# vim /etc/tomcat/server.xml            # 修改配置文件；</span><br><span class="line">      &lt;Host name=&quot;www.ihaiyun.cc&quot; appBase=&quot;/data/webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">        &lt;Context path=&quot;/testapp&quot; docBase=&quot;/data/test&quot; reloadable=&quot;true&quot;/&gt;</span><br><span class="line">     &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;ihaiyun.cc_access_log.&quot; suffix=&quot;.log&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line">    &lt;Valve className=&quot;org.apache.catalina.valves.RemoteAddrValve&quot; allow=&quot;127\.\d+\.\d+\.\d+&quot;/&gt;</span><br><span class="line"> &lt;/Host&gt;</span><br><span class="line"> [root@OpenJDK ~]# systemctl restart tomcat</span><br><span class="line">[root@OpenJDK ~]# elinks -dump http://www.ihaiyun.cc:8080/test      # 可以看到使用域名已经无法访问了；</span><br><span class="line">[root@OpenJDK ~]# elinks -dump http://127.0.0.1:8080/test   # 但使用iP还可以；</span><br><span class="line">   hello world</span><br></pre></td></tr></table></figure>
+<h4 id="定义访问控制，拒绝某主机"><a href="#定义访问控制，拒绝某主机" class="headerlink" title="定义访问控制，拒绝某主机"></a>定义访问控制，拒绝某主机</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK ~]# vim /etc/tomcat/server.xml        # 修改配置文件；</span><br><span class="line">      &lt;Host name=&quot;www.ihaiyun.cc&quot; appBase=&quot;/data/webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">        &lt;Context path=&quot;/testapp&quot; docBase=&quot;/data/test&quot; reloadable=&quot;true&quot;/&gt;</span><br><span class="line">     &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;ihaiyun.cc_access_log.&quot; suffix=&quot;.log&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line">    &lt;Valve className=&quot;org.apache.catalina.valves.RemoteAddrValve&quot; deny=&quot;192\.168\.8\.11&quot;/&gt; &lt;/Host&gt;      # 拒绝192.168.8.11，这台主机访问；</span><br><span class="line">[root@OpenJDK ~]# systemctl restart tomcat</span><br><span class="line">[root@Client ~]# ifconfig eth1              # Client就是192.168.8.11；</span><br><span class="line">eth1      Link encap:Ethernet  HWaddr 00:0C:29:DE:D2:8C  </span><br><span class="line">          inet addr:192.168.8.11  Bcast:192.168.8.255  Mask:255.255.255.0</span><br><span class="line">          inet6 addr: fe80::20c:29ff:fede:d28c/64 Scope:Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:3742 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:3027 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:380924 (371.9 KiB)  TX bytes:390104 (380.9 KiB)</span><br><span class="line"></span><br><span class="line">[root@Client ~]# cat /etc/hosts</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.8.11 www.ihaiyun.cc</span><br><span class="line">[root@Client ~]# elinks -dump http://192.168.8.12:8080/test/        # 直接访问默认虚拟主机，还是可以访问的；</span><br><span class="line">   hello world</span><br><span class="line">[root@Client ~]# elinks -dump http://www.ihaiyun.cc:8080/test/      # 访问www.ihaiyun.cc就被拒绝了；</span><br><span class="line">ELinks: Connection refused</span><br></pre></td></tr></table></figure>
+<h3 id="注释某语句"><a href="#注释某语句" class="headerlink" title="注释某语句"></a>注释某语句</h3><p><code>&lt;!-- --&gt;</code>代表注释某语句。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      &lt;Host name=&quot;www.ihaiyun.cc&quot; appBase=&quot;/data/webapps&quot;</span><br><span class="line">            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;</span><br><span class="line">        &lt;Context path=&quot;/testapp&quot; docBase=&quot;/data/test&quot; reloadable=&quot;true&quot;/&gt;</span><br><span class="line">     &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;</span><br><span class="line">               prefix=&quot;ihaiyun.cc_access_log.&quot; suffix=&quot;.log&quot;</span><br><span class="line">               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;</span><br><span class="line">&lt;!---   &lt;Valve className=&quot;org.apache.catalina.valves.RemoteAddrValve&quot; deny=&quot;192\.168\.8\.11&quot;/&gt; --&gt;      # 此语句已经被注释；</span><br><span class="line"> &lt;/Host&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/11/05/Tomcat-configure-2017-11-05/">Tomcat常用配置</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2017-11-05, 23:33:48</p>
+        <p><span>最后更新:</span>2018-04-23, 09:03:58</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/05/Tomcat-configure-2017-11-05/" title="Tomcat常用配置">https://houhaiyun.github.io/2017/11/05/Tomcat-configure-2017-11-05/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/11/05/Tomcat-configure-2017-11-05/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/11/05/Tomcat-Web-2017-11-05/">
+                    Tomcat web管理界面
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/11/05/Tomcat-Install/">
+                    安装tomcat
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#server-xml"><span class="toc-number">1.</span> <span class="toc-text">server.xml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#server"><span class="toc-number">2.</span> <span class="toc-text">server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#connector组件"><span class="toc-number">3.</span> <span class="toc-text">connector组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Engine"><span class="toc-number">4.</span> <span class="toc-text">Engine</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#host"><span class="toc-number">5.</span> <span class="toc-text">host</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#添加虚拟主机"><span class="toc-number">5.1.</span> <span class="toc-text">添加虚拟主机</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Context组件"><span class="toc-number">6.</span> <span class="toc-text">Context组件:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定义context"><span class="toc-number">6.1.</span> <span class="toc-text">定义context</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#value"><span class="toc-number">7.</span> <span class="toc-text">value</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定义日志"><span class="toc-number">7.1.</span> <span class="toc-text">定义日志</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#定义访问控制，允许某主机"><span class="toc-number">7.2.</span> <span class="toc-text">定义访问控制，允许某主机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#定义访问控制，拒绝某主机"><span class="toc-number">7.3.</span> <span class="toc-text">定义访问控制，拒绝某主机</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释某语句"><span class="toc-number">8.</span> <span class="toc-text">注释某语句</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Tomcat常用配置　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/11/05/Tomcat-Web-2017-11-05/" title="上一篇: Tomcat web管理界面">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/11/05/Tomcat-Install/" title="下一篇: 安装tomcat">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun-2017-11-07/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat-2017-11-07/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat-2017-11-07/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat-2017-11-07/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat-2017-11-07/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session-2017-11-07/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session-2017-11-07/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo-2017-11-05/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy-2017-11-05/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy-2017-11-05/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web-2017-11-05/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure-2017-11-05/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
