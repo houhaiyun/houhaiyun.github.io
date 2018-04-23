@@ -294,11 +294,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-Zabbix-Install" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Tomcat-Httpd-http-Diaodu-Tomcat" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/23/Zabbix-Install/" class="article-date">
-      <time datetime="2017-11-23T23:00:43.000Z" itemprop="datePublished">2017-11-23</time>
+      <a href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/" class="article-date">
+      <time datetime="2017-11-07T23:57:13.000Z" itemprop="datePublished">2017-11-07</time>
 </a>
 
 
@@ -313,7 +313,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a>
+      <a class="article-title" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a>
     </h1>
   
 
@@ -323,7 +323,9 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><table>
+              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Httpd-http-Diaodu-Tomcat-1.jpg" title="拓扑图"></center><br><center> 拓扑</center>
+
+<table>
 <thead>
 <tr>
 <th>服务</th>
@@ -335,18 +337,25 @@
 </thead>
 <tbody>
 <tr>
-<td>Zabbix-server</td>
-<td>192.168.8.12/24</td>
+<td>Httpd</td>
+<td>192.168.8.17/24</td>
 <td>CentOS Linux release 7.3.1611 (Core)</td>
-<td>zabbix-server-3.4.4</td>
-<td>监控server</td>
+<td>httpd.x86_64 0:2.4.6-45</td>
+<td>反向代理</td>
 </tr>
 <tr>
-<td>Nginx</td>
+<td>Tomcat1</td>
+<td>192.168.8.12/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Tomcat2</td>
 <td>192.168.8.15/24</td>
 <td>CentOS Linux release 7.3.1611 (Core)</td>
-<td>nginx-1.10.2</td>
-<td>被监控server</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
 </tr>
 </tbody>
 </table>
@@ -358,18 +367,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/安装Zabbix/">安装Zabbix</a>
+    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/Httpd基于http协议调度Tomcat集群/">Httpd基于http协议调度Tomcat集群</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/11/23/Zabbix-Install/#more">more >></a>
+          <a href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -389,11 +398,11 @@
 
 
   
-    <article id="post-MySQL-MariaDB-Install-Yum" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Tomcat-Nginx-Diaodu-Tomcat" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/11/MySQL-MariaDB-Install-Yum/" class="article-date">
-      <time datetime="2017-11-11T15:02:56.000Z" itemprop="datePublished">2017-11-11</time>
+      <a href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/" class="article-date">
+      <time datetime="2017-11-07T23:55:25.000Z" itemprop="datePublished">2017-11-07</time>
 </a>
 
 
@@ -408,7 +417,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a>
+      <a class="article-title" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a>
     </h1>
   
 
@@ -418,582 +427,9 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="官方yum仓库获取方式"><a href="#官方yum仓库获取方式" class="headerlink" title="官方yum仓库获取方式"></a>官方yum仓库获取方式</h3><p><a href="https://downloads.mariadb.org/mariadb/repositories/" target="_blank" rel="noopener">项目官方：https://downloads.mariadb.org/mariadb/repositories/</a></p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a><a class="article-category-link" href="/categories/数据库/MarraiDB安装-yum方式/">MarraiDB安装-yum方式</a>
-    </div>
+              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Nginx-Diaodu-Tomcat-1.jpg" title="拓扑图"></center>
 
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/11/MySQL-MariaDB-Install-Yum/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MySQL-MariaDB-Install-Binary" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/11/MySQL-MariaDB-Install-Binary/" class="article-date">
-      <time datetime="2017-11-11T15:01:31.000Z" itemprop="datePublished">2017-11-11</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="安装方式"><a href="#安装方式" class="headerlink" title="安装方式"></a>安装方式</h3><p><code>MariaDB</code>的安装方法大致有以下四种，本例是关于通用二进制（俗称绿色包）格式的压缩文件进行安装。</p>
-<ul>
-<li>系统自带<code>RPM</code>包安装</li>
-<li><code>MariaDB</code>官方自带的<code>rpm</code>包</li>
-<li>通用二进制格式</li>
-<li>源码编译</li>
-</ul>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a><a class="article-category-link" href="/categories/数据库/MarraiDB安装-通用二进制方式/">MarraiDB安装-通用二进制方式</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/11/MySQL-MariaDB-Install-Binary/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MySQL" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/11/MySQL/" class="article-date">
-      <time datetime="2017-11-11T14:58:48.000Z" itemprop="datePublished">2017-11-11</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/11/MySQL/">MySQL</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="什么是MySQL？"><a href="#什么是MySQL？" class="headerlink" title="什么是MySQL？"></a>什么是MySQL？</h3><p><code>MySQL</code>是一个关系型数据库管理系统，由瑞典 <code>MySQL AB</code> 公司开发，目前属于 <code>Oracle</code> 旗下公司。<code>MySQL</code> 最流行的关系型数据库管理系统，在 <code>WEB</code> 应用方面 <code>MySQL</code> 是最好的 RDBMS应用软件之一。<code>MySQL</code> 是一种关联数据库管理系统，关联数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。<code>MySQL</code> 所使用的 <code>SQL</code> 语言是用于访问数据库的最常用标准化语言。<code>MySQL</code> 软件采用了双授权政策（本词条“授权政策”），它分为社区版和商业版，由于其体积小、速度快、总体拥有成本低，尤其是开放源码这一特点，一般中小型网站的开发都选择 MySQL 作为网站数据库。由于其社区版的性能卓越，搭配 <code>PHP</code> 和 <code>Apache</code> 可组成良好的开发环境。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/11/MySQL/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MySQL-Liuxing-Database" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/11/MySQL-Liuxing-Database/" class="article-date">
-      <time datetime="2017-11-11T14:55:44.000Z" itemprop="datePublished">2017-11-11</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="WebScaleSQL"><a href="#WebScaleSQL" class="headerlink" title="WebScaleSQL"></a>WebScaleSQL</h3><p>2015年1月20日，<code>Facebook</code>宣布阿里巴巴旗下的阿里云RDS团队正式加入<code>WebScaleSQL</code>。<code>WebScaleSQL</code>是<code>Facebook</code>、 <code>Google</code>、<code>Twitter</code>和<code>Linkedin</code>四家公司的<code>MySQL</code>团队发起的<code>MySQL</code>开源组织，旨在改进<code>MySQL</code>在规模和性能等方面的问题。<code>WebScaleSQL</code>是基于<code>MySQL 5.6</code> 社区版本改编的<code>MySQL</code>通用分支，基于<code>GPL</code>开源协议发布。<code>WebScaleSQL</code>目前已经做了很多性能改进工作，包括：客户端异步协调、逻辑预读、查询限流、服务端线程池优化、InnoDB大页支持等等。由于我们的分支上本身有一些定制化的需求，因此不会直接使用<code>WebScaleSQL</code>分支提供线上服务，但是这些改进对于我们都是很感兴趣的，好的特性会被吸收进来。因为我们有各种各样应用场景的用户，对<code>MySQL</code>本身的要求也比较高。比如大并发连接的用户，就需要线程池；存大量历史数据的用户，就要求高的压缩比等等。通过这可以看出虽然<code>WebScaleSQL</code>诞生时间较晚，但是其维护力量可以说是很强大的，最后用一句话概括：这款数据库就是专门为<code>web</code>服务设计的数据库。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/目前流行的开源RDBMS/">目前流行的开源RDBMS</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/11/MySQL-Liuxing-Database/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MySQL-Guanxi-Database" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/11/MySQL-Guanxi-Database/" class="article-date">
-      <time datetime="2017-11-11T14:53:54.000Z" itemprop="datePublished">2017-11-11</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="RDBMS（关系型数据库管理系统）术语"><a href="#RDBMS（关系型数据库管理系统）术语" class="headerlink" title="RDBMS（关系型数据库管理系统）术语"></a>RDBMS（关系型数据库管理系统）术语</h3><ul>
-<li><code>Database</code>：数据库是一个表的集合，与相关的数据。 </li>
-<li><code>Table</code>： 一个表的数据是一个矩阵。在一个数据库中的表看起来像一个简单的电子表格。 </li>
-<li><code>Column</code>： 一列（数据元素）包含的是同一个样的数据，例如列邮政编码。 </li>
-<li><code>Row</code>： 行（元组，进入或记录）是一组相关的数据，例如一个订阅的数据。 </li>
-<li><code>Redundancy</code>： 存储数据的两倍，冗余，使系统速度更快。 </li>
-<li><code>Primary Key</code>：  主键是唯一的。一个关键值可以在一个表中不能出现两次。使用<code>key</code>我们可以在大多数行找到。 </li>
-<li><code>Foreign Key</code>： 外键是两个表之间的链接杆。 </li>
-<li><code>Compound Key</code>： 复合键（组合键）是一个重要的，由多个列，一列是因为并非十分独特。 </li>
-<li><code>Index</code>：在一个数据库中的索引类似于在一本书的背面的一个索引。 </li>
-<li><code>Referential Integrity</code>：参照完整性可以确保一个外键的值总是指向一个现有的行。</li>
-</ul>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/关系型数据概念/">关系型数据概念</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/11/MySQL-Guanxi-Database/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MySQL-Fanshi" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/11/MySQL-Fanshi/" class="article-date">
-      <time datetime="2017-11-11T14:51:59.000Z" itemprop="datePublished">2017-11-11</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>数据库管理系统：<code>DBMS</code>(<code>Datebase Management System</code>)。是一种操纵和管理数据库的大型软件，用于建立、使用和维护数据库。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计关系数据库的范式基础概念/">设计关系数据库的范式基础概念</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/11/MySQL-Fanshi/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MySQL-Data-Jiegou" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/11/MySQL-Data-Jiegou/" class="article-date">
-      <time datetime="2017-11-11T14:49:21.000Z" itemprop="datePublished">2017-11-11</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="数据结构模型常见的有以下三种："><a href="#数据结构模型常见的有以下三种：" class="headerlink" title="数据结构模型常见的有以下三种："></a>数据结构模型常见的有以下三种：</h3><ul>
-<li>层次模型</li>
-<li>网状模型</li>
-<li>关系模型</li>
-</ul>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构模型/">数据结构模型</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/11/MySQL-Data-Jiegou/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-MySQL-DataBase" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/11/MySQL-DataBase/" class="article-date">
-      <time datetime="2017-11-11T14:45:11.000Z" itemprop="datePublished">2017-11-11</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/11/MySQL-DataBase/">数据库简介</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <center><img src="https://houhaiyun.github.io/img/images/MySQL-DataBase-1.png" title="数据库"></center>
-
-<h3 id="什么是数据库？"><a href="#什么是数据库？" class="headerlink" title="什么是数据库？"></a>什么是数据库？</h3><p><strong>数据库，简单来说可视为电子化的文件柜——存储电子文件的处所，用户可以对文件中的数据运行新增、截取、更新、删除等操作。</strong></p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库简介/">数据库简介</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/11/MySQL-DataBase/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Memcached-Tomcat-Session-Manager" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/09/Memcached-Tomcat-Session-Manager/" class="article-date">
-      <time datetime="2017-11-09T16:33:03.000Z" itemprop="datePublished">2017-11-09</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Memcached-Tomcat-Session-Manager-1.jpg" title="拓扑图"></center>
+<center> 拓扑</center>
 
 <table>
 <thead>
@@ -1027,23 +463,8 @@
 <td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
 <td>应用服务</td>
 </tr>
-<tr>
-<td>Memcached1</td>
-<td>192.168.8.11/24</td>
-<td>CentOS release 6.9 (Final)</td>
-<td>memcached.x86_64 0:1.4.4-5</td>
-<td>缓存服务</td>
-</tr>
-<tr>
-<td>Memcached2</td>
-<td>192.168.8.13/24</td>
-<td>CentOS release 6.9 (Final)</td>
-<td>memcached.x86_64 0:1.4.4-5</td>
-<td>缓存服务</td>
-</tr>
 </tbody>
 </table>
-<p>简单说明下：<code>tomcat1</code>为主要把它的<code>session</code>存储到<code>memcached2</code>上，而<code>memcache2</code>是运行在另一台主机上的（一般情况下，<code>memcached</code>是存<code>tomcat1</code>的<code>session</code>），只有当<code>memcached2</code>不可用时，<code>tomcat1</code>才会把<code>session</code>存在<code>memcached1</code>上，也就是说<code>memcached1</code>是为了<code>tomcat1</code>做故障切换用的节点。这要的话，当<code>machine1</code>挂了的时候，<code>session</code>是不会丢失的。</p>
           
       
     </div>
@@ -1052,18 +473,571 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Memcached/">Memcached</a><a class="article-category-link" href="/categories/Memcached/tomcat-memcached-session-manager共享session/">tomcat + memcached session manager共享session</a>
+    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/Nginx调度Tomcat集群/">Nginx调度Tomcat集群</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Memcached/">Memcached</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/11/09/Memcached-Tomcat-Session-Manager/#more">more >></a>
+          <a href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Tomcat-Keep-Session" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/07/Tomcat-Keep-Session/" class="article-date">
+      <time datetime="2017-11-07T23:51:13.000Z" itemprop="datePublished">2017-11-07</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="一、为什么需要会话保持"><a href="#一、为什么需要会话保持" class="headerlink" title="一、为什么需要会话保持"></a>一、为什么需要会话保持</h3><p>如果我们将后端的Web服务器分为两组，一组是静态内容服务器，一组是动态内容服务器，那么我们再进行反向代理的时候，反向代理服务器通过判断资源文件的后缀名，决定将其调度至后端的那一组服务上。如果我们的后端服务器静态内容和动态内容都分别有多台，那么反向代理服务器还需要对其进行负载均衡，然后觉得资源调度到那一台服务器。那么对于静态内容的服务器，因为静态内容是不会处理会话的，所以在进行负载均衡时我们不用考虑其会话保持。做最简单的和最直接的轮询就好了，如果服务器的性能不一样的话，就做加权轮询即可。当然如果说后端静态服务器的资源大小区别也非常大，那么轮询的方式对负载均衡的方式来讲，效果不是特别明显，那可能需要使用最少连接数的负载均衡方式来处理这类资源情况，最少连接是可以考虑当前连接的服务器的负载情况，能保证结果公平。这是对于静态内容的服务器来说，那么对于动态内容的服务器，因为动态内容涉及到处理会话，我们就需要考虑负载均衡间服务器的会话保持了。会话保持是指在负载均衡器上有一种机制，在作负载均衡的同时，还保证同一用户相关连的访问请求会被分配到同一台服务器上。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/会话保持解决方案/">会话保持解决方案</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/07/Tomcat-Keep-Session/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Tomcat-Session" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/07/Tomcat-Session/" class="article-date">
+      <time datetime="2017-11-07T23:48:45.000Z" itemprop="datePublished">2017-11-07</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="一、什么是会话"><a href="#一、什么是会话" class="headerlink" title="一、什么是会话"></a>一、什么是会话</h3><p> 首先解释一下什么是会话。在计算机术语中，会话是指一个终端用户与交互系统进行通讯的过程，比如从输入账户密码进入操作系统到退出操作系统就是一个会话过程。会话较多用于网络上，TCP的三次握手就创建了一个会话，TCP关闭连接就是关闭会话。用平述的语言可以解释为：你拔打你女友的电话号码，你女友接听，然后一翻“亲爱的”，直到任何一方挂掉电话，这个过程就是一个会话。你挑逗一只小狗，它跟你互动，也是会话；它不鸟你，那就不形成会话。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/HTTP会话原理解释与应用/">HTTP会话原理解释与应用</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/07/Tomcat-Session/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Varnish-Log" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish-Log/" class="article-date">
+      <time datetime="2017-11-06T23:20:38.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish-Log/">Varnish日志</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="Varnishlog"><a href="#Varnishlog" class="headerlink" title="Varnishlog"></a>Varnishlog</h3><p><code>varnishlog</code>：显示原始日志格式信息</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/Varnish日志/">Varnish日志</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish-Log/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Varnish-varnishadm-status" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish-varnishadm-status/" class="article-date">
+      <time datetime="2017-11-06T23:19:09.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="设定后端server为sick"><a href="#设定后端server为sick" class="headerlink" title="设定后端server为sick"></a>设定后端server为sick</h3>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/varnishadm设定后台server状态/">varnishadm设定后台server状态</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish-varnishadm-status/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Varnish-Fuzaijunhen-healthy" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish-Fuzaijunhen-healthy/" class="article-date">
+      <time datetime="2017-11-06T23:17:21.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h3><p>后端定义两个<code>web server</code>，192.168.8.13和192.168.8.11。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/实现后端server负载均衡-健康检测/">实现后端server负载均衡+健康检测</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish-Fuzaijunhen-healthy/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Varnish-Fuzaijunhen-Server" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish-Fuzaijunhen-Server/" class="article-date">
+      <time datetime="2017-11-06T23:15:23.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>后端定义两个<code>web server</code>，192.168.8.13和192.168.8.11。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/实现后端server负载均衡/">实现后端server负载均衡</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish-Fuzaijunhen-Server/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Varnish-Many-Server" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish-Many-Server/" class="article-date">
+      <time datetime="2017-11-06T23:13:05.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="定义多个后端主机"><a href="#定义多个后端主机" class="headerlink" title="定义多个后端主机"></a>定义多个后端主机</h3><h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>后端定义两个<code>web server</code>，192.168.8.13用来存储图片，192.168.8.11用来存储<code>html</code>等文件。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/定义多个后端server/">定义多个后端server</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish-Many-Server/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Varnish-Qingli-Cache" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish-Qingli-Cache/" class="article-date">
+      <time datetime="2017-11-06T23:10:49.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="缓存对象的修剪：purge"><a href="#缓存对象的修剪：purge" class="headerlink" title="缓存对象的修剪：purge"></a>缓存对象的修剪：purge</h3><p>当我们定义某一内容缓存一定的时间例如2小时，那么当此内容更新时恰好时间在2小时之内，那用户访问的就是旧的图片了，如何解决这个问题呢？</p>
+<h3 id="问题如下："><a href="#问题如下：" class="headerlink" title="问题如下："></a>问题如下：</h3><p>设定某一类(例如：图片缓存2小时)内容的缓存时长；</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/Varnish缓存清理/">Varnish缓存清理</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish-Qingli-Cache/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -1085,7 +1059,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
     </nav>
   
 </div>

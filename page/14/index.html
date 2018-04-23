@@ -294,11 +294,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-AIDE" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Linux-User-space" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/09/10/AIDE/" class="article-date">
-      <time datetime="2017-09-10T12:37:26.000Z" itemprop="datePublished">2017-09-10</time>
+      <a href="/2017/07/03/Linux-User-space/" class="article-date">
+      <time datetime="2017-07-03T20:13:50.000Z" itemprop="datePublished">2017-07-03</time>
 </a>
 
 
@@ -313,7 +313,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/10/AIDE/">AIDE</a>
+      <a class="article-title" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a>
     </h1>
   
 
@@ -323,9 +323,9 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="AIDE简介"><a href="#AIDE简介" class="headerlink" title="AIDE简介"></a>AIDE简介</h3><p>当一个入侵者进入了你的系统并且种植了木马，通常会想法来隐蔽这个木马（除了木马自身的一些隐蔽特性外，他会尽量给你检查系统的过程设置障碍），通常入侵者会修改一些文件，比如管理员通常用<code>ps -aux</code>来查看系统进程，那么入侵者很可能用自己经过修改的<code>ps</code>程序来替换掉你系统上的<code>ps</code>程序，以使用ps命令查不到正在运行的木马程序。如果入侵者发现管理员正在运行<code>crontab</code>作业，也有可能替换掉<code>crontab</code>程序等等。所以由此可以看出对于系统文件或是关键文件的检查是很必要的。目前就系统完整性检查的工具用的比较多的有两款： <code>Tripwire</code>和<code>AIDE</code>，前者是一款商业软件，后者是一款免费的但功能也很强大的工具。</p>
-<ul>
-<li><code>AIDE</code>(<code>Advanced Intrusion Detection Environment</code>,高级入侵检测环境)是个入侵检测工具，主要用途是检查文档的完整性。</li>
+              <h3 id="用户空间：-User-space"><a href="#用户空间：-User-space" class="headerlink" title="用户空间： User space"></a>用户空间： User space</h3><ul>
+<li>用户程序的运行空间。为了安全，它们是隔离的，即使用户的程序崩溃了，内核也不受影响</li>
+<li>只能执行简单的运算，不能直接调用系统资源，必须通过系统接口（<code>system call</code>），才能向内核发出指令 </li>
 </ul>
           
       
@@ -335,18 +335,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/安全相关/">安全相关</a>
+    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/用户空间和内核空间/">用户空间和内核空间</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AIDE/">AIDE</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/09/10/AIDE/#more">more >></a>
+          <a href="/2017/07/03/Linux-User-space/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -366,11 +366,11 @@
 
 
   
-    <article id="post-SSH-mianmi" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="title-Linux-time" class="article article-type-title" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/09/08/SSH-mianmi/" class="article-date">
-      <time datetime="2017-09-08T12:57:06.000Z" itemprop="datePublished">2017-09-08</time>
+      <a href="/2017/07/03/Linux-time/" class="article-date">
+      <time datetime="2017-07-03T17:23:38.000Z" itemprop="datePublished">2017-07-03</time>
 </a>
 
 
@@ -385,7 +385,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a>
+      <a class="article-title" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a>
     </h1>
   
 
@@ -395,8 +395,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="what-is-SSH"><a href="#what-is-SSH" class="headerlink" title="what is SSH?"></a>what is SSH?</h3><p>Secure Shell（缩写为SSH），由IETF的网络工作小组（Network Working Group）所制定；SSH为一项创建在应用层和传输层基础上的安全协议，为计算机上的Shell（壳层）提供安全的传输和使用环境。使用Tcp 22端口。</p>
-<p>ssh协议目前有SSH1和SSH2，SSH2协议兼容SSH1。目前实现SSH1和SSH2协议的主要软件有OpenSSH和SSH Communications Security Corporation　公司的SSH Communications 软件。前者是OpenBSD组织开发的一款免费的SSH软件，后者是商业软件，因此在linux、FreeBSD、OpenBSD、NetBSD等免费类UNIX系统种，通畅都使用OpenSSH作为SSH协议的实现软件。</p>
+              <center><img src="https://houhaiyun.github.io/img/images/Linux-time-1.png" title="Linux 发行版时间线"></center>
           
       
     </div>
@@ -405,18 +404,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/SSH/">SSH</a><a class="article-category-link" href="/categories/SSH/SSH命令与ssh免密登陆/">SSH命令与ssh免密登陆</a>
+    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/Linux发行版时间线/">Linux发行版时间线</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssh/">ssh</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/09/08/SSH-mianmi/#more">more >></a>
+          <a href="/2017/07/03/Linux-time/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -436,11 +435,11 @@
 
 
   
-    <article id="post-Openssl" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Linux-open-source" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/09/06/Openssl/" class="article-date">
-      <time datetime="2017-09-06T12:50:28.000Z" itemprop="datePublished">2017-09-06</time>
+      <a href="/2017/07/02/Linux-open-source/" class="article-date">
+      <time datetime="2017-07-02T17:39:21.000Z" itemprop="datePublished">2017-07-02</time>
 </a>
 
 
@@ -455,7 +454,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a>
+      <a class="article-title" href="/2017/07/02/Linux-open-source/">常见开源协议</a>
     </h1>
   
 
@@ -465,10 +464,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h3><h4 id="PKI、CA、X-509"><a href="#PKI、CA、X-509" class="headerlink" title="PKI、CA、X.509"></a>PKI、CA、X.509</h4><p><strong>PKI:</strong> Public Key Infrastructure </p>
-<p><strong>公开密钥基础建设：</strong> 是一组由硬件、软件、参与者、管理政策与流程组成的基础架构，其目的在于创造、管理、分配、使用、存储以及撤销数字证书。</p>
-<p><strong>X.509：</strong> 是由ITU-T为了公开密钥基础建设（PKI）与授权管理基础建设（PMI）提出的产业标准。X.509标准，规范了公开密钥认证、证书吊销列表、授权证书、证书路径验证算法等。</p>
-<p><strong>CA：</strong> 数字证书认证机构(英文全称：Catificate Authority)。主要负责：证书发放、证书更新、证书撤销和证书验证。</p>
+              <center><img src="https://houhaiyun.github.io/img/images/Linux-open-source-2.jpeg" title="Public License"></center>
           
       
     </div>
@@ -477,18 +473,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/安全相关/">安全相关</a><a class="article-category-link" href="/categories/安全相关/Openssl证书请求和自签名/">Openssl证书请求和自签名</a>
+    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/常见开源协议/">常见开源协议</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Openssl/">Openssl</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/09/06/Openssl/#more">more >></a>
+          <a href="/2017/07/02/Linux-open-source/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -508,11 +504,11 @@
 
 
   
-    <article id="post-Linux-IP-Address" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="title-Linux-history" class="article article-type-title" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/09/01/Linux-IP-Address/" class="article-date">
-      <time datetime="2017-09-01T20:27:23.000Z" itemprop="datePublished">2017-09-01</time>
+      <a href="/2017/07/02/Linux-history/" class="article-date">
+      <time datetime="2017-07-02T17:05:33.000Z" itemprop="datePublished">2017-07-02</time>
 </a>
 
 
@@ -527,7 +523,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/01/Linux-IP-Address/">IP地址</a>
+      <a class="article-title" href="/2017/07/02/Linux-history/">Linux 历史?</a>
     </h1>
   
 
@@ -537,444 +533,11 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>互联网协议地址（英语：Internet Protocol Address，又译为网际协议地址），缩写为IP地址（英语：IP Address），是分配给网络上使用网际协议（英语：Internet Protocol, IP）的设备的数字标签。常见的IP地址分为IPv4与IPv6两大类。</p>
-<center><img src="https://houhaiyun.github.io/img/images/Linux-IP-Address-1.jpg" title="IP地址"></center>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/网络/">网络</a><a class="article-category-link" href="/categories/网络/IP地址/">IP地址</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IP地址/">IP地址</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/09/01/Linux-IP-Address/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-JiHuaRenWu-AT" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/08/28/JiHuaRenWu-AT/" class="article-date">
-      <time datetime="2017-08-28T13:04:09.000Z" itemprop="datePublished">2017-08-28</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="at命令简介"><a href="#at命令简介" class="headerlink" title="at命令简介"></a>at命令简介</h3><p><strong>Linux at命令可以让使用者指定在 TIME 这个特定时刻执行某个程序或指令</strong></p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>at [option] TIME</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/at命令/">at命令</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cron/">Cron</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/08/28/JiHuaRenWu-AT/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Linux-shell-script1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/08/25/Linux-shell-script1/" class="article-date">
-      <time datetime="2017-08-25T23:02:03.000Z" itemprop="datePublished">2017-08-25</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="脚本实例一：创建脚本的脚本"><a href="#脚本实例一：创建脚本的脚本" class="headerlink" title="脚本实例一：创建脚本的脚本"></a>脚本实例一：创建脚本的脚本</h3>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Shell脚本/">Shell脚本</a><a class="article-category-link" href="/categories/Shell脚本/脚本实例一/">脚本实例一</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/脚本实例一/">脚本实例一</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/08/25/Linux-shell-script1/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Linux-Shell-bianliang" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/08/20/Linux-Shell-bianliang/" class="article-date">
-      <time datetime="2017-08-20T21:59:11.000Z" itemprop="datePublished">2017-08-20</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <center><img src="https://houhaiyun.github.io/img/images/Linux-Shell-bianliang.jpg" title="Bash"></center>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/shell脚本/">shell脚本</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Shell变量/">Shell变量</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/08/20/Linux-Shell-bianliang/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Linux-Disk-jiegou" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/08/02/Linux-Disk-jiegou/" class="article-date">
-      <time datetime="2017-08-02T15:42:16.000Z" itemprop="datePublished">2017-08-02</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="硬盘盘结构"><a href="#硬盘盘结构" class="headerlink" title="硬盘盘结构"></a>硬盘盘结构</h3><p>硬盘的物理结构一般由磁头与碟片、电动机、主控芯片与排线等部件组成；当主电动机带动碟片旋转时，副电动机带动一组（<strong>磁头</strong>）到相对应的碟片上并确定读取正面还是反面的碟面，磁头悬浮在碟面上画出一个与碟片同心的圆形轨道（<strong>磁轨</strong>或称<strong>柱面</strong>），这时由磁头的磁感线圈感应碟面上的磁性与使用硬盘厂商指定的读取时间或数据间隔定位<strong>扇区</strong>，从而得到该扇区的数据内容；</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机基础知识/">计算机基础知识</a><a class="article-category-link" href="/categories/计算机基础知识/磁盘管理/">磁盘管理</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/08/02/Linux-Disk-jiegou/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Linux-Disk" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/08/01/Linux-Disk/" class="article-date">
-      <time datetime="2017-08-01T11:42:33.000Z" itemprop="datePublished">2017-08-01</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/01/Linux-Disk/">硬盘</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="机械硬盘"><a href="#机械硬盘" class="headerlink" title="机械硬盘"></a>机械硬盘</h3><p>机械硬盘（<code>HDD</code>）：<code>Hard Disk Drive</code>，即是传统普通硬盘，主要由：盘片，磁头，盘片转轴及控制电机，磁头控制器，数据转换器，接口，缓存等几个部分组成。机械硬盘中所有的盘片都装在一个旋转轴上，每张盘片之间是平行的，在每个盘片的存储面上有一个磁头，磁头与盘片之间的距离比头发丝的直径还小，所有的磁头联在一个磁头控制器上，由磁头控制器负责各个磁头的运动。磁头可沿盘片的半径方向运动，加上盘片每分钟几千转的高速旋转，磁头就可以定位在盘片的指定位置上进行数据的读写操作。数据通过磁头由电磁流来改变极性方式被电磁流写到磁盘上，也可以通过相反方式读取。硬盘为精密设备，进入硬盘的空气必须过滤。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机基础知识/">计算机基础知识</a><a class="article-category-link" href="/categories/计算机基础知识/硬盘/">硬盘</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/硬盘/">硬盘</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/08/01/Linux-Disk/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-User-Administration" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/23/User-Administration/" class="article-date">
-      <time datetime="2017-07-23T13:33:40.000Z" itemprop="datePublished">2017-07-23</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/23/User-Administration/">用户组管理相关命令</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="用户和组管理命令"><a href="#用户和组管理命令" class="headerlink" title="用户和组管理命令"></a>用户和组管理命令</h3><p><strong>用户管理命令</strong></p>
-<ul>
-<li>useradd：新增用户</li>
-<li>usermod：修改用户属性</li>
-<li>userdel：删除用户</li>
-<li>查看用户相关ID信息</li>
-<li>切换用户或以其他用户身份执行命令</li>
-<li>设置密码</li>
-<li>修改用户密码策略</li>
-<li>用户相关的其它命令</li>
+              <h3 id="Linux之前的UNIX历史："><a href="#Linux之前的UNIX历史：" class="headerlink" title="Linux之前的UNIX历史："></a><code>Linux</code>之前的<code>UNIX</code>历史：</h3><ul>
+<li>1969年以前伟大的梦想-贝尔实验室 （<code>Bell Labs</code>）通用电气（<code>General Electric</code>）和麻省理工学院（<code>MIT</code>）的<code>Multics</code>系统。</li>
 </ul>
-<p><strong>组帐号维护命令</strong></p>
 <ul>
-<li>groupadd：新增组</li>
-<li>groupmod：修改组属性</li>
-<li>groupdel：删除组</li>
-<li>gpasswd：更改组密码</li>
-<li>newgrp：临时切换主组</li>
-<li>更改和查看组成员</li>
-<li>将用户加入组的几种方法</li>
-<li>多个用户添加到一个组</li>
-</ul>
+<li>1969年<code>Ken Thompson</code>使用汇编语言<code>B</code>语言<code>File Server System</code>。
           
       
     </div>
@@ -983,18 +546,225 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/用户组管理相关命令/">用户组管理相关命令</a>
+    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/Linux历史/">Linux历史</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/用户和组/">用户和组</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux历史/">Linux历史</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/07/23/User-Administration/#more">more >></a>
+          <a href="/2017/07/02/Linux-history/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="title-Linux" class="article article-type-title" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/01/Linux/" class="article-date">
+      <time datetime="2017-07-01T21:44:14.000Z" itemprop="datePublished">2017-07-01</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/01/Linux/">什么Linux？</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="什么是linux？"><a href="#什么是linux？" class="headerlink" title="什么是linux？"></a>什么是linux？</h3><p><code>Linux</code>是一种自由和开放源代码的类<code>UNIX</code>操作系统。目前运用领域最广泛、使用人数最多的操作系统。该操作系统的内核由林纳斯·托瓦兹在1991年10月5日首次发布。在加上用户空间的应用程序之后，成为<code>Linux</code>操作系统。<code>Linux</code>也是自由软件和开放源代码软件发展中最著名的例子。只要遵循<code>GNU</code>通用公共许可证，任何个人和机构都可以自由地使用<code>Linux</code>的所有底层源代码，也可以自由地修改和再发布。大多数<code>Linux</code>系统还包括像提供<code>GUI</code>的<code>X Window</code>之类的程序。除了一部分专家之外，大多数人都是直接使用<code>Linux</code>发行版，而不是自己选择每一样组件或自行设置。<br>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/什么Linux？/">什么Linux？</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/07/01/Linux/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="title-Linux-fengnuoyiman" class="article article-type-title" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/01/Linux-fengnuoyiman/" class="article-date">
+      <time datetime="2017-07-01T20:44:14.000Z" itemprop="datePublished">2017-07-01</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><strong>冯·诺伊曼结构</strong>（英语：<code>von Neumann architecture</code>），也称<strong>冯·诺伊曼模型</strong>（<code>Von Neumann model</code>）或<strong>普林斯顿结构</strong>（<code>Princeton architecture</code>），是一种将程序指令存储器和数据存储器合并在一起的电脑设计概念结构。<br>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机基础知识/">计算机基础知识</a><a class="article-category-link" href="/categories/计算机基础知识/冯-诺依曼体系结构/">冯.诺依曼体系结构</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/07/01/Linux-fengnuoyiman/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Linux-ABI-API" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/01/Linux-ABI-API/" class="article-date">
+      <time datetime="2017-07-01T11:04:21.000Z" itemprop="datePublished">2017-07-01</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/01/Linux-ABI-API/">ABI和API</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="ABI"><a href="#ABI" class="headerlink" title="ABI"></a>ABI</h3><p>应用二进制接口（英语：<code>application binary interface</code>，缩写为 <code>ABI</code>）描述了应用程序（或者其他类型）和操作系统之间或其他应用程序的低级接口。允许编译好的目标代码在使用兼容<code>ABI</code>的系统中无需改动就能运行。<br>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机基础知识/">计算机基础知识</a><a class="article-category-link" href="/categories/计算机基础知识/ABI和API/">ABI和API</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ABI和API/">ABI和API</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/07/01/Linux-ABI-API/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -1016,7 +786,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/13/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/15/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/13/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span>
     </nav>
   
 </div>
