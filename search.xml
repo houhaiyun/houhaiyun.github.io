@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>指令集架构</title>
+      <link href="/2018/04/26/ISA/"/>
+      <url>/2018/04/26/ISA/</url>
+      <content type="html"><![CDATA[<h3 id="指令集架构"><a href="#指令集架构" class="headerlink" title="指令集架构"></a>指令集架构</h3><p>指令集架构（英语：lnstruction Set Architecture，缩写为ISA），又称为指令集或指令集体系，是计算机体系结构中与程序设计有关的部分，包含了基本数据类型，指令集，寄存器，寻址模式，存储体系，中断，异常处理以及外部I/O。指令集架构包含一系列的opcode即操作码（机器语言），以及由特定处理器执行的基本命令。</p><a id="more"></a><h3 id="指令集的分类"><a href="#指令集的分类" class="headerlink" title="指令集的分类"></a>指令集的分类</h3><p><strong>复杂指令集</strong>（英文：Complex Instruction Set Computing；缩写：CISC）是一种微处理器指令集架构，每个指令可执行若干低级操作，诸如从存储器读取、存储、和计算操作，全部集于单一指令之中。与之相对的是精简指令集。</p><p><strong>精简指令集计算</strong>（英语：reduced instruction set computing，缩写：RISC）或简译为精简指令集，是计算机中央处理器的一种设计模式。这种设计思路可以想像成是一家流水线工厂，对指令数目和寻址方式都做了精简，使其实现更容易，指令并行执进程度更好，编译器的效率更高。目前常见的精简指令集微处理器包括DEC Alpha、ARC、ARM、AVR、MIPS、PA-RISC、Power Architecture（包括PowerPC、PowerXCell）和SPARC等。</p><p>复杂指令集计算机包含许多应用程序中很少使用的特定指令，由此产生的缺陷是指令长度不固定。精简指令集计算机通过只执行在程序中经常使用的指令来简化处理器的结构，而特殊操作则以子程序的方式实现，它们的特殊使用通过处理器额外的执行时间来弥补。理论上的重要类型还包括最小指令集计算机与单指令集计算机，但都未用作商业处理器。另外一种派生类型是超长指令字，处理器接受许多经过编码的指令并通过检索提取出一个指令字并执行。</p><h3 id="机器语言"><a href="#机器语言" class="headerlink" title="机器语言"></a>机器语言</h3><p>机器语言是由声明和指令所组成的。再处理结构上，一个特定指令指明了以下几个部分：</p><ul><li>用于算数运算，寻址或者控制功能的特定寄存器；</li><li>特定存储空间的地址或偏移量；</li><li>用于解译操作码的特定寻址模式；</li></ul><p>复杂的操作可以借由将简单的指令合并而达成，可以（在冯.诺依曼体系中）连续的运行，也可以藉控制流来运行指令。</p><h3 id="指令类型"><a href="#指令类型" class="headerlink" title="指令类型"></a>指令类型</h3><p>有效的指令操作须包含：</p><ul><li>数据处理与存储操作<ul><li>将寄存器的值（在中央处理器作为高速缓存的存储空间）设为固定值；</li><li>将数据从存储空间中传送至寄存器，反之亦然。用于将数据取出并执行计算，或者将计算结果予以保存；</li><li>从硬件设备读取或写入数据。</li></ul></li><li>算术逻辑单元<ul><li>对两个存储于寄存器的数字进行add，subtract，multiply，divide,将结果放到一个寄存器内，一个或是更多的状态码可能被设置在状态寄存器中；</li><li>执行位操作，藉对两组数字（为两串的数字，都由零与一构成，分别存储于两个寄存器内）运行逻辑与和逻辑或，或者对寄存器的每一位运行逻辑非操作；</li><li>比较两个寄存器中的数据（例如是大于或者相等）；</li></ul></li><li>控制流<ul><li>分支，跳跃至程序某地址并执行相应指令；</li><li>条件分支，假设某一条件成立，就跳到程序的另一个位置；</li><li>间接分支，在跳到另一个位置之前，将现在所运行的指令的下一个指令的位置存储起来，作为子程序运行完返回的地址；</li></ul></li></ul><h3 id="复杂指令"><a href="#复杂指令" class="headerlink" title="复杂指令"></a>复杂指令</h3><p>一些电脑在他们的指令集架构内包含复杂指令。复杂指令包含：</p><ul><li>将许多寄存器存成堆栈的形式。</li><li>移动存储器内大笔的数据。</li><li>复杂或是浮点数运算（正弦，余弦，平方根等等）</li><li>运行test-and-set指令。</li><li>运行数字存在存储器而非寄存器的运算</li></ul><p>有一种复杂指令单指令流多数据流，英文全名是Single-Instruction Stream Multiple-Data Stream。或是向量指令，这是一种可以在同一时间对多笔数据进行相同运算的操作。SIMD有能力在短时间内将大笔的向量和矩阵计算完成。SIMD指令使并行计算变得简单，各种SIMD指令集被开发出来，例如MMX，3DNow!以及AltiVec。</p><h3 id="指令的组成"><a href="#指令的组成" class="headerlink" title="指令的组成"></a>指令的组成</h3><p>在传统的架构上，一条指令包含opcode，表示运算的方式，以及零个或是更多的运算对象，有些像是运算对象的数字可能指的是寄存器的编号，还有存储器位置，或是文字数据。</p><p>在超长指令字（VLIW）的结构中，包含了许多微指令，借此将复杂的指令分解为简单的指令。</p><h3 id="指令的长度"><a href="#指令的长度" class="headerlink" title="指令的长度"></a>指令的长度</h3><p>指令长度的范围可以说是相当广泛，从微控制器的4 bit，到VLIW系统的数百bit。在个人电脑，大型机，超级电脑内的处理器，其内部的指令长度介于8到64 bits（在x86处理器结构内，最长的指令长达15 bytes，等于120 bits）。在一个指令集架构内，不同的指令可能会有不同长度。在一些结构，特别是大部分的精简指令集（RISC），指令是固定的长度，长度对应到结构内一个字的大小。在其他结构，长度则是byte的整数倍或是一个halfword。</p><h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p>对微处理器而有两种指令集。第一种是复杂指令集（Complex Instruction Set Computer），拥有许多不同的指令。在1970年代，许多机构，像是IBM，发现有许多指令是不需要的。结果就产生了精简指令集（Reduced Instruction Set Computer），它所包含的指令就比较少。精简的指令集可以提供比较高的速度，使处理器的尺寸缩小，以及较少的电力损耗。然而，比较复杂的指令集较容易使工作更完善，存储器及缓存的效率较高，以及较为简单的代码。</p><p>一些指令集保留了一个或多个的opcode，以运行系统调用或软件中断。</p><h3 id="指令集的实现"><a href="#指令集的实现" class="headerlink" title="指令集的实现"></a>指令集的实现</h3><p>在设计处理器内的微架构时，工程师使用藉电路连接的区块来架构，区块用来表示加法器，乘法器，计数器，寄存器，算术逻辑单元等等，寄存器传递语言通常被用来描述被解码的指令，指令是借由微架构来运行指令。 有两种基本的方法来建构控制单元，藉控制单元，以微架构作为通路来运行指令：</p><ol><li>早期的电脑和采用精简指令集的电脑藉将电路接线（像是微架构剩下的部分）。</li><li>其他的设备使用微程序来达成—像是晶体管ROM或PLA（即使RAM已使用很久）。</li></ol><p>电脑微处理器的指令集架构（Instruction Set Architecture）常见的有三种：</p><ul><li>复杂指令集运算（Complex Instruction Set Computing，CISC）<br>目前x86架构微处理器如Intel的Pentium/Celeron/Xeon与AMD的Athlon/Duron/Sempron；以及其64位扩展系统的x86-64架构的Intel 64的Intel Core/Core2/Pentium/Xeon与AMD64的Phenom II/Phenom/Athlon 64/Opteron/Ryzen/EPYC都属于CISC系列。主要针对的操作系统是微软的Windows和苹果公司的OS X。另外Linux，一些UNIX等，都可以运行在x86（CISC）架构的微处理器。</li><li>精简指令集运算（Reduced Instruction Set Computing，RISC）<br>RISC这种指令集运算包括HP的PA-RISC，IBM的PowerPC，Compaq（被并入HP）的Alpha，MIPS公司的MIPS，SUN公司的SPARC，ARM公司的ARM、Cortex等。目前有UNIX，Linux，MacOS以及包括iOS，Android，WindowsPhone，WindowsRT等在内的大多数移动操作系统运行在RISC处理器上。</li><li>显式并发指令运算（Explicitly Parallel Instruction Computing，EPIC）<br>EPIC乃先进的全新指令集运算，只有Intel的IA-64架构的纯64位微处理器的Itanium/Itanium 2。EPIC指令集运算的IA-64架构主要针对的操作系统是微软64位安腾版的Windows XP以及64位安腾版的Windows Server 2003。另外一些64位的Linux，一些64位的UNIX也可以运行IA-64（EPIC）架构。</li><li>超长指令字指令集运算（VLIW）<br>通过将多条指令放入一个指令字，有效的提高了CPU各个计算功能部件的利用效率，提高了程序的性能</li></ul><h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="https://zh.wikipedia.org/wiki/%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%A7%8B" target="_blank" rel="noopener">维基百科：指令集架构https://zh.wikipedia.org/wiki/%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%A7%8B</a></p>]]></content>
+      
+      <categories>
+          
+          <category> 计算机基础知识 </category>
+          
+          <category> 指令集架构 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 计算机基础 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Docker简介</title>
       <link href="/2017/12/23/Docker-Jianjie/"/>
       <url>/2017/12/23/Docker-Jianjie/</url>
