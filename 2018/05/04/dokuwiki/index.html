@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://houhaiyun.github.io/img/images/dokuwiki-3.jpg">
 <meta property="og:image" content="https://houhaiyun.github.io/img/images/dokuwiki-1.gif">
 <meta property="og:image" content="https://houhaiyun.github.io/img/images/dokuwiki-2.gif">
-<meta property="og:updated_time" content="2018-05-04T12:44:50.143Z">
+<meta property="og:updated_time" content="2018-05-04T13:11:04.250Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="开源WIKI：DokuWIKI">
 <meta name="twitter:image" content="https://houhaiyun.github.io/img/images/dokuwiki-3.jpg">
@@ -340,7 +340,27 @@
 <a id="more"></a>
 <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><a href="https://www.dokuwiki.org/" target="_blank" rel="noopener">dokuwiki官网:https://www.dokuwiki.org/</a></p>
 <p>DokuWiki 是一个使用，用途多样的开源 Wiki 软件，并且不需要数据库。它因简洁易读的语法受到用户的喜爱。而容易维护、备份和整合则使它成为管理员的最爱。内置的访问控制列表和认证连接器使 DokuWiki 在企业环境下特别有用，由充满活力的社区贡献的众多插件则令它拥有比传统维基更广阔的应用范围。</p>
-<h3 id="安装dokuwiki"><a href="#安装dokuwiki" class="headerlink" title="安装dokuwiki"></a>安装dokuwiki</h3><h4 id="安装php-fpm、nginx"><a href="#安装php-fpm、nginx" class="headerlink" title="安装php-fpm、nginx"></a>安装php-fpm、nginx</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@dokuwiki ~]# yum install -y  nginx        # 安装nginx</span><br><span class="line"># 安装php72，注意最新版dokuwiki要求php版本不能低于5.4</span><br><span class="line">[root@dokuwiki ~]# yum remove -y php* php-common   </span><br><span class="line">[root@dokuwiki ~]# rpm  -Uvh  https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</span><br><span class="line">[root@dokuwiki ~]# rpm  -Uvh  https://mirror.webtatic.com/yum/el7/webtatic-release.rpm</span><br><span class="line">[root@dokuwiki ~]# yum install -y php72w* --skip-broken php72w-mysqlnd-7.2.1-1.w7.x86_64</span><br></pre></td></tr></table></figure>
+<h3 id="安装dokuwiki"><a href="#安装dokuwiki" class="headerlink" title="安装dokuwiki"></a>安装dokuwiki</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>系统版本</th>
+<th>软件版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nginx</td>
+<td>10.6.168.31/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>php 1.2</td>
+<td>WIKI</td>
+</tr>
+</tbody>
+</table>
+<h4 id="安装php-fpm、nginx"><a href="#安装php-fpm、nginx" class="headerlink" title="安装php-fpm、nginx"></a>安装php-fpm、nginx</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@dokuwiki ~]# yum install -y  nginx        # 安装nginx</span><br><span class="line"># 安装php72，注意最新版dokuwiki要求php版本不能低于5.4</span><br><span class="line">[root@dokuwiki ~]# yum remove -y php* php-common   </span><br><span class="line">[root@dokuwiki ~]# rpm  -Uvh  https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</span><br><span class="line">[root@dokuwiki ~]# rpm  -Uvh  https://mirror.webtatic.com/yum/el7/webtatic-release.rpm</span><br><span class="line">[root@dokuwiki ~]# yum install -y php72w* --skip-broken php72w-mysqlnd-7.2.1-1.w7.x86_64</span><br></pre></td></tr></table></figure>
 <h4 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@dokuwiki ~]# vim /etc/nginx/conf.d/wiki.conf</span><br><span class="line">server &#123;</span><br><span class="line">	listen 80 default_server ;</span><br><span class="line">	server_name wiki.zeforce.cn;</span><br><span class="line">	root /data/dokuwiki;</span><br><span class="line">	index index.html index.php;</span><br><span class="line">	</span><br><span class="line">	location ~ \.php$ &#123;</span><br><span class="line">	root /data/dokuwiki;</span><br><span class="line">	fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">	fastcgi_index index.php;</span><br><span class="line">	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">	include fastcgi_params;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="下载dokuwiki并解压dokuwiki"><a href="#下载dokuwiki并解压dokuwiki" class="headerlink" title="下载dokuwiki并解压dokuwiki"></a>下载dokuwiki并解压dokuwiki</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@dokuwiki ~]# wget https://download.dokuwiki.org/out/dokuwiki-8a269cc015a64b40e4c918699f1e1142.tgz</span><br><span class="line">[root@dokuwiki ~]# mkdir  /data</span><br><span class="line">[root@dokuwiki ~]# tar xf dokuwiki-8a269cc015a64b40e4c918699f1e1142.tgz -C /data</span><br></pre></td></tr></table></figure>
 <h4 id="赋予访问权限"><a href="#赋予访问权限" class="headerlink" title="赋予访问权限"></a>赋予访问权限</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@dokuwiki ~]# chown -R apache.apache /data/</span><br><span class="line">[root@dokuwiki ~]# chmod 777 -R /data       # 测试环境授权777，在生产环境可不要这么做！</span><br></pre></td></tr></table></figure>
@@ -360,7 +380,7 @@
         <p><span>本文标题:</span><a href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
         <p><span>发布时间:</span>2018-05-04, 12:37:02</p>
-        <p><span>最后更新:</span>2018-05-04, 12:44:50</p>
+        <p><span>最后更新:</span>2018-05-04, 13:11:04</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/05/04/dokuwiki/" title="开源WIKI：DokuWIKI">https://houhaiyun.github.io/2018/05/04/dokuwiki/</a>
             <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2018/05/04/dokuwiki/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -390,7 +410,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装dokuwiki"><span class="toc-number">2.</span> <span class="toc-text">安装dokuwiki</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装php-fpm、nginx"><span class="toc-number">2.1.</span> <span class="toc-text">安装php-fpm、nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改nginx配置文件"><span class="toc-number">2.2.</span> <span class="toc-text">修改nginx配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下载dokuwiki并解压dokuwiki"><span class="toc-number">2.3.</span> <span class="toc-text">下载dokuwiki并解压dokuwiki</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#赋予访问权限"><span class="toc-number">2.4.</span> <span class="toc-text">赋予访问权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#启动nginx、php-fpm，并配置默认页面，访问测试"><span class="toc-number">2.5.</span> <span class="toc-text">启动nginx、php-fpm，并配置默认页面，访问测试</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装dokuwiki"><span class="toc-number">2.</span> <span class="toc-text">安装dokuwiki</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#环境"><span class="toc-number">2.1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装php-fpm、nginx"><span class="toc-number">2.2.</span> <span class="toc-text">安装php-fpm、nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改nginx配置文件"><span class="toc-number">2.3.</span> <span class="toc-text">修改nginx配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下载dokuwiki并解压dokuwiki"><span class="toc-number">2.4.</span> <span class="toc-text">下载dokuwiki并解压dokuwiki</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#赋予访问权限"><span class="toc-number">2.5.</span> <span class="toc-text">赋予访问权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#启动nginx、php-fpm，并配置默认页面，访问测试"><span class="toc-number">2.6.</span> <span class="toc-text">启动nginx、php-fpm，并配置默认页面，访问测试</span></a></li></ol></li></ol>
         
     </div>
     <style>
