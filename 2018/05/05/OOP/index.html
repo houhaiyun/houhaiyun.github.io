@@ -15,23 +15,17 @@
 
 
 
-<meta name="description" content="概述触发器是“评估”由项目采集的数据并表示当前系统状况的逻辑表达式。 当监控项用于采集系统的数据时，始终遵循这些数据是非常不切合实际的，因为这些数据始终在等待一个令人担忧或者值得关注的状态。然而这个“评估”数据的工作可以留给触发器表达式。 触发器表达式允许定义一个什么状况的数据是“可接受”的阈值。因此，如果接收的数据超过了可接受的状态，则触发器会被触发 - 或将状态更改为PROBLEM.">
-<meta name="keywords" content="Zabbix">
+<meta name="keywords" content="Python基础">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Zabbix：配置触发器trigger">
-<meta property="og:url" content="https://houhaiyun.github.io/2017/11/23/Zabbix-Tirigger-Peizhi/index.html">
+<meta property="og:title" content="面向对象程序设计">
+<meta property="og:url" content="https://houhaiyun.github.io/2018/05/05/OOP/index.html">
 <meta property="og:site_name" content="houhaiyun">
-<meta property="og:description" content="概述触发器是“评估”由项目采集的数据并表示当前系统状况的逻辑表达式。 当监控项用于采集系统的数据时，始终遵循这些数据是非常不切合实际的，因为这些数据始终在等待一个令人担忧或者值得关注的状态。然而这个“评估”数据的工作可以留给触发器表达式。 触发器表达式允许定义一个什么状况的数据是“可接受”的阈值。因此，如果接收的数据超过了可接受的状态，则触发器会被触发 - 或将状态更改为PROBLEM.">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-1.jpg">
-<meta property="og:image" content="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-2.jpg">
-<meta property="og:image" content="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-3.jpg">
-<meta property="og:image" content="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-4.jpg">
-<meta property="og:updated_time" content="2018-04-23T13:24:56.196Z">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/OOP-1.jpg">
+<meta property="og:updated_time" content="2018-05-05T07:50:29.023Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Zabbix：配置触发器trigger">
-<meta name="twitter:description" content="概述触发器是“评估”由项目采集的数据并表示当前系统状况的逻辑表达式。 当监控项用于采集系统的数据时，始终遵循这些数据是非常不切合实际的，因为这些数据始终在等待一个令人担忧或者值得关注的状态。然而这个“评估”数据的工作可以留给触发器表达式。 触发器表达式允许定义一个什么状况的数据是“可接受”的阈值。因此，如果接收的数据超过了可接受的状态，则触发器会被触发 - 或将状态更改为PROBLEM.">
-<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-1.jpg">
+<meta name="twitter:title" content="面向对象程序设计">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/OOP-1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -61,7 +55,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Zabbix：配置触发器trigger | houhaiyun</title>
+<title>面向对象程序设计 | houhaiyun</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -294,11 +288,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Zabbix-Tirigger-Peizhi" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-OOP" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/23/Zabbix-Tirigger-Peizhi/" class="article-date">
-      <time datetime="2017-11-23T23:22:41.000Z" itemprop="datePublished">2017-11-23</time>
+      <a href="/2018/05/05/OOP/" class="article-date">
+      <time datetime="2018-05-05T07:49:37.000Z" itemprop="datePublished">2018-05-05</time>
 </a>
 
 
@@ -313,7 +307,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Zabbix：配置触发器trigger
+      面向对象程序设计
     </h1>
   
 
@@ -322,13 +316,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/配置触发器trigger/">配置触发器trigger</a>
+    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/面向对象程序设计/">面向对象程序设计</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -338,52 +332,39 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>触发器是“评估”由项目采集的数据并表示当前系统状况的逻辑表达式。</p>
-<p>当监控项用于采集系统的数据时，始终遵循这些数据是非常不切合实际的，因为这些数据始终在等待一个令人担忧或者值得关注的状态。然而这个“评估”数据的工作可以留给触发器表达式。</p>
-<p>触发器表达式允许定义一个什么状况的数据是“可接受”的阈值。因此，如果接收的数据超过了可接受的状态，则触发器会被触发 - 或将状态更改为<code>PROBLEM</code>.</p>
+        <center><img src="https://houhaiyun.github.io/img/images/OOP-1.jpg" title="面向对象程序设计"></center>
+
 <a id="more"></a>
-<p>一个触发器可以拥有下面几种状态：</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OK</td>
-<td>这是一个正常的触发器状态，在旧版本的Zabbix中称为FALSE。</td>
-</tr>
-<tr>
-<td>PROBLEM</td>
-<td>通常意味着触发了某些事情。例如，处理器的负载较高。在旧版本的Zabbix中称为TRUE。</td>
-</tr>
-</tbody>
-</table>
-<p>每当<code>Zabbix server</code>接收到作为表达式一部分的新值时，都会重新计算触发器状态（表达式）。</p>
-<p>如果在表达式中使用基于时间的函数(<code>nodata()</code>, <code>date()</code>, <code>dayofmonth()</code>, <code>dayofweek()</code>, <code>time()</code>, <code>now()</code>)，触发器就会由<code>Zabbix timer</code>进程每30秒重新计算一次。如果在表达式中同时使用基于时间和非基于时间的函数，当接收到一个新值和每隔30秒都会重新计算触发器的状态。</p>
-<h3 id="配置一个触发器"><a href="#配置一个触发器" class="headerlink" title="配置一个触发器"></a>配置一个触发器</h3><p>配置一个触发器，请执行以下操作：</p>
-<ul>
-<li>点击上方菜单栏的<code>Configuration</code> → <code>Hosts</code></li>
-<li>在<code>Host</code>那一行点击<code>Triggers</code></li>
-<li>在右上角点击<code>Create Trigger</code>（或者在触发器名称上编辑一个现有的触发器）</li>
-<li>在打开的页面输入触发器的参数</li>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>面向对象程序设计（英语：Object-oriented programming，缩写：OOP）是种具有对象概念的程序编程典范，同时也是一种程序开发的抽象方针。它可能包含数据、属性、代码与方法。对象则指的是类的实例。它将对象作为程序的基本单元，将程序和数据封装其中，以提高软件的重用性、灵活性和扩展性，对象里的程序可以访问及经常修改对象相关连的数据。在面向对象程序编程里，计算机程序会被设计成彼此相关的对象。</p>
+<p>面向过程的程序设计把计算机程序视为一系列的命令集合，即一组函数的顺序执行。为了简化程序设计，面向过程把函数继续切分为子函数，即把大块函数通过切割成小块函数来降低系统的复杂度。</p>
+<p>而面向对象的程序设计把计算机程序视为一组对象的集合，而每个对象都可以接收其他对象发过来的消息，并处理这些消息，计算机程序的执行就是一系列消息在各个对象之间传递。</p>
+<h3 id="面向对象技术简介"><a href="#面向对象技术简介" class="headerlink" title="面向对象技术简介"></a>面向对象技术简介</h3><ul>
+<li><strong>类(Class):</strong> 用来描述具有相同的属性和方法的对象的集合。它定义了该集合中每个对象所共有的属性和方法。对象是类的实例。</li>
+<li><strong>类变量：</strong> 类变量在整个实例化的对象中是公用的。类变量定义在类中且在函数体之外。类变量通常不作为实例变量使用。</li>
+<li><strong>数据成员：</strong> 类变量或者实例变量, 用于处理类及其实例对象的相关的数据。</li>
+<li><strong>方法重写：</strong> 如果从父类继承的方法不能满足子类的需求，可以对其进行改写，这个过程叫方法的覆盖（override），也称为方法的重写。</li>
+<li><strong>实例变量：</strong> 定义在方法中的变量，只作用于当前实例的类。</li>
+<li><strong>继承：</strong> 即一个派生类（derived class）继承基类（base class）的字段和方法。继承也允许把一个派生类的对象作为一个基类对象对待。例如，有这样一个设计：一个Dog类型的对象派生自Animal类，这是模拟”是一个（is-a）”关系（例图，Dog是一个Animal）。</li>
+<li><strong>实例化：</strong> 创建一个类的实例，类的具体对象。</li>
+<li><strong>方法：</strong> 类中定义的函数。</li>
+<li><strong>对象：</strong> 通过类定义的数据结构实例。对象包括两个数据成员（类变量和实例变量）和方法。</li>
 </ul>
-<h4 id="点击上方菜单栏的Configuration-→-Hosts-并在Host那一行点击Triggers"><a href="#点击上方菜单栏的Configuration-→-Hosts-并在Host那一行点击Triggers" class="headerlink" title="点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers"></a>点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-1.jpg" title="点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers"></center>
-
-<h4 id="在右上角点击Create-Trigger"><a href="#在右上角点击Create-Trigger" class="headerlink" title="在右上角点击Create Trigger"></a>在右上角点击Create Trigger</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-2.jpg" title="在右上角点击Create Trigger"></center>
-
-<h4 id="在打开的页面输入触发器的参数"><a href="#在打开的页面输入触发器的参数" class="headerlink" title="在打开的页面输入触发器的参数"></a>在打开的页面输入触发器的参数</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-3.jpg" title="在打开的页面输入触发器的参数"></center>
-
-<p><code>Trigger</code>标签页包含了所有必需的触发器属性。</p>
-<h4 id="依赖关系标签"><a href="#依赖关系标签" class="headerlink" title="依赖关系标签"></a>依赖关系标签</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Tirigger-Peizhi-4.jpg" title="依赖关系标签"></center>
-
-<p>依赖关系标签页包含触发器的所有依赖关系。</p>
-<p>点击<code>Add</code>来添加一个新的依赖关系。</p>
-<blockquote>
-<p>你也可以打开一个现有的触发器，点击Clone按钮，以一个不同的名称保存为新的触发器。</p>
-</blockquote>
+<h3 id="简单理解"><a href="#简单理解" class="headerlink" title="简单理解"></a>简单理解</h3><pre><code>给你一个任务，你要思考怎么做。
+如果你的思维方式是：我先做什么，再做什么……这叫面向过程；
+如果思维方式是：我先做一个什么东西来做这件事，再做一个什么东西来做那件事，然后它们怎么相互配合……这叫面向对象。
+</code></pre><p><a href="https://www.zhihu.com/question/31021366" target="_blank" rel="noopener">此内容来自知乎: 什么是面向对象编程思想？</a></p>
+<h3 id="面向对象三大特性"><a href="#面向对象三大特性" class="headerlink" title="面向对象三大特性"></a>面向对象三大特性</h3><p>面向对象是相对于面向过程而言的。面向过程语言是一种基于<strong>功能分析</strong>的、以<strong>算法</strong>为中心的程序设计方法；而面向对象是一种基于<strong>结构分析</strong>的、以<strong>数据</strong>为中心的程序设计思想。早在面向过程语言时代，有一句话说：程序=算法+数据结构。而现在在面向对象语言时代，这句话变为：程序= 对象+消息。对象：万物皆对象； 消息：指对象之间的相互通信。在面向对象语言中有一个有很重要东西，叫做类。从面向过程的角度看，类就是一个特殊的数据结构，它就好像是我们C语言中的结构体;从面向对象的角度看，类就是具有相同属性和方法的对象的集合。</p>
+<p><strong>面向对象有三大特性：封装、继承、多态。</strong></p>
+<p><strong>所谓封装</strong>,就是指隐藏对象的实现细节，给外界提供公共的方法来访问。这一点，我个人认为和面向过程语言有本质的区别。在C语言中，我们必须在乎每一个实现细节，去关注每一个过程； 而自从从在面向对象语言中提出了封装这个概念后，我们就可以不必要去关心每一个对象的实现细节，  我们只要关注我们所要实现的功能就行，然后根据给我们提供好的接口，我们去面向接口编程就行了。面向对象的封装思想，我认为应用的最好、最成功的地方，就是在微软的.NET技术上.微软把很多经常用到的功能都封装在一个控件里，作为我们用户不必去在意到底这个控件是用什么实现的，它内部到底是怎么样的？我们只需要关心我们需要实现的功能就行， 然后根据控件给我们提供的属性和方法去操作这些控件，实现我们想要的功能就行了。</p>
+<p><strong>面向对象第二个特征，继承。</strong> 我认为面向对象的继承和生物学的继承很相似。子类可以继承父类的公共属性和方法，子类永远没法继承到父类的私有属性和方法。这一点还区别于生物学的继承，生物学中子类可以同时继承父亲和母亲。但是在java|C#|C++等面向对象语言中，是不允许多重继承的，但可以多层继承。为了弥补不能多重继承这点，在java和c#语言中都提出了接口这一概念。<strong>接口就是一种规范</strong>。它同样不会有实现细节，而只是给那些要实现这个接口的类一个规范和约束，约束那些实现这些接口的类，要实现我提供的功能，就必须实现我的所有方法， 要不你就声明为抽象类。</p>
+<p><strong>面向对象第三大特征，多态。</strong>多态，就是同一个实现接口，对不同的实例而执行不同的操作。这一点，我记得在上高中生物的时候学过遗传学，我觉得这里的多态就是遗传学的变异。  同一个物种的后代由于基因突变或自然环境等影响，而造成不同的个体差异。而我们这里的多态也一样，同属一个基类的不同派生类也可以有自己不同于其他类的属性和方法。除了这封装、继承、多态这三点基本特征外，面向对象还有一个很重要的概念，叫<strong>抽象</strong>。抽象就是把提取事物的本质东西，而忽视非本质的东西。对应于抽象这一概念，java和c#中都有一个类叫做抽象类。抽象类中可以给出方法的实现细节，同接口一样如果你要实现我这个抽象类就必须实现我的所有方法，要不你就声明你为抽象类。如果不允许抽象类中有方法的实现细节，这就变成了接口。</p>
+<p>   总之，面向对象就是万物皆对象，把客观事物当成一个对象来处理的程序设计思想。是一种区别于POP、SOA、面向组件</p>
+<p>​    等其他程序设计思想，是一种基于结构分析的，以数据为中心的程序设计思想。</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><strong>本文所有内容都来自以下站点中：</strong></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1" target="_blank" rel="noopener">维基百科: 面向对象程序设计</a></p>
+<p><a href="http://www.runoob.com/python/python-object.html" target="_blank" rel="noopener">RUNOOB.COM：Python面向对象</a></p>
+<p><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868200385680e8cf932dba9433ea367de9aba2b4784000" target="_blank" rel="noopener">廖雪峰的官方网站：面向对象编程</a></p>
+<p><a href="https://my.oschina.net/shaw1688/blog/601142" target="_blank" rel="noopener">开源中国：谈谈你对面向对象的理解</a></p>
 
       
     </div>
@@ -392,13 +373,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></p>
+        <p><span>本文标题:</span><a href="/2018/05/05/OOP/">面向对象程序设计</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
-        <p><span>发布时间:</span>2017-11-23, 23:22:41</p>
-        <p><span>最后更新:</span>2018-04-23, 13:24:56</p>
+        <p><span>发布时间:</span>2018-05-05, 07:49:37</p>
+        <p><span>最后更新:</span>2018-05-05, 07:50:29</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/11/23/Zabbix-Tirigger-Peizhi/" title="Zabbix：配置触发器trigger">https://houhaiyun.github.io/2017/11/23/Zabbix-Tirigger-Peizhi/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/11/23/Zabbix-Tirigger-Peizhi/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/05/05/OOP/" title="面向对象程序设计">https://houhaiyun.github.io/2018/05/05/OOP/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2018/05/05/OOP/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -410,16 +391,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/11/23/Zabbix-Tirigger-Dependencies/">
-                    Zabbix：触发器trigger依赖关系Dependencies
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">
-                    Zabbix：监控项item中自定义key
+                <a href="/2018/05/05/Python/">
+                    Python简介
                 </a>
             </div>
         
@@ -431,7 +406,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置一个触发器"><span class="toc-number">2.</span> <span class="toc-text">配置一个触发器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#点击上方菜单栏的Configuration-→-Hosts-并在Host那一行点击Triggers"><span class="toc-number">2.1.</span> <span class="toc-text">点击上方菜单栏的Configuration → Hosts 并在Host那一行点击Triggers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在右上角点击Create-Trigger"><span class="toc-number">2.2.</span> <span class="toc-text">在右上角点击Create Trigger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在打开的页面输入触发器的参数"><span class="toc-number">2.3.</span> <span class="toc-text">在打开的页面输入触发器的参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖关系标签"><span class="toc-number">2.4.</span> <span class="toc-text">依赖关系标签</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#面向对象技术简介"><span class="toc-number">2.</span> <span class="toc-text">面向对象技术简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简单理解"><span class="toc-number">3.</span> <span class="toc-text">简单理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#面向对象三大特性"><span class="toc-number">4.</span> <span class="toc-text">面向对象三大特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">5.</span> <span class="toc-text">致谢</span></a></li></ol>
         
     </div>
     <style>
@@ -467,7 +442,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Zabbix：配置触发器trigger　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"面向对象程序设计　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -507,15 +482,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/11/23/Zabbix-Tirigger-Dependencies/" title="上一篇: Zabbix：触发器trigger依赖关系Dependencies">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/" title="下一篇: Zabbix：监控项item中自定义key">
+            <a href="/2018/05/05/Python/" title="下一篇: Python简介">
                 <i class="fa fa-angle-right"></i>
             </a>
         
