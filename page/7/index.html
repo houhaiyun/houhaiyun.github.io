@@ -294,6 +294,110 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Tomcat-Httpd-ajp-Diaodu-Tomcat" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/" class="article-date">
+      <time datetime="2017-11-07T23:58:52.000Z" itemprop="datePublished">2017-11-07</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Httpd-ajp-Diaodu-Tomcat-1.jpg" title="拓扑图"></center><br><center> 拓扑</center>
+
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>系统版本</th>
+<th>软件版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Httpd</td>
+<td>192.168.8.17/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>httpd.x86_64 0:2.4.6-45</td>
+<td>反向代理</td>
+</tr>
+<tr>
+<td>Tomcat1</td>
+<td>192.168.8.12/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Tomcat2</td>
+<td>192.168.8.15/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+</tbody>
+</table>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/Httpd基于ajp协议调度Tomcat集群/">Httpd基于ajp协议调度Tomcat集群</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Tomcat-Httpd-http-Diaodu-Tomcat" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -968,76 +1072,6 @@
       
         <p class="article-more-link">
           <a href="/2017/11/06/Varnish-Many-Server/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Varnish-Qingli-Cache" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/06/Varnish-Qingli-Cache/" class="article-date">
-      <time datetime="2017-11-06T23:10:49.000Z" itemprop="datePublished">2017-11-06</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="缓存对象的修剪：purge"><a href="#缓存对象的修剪：purge" class="headerlink" title="缓存对象的修剪：purge"></a>缓存对象的修剪：purge</h3><p>当我们定义某一内容缓存一定的时间例如2小时，那么当此内容更新时恰好时间在2小时之内，那用户访问的就是旧的图片了，如何解决这个问题呢？</p>
-<h3 id="问题如下："><a href="#问题如下：" class="headerlink" title="问题如下："></a>问题如下：</h3><p>设定某一类(例如：图片缓存2小时)内容的缓存时长；</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/Varnish缓存清理/">Varnish缓存清理</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/06/Varnish-Qingli-Cache/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
