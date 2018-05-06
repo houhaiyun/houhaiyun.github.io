@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>Python 之 注释</title>
+      <link href="/2018/05/06/Python-Notes/"/>
+      <url>/2018/05/06/Python-Notes/</url>
+      <content type="html"><![CDATA[<center><img src="https://houhaiyun.github.io/img/images/Python-Notes.png" title="Python注释"></center><a id="more"></a><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>在大多数的编程语言中，注释都是一项很有用的功能。</p><p>Python中的注释有单行注释和多行注释。</p><h3 id="单行注释"><a href="#单行注释" class="headerlink" title="单行注释"></a>单行注释</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 这是注释</span><br><span class="line">print(&quot;hello world&quot;)</span><br></pre></td></tr></table></figure><h3 id="多行注释"><a href="#多行注释" class="headerlink" title="多行注释"></a>多行注释</h3><p>多行注释用三个单引号 <code>&#39;&#39;&#39;</code>或者三个双引号 <code>&quot;&quot;&quot;</code> 将注释括起来，例如:</p><p><strong>1. 单引号</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python3</span><br><span class="line">&apos;&apos;&apos;</span><br><span class="line">多行注释，使用三个单引号</span><br><span class="line">多行注释，使用三个单引号</span><br><span class="line">多行注释，使用三个单引号</span><br><span class="line">&apos;&apos;&apos;</span><br><span class="line">print(&quot;hello world&quot;)</span><br></pre></td></tr></table></figure><p><strong>1. 双引号</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python3</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">多行注释，使用三个双引号</span><br><span class="line">多行注释，使用三个双引号</span><br><span class="line">多行注释，使用三个双引号</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">print(&quot;hello world&quot;)</span><br></pre></td></tr></table></figure>]]></content>
+      
+      <categories>
+          
+          <category> Python基础 </category>
+          
+          <category> Python 之 注释 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Python基础 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Python常用数据类型-数字</title>
       <link href="/2018/05/06/Python-data-type-digital/"/>
       <url>/2018/05/06/Python-data-type-digital/</url>
