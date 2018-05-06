@@ -15,23 +15,17 @@
 
 
 
-<meta name="description" content="环境准备     服务 IP 系统版本 软件版本 功能     Httpd 192.168.8.17/24 CentOS Linux release 7.3.1611 (Core) httpd.x86_64 0:2.4.6-45 反向代理   Tomcat1 192.168.8.12/24 CentOS Linux release 7.3.1611 (Core) tomcat-7.0.69(jav">
-<meta name="keywords" content="Tomcat">
+<meta name="keywords" content="Python基础">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实现httpd会话绑定">
-<meta property="og:url" content="https://houhaiyun.github.io/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/index.html">
+<meta property="og:title" content="Python常用数据类型-数字">
+<meta property="og:url" content="https://houhaiyun.github.io/2018/05/06/Python-data-type-digital/index.html">
 <meta property="og:site_name" content="houhaiyun">
-<meta property="og:description" content="环境准备     服务 IP 系统版本 软件版本 功能     Httpd 192.168.8.17/24 CentOS Linux release 7.3.1611 (Core) httpd.x86_64 0:2.4.6-45 反向代理   Tomcat1 192.168.8.12/24 CentOS Linux release 7.3.1611 (Core) tomcat-7.0.69(jav">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-1.jpg">
-<meta property="og:image" content="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-2.gif">
-<meta property="og:image" content="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-3.gif">
-<meta property="og:image" content="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-4.gif">
-<meta property="og:updated_time" content="2018-04-23T10:29:25.702Z">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Python-data-type-digital.png">
+<meta property="og:updated_time" content="2018-05-06T07:46:24.804Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="实现httpd会话绑定">
-<meta name="twitter:description" content="环境准备     服务 IP 系统版本 软件版本 功能     Httpd 192.168.8.17/24 CentOS Linux release 7.3.1611 (Core) httpd.x86_64 0:2.4.6-45 反向代理   Tomcat1 192.168.8.12/24 CentOS Linux release 7.3.1611 (Core) tomcat-7.0.69(jav">
-<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-1.jpg">
+<meta name="twitter:title" content="Python常用数据类型-数字">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Python-data-type-digital.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -61,7 +55,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>实现httpd会话绑定 | houhaiyun</title>
+<title>Python常用数据类型-数字 | houhaiyun</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -294,11 +288,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Tomcat-Httpd-session-Bangding-Tomcat" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Python-data-type-digital" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/" class="article-date">
-      <time datetime="2017-11-08T00:00:58.000Z" itemprop="datePublished">2017-11-08</time>
+      <a href="/2018/05/06/Python-data-type-digital/" class="article-date">
+      <time datetime="2018-05-06T07:44:52.000Z" itemprop="datePublished">2018-05-06</time>
 </a>
 
 
@@ -313,7 +307,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      实现httpd会话绑定
+      Python常用数据类型-数字
     </h1>
   
 
@@ -322,13 +316,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/实现httpd会话绑定/">实现httpd会话绑定</a>
+    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python常用数据类型-数字/">Python常用数据类型-数字</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -338,61 +332,21 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-1.jpg" title="拓扑图"></center>
+        <center><img src="https://houhaiyun.github.io/img/images/Python-data-type-digital.png" title="Python常用数据类型-数字"></center>
 
-<table>
-<thead>
-<tr>
-<th>服务</th>
-<th>IP</th>
-<th>系统版本</th>
-<th>软件版本</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Httpd</td>
-<td>192.168.8.17/24</td>
-<td>CentOS Linux release 7.3.1611 (Core)</td>
-<td>httpd.x86_64 0:2.4.6-45</td>
-<td>反向代理</td>
-</tr>
-<tr>
-<td>Tomcat1</td>
-<td>192.168.8.12/24</td>
-<td>CentOS Linux release 7.3.1611 (Core)</td>
-<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
-<td>应用服务</td>
-</tr>
-<tr>
-<td>Tomcat2</td>
-<td>192.168.8.15/24</td>
-<td>CentOS Linux release 7.3.1611 (Core)</td>
-<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
-<td>应用服务</td>
-</tr>
-</tbody>
-</table>
 <a id="more"></a>
-<h4 id="1-修改主机名，并写入hosts文件"><a href="#1-修改主机名，并写入hosts文件" class="headerlink" title="1. 修改主机名，并写入hosts文件"></a>1. 修改主机名，并写入hosts文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"># 修改Httpd server 主机名；</span><br><span class="line">[root@centos6 ~]# hostname Httpd.haiyun.com &amp;&amp; exec bash</span><br><span class="line">[root@Httpd ~]# </span><br><span class="line">[root@Httpd ~]# vim /etc/hosts      # 写入/etc/hosts文件；</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 Httpd.haiyun.com</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.8.11 Httpd.haiyun.com </span><br><span class="line">192.168.8.12 Tomcat1.haiyun.com</span><br><span class="line">192.168.8.15 Tomcat2.haiyun.com</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 修改Tomccat1 server 主机名；</span><br><span class="line">[root@centos7 ~]# hostname Tomcat1.haiyun.com &amp;&amp; exec bash</span><br><span class="line">[root@Tomcat1 ~]# </span><br><span class="line">[root@Tomcat1 ~]# vim /etc/hosts        # 写入/etc/hosts文件；</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 Tomcat1.haiyun.com</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.8.11 Httpd.haiyun.com </span><br><span class="line">192.168.8.12 Tomcat1.haiyun.com</span><br><span class="line">192.168.8.15 Tomcat2.haiyun.com</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 修改Tomccat2 server 主机名；</span><br><span class="line">[root@centos7 ~]# hostname Tomcat2.haiyun.com &amp;&amp; exec bash</span><br><span class="line">[root@Tomcat2 ~]# </span><br><span class="line">[root@Tomcat2 ~]# vim /etc/hosts            # 写入/etc/hosts文件；</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 Tomcat2.haiyun.com</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.8.11 Httpd.haiyun.com </span><br><span class="line">192.168.8.12 Tomcat1.haiyun.com</span><br><span class="line">192.168.8.15 Tomcat2.haiyun.com</span><br><span class="line"></span><br><span class="line">[root@Httpd ~]# ping -c 1 Httpd.haiyun.com          # 测试是否能够解析成功，ok；</span><br><span class="line">PING localhost (127.0.0.1) 56(84) bytes of data.</span><br><span class="line">64 bytes from localhost (127.0.0.1): icmp_seq=1 ttl=64 time=0.010 ms</span><br><span class="line"></span><br><span class="line">--- localhost ping statistics ---</span><br><span class="line">1 packets transmitted, 1 received, 0% packet loss, time 0ms</span><br><span class="line">rtt min/avg/max/mdev = 0.010/0.010/0.010/0.000 ms</span><br><span class="line">[root@Httpd ~]# ping -c 1 Tomcat1.haiyun.com</span><br><span class="line">PING Tomcat1.haiyun.com (192.168.8.12) 56(84) bytes of data.</span><br><span class="line">64 bytes from Tomcat1.haiyun.com (192.168.8.12): icmp_seq=1 ttl=64 time=1.83 ms</span><br><span class="line"></span><br><span class="line">--- Tomcat1.haiyun.com ping statistics ---</span><br><span class="line">1 packets transmitted, 1 received, 0% packet loss, time 2ms</span><br><span class="line">rtt min/avg/max/mdev = 1.835/1.835/1.835/0.000 ms</span><br><span class="line">[root@Httpd ~]# ping -c 1 Tomcat2.haiyun.com</span><br><span class="line">PING Tomcat2.haiyun.com (192.168.8.15) 56(84) bytes of data.</span><br><span class="line">64 bytes from Tomcat2.haiyun.com (192.168.8.15): icmp_seq=1 ttl=64 time=1.94 ms</span><br><span class="line"></span><br><span class="line">--- Tomcat2.haiyun.com ping statistics ---</span><br><span class="line">1 packets transmitted, 1 received, 0% packet loss, time 2ms</span><br><span class="line">rtt min/avg/max/mdev = 1.940/1.940/1.940/0.000 ms</span><br></pre></td></tr></table></figure>
-<h4 id="2-同步所有server的时间"><a href="#2-同步所有server的时间" class="headerlink" title="2. 同步所有server的时间"></a>2. 同步所有server的时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Httpd server</span><br><span class="line">[root@Httpd ~]# ntpdate 172.18.0.1</span><br><span class="line"> 7 Nov 16:32:36 ntpdate[11037]: adjust time server 172.18.0.1 offset -0.000054 sec</span><br><span class="line">[root@Httpd ~]# date</span><br><span class="line">Tue Nov  7 16:32:47 CST 2017</span><br><span class="line"></span><br><span class="line"># Tomcat1 server</span><br><span class="line">[root@Tomcat1 ~]# ntpdate 172.18.0.1</span><br><span class="line"> 7 Nov 16:32:42 ntpdate[3153]: adjust time server 172.18.0.1 offset 0.000261 sec</span><br><span class="line">[root@Tomcat1 ~]# date</span><br><span class="line">Tue Nov  7 16:32:47 CST 2017</span><br><span class="line"></span><br><span class="line"># Tomcat2 server</span><br><span class="line">[root@Tomcat2 ~]# ntpdate 172.18.0.1</span><br><span class="line"> 7 Nov 16:32:42 ntpdate[11255]: adjust time server 172.18.0.1 offset 0.332502 sec</span><br><span class="line">[root@Tomcat2 ~]# date</span><br><span class="line">Tue Nov  7 16:32:47 CST 2017</span><br></pre></td></tr></table></figure>
-<h3 id="为两台后端server安装Tomcat软件"><a href="#为两台后端server安装Tomcat软件" class="headerlink" title="为两台后端server安装Tomcat软件"></a>为两台后端server安装Tomcat软件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Tomcat1配置</span><br><span class="line">[root@Tomcat1 ~]# yum -y install java-1.8.0-openjdk-devel tomcat tomcat-admin-webapps tomcat-docs-webapp tomcat-webapps</span><br><span class="line"></span><br><span class="line"># Tomcat2配置</span><br><span class="line">[root@Tomcat2 ~]# yum -y install java-1.8.0-openjdk-devel tomcat tomcat-admin-webapps tomcat-docs-webapp tomcat-webapps</span><br></pre></td></tr></table></figure>
-<h3 id="为两台Tomcat设置默认访问主页"><a href="#为两台Tomcat设置默认访问主页" class="headerlink" title="为两台Tomcat设置默认访问主页"></a>为两台Tomcat设置默认访问主页</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"># Tomcat1配置</span><br><span class="line">[root@Tomcat1 ~]# mkdir -pv /usr/share/tomcat/webapps/myapp/WEB-INF</span><br><span class="line">mkdir: created directory ‘/usr/share/tomcat/webapps/myapp’</span><br><span class="line">mkdir: created directory ‘/usr/share/tomcat/webapps/myapp/WEB-INF’</span><br><span class="line">[root@Tomcat1 ~]# vim /usr/share/tomcat/webapps/myapp/index.jsp     # 创建默认主页；</span><br><span class="line">&lt;%@ page language=&quot;java&quot; %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;&lt;title&gt;Tomcat1&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        &lt;h1&gt;&lt;font color=&quot;red&quot;&gt;Tomcat1.ihaiyun.cc&lt;/font&gt;&lt;/h1&gt;</span><br><span class="line">        &lt;table align=&quot;centre&quot; border=&quot;1&quot;&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;td&gt;Session ID&lt;/td&gt;</span><br><span class="line">            &lt;% session.setAttribute(&quot;ihaiyun.cc&quot;,&quot;magedu.com&quot;); %&gt;</span><br><span class="line">                &lt;td&gt;&lt;%= session.getId() %&gt;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;td&gt;Created on&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;&lt;%= session.getCreationTime() %&gt;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">[root@Tomcat1 ~]# systemctl start tomcat.service        # 启动Tomcat服务；</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Tomcat2配置</span><br><span class="line">[root@Tomcat2 ~]# mkdir -pv /usr/share/tomcat/webapps/myapp/WEB-INF</span><br><span class="line">mkdir: created directory ‘/usr/share/tomcat/webapps/myapp’</span><br><span class="line">mkdir: created directory ‘/usr/share/tomcat/webapps/myapp/WEB-INF’</span><br><span class="line">[root@Tomcat2 ~]# vim /usr/share/tomcat/webapps/myapp/index.jsp     # 创建默认主页；</span><br><span class="line">&lt;%@ page language=&quot;java&quot; %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;&lt;title&gt;Tomcat2&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        &lt;h1&gt;&lt;font color=&quot;blue&quot;&gt;Tomcat2.ihaiyun.cc&lt;/font&gt;&lt;/h1&gt;</span><br><span class="line">        &lt;table align=&quot;centre&quot; border=&quot;1&quot;&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;td&gt;Session ID&lt;/td&gt;</span><br><span class="line">            &lt;% session.setAttribute(&quot;ihaiyun.cc&quot;,&quot;magedu.com&quot;); %&gt;</span><br><span class="line">                &lt;td&gt;&lt;%= session.getId() %&gt;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;td&gt;Created on&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;&lt;%= session.getCreationTime() %&gt;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">[root@Tomcat2 ~]# systemctl start tomcat.service        # 启动Tomcat服务；</span><br></pre></td></tr></table></figure>
-<h4 id="访问测试"><a href="#访问测试" class="headerlink" title="访问测试"></a>访问测试</h4><p><strong>注意：</strong><code>Tomcat1</code>为红色，<code>Tomcat2</code>为蓝色。</p>
-<center><img src="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-2.gif" title="访问测试"></center>
-
-
-<h3 id="安装Httpd并配置调度"><a href="#安装Httpd并配置调度" class="headerlink" title="安装Httpd并配置调度"></a>安装Httpd并配置调度</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[root@Httpd ~]# yum -y install httpd        # 安装httpd；</span><br><span class="line">[root@Httpd ~]# vim /etc/httpd/conf.d/httpd.conf            # 添加配置文件；</span><br><span class="line">[root@Httpd ~]# vim /etc/httpd/conf.d/httpd.conf </span><br><span class="line"></span><br><span class="line">Header add Set-Cookie &quot;ROUTEID=.%&#123;BALANCER_WORKER_ROUTE&#125;e; path=/&quot; env=BALANCER_ROUTE_CHANGED&lt;proxy         # 添加自定义ROUTEID；  </span><br><span class="line">&lt;proxy balancer://tcsrvs&gt;</span><br><span class="line">    BalancerMember http://192.168.8.12:8080 route=tomcat1       # 指定192.168.8.12的Id为tomcat1；</span><br><span class="line">    BalancerMember http://192.168.8.15:8080 route=tomcat2       # 指定192.168.8.15的Id为tomcat2；</span><br><span class="line">    ProxySet lbmethod=byrequests</span><br><span class="line">    ProxySet stickysession=ROUTEID              # 设置会话根据ROUTEID进行调度；</span><br><span class="line">&lt;/Proxy&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    ServerName httpd.ihaiyun.cc</span><br><span class="line">    ProxyVia On</span><br><span class="line">    ProxyRequests Off</span><br><span class="line">    ProxyPreserveHost On</span><br><span class="line">    &lt;Proxy *&gt;</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Proxy&gt;</span><br><span class="line">    ProxyPass / balancer://tcsrvs/</span><br><span class="line">    ProxyPassReverse / balancer://tcsrvs/</span><br><span class="line">    &lt;Location /&gt;</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Location&gt;</span><br><span class="line">    &lt;Location /balancer-manager&gt;</span><br><span class="line">        SetHandler balancer-manager</span><br><span class="line">        ProxyPass !</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Location&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">[root@Httpd ~]# systemctl reload httpd.service          # 重新加载服务；</span><br></pre></td></tr></table></figure>
-<h3 id="访问测试-1"><a href="#访问测试-1" class="headerlink" title="访问测试"></a>访问测试</h3><p>现在命令行测试。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[root@Httpd ~]# for i in &#123;1..4&#125;; do elinks -dump http://192.168.8.17/myapp/ ; done      # 已经实现会话绑定，都被调度到tomcat2了；</span><br><span class="line">[root@Httpd ~]# for i in &#123;1..4&#125;; do elinks -dump http://192.168.8.17/myapp/ ; done</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | DE99E41C8C2529CA7737F3DDA555A6B3 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510064889270                    |</span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | E1C95CC4B1BFAB9A75BD2947F23C0BA9 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510064889312                    |</span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | 7DA80B52F0719216FBB9A8E691BC3C22 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510064889352                    |</span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | D94A56F7A62CFBEDCB71443891917825 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510064889393                    |</span><br><span class="line">   +-----------------------------------------------+</span><br></pre></td></tr></table></figure>
-<center><img src="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-3.gif" title="访问测试"></center>
-
-
-<h3 id="基于ajp协议实现会话绑定"><a href="#基于ajp协议实现会话绑定" class="headerlink" title="基于ajp协议实现会话绑定"></a>基于ajp协议实现会话绑定</h3><p>环境就按上面搭建好的环境。</p>
-<h3 id="修改httpd配置文件"><a href="#修改httpd配置文件" class="headerlink" title="修改httpd配置文件"></a>修改httpd配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@Httpd ~]# vim /etc/httpd/conf.d/httpd.conf </span><br><span class="line">Header add Set-Cookie &quot;ROUTEID=.%&#123;BALANCER_WORKER_ROUTE&#125;e; path=/&quot; env=BALANCER_ROUTE_CHANGED&lt;proxy balancer://tcsrvs&gt;</span><br><span class="line">    BalancerMember ajp://192.168.8.12:8009 route=tomcat1        # 已经修改为ajp协议，且端口也变为8009；</span><br><span class="line">    BalancerMember ajp://192.168.8.15:8009 route=tomcat2</span><br><span class="line">    ProxySet lbmethod=byrequests</span><br><span class="line">    ProxySet stickysession=ROUTEID</span><br><span class="line">&lt;/Proxy&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    ServerName ajpd.ihaiyun.cc</span><br><span class="line">    ProxyVia On</span><br><span class="line">    ProxyRequests Off</span><br><span class="line">    ProxyPreserveHost On</span><br><span class="line">    &lt;Proxy *&gt;</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Proxy&gt;</span><br><span class="line">    ProxyPass / balancer://tcsrvs/</span><br><span class="line">    ProxyPassReverse / balancer://tcsrvs/</span><br><span class="line">    &lt;Location /&gt;</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Location&gt;</span><br><span class="line">    &lt;Location /balancer-manager&gt;</span><br><span class="line">        SetHandler balancer-manager</span><br><span class="line">        ProxyPass !</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Location&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">[root@Httpd ~]# systemctl reload httpd      # 重新加载服务；</span><br></pre></td></tr></table></figure>
-<h3 id="访问测试-2"><a href="#访问测试-2" class="headerlink" title="访问测试"></a>访问测试</h3><p>在命令行中访问<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@Httpd ~]# for i in &#123;1..4&#125;; do elinks -dump http://192.168.8.17/myapp/ ; done      # 全部调度到tomcat2，ok；</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | 22F9390B8F3D48D1462F8F86B880CD03 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510065461064                    |</span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | 04467F2925B69BE21FD5F87D5C956C42 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510065461105                    |</span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | 96A245A1732FCA0594A9019530F89173 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510065461142                    |</span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">                               Tomcat2.ihaiyun.cc</span><br><span class="line"></span><br><span class="line">   +-----------------------------------------------+</span><br><span class="line">   | Session ID | E23E51B0AE529E3F08B3407C320DC272 |</span><br><span class="line">   |------------+----------------------------------|</span><br><span class="line">   | Created on | 1510065461183                    |</span><br><span class="line">   +-----------------------------------------------+</span><br></pre></td></tr></table></figure></p>
-<center>在浏览器测试，ok</center><br><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-4.gif" title="访问测试"></center>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>数字数据类型用于存储数值。</p>
+<h3 id="整数"><a href="#整数" class="headerlink" title="整数"></a>整数</h3><p>在Python中，可对整数执行加(+)、减(-)、乘(*)、除(/) 运算，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; 1 + 2 </span><br><span class="line">3</span><br><span class="line">&gt;&gt;&gt; 3 - 1</span><br><span class="line">2</span><br><span class="line">&gt;&gt;&gt; 2 * 3</span><br><span class="line">6</span><br><span class="line">&gt;&gt;&gt; 9 / 3</span><br><span class="line">3.0</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; 2 ** 3      # **代表乘方运算</span><br><span class="line">8</span><br></pre></td></tr></table></figure>
+<p>在Python中还支持运算次序，因此你可以在同一个表达式中使用多种运算。你还可以使用括号来修改运算次序，让Python按你指定的次序执行运算，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; 3 + 3*3 </span><br><span class="line">12</span><br><span class="line">&gt;&gt;&gt; (3+1) * 5</span><br><span class="line">20</span><br></pre></td></tr></table></figure>
+<p>在这些示例中，空格不影响Python计算表达式的方式，它们的存在旨在让你阅读代码时，能够确定先执行那些运算。</p>
+<h3 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h3><p>Python将带小数点的数字都称为浮点数。</p>
+<p>你只需要输入要使用的数字，Python通常都会按照你期望的方式处理它们。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; 0.2 + 0.3</span><br><span class="line">0.5</span><br><span class="line">&gt;&gt;&gt; 0.2 * 0.3</span><br><span class="line">0.06</span><br></pre></td></tr></table></figure>
+<p>但需要注意的是，结果包含的小数位可能是不确定的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; 0.2 + 0.1</span><br><span class="line">0.30000000000000004</span><br><span class="line">&gt;&gt;&gt; 0.3 - 0.1</span><br><span class="line">0.19999999999999998</span><br><span class="line">&gt;&gt;&gt; 3 * 0.1</span><br><span class="line">0.30000000000000004</span><br></pre></td></tr></table></figure>
+<p>所有语言都存在这种问题，没有什么可担心的。Python会尽力找到一种方式，以尽可能精确地表示结果，但鉴于计算机内部表示数字的方式，这在有些情况下很难。就现在而言，暂时忽略多余的小数位即可。</p>
 
       
     </div>
@@ -401,13 +355,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></p>
+        <p><span>本文标题:</span><a href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
-        <p><span>发布时间:</span>2017-11-08, 00:00:58</p>
-        <p><span>最后更新:</span>2018-04-23, 10:29:25</p>
+        <p><span>发布时间:</span>2018-05-06, 07:44:52</p>
+        <p><span>最后更新:</span>2018-05-06, 07:46:24</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/" title="实现httpd会话绑定">https://houhaiyun.github.io/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/05/06/Python-data-type-digital/" title="Python常用数据类型-数字">https://houhaiyun.github.io/2018/05/06/Python-data-type-digital/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2018/05/06/Python-data-type-digital/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -419,16 +373,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/11/08/Tomcat-Session-Jiqun/">
-                    搭建Tomcat会话集群
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">
-                    Httpd基于ajp协议调度Tomcat集群
+                <a href="/2018/05/06/Python-data-type-string/">
+                    Python常用数据类型-字符串
                 </a>
             </div>
         
@@ -440,7 +388,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-修改主机名，并写入hosts文件"><span class="toc-number">1.1.</span> <span class="toc-text">1. 修改主机名，并写入hosts文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-同步所有server的时间"><span class="toc-number">1.2.</span> <span class="toc-text">2. 同步所有server的时间</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为两台后端server安装Tomcat软件"><span class="toc-number">2.</span> <span class="toc-text">为两台后端server安装Tomcat软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为两台Tomcat设置默认访问主页"><span class="toc-number">3.</span> <span class="toc-text">为两台Tomcat设置默认访问主页</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#访问测试"><span class="toc-number">3.1.</span> <span class="toc-text">访问测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Httpd并配置调度"><span class="toc-number">4.</span> <span class="toc-text">安装Httpd并配置调度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#访问测试-1"><span class="toc-number">5.</span> <span class="toc-text">访问测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于ajp协议实现会话绑定"><span class="toc-number">6.</span> <span class="toc-text">基于ajp协议实现会话绑定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改httpd配置文件"><span class="toc-number">7.</span> <span class="toc-text">修改httpd配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#访问测试-2"><span class="toc-number">8.</span> <span class="toc-text">访问测试</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#整数"><span class="toc-number">2.</span> <span class="toc-text">整数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浮点数"><span class="toc-number">3.</span> <span class="toc-text">浮点数</span></a></li></ol>
         
     </div>
     <style>
@@ -476,7 +424,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"实现httpd会话绑定　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"Python常用数据类型-数字　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -516,15 +464,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/11/08/Tomcat-Session-Jiqun/" title="上一篇: 搭建Tomcat会话集群">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/" title="下一篇: Httpd基于ajp协议调度Tomcat集群">
+            <a href="/2018/05/06/Python-data-type-string/" title="下一篇: Python常用数据类型-字符串">
                 <i class="fa fa-angle-right"></i>
             </a>
         
