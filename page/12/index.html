@@ -294,6 +294,77 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Nginx-ngx-http-headers-module" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/27/Nginx-ngx-http-headers-module/" class="article-date">
+      <time datetime="2017-10-27T23:32:39.000Z" itemprop="datePublished">2017-10-27</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>该<code>ngx_http_headers_module</code>模块允许将<code>“Expires”和“Cache-Control”</code>头字段以及任意字段添加到响应头。</p>
+<p>向由代理服务器响应给客户端的响应报文添加自定义首部，或修改指定首部的值</p>
+<h3 id="add-header-name-value-always"><a href="#add-header-name-value-always" class="headerlink" title="add_header name value [always];"></a>add_header name value [always];</h3><p><strong>官网帮助</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	add_header name value [always];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, location, if in location</span><br></pre></td></tr></table></figure></p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/模块-ngx-http-headers-module/">模块 ngx_http_headers_module</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/27/Nginx-ngx-http-headers-module/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Nginx-ngx-http-proxy-module" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -929,78 +1000,9 @@
 
 
   
-    <article id="post-Nginx-configure2" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/25/Nginx-configure2/" class="article-date">
-      <time datetime="2017-10-25T17:39:43.000Z" itemprop="datePublished">2017-10-25</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="http协议相关的配置结构"><a href="#http协议相关的配置结构" class="headerlink" title="http协议相关的配置结构"></a>http协议相关的配置结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    ...</span><br><span class="line">    ... 各server的公共配置</span><br><span class="line">    server &#123; 每个server用于定义一个虚拟主机</span><br><span class="line">        ...</span><br><span class="line">        &#125;</span><br><span class="line">    server &#123;</span><br><span class="line">        ...</span><br><span class="line">        server_name 虚拟主机名</span><br><span class="line">        root 主目录</span><br><span class="line">        alias 路径别名</span><br><span class="line">        location [OPERATOR] URL &#123; 指定URL的特性</span><br><span class="line">            ...</span><br><span class="line">            if CONDITION &#123;</span><br><span class="line">            ...</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/Nginx配置文件/">Nginx配置文件</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/25/Nginx-configure2/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/11/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/13/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/11/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/13/">Next &raquo;</a>
     </nav>
   
 </div>
