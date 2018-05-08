@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>What Is Open vSwitch</title>
+      <link href="/2018/05/08/OVS/"/>
+      <url>/2018/05/08/OVS/</url>
+      <content type="html"><![CDATA[<center><img src="https://houhaiyun.github.io/img/images/OVS-1.png" title="Open vSwitch"></center><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><a href="http://www.openvswitch.org/" target="_blank" rel="noopener">官网：www.openvswitch.org</a></p><p><a href="http://docs.openvswitch.org" target="_blank" rel="noopener">官网文档：docs.openvswitch.org</a></p><p>Open vSwitch是一种多层软件开关，以开源Apache 2许可证授权。我们的目标是实施一个支持标准管理界面的生产质量转换平台，并打开转发功能以实现程序化扩展和控制。</p><p>Open vSwitch非常适合在VM环境中充当虚拟交换机。除了向虚拟网络层公开标准控制和可见性接口之外，它还设计用于支持跨多个物理服务器进行分发。Open vSwitch支持多种基于Linux的虚拟化技术，包括Xen/XenServer，KVM和VIrtualBox。</p><p>大部分代码都是用独立于平台的C语言编写的，可以轻松移植到其他环境中。Open vSwitch的当前版本支持以下功能：</p><ul><li>具有中继和接入端口的标准802.1Q VLAN模型</li><li>在上游交换机上使用或不使用LACP的NIC绑定</li><li>NetFlow，sFlow（R）和镜像以提高可视性</li><li>QoS（服务质量）配置，加上监管</li><li>Geneve，GRE，VXLAN，STT和LISP隧道</li><li>802.1ag连接故障管理</li><li>OpenFlow 1.0加上许多扩展</li><li>具有C和Python绑定的事务配置数据库</li><li>使用Linux内核模块进行高性能转发</li></ul><p>包含的Linux内核模块支持Linux 3.10及更高的版本。</p><p>Open vSwitch也可以完全在用户空间中运行，无需内核模块的帮助。这个空间实现应该比基于内核的交换机更容易移植。用户空间中的OVS可以访问Linux或DPDK设备。注意打开带有用户空间数据路径和非DPDF设备的vSwitch被认为是实验性的，并且性能成本较高。</p><h3 id="这里有什么？"><a href="#这里有什么？" class="headerlink" title="这里有什么？"></a>这里有什么？</h3><p>这种分配的主要组成部分是：</p><ul><li>ovs-vswitchd，一个实现交换机的守护进程，以及一个用于基于流的交换的配套Linux内核模块。</li><li>ovsdb-server，一种轻量级数据库服务器，用于ovs-vswitchd查询以获取其配置。</li><li>ovs-dpctl，一款用于配置交换机内核模块的工具。</li><li>用于为Citrix XenServer和Red Hat Enterprise Linux构建RPM的脚本和规范。XenServer RPM允许将Open vSwitch安装在Citrix XenServer主机上，作为其交换机的直接替代品，并具有其他功能。</li><li>ovs-vsctl，用于查询和更新ovs-vswitchd配置的实用程序。</li><li>ovs-appctl，一种将命令发送到运行Open vSwitch守护程序的实用程序。</li></ul><p>Open vSwitch还提供了一些工具：</p><ul><li>ovs-ofctl，用于查询和控制OpenFlow交换机和控制器的实用工具。</li><li>ovs-pki，一种用于创建和管理公钥基础设施的工具</li></ul>]]></content>
+      
+      <categories>
+          
+          <category> SDN </category>
+          
+          <category> What Is Open vSwitch </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SDN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Python常用数据类型-元组</title>
       <link href="/2018/05/07/Python-tuple/"/>
       <url>/2018/05/07/Python-tuple/</url>
