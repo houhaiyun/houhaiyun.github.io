@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="houhaiyun" />
+
+
+
+<meta name="keywords" content="Python基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python基础 之 if语句">
+<meta property="og:url" content="https://houhaiyun.github.io/2018/05/10/Python-if/index.html">
+<meta property="og:site_name" content="houhaiyun">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Python-if.png">
+<meta property="og:updated_time" content="2018-05-10T14:07:38.235Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python基础 之 if语句">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Python-if.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Python基础 之 if语句 | houhaiyun</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">houhaiyun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" href="/about" title="微信"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABI和API/">ABI和API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIDE/">AIDE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ansible/">Ansible</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CMDB/">CMDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cron/">Cron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GUI和CLI/">GUI和CLI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Haproxy/">Haproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP地址/">IP地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JIRA/">JIRA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KeepAlived/">KeepAlived</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LVS/">LVS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Shell/">Linux Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux历史/">Linux历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Memcached/">Memcached</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Open-vSwitch/">Open vSwitch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Openssl/">Openssl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python基础/">Python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDN/">SDN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell变量/">Shell变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/">Tomcat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Varnish/">Varnish</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vsftp/">Vsftp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WIKI/">WIKI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zabbix/">Zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell脚本实例/">shell脚本实例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库基础/">数据库基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户和组/">用户和组</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬盘/">硬盘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/磁盘管理/">磁盘管理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计算机基础/">计算机基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/重定向和管道/">重定向和管道</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">houhaiyun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">houhaiyun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">天行健，君子以自强不息。地势坤，君子以厚德载物。</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="https://www.jianshu.com/u/25dafc9770db" title="简书"></a>
+                            
+                                <a class="fa SegmentFault" target="_blank" href="https://segmentfault.com/u/haiyun_59d7611bbffff" title="SegmentFault"></a>
+                            
+                                <a class="fa CSDN" target="_blank" href="https://blog.csdn.net/hai__yun" title="CSDN"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=580338780" title="网易云音乐"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                                <a class="fa 微信" target="_blank" href="/about" title="微信"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Python-if" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/05/10/Python-if/" class="article-date">
+      <time datetime="2018-05-10T14:05:22.000Z" itemprop="datePublished">2018-05-10</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python基础 之 if语句
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python基础-之-if语句/">Python基础 之 if语句</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <center><img src="https://houhaiyun.github.io/img/images/Python-if.png" title="Python基础 之 if语句"></center>
+
+<a id="more"></a>
+<h3 id="if语句示例"><a href="#if语句示例" class="headerlink" title="if语句示例"></a>if语句示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">languages = [&quot;python&quot;,&quot;java&quot;,&quot;c&quot;,&quot;c++&quot;,&quot;php&quot;,&quot;perl&quot;]</span><br><span class="line"></span><br><span class="line">for i in languages:</span><br><span class="line">    if i == &apos;python&apos;:</span><br><span class="line">        print(i.upper())</span><br><span class="line">    else:</span><br><span class="line">        print(i.title())</span><br><span class="line"></span><br><span class="line"># 运行后结果</span><br><span class="line">PYTHON</span><br><span class="line">Java</span><br><span class="line">C</span><br><span class="line">C++</span><br><span class="line">Php</span><br><span class="line">Perl</span><br></pre></td></tr></table></figure>
+<h3 id="条件测试"><a href="#条件测试" class="headerlink" title="条件测试"></a>条件测试</h3><p>每条if语句的核心都是一个值为True或False的表达式，这种表达式被称为条件测试。Python根据条件测试的值为True还是False来决定是否执行if语句中的代码。如果条件测试的值为True，Python就执行紧跟在if语句后面的代码；如果为False，Python就忽略这些代码。</p>
+<h4 id="检查是否相等"><a href="#检查是否相等" class="headerlink" title="检查是否相等"></a>检查是否相等</h4><p>大多数测试条件都将一个变量的当前值同特定值进行比较。最简单的条件测试检查变量的值是否与特定的值相等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; car = &apos;bmw&apos;</span><br><span class="line">&gt;&gt;&gt; car == &apos;bmw&apos;</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<p>在这个示例中，两边的值相等，因此Python返回True</p>
+<p>如果变量car的值不是’bmw’，上述测试将返回False</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; car = &apos;audi&apos;</span><br><span class="line">&gt;&gt;&gt; car == &apos;bmw&apos;</span><br><span class="line">False</span><br></pre></td></tr></table></figure>
+<h4 id="检查是否相等时不考虑大小写"><a href="#检查是否相等时不考虑大小写" class="headerlink" title="检查是否相等时不考虑大小写"></a>检查是否相等时不考虑大小写</h4><p>在Python中检查是否相等时区分大小写，例如，两个大小写不同的值会被视为不相等：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; car = &apos;audi&apos;</span><br><span class="line">&gt;&gt;&gt; car == &apos;Audi&apos;</span><br><span class="line">False</span><br></pre></td></tr></table></figure>
+<p>如果大小写很重要，这种行为有其优点。但如果大小写无关紧要，而只是想检查变量的值，可将变量的值转换为小写，在进行比较：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; car = &apos;Audi&apos;</span><br><span class="line">&gt;&gt;&gt; car.lower() == &apos;audi&apos;</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<h4 id="检查是否不相等"><a href="#检查是否不相等" class="headerlink" title="检查是否不相等"></a>检查是否不相等</h4><p>要判断两个值是否不等，可结合使用惊叹号和等号(!=)，其中的惊叹号表示不，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var1 = &apos;test1&apos;</span><br><span class="line"></span><br><span class="line">if var1 != &apos;test&apos;:</span><br><span class="line">    print(var1)</span><br></pre></td></tr></table></figure>
+<h4 id="比较数字"><a href="#比较数字" class="headerlink" title="比较数字"></a>比较数字</h4><p>检查数字非常简单，例如，下面的的代码检查一个人是否是18岁：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; age = 18</span><br><span class="line">&gt;&gt;&gt; age == 18</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<p>你还可以检查两个数字是否不等，例如，下面的代码在提供的答案不正确时打印一条消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">answer = 22</span><br><span class="line"></span><br><span class="line">if answer != 12:</span><br><span class="line">    print(&quot;answer != 12&quot;)</span><br><span class="line"></span><br><span class="line"># 代码执行结果：</span><br><span class="line">answer != 12</span><br></pre></td></tr></table></figure>
+<p>条件语句中可包含各种数字比较，如小于、小于等于、大于、大于等于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; age = 19 </span><br><span class="line">&gt;&gt;&gt; age &lt; 22</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; age &gt; 22</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt; age &gt;= 19</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; age &lt;= 23</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<h4 id="检查多个条件"><a href="#检查多个条件" class="headerlink" title="检查多个条件"></a>检查多个条件</h4><p>你可能想同时检查多个条件，例如，有时候你需要在两个条件都为True时才能执行相应的操作，而有时你只要求一个条件为True时就执行相应的操作。在这些情况下，关键字and和or可助你一臂之力。</p>
+<h5 id="1-使用and检查多个条件"><a href="#1-使用and检查多个条件" class="headerlink" title="1. 使用and检查多个条件"></a>1. 使用and检查多个条件</h5><p>要检查是否两个条件都为True，可使用关键字and将两个条件测试合二为一；如果每个测试都通过了，整个表达式就为True；如果至少有一个没有通过，整个表达式就为False。</p>
+<p>例如，要检查是否两个人都不小于21岁，可使用下面的测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; age_0 = 22</span><br><span class="line">&gt;&gt;&gt; age_1 = 12</span><br><span class="line">&gt;&gt;&gt; age_0 &gt;= 22 and age_1 &gt;=22</span><br><span class="line">False</span><br></pre></td></tr></table></figure>
+<p>为改善可读性，可将每个测试都分别放在一对括号内，但并非必须这样做。如果你使用括号，测试将类似于下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; age_0 = 22</span><br><span class="line">&gt;&gt;&gt; age_1 = 12</span><br><span class="line">&gt;&gt;&gt; (age_0 &gt;= 22) and (age_1 &gt;= 22)</span><br><span class="line">False</span><br></pre></td></tr></table></figure>
+<h5 id="2-使用or检查多个条件"><a href="#2-使用or检查多个条件" class="headerlink" title="2. 使用or检查多个条件"></a>2. 使用or检查多个条件</h5><p>关键字or也能够让你检查多个条件，但只要至少有一个条件满足，就能通过整个测试。仅当两个测试都没有通过时，使用or的表达式才为False：</p>
+<p>下面再次检查两个人的年龄，但检查的条件是至少有一个人不小于22：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; age_1 = 12</span><br><span class="line">&gt;&gt;&gt; age_0 = 22</span><br><span class="line">&gt;&gt;&gt; (age_0 &gt;= 22) or (age_1 &gt;= 22)</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<h4 id="检查特定值是否包含在列表中"><a href="#检查特定值是否包含在列表中" class="headerlink" title="检查特定值是否包含在列表中"></a>检查特定值是否包含在列表中</h4><p>有时候，执行操作前必须检查列表是否包含特定的值。例如，结束用户的注册过程前，可能需要检查他提供的用户名是否已包含在用户名列表中。在地图程序中，可能需要检查用户提交的位置是否包含在已知位置列表中。</p>
+<p>要判断特定的值是否已经包含在列表中，可使用关键字in。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; languages = [&quot;python&quot;,&quot;java&quot;,&quot;c&quot;,&quot;c++&quot;,&quot;php&quot;,&quot;perl&quot;]</span><br><span class="line">&gt;&gt;&gt; &apos;c&apos; in languages</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; &apos;asdf&apos; in languages</span><br><span class="line">False</span><br></pre></td></tr></table></figure>
+<h4 id="检查特定的值是否不包含在列表中"><a href="#检查特定的值是否不包含在列表中" class="headerlink" title="检查特定的值是否不包含在列表中"></a>检查特定的值是否不包含在列表中</h4><p>还有些时候，确定特定的值未包含在列表中很重要；在这种情况下，可使用关键字not in。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; languages = [&quot;python&quot;,&quot;java&quot;,&quot;c&quot;,&quot;c++&quot;,&quot;php&quot;,&quot;perl&quot;]</span><br><span class="line">&gt;&gt;&gt; &apos;asdfasdf&apos; not in languages</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; &apos;c&apos; not in languages</span><br><span class="line">False</span><br></pre></td></tr></table></figure>
+<h4 id="布尔表达式"><a href="#布尔表达式" class="headerlink" title="布尔表达式"></a>布尔表达式</h4><p>随着你对编程的了解越来越深入，将遇到术语布尔表达式，它不过是条件测试的别名。与条件表达式一样，布尔表达式的结果要么为True，要么为False。</p>
+<p>布尔值通常用于记录条件，如游戏是否正在运行，或用户是否可以编辑网站的特定内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; game_active = True</span><br><span class="line">&gt;&gt;&gt; can_edit = False</span><br></pre></td></tr></table></figure>
+<p>在跟踪程序状态或程序中重要的条件方面，布尔值提供了一种高效的方式。</p>
+<h3 id="if语句格式"><a href="#if语句格式" class="headerlink" title="if语句格式"></a>if语句格式</h3><p>Python中if语句的一般形式如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if condition_1:</span><br><span class="line">    statement_block_1</span><br><span class="line">elif condition_2:</span><br><span class="line">    statement_block_2</span><br><span class="line">else:</span><br><span class="line">    statement_block_3</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果 “condition_1” 为 True 将执行 “statement_block_1” 块语句</li>
+<li>如果 “condition_1” 为False，将判断 “condition_2”</li>
+<li>如果”condition_2” 为 True 将执行 “statement_block_2” 块语句</li>
+<li>如果 “condition_2” 为False，将执行”statement_block_3”块语句</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>1、每个条件后面要使用冒号 :，表示接下来是满足条件后要执行的语句块。</li>
+<li>2、使用缩进来划分语句块，相同缩进数的语句在一起组成一个语句块。</li>
+<li>3、在Python中没有switch – case语句。</li>
+</ul>
+<h4 id="简单的if语句"><a href="#简单的if语句" class="headerlink" title="简单的if语句"></a>简单的if语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">age = 22</span><br><span class="line"></span><br><span class="line">if age &gt; 18:</span><br><span class="line">    print(&quot;you are old&quot;)</span><br><span class="line"></span><br><span class="line"># 代码执行结果</span><br><span class="line">you are old</span><br></pre></td></tr></table></figure>
+<h4 id="if-else语句"><a href="#if-else语句" class="headerlink" title="if-else语句"></a>if-else语句</h4><p>经常需要在条件测试通过了时，执行一个操作，并在没有通过时执行另一个操作；在这种情况下，可使用Python提供的if-else语句。if-else语句块类似于简单的if语句，但其中的else语句让你能够指定条件测试未通过时要执行的操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">age = 11</span><br><span class="line"></span><br><span class="line">if age &gt; 18:</span><br><span class="line">    print(&quot;you are old&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(&quot;you are young&quot;)</span><br><span class="line"></span><br><span class="line"># 代码执行结果</span><br><span class="line">you are young</span><br></pre></td></tr></table></figure>
+<h4 id="if-elif-else结构"><a href="#if-elif-else结构" class="headerlink" title="if-elif-else结构"></a>if-elif-else结构</h4><p>经常需要检查超过两个的情形，为此可使用Python提供的if-elif-else结构。python只执行if-elif-else结构中的一个代码块，它依次检查每个条件测试，知道遇到通过了的条件测试。测试通过后，Python将执行紧跟在它后面的代码，并跳过余下的测试。</p>
+<p>在生活中，很多情况下需要考虑的情形都超过两个。例如根据年龄段收费的公园：</p>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 4岁以下免费</li>
+<li style="list-style: none"><input type="checkbox"> 4-10岁收费5元</li>
+<li style="list-style: none"><input type="checkbox"> 10-18岁收费10元</li>
+<li style="list-style: none"><input type="checkbox"> 18岁（含以上）收费15元</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">age = 15</span><br><span class="line"></span><br><span class="line">if age &lt; 4:</span><br><span class="line">    print(&quot;RMB: ￥ 0&quot;)</span><br><span class="line">elif age &gt;= 4 and age &lt; 10:</span><br><span class="line">    print(&quot;RMB: ￥ 5&quot;)</span><br><span class="line">elif age &gt;= 10 and age &lt; 18:</span><br><span class="line">    print(&quot;RMB: ￥ 10&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(&quot;RMB: ￥ 15&quot;)</span><br><span class="line"></span><br><span class="line"># 代码执行结果</span><br><span class="line">RMB: ￥ 10</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/05/10/Python-if/">Python基础 之 if语句</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">houhaiyun</a></p>
+        <p><span>发布时间:</span>2018-05-10, 14:05:22</p>
+        <p><span>最后更新:</span>2018-05-10, 14:07:38</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/05/10/Python-if/" title="Python基础 之 if语句">https://houhaiyun.github.io/2018/05/10/Python-if/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://houhaiyun.github.io/2018/05/10/Python-if/　　作者: houhaiyun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/05/09/OpenvSwitch-Install/">
+                    安装Open vSwitch
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#if语句示例"><span class="toc-number">1.</span> <span class="toc-text">if语句示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#条件测试"><span class="toc-number">2.</span> <span class="toc-text">条件测试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#检查是否相等"><span class="toc-number">2.1.</span> <span class="toc-text">检查是否相等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#检查是否相等时不考虑大小写"><span class="toc-number">2.2.</span> <span class="toc-text">检查是否相等时不考虑大小写</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#检查是否不相等"><span class="toc-number">2.3.</span> <span class="toc-text">检查是否不相等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#比较数字"><span class="toc-number">2.4.</span> <span class="toc-text">比较数字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#检查多个条件"><span class="toc-number">2.5.</span> <span class="toc-text">检查多个条件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-使用and检查多个条件"><span class="toc-number">2.5.1.</span> <span class="toc-text">1. 使用and检查多个条件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-使用or检查多个条件"><span class="toc-number">2.5.2.</span> <span class="toc-text">2. 使用or检查多个条件</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#检查特定值是否包含在列表中"><span class="toc-number">2.6.</span> <span class="toc-text">检查特定值是否包含在列表中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#检查特定的值是否不包含在列表中"><span class="toc-number">2.7.</span> <span class="toc-text">检查特定的值是否不包含在列表中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#布尔表达式"><span class="toc-number">2.8.</span> <span class="toc-text">布尔表达式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#if语句格式"><span class="toc-number">3.</span> <span class="toc-text">if语句格式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单的if语句"><span class="toc-number">3.1.</span> <span class="toc-text">简单的if语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#if-else语句"><span class="toc-number">3.2.</span> <span class="toc-text">if-else语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#if-elif-else结构"><span class="toc-number">3.3.</span> <span class="toc-text">if-elif-else结构</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Python基础 之 if语句　| houhaiyun　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/05/09/OpenvSwitch-Install/" title="下一篇: 安装Open vSwitch">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 houhaiyun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂)" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*)" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+</html>
+<script type="text/javascript" src="/js/love.js"></script>
