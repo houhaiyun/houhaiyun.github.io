@@ -3,6 +3,27 @@
   
     
     <entry>
+      <title>中文技术文档的写作规范</title>
+      <link href="/2018/07/03/document-style-guide/"/>
+      <url>/2018/07/03/document-style-guide/</url>
+      <content type="html"><![CDATA[<p>中文技术文档的写作规范。</p><p><strong>本规范转自 Ruan YiFeng ， GitHub 地址：<a href="https://github.com/ruanyf/document-style-guide" target="_blank" rel="noopener">https://github.com/ruanyf/document-style-guide</a></strong></p><a id="more"></a><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol><li><a href="https://github.com/ruanyf/document-style-guide/blob/master/docs/title.md" target="_blank" rel="noopener">标题</a></li><li><a href="https://github.com/ruanyf/document-style-guide/blob/master/docs/text.md" target="_blank" rel="noopener">文本</a></li><li><a href="https://github.com/ruanyf/document-style-guide/blob/master/docs/paragraph.md" target="_blank" rel="noopener">段落</a></li><li><a href="https://github.com/ruanyf/document-style-guide/blob/master/docs/number.md" target="_blank" rel="noopener">数值</a></li><li><a href="https://github.com/ruanyf/document-style-guide/blob/master/docs/marks.md" target="_blank" rel="noopener">标点符号</a></li><li><a href="https://github.com/ruanyf/document-style-guide/blob/master/docs/structure.md" target="_blank" rel="noopener">文档体系</a></li><li><a href="https://github.com/ruanyf/document-style-guide/blob/master/docs/reference.md" target="_blank" rel="noopener">参考链接</a></li></ol>]]></content>
+      
+      <categories>
+          
+          <category> 相关规范 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 相关规范 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>ELK 6.3 部署</title>
       <link href="/2018/07/03/ELK-Deploy/"/>
       <url>/2018/07/03/ELK-Deploy/</url>
