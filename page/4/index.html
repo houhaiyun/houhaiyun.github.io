@@ -221,11 +221,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-ISA" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Ansible-CMDB" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/04/26/ISA/" class="article-date">
-      <time datetime="2018-04-26T13:39:42.000Z" itemprop="datePublished">2018-04-26</time>
+      <a href="/2018/06/24/Ansible-CMDB/" class="article-date">
+      <time datetime="2018-06-24T08:44:05.000Z" itemprop="datePublished">2018-06-24</time>
 </a>
 
 
@@ -240,7 +240,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/26/ISA/">指令集架构</a>
+      <a class="article-title" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a>
     </h1>
   
 
@@ -250,7 +250,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="指令集架构"><a href="#指令集架构" class="headerlink" title="指令集架构"></a>指令集架构</h3><p>指令集架构（英语：lnstruction Set Architecture，缩写为ISA），又称为指令集或指令集体系，是计算机体系结构中与程序设计有关的部分，包含了基本数据类型，指令集，寄存器，寻址模式，存储体系，中断，异常处理以及外部I/O。指令集架构包含一系列的opcode即操作码（机器语言），以及由特定处理器执行的基本命令。</p>
+              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><a href="https://github.com/fboender/ansible-cmdb" target="_blank" rel="noopener">github项目地址：https://github.com/fboender/ansible-cmdb</a></p>
+<p><a href="http://ansible-cmdb.readthedocs.io/en/latest/" target="_blank" rel="noopener">官方文档：http://ansible-cmdb.readthedocs.io/en/latest/</a></p>
+<p>Ansible-cmdb将Ansible 实际收集的输出信息 转换为包含系统配置信息的静态HTML概述页面（以及其他内容）。</p>
+<p>它支持多种类型的输出（html，csv，sql等），并将由Ansible收集的信息与自定义数据进行扩展。对于每个主机，它还显示组，主机变量，自定义变量和机器本地事实。</p>
           
       
     </div>
@@ -259,18 +262,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机基础知识/">计算机基础知识</a><a class="article-category-link" href="/categories/计算机基础知识/指令集架构/">指令集架构</a>
+    <a class="article-category-link" href="/categories/CMDB/">CMDB</a><a class="article-category-link" href="/categories/CMDB/Ansible-CMDB/">Ansible-CMDB</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机基础/">计算机基础</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CMDB/">CMDB</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/04/26/ISA/#more">more >></a>
+          <a href="/2018/06/24/Ansible-CMDB/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -290,11 +293,11 @@
 
 
   
-    <article id="post-Docker-Jianjie" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-GlusterFS-Deploy" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/12/23/Docker-Jianjie/" class="article-date">
-      <time datetime="2017-12-23T22:34:17.000Z" itemprop="datePublished">2017-12-23</time>
+      <a href="/2018/06/18/GlusterFS-Deploy/" class="article-date">
+      <time datetime="2018-06-18T12:12:19.000Z" itemprop="datePublished">2018-06-18</time>
 </a>
 
 
@@ -309,7 +312,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/23/Docker-Jianjie/">Docker简介</a>
+      <a class="article-title" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a>
     </h1>
   
 
@@ -319,7 +322,40 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/Docker-Jianjie-1.png" title="Docker"></center>
+              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>服务器</strong></th>
+<th style="text-align:center"><strong>IP</strong></th>
+<th style="text-align:center"><strong>主机名</strong></th>
+<th style="text-align:center"><strong>系统</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">server 1</td>
+<td style="text-align:center">192.168.2.12</td>
+<td style="text-align:center">node1.haiyun.com</td>
+<td style="text-align:center">CentOS 7.3</td>
+</tr>
+<tr>
+<td style="text-align:center">server 2</td>
+<td style="text-align:center">192.168.2.13</td>
+<td style="text-align:center">node2.haiyun.com</td>
+<td style="text-align:center">CentOS 7.3</td>
+</tr>
+<tr>
+<td style="text-align:center">server 3</td>
+<td style="text-align:center">192.168.2.14</td>
+<td style="text-align:center">node3.haiyun.com</td>
+<td style="text-align:center">CentOS 7.3</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>所有服务器都已关闭防火墙和SELinux</li>
+<li>每台服务器都有两块硬盘，一块用于安装系统，一块用于GlusterFS</li>
+</ol>
           
       
     </div>
@@ -328,18 +364,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker简介/">Docker简介</a>
+    <a class="article-category-link" href="/categories/分布式存储系统/">分布式存储系统</a><a class="article-category-link" href="/categories/分布式存储系统/GlusterFS/">GlusterFS</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GlusterFS/">GlusterFS</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/12/23/Docker-Jianjie/#more">more >></a>
+          <a href="/2018/06/18/GlusterFS-Deploy/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -359,11 +395,11 @@
 
 
   
-    <article id="post-Docker-Why-Use" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-GlusterFS" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/12/23/Docker-Why-Use/" class="article-date">
-      <time datetime="2017-12-23T22:32:27.000Z" itemprop="datePublished">2017-12-23</time>
+      <a href="/2018/06/18/GlusterFS/" class="article-date">
+      <time datetime="2018-06-18T12:08:21.000Z" itemprop="datePublished">2018-06-18</time>
 </a>
 
 
@@ -378,7 +414,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a>
+      <a class="article-title" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a>
     </h1>
   
 
@@ -388,7 +424,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="为什么要用Docker？"><a href="#为什么要用Docker？" class="headerlink" title="为什么要用Docker？"></a>为什么要用Docker？</h3><p>作为一种新兴的虚拟化方式，<code>Docker</code> 跟传统的虚拟化方式相比具有众多的优势。</p>
+              <center><img src="https://www.ihaiyun.cc/img/images/gluster-ant.png" title="Gluster"></center>
           
       
     </div>
@@ -397,18 +433,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/为什么要用Docker？/">为什么要用Docker？</a>
+    <a class="article-category-link" href="/categories/分布式存储系统/">分布式存储系统</a><a class="article-category-link" href="/categories/分布式存储系统/GlusterFS/">GlusterFS</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GlusterFS/">GlusterFS</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/12/23/Docker-Why-Use/#more">more >></a>
+          <a href="/2018/06/18/GlusterFS/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -428,11 +464,11 @@
 
 
   
-    <article id="post-Docker-Xunnihua" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Linux-top" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/12/23/Docker-Xunnihua/" class="article-date">
-      <time datetime="2017-12-23T22:28:27.000Z" itemprop="datePublished">2017-12-23</time>
+      <a href="/2018/06/16/Linux-top/" class="article-date">
+      <time datetime="2018-06-16T11:35:35.000Z" itemprop="datePublished">2018-06-16</time>
 </a>
 
 
@@ -447,7 +483,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a>
+      <a class="article-title" href="/2018/06/16/Linux-top/">top 命令</a>
     </h1>
   
 
@@ -457,9 +493,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="XEN"><a href="#XEN" class="headerlink" title="XEN"></a>XEN</h3><p><a href="http://xen.org/" target="_blank" rel="noopener">官网：http://xen.org/</a></p>
-<p><code>Xen</code> 由剑桥大学开发，它是基于硬件的完全分割，物理上有多少的资源就只能分配多少资源，因此很难超售。可分为<code>Xen-PV</code>（半虚拟化），和<code>Xen-HVM</code>（全虚拟化）。</p>
-<p><code>Xen</code>是不能超售内存和硬盘的，当母服务器只有16<code>G</code>内存以及100<code>G</code>硬盘时，当开 <code>Xen</code>架构（任意一个虚拟化）的1<code>G</code>内存、25<code>G</code>硬盘的子机时，会直接占用服务器1<code>G</code> 内存，以及25<code>G</code>硬盘，所以<code>Xen</code>的性能，相比<code>OpenVZ</code>在超售的情况下要好。</p>
+              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>Tep 程序对运行的系统提供一个动态的实时的监控。它能够显示系统的总体信息和一些正被 Linux 内核管理的任务。它所显示的系统总体系统的样式以及任务信息显示的样式，顺序和大小都是由用户配置，而且配置信息可以重启后永久生效。top 能够对京城提供一个有限的交互式界面，对个性化配置提供更多扩展性的界面。</p>
           
       
     </div>
@@ -468,18 +502,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/虚拟化/">虚拟化</a>
+    <a class="article-category-link" href="/categories/Linux-系统管理/">Linux 系统管理</a><a class="article-category-link" href="/categories/Linux-系统管理/top/">top</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/top/">top</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/12/23/Docker-Xunnihua/#more">more >></a>
+          <a href="/2018/06/16/Linux-top/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -499,11 +533,11 @@
 
 
   
-    <article id="post-Zabbix-Jiankong-Nginx" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python-if" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/27/Zabbix-Jiankong-Nginx/" class="article-date">
-      <time datetime="2017-11-27T12:06:42.000Z" itemprop="datePublished">2017-11-27</time>
+      <a href="/2018/05/10/Python-if/" class="article-date">
+      <time datetime="2018-05-10T14:05:22.000Z" itemprop="datePublished">2018-05-10</time>
 </a>
 
 
@@ -518,7 +552,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a>
+      <a class="article-title" href="/2018/05/10/Python-if/">Python基础 之 if语句</a>
     </h1>
   
 
@@ -528,7 +562,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="安装nginx，并修改nginx配置文件，开启status"><a href="#安装nginx，并修改nginx配置文件，开启status" class="headerlink" title="安装nginx，并修改nginx配置文件，开启status"></a>安装nginx，并修改nginx配置文件，开启status</h3>
+              <center><img src="https://houhaiyun.github.io/img/images/Python-if.png" title="Python基础 之 if语句"></center>
           
       
     </div>
@@ -537,18 +571,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/监控Nginx状态/">监控Nginx状态</a>
+    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python基础-之-if语句/">Python基础 之 if语句</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/11/27/Zabbix-Jiankong-Nginx/#more">more >></a>
+          <a href="/2018/05/10/Python-if/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -568,11 +602,11 @@
 
 
   
-    <article id="post-Zabbix-Wechat-Baojing" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-OpenvSwitch-Install" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/27/Zabbix-Wechat-Baojing/" class="article-date">
-      <time datetime="2017-11-27T12:06:17.000Z" itemprop="datePublished">2017-11-27</time>
+      <a href="/2018/05/09/OpenvSwitch-Install/" class="article-date">
+      <time datetime="2018-05-09T02:16:48.000Z" itemprop="datePublished">2018-05-09</time>
 </a>
 
 
@@ -587,7 +621,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a>
+      <a class="article-title" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a>
     </h1>
   
 
@@ -597,7 +631,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="微信企业号申请"><a href="#微信企业号申请" class="headerlink" title="微信企业号申请"></a>微信企业号申请</h3><p><a href="http://work.weixin.qq.com/" target="_blank" rel="noopener">地址：http://work.weixin.qq.com/</a></p>
+              <h3 id="获取Open-vSwitch来源"><a href="#获取Open-vSwitch来源" class="headerlink" title="获取Open vSwitch来源"></a>获取Open vSwitch来源</h3><p>Open vSwitch源代码的规范位置是其Git存储库，您可以使用以下命令将其克隆到名为“ovs”的目录中：</p>
           
       
     </div>
@@ -606,18 +640,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/实现新版微信告警/">实现新版微信告警</a>
+    <a class="article-category-link" href="/categories/Open-vSwitch/">Open vSwitch</a><a class="article-category-link" href="/categories/Open-vSwitch/安装Open-vSwitch/">安装Open vSwitch</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SDN/">SDN</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/11/27/Zabbix-Wechat-Baojing/#more">more >></a>
+          <a href="/2018/05/09/OpenvSwitch-Install/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -637,11 +671,11 @@
 
 
   
-    <article id="post-Zabbix-Caozuo-Action" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Why-Use-OpenvSwitch" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/27/Zabbix-Caozuo-Action/" class="article-date">
-      <time datetime="2017-11-27T12:05:50.000Z" itemprop="datePublished">2017-11-27</time>
+      <a href="/2018/05/09/Why-Use-OpenvSwitch/" class="article-date">
+      <time datetime="2018-05-09T02:14:37.000Z" itemprop="datePublished">2018-05-09</time>
 </a>
 
 
@@ -656,7 +690,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a>
+      <a class="article-title" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a>
     </h1>
   
 
@@ -666,14 +700,9 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>如果您希望由于事件而发生某些操作（例如发送通知），则需要配置操作。</p>
-<p>可以根据所有支持的类型的事件来定义操作：</p>
-<ul>
-<li>触发事件 - 当<code>trigger</code>的状态从<code>OK</code> 转到 <code>PROBLEM</code> 或者转回时</li>
-<li>发现事件 - 发生网络发现时</li>
-<li>自动注册事件 -当新的活动代理自动注册</li>
-<li>内部事件 - 当项目不受支持或触发器进入未知状态</li>
-</ul>
+              <h3 id="为什么要用Open-vSwitch？"><a href="#为什么要用Open-vSwitch？" class="headerlink" title="为什么要用Open vSwitch？"></a>为什么要用Open vSwitch？</h3><p>虚拟机管理程序需要能够跨越虚拟机和外部世界之间的流量。在基于Linux的管理程序中，这常常意味着使用内置的L2交换机（Linux网桥），该交换机快速可靠。因此，有必要问为什么使用Open vSwitch。</p>
+<p><strong>答案</strong>是Open vSwitch面向多服务器虚拟化部署，这是前一个堆栈不太适合的一个环境。这些环境通常以高度动态的端点，逻辑抽象的维护以及（有时）与专用交换硬件的集成或卸载为特征。</p>
+<p>以下特征和设计注意事项有助于Open vSwitch应对上述要求。</p>
           
       
     </div>
@@ -682,18 +711,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/操作Actions/">操作Actions</a>
+    <a class="article-category-link" href="/categories/Open-vSwitch/">Open vSwitch</a><a class="article-category-link" href="/categories/Open-vSwitch/为什么要用Open-vSwitch？/">为什么要用Open vSwitch？</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SDN/">SDN</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/11/27/Zabbix-Caozuo-Action/#more">more >></a>
+          <a href="/2018/05/09/Why-Use-OpenvSwitch/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -713,11 +742,11 @@
 
 
   
-    <article id="post-Zabbix-Huandengpian" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-OVS" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/27/Zabbix-Huandengpian/" class="article-date">
-      <time datetime="2017-11-27T12:05:21.000Z" itemprop="datePublished">2017-11-27</time>
+      <a href="/2018/05/08/OVS/" class="article-date">
+      <time datetime="2018-05-08T03:42:54.000Z" itemprop="datePublished">2018-05-08</time>
 </a>
 
 
@@ -732,7 +761,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a>
+      <a class="article-title" href="/2018/05/08/OVS/">What Is Open vSwitch</a>
     </h1>
   
 
@@ -742,9 +771,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在幻灯片演示中，你可以配置多个聚合图形以设定的间隔逐个显示。</p>
-<p>有时候，你可能想要在一些配置好的聚合图形之间进行切换。虽然这样可以手动完成，但这样做一次两次后就会变得非常乏味。因此，就可以通过幻灯片演示来自动完成此项工作。</p>
-<p>Zabbix 的所有用户（包括非管理员用户）都可以创建幻灯片演示。幻灯片演示拥有所有者 - 这个所有者就是哪个用户创建了它们。</p>
+              <center><img src="https://houhaiyun.github.io/img/images/OVS-1.png" title="Open vSwitch"></center>
           
       
     </div>
@@ -753,18 +780,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/幻灯片演示/">幻灯片演示</a>
+    <a class="article-category-link" href="/categories/SDN/">SDN</a><a class="article-category-link" href="/categories/SDN/What-Is-Open-vSwitch/">What Is Open vSwitch</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Open-vSwitch/">Open vSwitch</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/11/27/Zabbix-Huandengpian/#more">more >></a>
+          <a href="/2018/05/08/OVS/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -784,11 +811,11 @@
 
 
   
-    <article id="post-Zabbix-Graph-Zidingyi" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python-tuple" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/27/Zabbix-Graph-Zidingyi/" class="article-date">
-      <time datetime="2017-11-27T12:04:56.000Z" itemprop="datePublished">2017-11-27</time>
+      <a href="/2018/05/07/Python-tuple/" class="article-date">
+      <time datetime="2018-05-07T14:02:45.000Z" itemprop="datePublished">2018-05-07</time>
 </a>
 
 
@@ -803,7 +830,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a>
+      <a class="article-title" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a>
     </h1>
   
 
@@ -813,11 +840,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>自定义图形，顾名思义，就是提供定制的功能。</p>
-<p>虽然简单图形对于查看单个监控项的数据很适用，但它们并不提供配置功能。</p>
-<p>因此，如果想要更改图形的样式、线条的显示方式或是比较多个监控项。例如，单个图形中显示接受和发送的流量，就需要自定义图形。</p>
-<p>自定义图形是手动配置的。</p>
-<p>可以为单个主机、多个主机、单个模板创建自定义图形。</p>
+              <center><img src="https://houhaiyun.github.io/img/images/Python-tuple.png" title="Python常用数据类型-元组"></center>
           
       
     </div>
@@ -826,18 +849,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/自定义图形Graph/">自定义图形Graph</a>
+    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python常用数据类型-元组/">Python常用数据类型-元组</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/11/27/Zabbix-Graph-Zidingyi/#more">more >></a>
+          <a href="/2018/05/07/Python-tuple/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -857,11 +880,11 @@
 
 
   
-    <article id="post-Zabbix-Graph-Jiandan" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python-list2" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/27/Zabbix-Graph-Jiandan/" class="article-date">
-      <time datetime="2017-11-27T12:04:29.000Z" itemprop="datePublished">2017-11-27</time>
+      <a href="/2018/05/07/Python-list2/" class="article-date">
+      <time datetime="2018-05-07T13:32:48.000Z" itemprop="datePublished">2018-05-07</time>
 </a>
 
 
@@ -876,7 +899,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a>
+      <a class="article-title" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a>
     </h1>
   
 
@@ -886,8 +909,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>Zabbix提供了简单图形，用来可视化显示监控项采集到的数据。 对于用户而言，并不需要进行配置就可以查看简单图形。这是由Zabbix免费提供的。</p>
-<p>通过<code>Monitoring</code> → <code>Latest data</code>点击各自监控项的图形链接，就可以展示图形。</p>
+              <center><img src="https://houhaiyun.github.io/img/images/Python-list2.png" title="Python常用数据类型-列表2"></center>
           
       
     </div>
@@ -896,18 +918,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/简单图形Graph/">简单图形Graph</a>
+    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python常用数据类型-列表2/">Python常用数据类型-列表2</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/11/27/Zabbix-Graph-Jiandan/#more">more >></a>
+          <a href="/2018/05/07/Python-list2/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -929,7 +951,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 </div>

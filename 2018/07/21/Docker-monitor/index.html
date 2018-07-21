@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="侯海云" />
+
+
+
+<meta name="description" content="Docker容器监控维度对于Docker容器，需要进行全面的监控和检测，以便及时了解Docker容器的运行情况即资源使用情况，为运维编排解决决策支持。下面将从Docker容器所在的主机、启动容器的镜像基础及容器本身这3个维度来总结Docker容器监控中所涉及的可用的监控指标。">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker容器的监控手段">
+<meta property="og:url" content="https://www.ihaiyun.cc/2018/07/21/Docker-monitor/index.html">
+<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:description" content="Docker容器监控维度对于Docker容器，需要进行全面的监控和检测，以便及时了解Docker容器的运行情况即资源使用情况，为运维编排解决决策支持。下面将从Docker容器所在的主机、启动容器的镜像基础及容器本身这3个维度来总结Docker容器监控中所涉及的可用的监控指标。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-07-21T11:47:16.983Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker容器的监控手段">
+<meta name="twitter:description" content="Docker容器监控维度对于Docker容器，需要进行全面的监控和检测，以便及时了解Docker容器的运行情况即资源使用情况，为运维编排解决决策支持。下面将从Docker容器所在的主机、启动容器的镜像基础及容器本身这3个维度来总结Docker容器监控中所涉及的可用的监控指标。">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Docker容器的监控手段 | 侯海云的个人网站</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">侯海云</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Docker-monitor" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-monitor/" class="article-date">
+      <time datetime="2018-07-21T11:46:19.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Docker容器的监控手段
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker容器的监控手段/">Docker容器的监控手段</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="Docker容器监控维度"><a href="#Docker容器监控维度" class="headerlink" title="Docker容器监控维度"></a>Docker容器监控维度</h3><p>对于Docker容器，需要进行全面的监控和检测，以便及时了解Docker容器的运行情况即资源使用情况，为运维编排解决决策支持。下面将从Docker容器所在的主机、启动容器的镜像基础及容器本身这3个维度来总结Docker容器监控中所涉及的可用的监控指标。</p>
+<a id="more"></a>
+<h4 id="1-主机维度"><a href="#1-主机维度" class="headerlink" title="1. 主机维度"></a>1. 主机维度</h4><p>对于Docker的容器监控，主要以容器级别的监控指标为主。这里先介绍一些Docker主机级别的监控指标，通过这些指标可以从整体上了解一下主机上容器运行情况。我们可以监控主机的以下相关信息。</p>
+<ul>
+<li>主机的CPU情况和使用量</li>
+<li>主机的内存情况和使用量</li>
+<li>主机上的本地镜像情况</li>
+<li>主机上的容器运行情况</li>
+</ul>
+<h4 id="2-镜像维度"><a href="#2-镜像维度" class="headerlink" title="2. 镜像维度"></a>2. 镜像维度</h4><p>作为容器的基础，还需要对主机上的镜像信息进行监控。镜像的相关信息一般为静态信息，可以反映出主机上用于构建容器的镜像的基础情况，以便从底层来掌握和优化主机上的容器。我们可以监控镜像的以下相关信息：</p>
+<ul>
+<li>镜像的基本信息</li>
+<li>镜像与容器的对应关系</li>
+<li>镜像构建的历史消息（层级的依赖信息）</li>
+</ul>
+<p>镜像的基本信息可以包括镜像的总数量、ID、名称、版本、大小等。</p>
+<h4 id="3-容器维度"><a href="#3-容器维度" class="headerlink" title="3. 容器维度"></a>3. 容器维度</h4><p>在主机上运行的容器是监控的重中之重。作为应用的直接载体，使用者需要对容器的各类信息进行实时监控，以保证应用的正常运行。Docker在底层使用了linux内核提供的资源机制——namespace和cgroups，以此来支持容器的运行。通过这些机制，我们可以很方便地获取容器的各项监控指标。</p>
+<ul>
+<li>容器的基本信息</li>
+<li>容器的运行状态</li>
+<li>容器的用量信息</li>
+</ul>
+<p>容器的基本信息包括容器的总数量、ID、名称、镜像、启动命令、端口等信息。容器监控时可以依据容器的运行状态，即运行中、暂停、停止及异常退出，来统计各状态的容器的数量，并实时反馈各个容器的运行状态。容器的用量信息则是用户最关心的，也是监控中最为复杂的部分，他可以统计容器的CPU使用率、内存使用率、块设备I/O使用量、网络使用情况等资源的使用情况。这一部分监控数据大多数都来源于Cgroup下面的限制文件。</p>
+<h3 id="容器监控命令"><a href="#容器监控命令" class="headerlink" title="容器监控命令"></a>容器监控命令</h3><p>Docker为用户提供了功能强大的命令行工具，可以让用户完成丰富的功能。同时，Docker为开发人员提供了标准化的API，通过调用这些API可以让开发人员定制自己的应用服务。</p>
+<p>在Docker的监控中，namespace和cgroups的使用是至关重要的。接下来根据Docker所提供的命令行工具，针对其中与监控有关的命令行进行解读。</p>
+<h4 id="1-docker-ps命令"><a href="#1-docker-ps命令" class="headerlink" title="1. docker ps命令"></a>1. docker ps命令</h4><p>用户通过docker ps命令，可以查看当前主机上的容器信息，包括容器ID、镜像名、容器启动执行命令、创建时间、状态、端口信息和容器名。该命令默认只累出当前正在运行的容器的信息，用户可以通过使用-a参数来列出包括已经停止的所有容器的信息。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># docker ps -a</span><br><span class="line"></span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                      PORTS               NAMES</span><br><span class="line">bb772b28a961        busybox             &quot;sh&quot;                3 seconds ago       Up 3 seconds                                    con3</span><br><span class="line">6de82becaa65        busybox             &quot;sh&quot;                18 hours ago        Exited (137) 16 hours ago                       con2</span><br><span class="line">80c26aff31f8        busybox             &quot;sh&quot;                18 hours ago        Exited (137) 16 hours ago                       con1</span><br></pre></td></tr></table></figure>
+<p>一般情况下，docker ps命令用于查找容器的ID，以便用户查看特定容器的具体信息，后续的其他容器监控信息查看命令将普遍用到它。</p>
+<h4 id="2-docker-images命令"><a href="#2-docker-images命令" class="headerlink" title="2. docker images命令"></a>2. docker images命令</h4><p>用户通过使用docker iamges命令，可以查看当前主机上的镜像信息，包括镜像所属的库、标签、ID、创建时间和实际大小。该命令默认只会累出所有顶层镜像的信息，但用户可以通过-a参数来查看所有中间层的镜像的信息。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># docker images </span><br><span class="line"></span><br><span class="line">REPOSITORY                      TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">docker.io/ubuntu                trusty              971bb384a50a        3 days ago          188 MB</span><br><span class="line">docker.io/ubuntu                latest              74f8760a2a8b        3 days ago          82.4 MB</span><br><span class="line">docker.io/busybox               latest              22c2dd5ee85d        3 days ago          1.16 MB</span><br></pre></td></tr></table></figure>
+<h4 id="3-docker-stats命令"><a href="#3-docker-stats命令" class="headerlink" title="3. docker stats命令"></a>3. docker stats命令</h4><p>docker stats命令是Docker 1.5版本中最新提供的命令，专门用于容器状态信息的统计，同时它还有配套的API（get /containers/(id)/stats），可供开发人员调用。使用该命令，用户可以实时监控启动中的容器的运行情况，包括CPU、内存、块设备I/O和网络I/O，这些信息都会定期刷新以显示最新的运行情况。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># docker stats con1 con2 con3</span><br><span class="line">CONTAINER           CPU %               MEM USAGE / LIMIT    MEM %               NET I/O             BLOCK I/O           PIDS</span><br><span class="line">con1                0.00%               56 KiB / 7.624 GiB   0.00%               0 B / 0 B           0 B / 0 B           1</span><br><span class="line">con2                0.00%               52 KiB / 7.624 GiB   0.00%               0 B / 0 B           0 B / 0 B           1</span><br><span class="line">con3                0.00%               56 KiB / 7.624 GiB   0.00%               0 B / 0 B           1.09 MB / 0 B       1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：docker stats命令目前只有在选用libcontainer作为执行驱动时才可以使用。</p>
+</blockquote>
+<p>docker stats命令显示的容器的资源使用情况有限，通过使用stats API可以查看更多详细信息。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># echo -e &quot;GET /containers/con1/stats HTTP/1.1\r\n\ &quot; | nc -U /var/run/docker.sock</span><br></pre></td></tr></table></figure>
+<p>开发者可以使用stats API将容器的运行状态信息传递到自己构建的应用中，以实现容器的系统监控。</p>
+<h4 id="4-docker-inspect命令"><a href="#4-docker-inspect命令" class="headerlink" title="4. docker inspect命令"></a>4. docker inspect命令</h4><p>用户通过使用docker inspect命令，可以查看镜像或容器底层详细信息，以此来了解镜像或容器的完整构建信息，包括基础配置、主机配置、网络设置、状态信息等。同时，如果需要查看其特定信息，可以同故宫-f参数来设定输出格式。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># docker inspect -f &#123;&#123;.NetworkSettings.IPAddress&#125;&#125; con1</span><br></pre></td></tr></table></figure>
+<h4 id="5-docker-top命令"><a href="#5-docker-top命令" class="headerlink" title="5. docker top命令"></a>5. docker top命令</h4><p>用户通过使用docker top命令，可以查看正在运行的容器中的进程的运行情况。该命令可以使用户在没有通过/bin/bash终端与容器进行交互时，帮助用户查看容器内的进程信息，包括进程号、父进程号、命令等。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># docker top con1</span><br><span class="line">UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD</span><br><span class="line">root                2721                2704                0                   11:44               pts/2               00:00:00            sh</span><br></pre></td></tr></table></figure>
+<h4 id="6-docker-port命令"><a href="#6-docker-port命令" class="headerlink" title="6. docker port命令"></a>6. docker port命令</h4><p>docker port命令的用途较为特定化，用于查看容器与主机之间的端口映射关系信息。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># docker ps</span><br><span class="line">CONTAINER ID        IMAGE                      COMMAND             CREATED             STATUS              PORTS                NAMES</span><br><span class="line">2035c4f9a5e0        docker.io/busybox:latest   &quot;sh&quot;                4 seconds ago       Up 3 seconds        0.0.0.0:80-&gt;80/tcp   test</span><br><span class="line"></span><br><span class="line">[root@host1 ~]# docker port test</span><br><span class="line">80/tcp -&gt; 0.0.0.0:80</span><br></pre></td></tr></table></figure>
+<h3 id="常用的容器监控工具"><a href="#常用的容器监控工具" class="headerlink" title="常用的容器监控工具"></a>常用的容器监控工具</h3><h4 id="1-Google的cAdvisor"><a href="#1-Google的cAdvisor" class="headerlink" title="1. Google的cAdvisor"></a>1. Google的cAdvisor</h4><p>cAdvisor（Container Advisor）是Google开发的用于分析运行中容器的资源占用和性能指标的开源工具。cAdvisor是一个运行时的守护进程，负责收集、聚合、处理和输出运行中容器的信息。需要特别说明的是，对于每个容器，cAdvisor都有资源隔离参数、资源使用历史情况以及完整历史资源使用和网络统计信息的柱状图。cAdvisor中的数据可以以容器或主机级别进行输出。</p>
+<p>cAdvisor原生支持Google自家的Imctfy容器，即Let Contain That For You项目。Imctfy是Google开源那版本的容器栈，旨在代替LXC应用容器，以满足与资源隔离相关的需求。cAdvisor在2014年的DockerCon上发布，除了Imctfy容器外，同样支持Docker的还有libcontainer容器。同时，由于采用Go语言开发，cAdvisor可以方便地集成进libcontainer，它是除了Kubernetes外，Google支持Docker的另一个重要应用。</p>
+<p>cAdvisor提供了一个Docker镜像，可以供用户在Docker中快速运行cAdvisor，操作简单方便。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">	--volume=/:/rootfs:ro \</span><br><span class="line">	--volume=/var/run:/var/run:rw \</span><br><span class="line">	--volume=/sys:/sys:ro \</span><br><span class="line">	--volume=/var/lib/docker/:/var/lib/docker:ro \</span><br><span class="line">	--publish=8080:8080 \</span><br><span class="line">	--detach=true \</span><br><span class="line">	--name=cadvisor \</span><br><span class="line">	google/cadvisor:latest</span><br></pre></td></tr></table></figure>
+<p>在启动cAdvisor后，它会在后台运行，并暴露8080端口，用户可以访问<a href="http://localhost:8080来查看cAdvisor。cAdvisor通过良好的Web" target="_blank" rel="noopener">http://localhost:8080来查看cAdvisor。cAdvisor通过良好的Web</a> UI提供给用户可视化的数据展示，其访问呢页面如下图所示。</p>
+<p>实验没有成功，暂时无图。</p>
+<p>cAdvisor你可以自行为用户提供监控服务，还可以结合其他应用为用户提供良好的服务移植和定制。cAdvisor支持输出状态信息到InflusDB数据库进行存储和读取。同时，它还支持将容器的统计信息以Prometheus标准指标形式输出，并存储在指定的/metrics HTTPd服务端点，以便可以通过Prometheus应用来查看cAdvisor。关于Prometheus应用的内容将稍后讲解。此外，对于使用集群的用户，Google的Heapster可以利用cAdvisor来监控集群。</p>
+<p>cAdvisor作为一个开源应用，还未用户提供了丰富的API接口服务cAdvisor Remote REST API，以便为用户提供原始和已处理的统计数据。通过这一套API，用户可以将cAdvisor提供的而服务集成进自己的应用中，并扩展监控功能。</p>
+<p>cAdviosr作为一个监控应用，其最终目标在于改善运行中的容器的资源使用和性能表现情况，通过有效的监控，可以实现以下蓝图：</p>
+<ul>
+<li>容器运行报告，包括容器的性能和资源使用情况；</li>
+<li>依据报告，实现容器运行的自动调节；</li>
+<li>为运维编排提供集群的资源使用预测。</li>
+</ul>
+<p>目前cAdvisor已经在诸多平台得到了应用，依靠其开源特性和Google的社区资源正在不断完善和丰富，并朝着其设计蓝图稳步前行。</p>
+<h4 id="2-Datadog"><a href="#2-Datadog" class="headerlink" title="2. Datadog"></a>2. Datadog</h4><p>Datadog公司是一家初创企业，其主营业务是帮助其他公司管理和检测云端应用。Datadog能够帮助开发和运营团队检测其应用在云端工作时的各项数据指标，并提供功能丰富的控制平台，支持多种主流云服务，从而实现云服务的一站式管理。从2010年成立至今，Datadog已经支持包括亚马逊AWS、微软Azure、Google云平台等主流云服务提供商。Docker作为当下火热的新型平台，Datadog也迅速做出支持，实现了对Docker监控的集成。</p>
+<p>Datalog利用Docker所使用的内核结构cgroups获取Docker的性能指标，包括CPU、内存、网络和I/O数据。Datadog可以检测和查看所有Docker可用的细化性能指标。</p>
+<p>Datadog利用Docker自身的属性转化成分类标签，以实现对容器监控的聚合整理。通过标签的设定，可以实现复杂的条件筛选，按用户需求来创建容器的监控视图。此外，Datalog还支持警报功能，可以在发生法异常时第一时间向用户发送提醒。同样地，警报的设定可以结合标签来使用，便捷地设定多种警报。Datadog还支持对于容器的声明周期监控，实现了容器整个生命周期中创建、启动、停止和删除时间的可视化管理。</p>
+<h4 id="3-SoundCloud的Prometheus"><a href="#3-SoundCloud的Prometheus" class="headerlink" title="3. SoundCloud的Prometheus"></a>3. SoundCloud的Prometheus</h4><p>SoundCloud公司的Prometheus是一个开源服务监控系统和时间序列数据库。它可以从配置好的监控对象按照指定的时间间隔来收集信息指标，进行可视化展示和高效的数据存储，并提供警报功能。Prometheus的优势在于高纬度时间序列数据进行处理、绘制图表和设定警报。得益于多维度数据模型基础，Prometheus可以方便地利用查询语言来进行数据的过滤和聚合。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>发布时间:</span>2018-07-21, 11:46:19</p>
+        <p><span>最后更新:</span>2018-07-21, 11:47:16</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/21/Docker-monitor/" title="Docker容器的监控手段">https://www.ihaiyun.cc/2018/07/21/Docker-monitor/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/07/21/Docker-monitor/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/21/Docker-dockerfile-use/">
+                    Dockerfile的使用
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker容器监控维度"><span class="toc-number">1.</span> <span class="toc-text">Docker容器监控维度</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-主机维度"><span class="toc-number">1.1.</span> <span class="toc-text">1. 主机维度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-镜像维度"><span class="toc-number">1.2.</span> <span class="toc-text">2. 镜像维度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-容器维度"><span class="toc-number">1.3.</span> <span class="toc-text">3. 容器维度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#容器监控命令"><span class="toc-number">2.</span> <span class="toc-text">容器监控命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-docker-ps命令"><span class="toc-number">2.1.</span> <span class="toc-text">1. docker ps命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-docker-images命令"><span class="toc-number">2.2.</span> <span class="toc-text">2. docker images命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-docker-stats命令"><span class="toc-number">2.3.</span> <span class="toc-text">3. docker stats命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-docker-inspect命令"><span class="toc-number">2.4.</span> <span class="toc-text">4. docker inspect命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-docker-top命令"><span class="toc-number">2.5.</span> <span class="toc-text">5. docker top命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-docker-port命令"><span class="toc-number">2.6.</span> <span class="toc-text">6. docker port命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用的容器监控工具"><span class="toc-number">3.</span> <span class="toc-text">常用的容器监控工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Google的cAdvisor"><span class="toc-number">3.1.</span> <span class="toc-text">1. Google的cAdvisor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Datadog"><span class="toc-number">3.2.</span> <span class="toc-text">2. Datadog</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-SoundCloud的Prometheus"><span class="toc-number">3.3.</span> <span class="toc-text">3. SoundCloud的Prometheus</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/21/Docker-dockerfile-use/" title="下一篇: Dockerfile的使用">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-use/">Dockerfile的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-security/">Dcoekr与容器安全</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume-2/">Docker 数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-storage-manage/">Docker 存储管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-image/">Docker 镜像管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-libcontainer/">libcontainer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-arch/">Docker 架构概览</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network/">Docker网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume/">Docker数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-Install/">Docker安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Linux-iftop/">网络带宽监控工具 iftop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/06/Linux-iotop/">磁盘io监控工具 iotop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/05/Jenkins/">Jenkins</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/CI/">持续集成是什么?</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/ELK/">开源日志实时分析平台ELK</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/Linux-opt-map/">Linux 运维技能树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/Linux-top/">top 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 侯海云
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    </body>
+</html>

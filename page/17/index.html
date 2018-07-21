@@ -221,11 +221,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="title-Linux-Centos6-9-Install" class="article article-type-title" itemscope itemprop="blogPost">
+    <article id="post-Nginx-configure" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/07/04/Linux-Centos6-9-Install/" class="article-date">
-      <time datetime="2017-07-04T17:29:04.000Z" itemprop="datePublished">2017-07-04</time>
+      <a href="/2017/10/25/Nginx-configure/" class="article-date">
+      <time datetime="2017-10-25T17:37:07.000Z" itemprop="datePublished">2017-10-25</time>
 </a>
 
 
@@ -240,7 +240,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a>
+      <a class="article-title" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a>
     </h1>
   
 
@@ -250,79 +250,13 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <p><code>CentOS</code>（<code>Community Enterprise Operating System</code>，中文意思是：社区企业操作系统）是<code>Linux</code>发行版之一，它是来自于<code>Red Hat Enterprise Linux</code>依照开放源代码规定释出的源代码所编译而成。</p>
-<center><img src="https://houhaiyun.github.io/img/images/Linux-Centos6-9-Install-1.png" title="Centos"></center>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/Centos6-9-安装详解/">Centos6.9 安装详解</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Centos6-9-安装详解/">Centos6.9 安装详解</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/07/04/Linux-Centos6-9-Install/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Linux-User-space" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/03/Linux-User-space/" class="article-date">
-      <time datetime="2017-07-03T20:13:50.000Z" itemprop="datePublished">2017-07-03</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="用户空间：-User-space"><a href="#用户空间：-User-space" class="headerlink" title="用户空间： User space"></a>用户空间： User space</h3><ul>
-<li>用户程序的运行空间。为了安全，它们是隔离的，即使用户的程序崩溃了，内核也不受影响</li>
-<li>只能执行简单的运算，不能直接调用系统资源，必须通过系统接口（<code>system call</code>），才能向内核发出指令 </li>
+              <h3 id="配置文件组成部分"><a href="#配置文件组成部分" class="headerlink" title="配置文件组成部分"></a>配置文件组成部分</h3><ul>
+<li>主配置文件： nginx.conf<ul>
+<li>子配置文件 include conf.d/*.conf</li>
+</ul>
+</li>
+<li>fastcgi， uwsgi， scgi等协议相关的配置文件</li>
+<li>mime.types：支持的mime类型</li>
 </ul>
           
       
@@ -332,18 +266,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/用户空间和内核空间/">用户空间和内核空间</a>
+    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/Nginx配置文件/">Nginx配置文件</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/用户空间和内核空间/">用户空间和内核空间</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/07/03/Linux-User-space/#more">more >></a>
+          <a href="/2017/10/25/Nginx-configure/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -363,11 +297,11 @@
 
 
   
-    <article id="title-Linux-time" class="article article-type-title" itemscope itemprop="blogPost">
+    <article id="post-Linux-LVS-suanfa" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/07/03/Linux-time/" class="article-date">
-      <time datetime="2017-07-03T17:23:38.000Z" itemprop="datePublished">2017-07-03</time>
+      <a href="/2017/10/21/Linux-LVS-suanfa/" class="article-date">
+      <time datetime="2017-10-21T22:50:34.000Z" itemprop="datePublished">2017-10-21</time>
 </a>
 
 
@@ -382,7 +316,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a>
+      <a class="article-title" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a>
     </h1>
   
 
@@ -392,7 +326,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/Linux-time-1.png" title="Linux 发行版时间线"></center>
+              <h3 id="LVS的调度算法分为静态与动态两类："><a href="#LVS的调度算法分为静态与动态两类：" class="headerlink" title="LVS的调度算法分为静态与动态两类："></a>LVS的调度算法分为静态与动态两类：</h3><center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-suanfa-1.jpg" title="LVS调度算法"></center>
           
       
     </div>
@@ -401,18 +335,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/Linux发行版时间线/">Linux发行版时间线</a>
+    <a class="article-category-link" href="/categories/负载均衡/">负载均衡</a><a class="article-category-link" href="/categories/负载均衡/LVS调度算法/">LVS调度算法</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux发行版时间线/">Linux发行版时间线</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LVS/">LVS</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/07/03/Linux-time/#more">more >></a>
+          <a href="/2017/10/21/Linux-LVS-suanfa/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -432,11 +366,11 @@
 
 
   
-    <article id="post-Linux-open-source" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Linux-LVS" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/07/02/Linux-open-source/" class="article-date">
-      <time datetime="2017-07-02T17:39:21.000Z" itemprop="datePublished">2017-07-02</time>
+      <a href="/2017/10/21/Linux-LVS/" class="article-date">
+      <time datetime="2017-10-21T22:49:55.000Z" itemprop="datePublished">2017-10-21</time>
 </a>
 
 
@@ -451,7 +385,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/02/Linux-open-source/">常见开源协议</a>
+      <a class="article-title" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a>
     </h1>
   
 
@@ -461,7 +395,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/Linux-open-source-2.jpeg" title="Public License"></center>
+              <h3 id="LVS-集群的通用结构"><a href="#LVS-集群的通用结构" class="headerlink" title="LVS 集群的通用结构"></a>LVS 集群的通用结构</h3><p><code>LVS</code>集群采用 <code>IP</code> 负载均衡技术，属于 <code>IP</code> 层的交换（<code>L4</code>） , 具有很好的吞吐率。调度器分析客户端到服务器的 <code>IP</code> 报头信息， 将请求均衡地转移到不同的服务器上执行，且调度器自动屏蔽掉服务器的故障，从而将一组服务器构成一个高性能的、高可用的虚拟服务器， <code>LVS</code> 集群系统的通用结构如图所示， 主要包含四大部分：</p>
           
       
     </div>
@@ -470,18 +404,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/常见开源协议/">常见开源协议</a>
+    <a class="article-category-link" href="/categories/负载均衡/">负载均衡</a><a class="article-category-link" href="/categories/负载均衡/LVS负载均衡技术/">LVS负载均衡技术</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/常见开源协议/">常见开源协议</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LVS/">LVS</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/07/02/Linux-open-source/#more">more >></a>
+          <a href="/2017/10/21/Linux-LVS/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -501,11 +435,11 @@
 
 
   
-    <article id="title-Linux-history" class="article article-type-title" itemscope itemprop="blogPost">
+    <article id="post-Linux-iptables-SNAT" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/07/02/Linux-history/" class="article-date">
-      <time datetime="2017-07-02T17:05:33.000Z" itemprop="datePublished">2017-07-02</time>
+      <a href="/2017/10/21/Linux-iptables-SNAT/" class="article-date">
+      <time datetime="2017-10-21T22:39:51.000Z" itemprop="datePublished">2017-10-21</time>
 </a>
 
 
@@ -520,7 +454,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/02/Linux-history/">Linux 历史?</a>
+      <a class="article-title" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a>
     </h1>
   
 
@@ -530,11 +464,360 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="Linux之前的UNIX历史："><a href="#Linux之前的UNIX历史：" class="headerlink" title="Linux之前的UNIX历史："></a><code>Linux</code>之前的<code>UNIX</code>历史：</h3><ul>
-<li>1969年以前伟大的梦想-贝尔实验室 （<code>Bell Labs</code>）通用电气（<code>General Electric</code>）和麻省理工学院（<code>MIT</code>）的<code>Multics</code>系统。</li>
-</ul>
+              <h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><h4 id="拓扑"><a href="#拓扑" class="headerlink" title="拓扑"></a>拓扑</h4><center><img src="https://houhaiyun.github.io/img/images/Linux-iptables-SNAT-1.jpg" title="拓扑图"></center>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Iptables/">Iptables</a><a class="article-category-link" href="/categories/Iptables/SNAT与DNAT/">SNAT与DNAT</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SNAT与DNAT/">SNAT与DNAT</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/21/Linux-iptables-SNAT/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-FTP-SSL" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/16/FTP-SSL/" class="article-date">
+      <time datetime="2017-10-16T08:30:37.000Z" itemprop="datePublished">2017-10-16</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <center><img src="https://houhaiyun.github.io/img/images/FTP-SSL-1.jpg" title="ftps"></center>
+
+<h3 id="查看是否支持SSL"><a href="#查看是否支持SSL" class="headerlink" title="查看是否支持SSL"></a>查看是否支持SSL</h3>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/FTP/">FTP</a><a class="article-category-link" href="/categories/FTP/实现基于SSL的FTPS/">实现基于SSL的FTPS</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vsftp/">Vsftp</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/16/FTP-SSL/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-FTP-config" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/16/FTP-config/" class="article-date">
+      <time datetime="2017-10-16T08:23:00.000Z" itemprop="datePublished">2017-10-16</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/16/FTP-config/">Vsftp常用配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <center><img src="https://houhaiyun.github.io/img/images/FTP-config-1.png" title="vsftp"></center>
+
+<h3 id="Vsftpd"><a href="#Vsftpd" class="headerlink" title="Vsftpd"></a>Vsftpd</h3><p><code>vsftpd</code>:<code>Very Secure FTP Daemon</code>， <code>CentOS</code>默认FTP服务器。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/FTP/">FTP</a><a class="article-category-link" href="/categories/FTP/Vsftp常用配置/">Vsftp常用配置</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vsftp/">Vsftp</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/16/FTP-config/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Httpd-https" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/09/Httpd-https/" class="article-date">
+      <time datetime="2017-10-09T10:31:26.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <center><img src="https://houhaiyun.github.io/img/images/Httpd-https-1.jpg" title="https"></center>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Web/">Web</a><a class="article-category-link" href="/categories/Web/httpd-2-2-实现https/">httpd-2.2 实现https</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Apache/">Apache</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/09/Httpd-https/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Dropbear" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/11/Dropbear/" class="article-date">
+      <time datetime="2017-09-11T12:44:55.000Z" itemprop="datePublished">2017-09-11</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="Dropbear简介"><a href="#Dropbear简介" class="headerlink" title="Dropbear简介"></a>Dropbear简介</h3><p><code>Dropbear</code>是一个相对较小的SSH服务器和客户端。它运行在各种基于<code>POSIX</code>的平台上。<code>Dropbear</code>是一种开源软件，以<code>MIT</code>风格的许可证分发。<code>Dropbear</code>对于“嵌入”型<code>Linux</code>（或其他<code>Unix</code>）系统（如无线路由器）特别有用。——<code>Dropbear</code>官网</p>
+<p><a href="https://matt.ucc.asn.au/dropbear/dropbear.html" target="_blank" rel="noopener">官网：https://matt.ucc.asn.au/dropbear/dropbear.html</a></p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/SSH/">SSH</a><a class="article-category-link" href="/categories/SSH/Dropbear-轻量级SSH服务器和客户端/">Dropbear-轻量级SSH服务器和客户端</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssh/">ssh</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/09/11/Dropbear/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-AIDE" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/10/AIDE/" class="article-date">
+      <time datetime="2017-09-10T12:37:26.000Z" itemprop="datePublished">2017-09-10</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/10/AIDE/">AIDE</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="AIDE简介"><a href="#AIDE简介" class="headerlink" title="AIDE简介"></a>AIDE简介</h3><p>当一个入侵者进入了你的系统并且种植了木马，通常会想法来隐蔽这个木马（除了木马自身的一些隐蔽特性外，他会尽量给你检查系统的过程设置障碍），通常入侵者会修改一些文件，比如管理员通常用<code>ps -aux</code>来查看系统进程，那么入侵者很可能用自己经过修改的<code>ps</code>程序来替换掉你系统上的<code>ps</code>程序，以使用ps命令查不到正在运行的木马程序。如果入侵者发现管理员正在运行<code>crontab</code>作业，也有可能替换掉<code>crontab</code>程序等等。所以由此可以看出对于系统文件或是关键文件的检查是很必要的。目前就系统完整性检查的工具用的比较多的有两款： <code>Tripwire</code>和<code>AIDE</code>，前者是一款商业软件，后者是一款免费的但功能也很强大的工具。</p>
 <ul>
-<li>1969年<code>Ken Thompson</code>使用汇编语言<code>B</code>语言<code>File Server System</code>。
+<li><code>AIDE</code>(<code>Advanced Intrusion Detection Environment</code>,高级入侵检测环境)是个入侵检测工具，主要用途是检查文档的完整性。</li>
+</ul>
           
       
     </div>
@@ -543,18 +826,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/Linux历史/">Linux历史</a>
+    <a class="article-category-link" href="/categories/安全相关/">安全相关</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux历史/">Linux历史</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AIDE/">AIDE</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/07/02/Linux-history/#more">more >></a>
+          <a href="/2017/09/10/AIDE/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -574,11 +857,11 @@
 
 
   
-    <article id="title-Linux" class="article article-type-title" itemscope itemprop="blogPost">
+    <article id="post-SSH-mianmi" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/07/01/Linux/" class="article-date">
-      <time datetime="2017-07-01T21:44:14.000Z" itemprop="datePublished">2017-07-01</time>
+      <a href="/2017/09/08/SSH-mianmi/" class="article-date">
+      <time datetime="2017-09-08T12:57:06.000Z" itemprop="datePublished">2017-09-08</time>
 </a>
 
 
@@ -593,7 +876,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/01/Linux/">什么Linux？</a>
+      <a class="article-title" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a>
     </h1>
   
 
@@ -603,7 +886,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="什么是linux？"><a href="#什么是linux？" class="headerlink" title="什么是linux？"></a>什么是linux？</h3><p><code>Linux</code>是一种自由和开放源代码的类<code>UNIX</code>操作系统。目前运用领域最广泛、使用人数最多的操作系统。该操作系统的内核由林纳斯·托瓦兹在1991年10月5日首次发布。在加上用户空间的应用程序之后，成为<code>Linux</code>操作系统。<code>Linux</code>也是自由软件和开放源代码软件发展中最著名的例子。只要遵循<code>GNU</code>通用公共许可证，任何个人和机构都可以自由地使用<code>Linux</code>的所有底层源代码，也可以自由地修改和再发布。大多数<code>Linux</code>系统还包括像提供<code>GUI</code>的<code>X Window</code>之类的程序。除了一部分专家之外，大多数人都是直接使用<code>Linux</code>发行版，而不是自己选择每一样组件或自行设置。<br>
+              <h3 id="what-is-SSH"><a href="#what-is-SSH" class="headerlink" title="what is SSH?"></a>what is SSH?</h3><p>Secure Shell（缩写为SSH），由IETF的网络工作小组（Network Working Group）所制定；SSH为一项创建在应用层和传输层基础上的安全协议，为计算机上的Shell（壳层）提供安全的传输和使用环境。使用Tcp 22端口。</p>
+<p>ssh协议目前有SSH1和SSH2，SSH2协议兼容SSH1。目前实现SSH1和SSH2协议的主要软件有OpenSSH和SSH Communications Security Corporation　公司的SSH Communications 软件。前者是OpenBSD组织开发的一款免费的SSH软件，后者是商业软件，因此在linux、FreeBSD、OpenBSD、NetBSD等免费类UNIX系统种，通畅都使用OpenSSH作为SSH协议的实现软件。</p>
           
       
     </div>
@@ -612,156 +896,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux基础/">Linux基础</a><a class="article-category-link" href="/categories/Linux基础/什么Linux？/">什么Linux？</a>
+    <a class="article-category-link" href="/categories/SSH/">SSH</a><a class="article-category-link" href="/categories/SSH/SSH命令与ssh免密登陆/">SSH命令与ssh免密登陆</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/什么Linux？/">什么Linux？</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssh/">ssh</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2017/07/01/Linux/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="title-Linux-fengnuoyiman" class="article article-type-title" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/01/Linux-fengnuoyiman/" class="article-date">
-      <time datetime="2017-07-01T20:44:14.000Z" itemprop="datePublished">2017-07-01</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><strong>冯·诺伊曼结构</strong>（英语：<code>von Neumann architecture</code>），也称<strong>冯·诺伊曼模型</strong>（<code>Von Neumann model</code>）或<strong>普林斯顿结构</strong>（<code>Princeton architecture</code>），是一种将程序指令存储器和数据存储器合并在一起的电脑设计概念结构。<br>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机基础知识/">计算机基础知识</a><a class="article-category-link" href="/categories/计算机基础知识/冯-诺依曼体系结构/">冯.诺依曼体系结构</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/冯-诺依曼体系结构/">冯.诺依曼体系结构</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/07/01/Linux-fengnuoyiman/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Linux-ABI-API" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/01/Linux-ABI-API/" class="article-date">
-      <time datetime="2017-07-01T11:04:21.000Z" itemprop="datePublished">2017-07-01</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/01/Linux-ABI-API/">ABI和API</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="ABI"><a href="#ABI" class="headerlink" title="ABI"></a>ABI</h3><p>应用二进制接口（英语：<code>application binary interface</code>，缩写为 <code>ABI</code>）描述了应用程序（或者其他类型）和操作系统之间或其他应用程序的低级接口。允许编译好的目标代码在使用兼容<code>ABI</code>的系统中无需改动就能运行。<br>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机基础知识/">计算机基础知识</a><a class="article-category-link" href="/categories/计算机基础知识/ABI和API/">ABI和API</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ABI和API/">ABI和API</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/07/01/Linux-ABI-API/#more">more >></a>
+          <a href="/2017/09/08/SSH-mianmi/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -783,7 +929,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/16/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span>
+      <a class="extend prev" rel="prev" href="/page/16/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/18/">Next &raquo;</a>
     </nav>
   
 </div>

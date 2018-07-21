@@ -221,11 +221,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-GlusterFS" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-arch" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/06/18/GlusterFS/" class="article-date">
-      <time datetime="2018-06-18T12:08:21.000Z" itemprop="datePublished">2018-06-18</time>
+      <a href="/2018/07/21/Docker-arch/" class="article-date">
+      <time datetime="2018-07-21T11:12:56.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -240,7 +240,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a>
+      <a class="article-title" href="/2018/07/21/Docker-arch/">Docker 架构概览</a>
     </h1>
   
 
@@ -250,7 +250,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://www.ihaiyun.cc/img/images/gluster-ant.png" title="Gluster"></center>
+              <h3 id="Docker-架构概览"><a href="#Docker-架构概览" class="headerlink" title="Docker 架构概览"></a>Docker 架构概览</h3>
           
       
     </div>
@@ -259,18 +259,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/分布式存储系统/">分布式存储系统</a><a class="article-category-link" href="/categories/分布式存储系统/GlusterFS/">GlusterFS</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker-架构概览/">Docker 架构概览</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GlusterFS/">GlusterFS</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/06/18/GlusterFS/#more">more >></a>
+          <a href="/2018/07/21/Docker-arch/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -290,11 +290,11 @@
 
 
   
-    <article id="post-Linux-top" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-cgroups" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/06/16/Linux-top/" class="article-date">
-      <time datetime="2018-06-16T11:35:35.000Z" itemprop="datePublished">2018-06-16</time>
+      <a href="/2018/07/21/Docker-cgroups/" class="article-date">
+      <time datetime="2018-07-21T11:09:09.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -309,7 +309,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/16/Linux-top/">top 命令</a>
+      <a class="article-title" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a>
     </h1>
   
 
@@ -319,7 +319,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>Tep 程序对运行的系统提供一个动态的实时的监控。它能够显示系统的总体信息和一些正被 Linux 内核管理的任务。它所显示的系统总体系统的样式以及任务信息显示的样式，顺序和大小都是由用户配置，而且配置信息可以重启后永久生效。top 能够对京城提供一个有限的交互式界面，对个性化配置提供更多扩展性的界面。</p>
+              <p>上一节中，我们了解了Docker背后使用额资源隔离技术namespace，通过系统调用构建一个相对隔离的shell环境，也可以称之为简单的“容器”。这一届将讲解另一个强大的内核工具——cgroups。它不仅可以限制被namespace隔离起来的资源，还可以为资源设置权重、计算使用量、操控任务（进程或线程）启停等。在本节最后介绍完基本概念后，将详细讲解Docker中使用到的cgroups内容。</p>
+<blockquote>
+<p>注意：在Linux系统中，内核本身的调度和管理并不对进程和线程进行区分，只根据clone创建时传入参数的不同，来从概念上区别进程和线程，所以本节同一称之为任务。</p>
+</blockquote>
           
       
     </div>
@@ -328,18 +331,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux-系统管理/">Linux 系统管理</a><a class="article-category-link" href="/categories/Linux-系统管理/top/">top</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/cgroups资源限制/">cgroups资源限制</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/top/">top</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/06/16/Linux-top/#more">more >></a>
+          <a href="/2018/07/21/Docker-cgroups/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -359,11 +362,11 @@
 
 
   
-    <article id="post-Python-if" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-namespace" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/10/Python-if/" class="article-date">
-      <time datetime="2018-05-10T14:05:22.000Z" itemprop="datePublished">2018-05-10</time>
+      <a href="/2018/07/21/Docker-namespace/" class="article-date">
+      <time datetime="2018-07-21T11:05:12.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -378,7 +381,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/10/Python-if/">Python基础 之 if语句</a>
+      <a class="article-title" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a>
     </h1>
   
 
@@ -388,7 +391,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/Python-if.png" title="Python基础 之 if语句"></center>
+              <h3 id="namespace-资源隔离"><a href="#namespace-资源隔离" class="headerlink" title="namespace 资源隔离"></a>namespace 资源隔离</h3><p>Docker大热之后，热衷技术的开发者就会思考，想要实现一个资源隔离的容器，应该从哪些方面下手？也许第一反应就是chroot命令，这条命令给用户最直观的感受就是再使用后根目录/的挂载点切换了，即文件系统被隔离了。接着，为了在分布式的环境下进行通信和定位，容器必须要有独立的IP、端口、路由等，自然就联想到了网络的隔离。同时，容器还需要一个独立的主机名以便在网络中标识自己。有了网络，自然离不开通信，也就想到了进程间通信需要隔离。开发者可能也已想到了权限的问题，对用户和用户组的隔离就实现了用户权限的隔离。最后，运行在容器中的应用需要有进程号（PID），自然也需要与宿主机中的PID进行隔离。</p>
           
       
     </div>
@@ -397,18 +400,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python基础-之-if语句/">Python基础 之 if语句</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/namespace资源隔离/">namespace资源隔离</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/05/10/Python-if/#more">more >></a>
+          <a href="/2018/07/21/Docker-namespace/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -428,11 +431,11 @@
 
 
   
-    <article id="post-OpenvSwitch-Install" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-harbor" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/09/OpenvSwitch-Install/" class="article-date">
-      <time datetime="2018-05-09T02:16:48.000Z" itemprop="datePublished">2018-05-09</time>
+      <a href="/2018/07/21/Docker-harbor/" class="article-date">
+      <time datetime="2018-07-21T11:03:06.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -447,7 +450,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a>
+      <a class="article-title" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a>
     </h1>
   
 
@@ -457,7 +460,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="获取Open-vSwitch来源"><a href="#获取Open-vSwitch来源" class="headerlink" title="获取Open vSwitch来源"></a>获取Open vSwitch来源</h3><p>Open vSwitch源代码的规范位置是其Git存储库，您可以使用以下命令将其克隆到名为“ovs”的目录中：</p>
+              <h3 id="安装docker和docker-compose"><a href="#安装docker和docker-compose" class="headerlink" title="安装docker和docker-compose"></a>安装docker和docker-compose</h3>
           
       
     </div>
@@ -466,18 +469,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Open-vSwitch/">Open vSwitch</a><a class="article-category-link" href="/categories/Open-vSwitch/安装Open-vSwitch/">安装Open vSwitch</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/使用vmware-harbor构建镜像仓库/">使用vmware harbor构建镜像仓库</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SDN/">SDN</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/05/09/OpenvSwitch-Install/#more">more >></a>
+          <a href="/2018/07/21/Docker-harbor/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -497,11 +500,11 @@
 
 
   
-    <article id="post-Why-Use-OpenvSwitch" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-repertory" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/09/Why-Use-OpenvSwitch/" class="article-date">
-      <time datetime="2018-05-09T02:14:37.000Z" itemprop="datePublished">2018-05-09</time>
+      <a href="/2018/07/21/Docker-repertory/" class="article-date">
+      <time datetime="2018-07-21T11:01:29.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -516,7 +519,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a>
+      <a class="article-title" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a>
     </h1>
   
 
@@ -526,9 +529,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <h3 id="为什么要用Open-vSwitch？"><a href="#为什么要用Open-vSwitch？" class="headerlink" title="为什么要用Open vSwitch？"></a>为什么要用Open vSwitch？</h3><p>虚拟机管理程序需要能够跨越虚拟机和外部世界之间的流量。在基于Linux的管理程序中，这常常意味着使用内置的L2交换机（Linux网桥），该交换机快速可靠。因此，有必要问为什么使用Open vSwitch。</p>
-<p><strong>答案</strong>是Open vSwitch面向多服务器虚拟化部署，这是前一个堆栈不太适合的一个环境。这些环境通常以高度动态的端点，逻辑抽象的维护以及（有时）与专用交换硬件的集成或卸载为特征。</p>
-<p>以下特征和设计注意事项有助于Open vSwitch应对上述要求。</p>
+              <h3 id="安装docker-distribution"><a href="#安装docker-distribution" class="headerlink" title="安装docker-distribution"></a>安装docker-distribution</h3>
           
       
     </div>
@@ -537,18 +538,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Open-vSwitch/">Open vSwitch</a><a class="article-category-link" href="/categories/Open-vSwitch/为什么要用Open-vSwitch？/">为什么要用Open vSwitch？</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker构建私有仓库/">Docker构建私有仓库</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SDN/">SDN</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/05/09/Why-Use-OpenvSwitch/#more">more >></a>
+          <a href="/2018/07/21/Docker-repertory/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -568,11 +569,11 @@
 
 
   
-    <article id="post-OVS" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-dockerfile" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/08/OVS/" class="article-date">
-      <time datetime="2018-05-08T03:42:54.000Z" itemprop="datePublished">2018-05-08</time>
+      <a href="/2018/07/21/Docker-dockerfile/" class="article-date">
+      <time datetime="2018-07-21T10:51:54.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -587,7 +588,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/08/OVS/">What Is Open vSwitch</a>
+      <a class="article-title" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a>
     </h1>
   
 
@@ -597,7 +598,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/OVS-1.png" title="Open vSwitch"></center>
+              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Dockfile是一种被Docker程序解释的脚本，Dockerfile由一条一条的指令组成，每条指令对应Linux下面的一条命令。Docker程序将这些Dockerfile指令翻译真正的Linux命令。Dockerfile有自己书写格式和支持的命令，Docker程序解决这些命令间的依赖关系，类似于Makefile。Docker程序将读取Dockerfile，根据指令生成定制的image。相比image这种黑盒子，Dockerfile这种显而易见的脚本更容易被使用者接受，它明确的表明image是怎么产生的。有了Dockerfile，当我们需要定制自己额外的需求时，只需在Dockerfile上添加或者修改指令，重新生成image即可，省去了敲命令的麻烦。</p>
           
       
     </div>
@@ -606,18 +607,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/SDN/">SDN</a><a class="article-category-link" href="/categories/SDN/What-Is-Open-vSwitch/">What Is Open vSwitch</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Dockerfile编写/">Dockerfile编写</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Open-vSwitch/">Open vSwitch</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/05/08/OVS/#more">more >></a>
+          <a href="/2018/07/21/Docker-dockerfile/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -637,11 +638,11 @@
 
 
   
-    <article id="post-Python-tuple" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-network" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/07/Python-tuple/" class="article-date">
-      <time datetime="2018-05-07T14:02:45.000Z" itemprop="datePublished">2018-05-07</time>
+      <a href="/2018/07/21/Docker-network/" class="article-date">
+      <time datetime="2018-07-21T10:48:45.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -656,7 +657,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a>
+      <a class="article-title" href="/2018/07/21/Docker-network/">Docker网络管理</a>
     </h1>
   
 
@@ -666,7 +667,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/Python-tuple.png" title="Python常用数据类型-元组"></center>
+              <h3 id="列出当前主机上的docker网络"><a href="#列出当前主机上的docker网络" class="headerlink" title="列出当前主机上的docker网络"></a>列出当前主机上的docker网络</h3>
           
       
     </div>
@@ -675,18 +676,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python常用数据类型-元组/">Python常用数据类型-元组</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker网络管理/">Docker网络管理</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/05/07/Python-tuple/#more">more >></a>
+          <a href="/2018/07/21/Docker-network/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -706,11 +707,11 @@
 
 
   
-    <article id="post-Python-list2" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-volume" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/07/Python-list2/" class="article-date">
-      <time datetime="2018-05-07T13:32:48.000Z" itemprop="datePublished">2018-05-07</time>
+      <a href="/2018/07/21/Docker-volume/" class="article-date">
+      <time datetime="2018-07-21T10:44:49.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -725,7 +726,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a>
+      <a class="article-title" href="/2018/07/21/Docker-volume/">Docker数据卷</a>
     </h1>
   
 
@@ -735,7 +736,13 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/Python-list2.png" title="Python常用数据类型-列表2"></center>
+              <h3 id="容器存储数据存在的问题"><a href="#容器存储数据存在的问题" class="headerlink" title="容器存储数据存在的问题"></a>容器存储数据存在的问题</h3><p>关闭并重启容器，其数据不受影响；但删除容器，则其更改的数据将会全部丢失；</p>
+<p>存在的问题：</p>
+<ol>
+<li>存储于联合文件系统中，不易于宿主机的访问；</li>
+<li>容器间数据共享不便；</li>
+<li>删除容器其数据会丢失；</li>
+</ol>
           
       
     </div>
@@ -744,18 +751,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python常用数据类型-列表2/">Python常用数据类型-列表2</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker数据卷/">Docker数据卷</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/05/07/Python-list2/#more">more >></a>
+          <a href="/2018/07/21/Docker-volume/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -775,11 +782,11 @@
 
 
   
-    <article id="post-Python-for-range" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-commit-image" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/07/Python-for-range/" class="article-date">
-      <time datetime="2018-05-07T11:55:38.000Z" itemprop="datePublished">2018-05-07</time>
+      <a href="/2018/07/21/Docker-commit-image/" class="article-date">
+      <time datetime="2018-07-21T10:41:29.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -794,7 +801,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a>
+      <a class="article-title" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a>
     </h1>
   
 
@@ -804,7 +811,11 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/Python-for-range.png" title="Python 之 for循环和range()函数"></center>
+              <h3 id="镜像的生成途径"><a href="#镜像的生成途径" class="headerlink" title="镜像的生成途径"></a>镜像的生成途径</h3><ol>
+<li>Dockerfile</li>
+<li>基于容器的制作</li>
+<li>Docker Hub automated builds</li>
+</ol>
           
       
     </div>
@@ -813,18 +824,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python基础/">Python基础</a><a class="article-category-link" href="/categories/Python基础/Python-之-for循环和range-函数/">Python 之 for循环和range()函数</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/通过commit方式制作Docker镜像/">通过commit方式制作Docker镜像</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python基础/">Python基础</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/05/07/Python-for-range/#more">more >></a>
+          <a href="/2018/07/21/Docker-commit-image/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -844,11 +855,11 @@
 
 
   
-    <article id="post-Jira" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Docker-manage-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/07/Jira/" class="article-date">
-      <time datetime="2018-05-07T07:37:32.000Z" itemprop="datePublished">2018-05-07</time>
+      <a href="/2018/07/21/Docker-manage-1/" class="article-date">
+      <time datetime="2018-07-21T10:38:21.000Z" itemprop="datePublished">2018-07-21</time>
 </a>
 
 
@@ -863,7 +874,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/07/Jira/">Jira</a>
+      <a class="article-title" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a>
     </h1>
   
 
@@ -873,7 +884,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <center><img src="https://houhaiyun.github.io/img/images/Jira-1.png" title="项目管理工具 JIRA"></center>
+              <h3 id="查看docker版本"><a href="#查看docker版本" class="headerlink" title="查看docker版本"></a>查看docker版本</h3>
           
       
     </div>
@@ -882,18 +893,18 @@
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/项目管理工具/">项目管理工具</a><a class="article-category-link" href="/categories/项目管理工具/JIRA/">JIRA</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker镜像管理及容器管理/">Docker镜像管理及容器管理</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JIRA/">JIRA</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a href="/2018/05/07/Jira/#more">more >></a>
+          <a href="/2018/07/21/Docker-manage-1/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -915,7 +926,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>

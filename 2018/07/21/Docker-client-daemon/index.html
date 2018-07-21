@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="侯海云" />
+
+
+
+<meta name="description" content="使用过Docker的恐怕对docker这个命令是再熟悉不过了，不知读者有没有思考过，当使用这个命令时究竟发生了什么？该从哪里入手去跟踪一个docker命令的执行流程呢？实际上，要回答这个问题，首先要了解docker命令的两种模式：client模式和daemon模式。">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker client和daemon">
+<meta property="og:url" content="https://www.ihaiyun.cc/2018/07/21/Docker-client-daemon/index.html">
+<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:description" content="使用过Docker的恐怕对docker这个命令是再熟悉不过了，不知读者有没有思考过，当使用这个命令时究竟发生了什么？该从哪里入手去跟踪一个docker命令的执行流程呢？实际上，要回答这个问题，首先要了解docker命令的两种模式：client模式和daemon模式。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-11.png">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-12.png">
+<meta property="og:updated_time" content="2018-07-21T11:16:17.892Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="docker client和daemon">
+<meta name="twitter:description" content="使用过Docker的恐怕对docker这个命令是再熟悉不过了，不知读者有没有思考过，当使用这个命令时究竟发生了什么？该从哪里入手去跟踪一个docker命令的执行流程呢？实际上，要回答这个问题，首先要了解docker命令的两种模式：client模式和daemon模式。">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Docker-11.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>docker client和daemon | 侯海云的个人网站</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">侯海云</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Docker-client-daemon" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-client-daemon/" class="article-date">
+      <time datetime="2018-07-21T11:15:18.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      docker client和daemon
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/docker-client和daemon/">docker client和daemon</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>使用过Docker的恐怕对docker这个命令是再熟悉不过了，不知读者有没有思考过，当使用这个命令时究竟发生了什么？该从哪里入手去跟踪一个docker命令的执行流程呢？实际上，要回答这个问题，首先要了解docker命令的两种模式：client模式和daemon模式。</p>
+<a id="more"></a>
+<h3 id="client模式"><a href="#client模式" class="headerlink" title="client模式"></a>client模式</h3><p>什么是Docker的client模式呢？我们知道，docker命令对应的源文件是docker/docker.go（如果不做说明，根路径是项目的根目录docker/），它的使用方式如下：</p>
+<p>docker [OPTIONS] COMMAND [ARG…]</p>
+<p>其中OPTIONS参数称为flag，任何时候执行一个docker命令，Docker都需要先解析这些flag，然后按照用户声明的COOMAND向制定的自命令执行对应的操作。</p>
+<p>如果子命令为daemon，Docker就会创建一个运行在宿主机的daemon进程（docker/daemon.go#mainDaemon），即执行daemon模式。其余子命令都会执行client模式。处于client模式下的docker命令工作流程包含如下几个步骤。</p>
+<h4 id="1-解析flag信息"><a href="#1-解析flag信息" class="headerlink" title="1. 解析flag信息"></a>1. 解析flag信息</h4><p>docker命令支持大量的OPTION，或者说flag，这里列出对于运行在client模式下的docker比较重要的一些flag。</p>
+<ul>
+<li>Debug，对应-D和–debug参数，它将向系统中添加DEBUG环境变量且赋值为1，并把日志显示等级调为DEBUG级，这个flag用于启动调试模式。</li>
+<li>LogLevel，对应-l和–log-level参数，默认等级为info，即只输出普通的操作信息。用户可以指定的日志等级现在有panic、fatal、error、warn、info、debug这几种。</li>
+<li>Hosts，对应-H和–host=[]参数，对于client模式，就是指本次操作需要连接的Docker daemon位置，而对于daemon模式，则提供索要监听的地址。若Hosts变量或者系统环境变量DOCKER_HOST不为空，说明用户指定了host对象；否则使用默认设定，默认情况下Linux系统设置为unix:///var/run/docker.sock</li>
+<li>protoAddrParts，这个信息来自于-H参数中：//前后的两部分的组合，即与Docker daemon建立通信的协议方式与socket地址。</li>
+</ul>
+<h4 id="2-创建client实例"><a href="#2-创建client实例" class="headerlink" title="2. 创建client实例"></a>2. 创建client实例</h4><p>client的创建就是在已有配置参数信息的基础上，调用api/client/cli.go#NewDockerClie，需要设置好proto（传输协议）、addr（host的目标地址）和tlsConfig（啊暖传输层协议的配置），另外还会配置标准输入输出及错误输出。</p>
+<h4 id="3-执行具体的命令"><a href="#3-执行具体的命令" class="headerlink" title="3. 执行具体的命令"></a>3. 执行具体的命令</h4><p>Docker client对象创建成功后，剩下的执行具体的命令就交给cli/cli.go来处理了。</p>
+<h5 id="从命令映射到对应的方法"><a href="#从命令映射到对应的方法" class="headerlink" title="从命令映射到对应的方法"></a>从命令映射到对应的方法</h5><p>cli主要通过反射机制，从用户输入命令（比如run）得到匹配的执行方法（比如CmdRun），这也是所谓“约定大于配置”的方法命令规范。</p>
+<p>同时，cli会根据参数列表的长度判断是否用于多级Docker命令支持（例如未来也许会加入一条命令，如docker group run可以指定一组Dcoker容器一起运行某个命令），然后根据找到的执行方法，把剩余参数传入并执行。若传入的方法不合法或参数不正确，则返回docker命令的帮助信息并退出。</p>
+<p>在v1.10的Docker中每一个类似api/client/commnd.go#CmdRun的方法都被剥离出阿里作为一个单独的文件存在，例如读者想要学习docker run这个命令的执行过程，就需要寻早api/clientrun.go这个文件。</p>
+<h5 id="执行对应的方法，发起请求"><a href="#执行对应的方法，发起请求" class="headerlink" title="执行对应的方法，发起请求"></a>执行对应的方法，发起请求</h5><p>找到具体的执行方法后，就开始执行。虽然请求内容会有所不同，但执行流程却大致相同。基本的流程如下所示。</p>
+<ul>
+<li>解析传入的参数，并针对参数进行配置处理</li>
+<li>获取与Docker daemon通信所需要的认证配置信息。</li>
+<li>根据命令业务类型，给Docker daemon发送POST、GET等请求。</li>
+<li>读取来自Docker daemon的返回结果。</li>
+</ul>
+<p>由此可见，在请求执行过程中，大多都是将命令行中关于请求的参数进行初步处理，并添加响应的辅助信息，最终通过指定的协议给Docker daemon发送Docker client API请求，主要的任务执行均有Docker daemon完成。</p>
+<p>至此，client模式下的一个命令的处理流程就结束了，接下来介绍daemon模式。</p>
+<h3 id="daemon-模式"><a href="#daemon-模式" class="headerlink" title="daemon 模式"></a>daemon 模式</h3><p>上一节讲到了Docker运行时如果使用docker daemon自命令，就会运行Docker daemon。本节将重点讲解Docker daemon在启动过程中所做的工作。</p>
+<p>一旦docker进入了daemon模式下，剩下的初始化工作和启动工作就都由Docker的docker/daemon.go#CmdDaemon来完成。</p>
+<p>下面是Docker daemon启动与初始化过程的详细解析。</p>
+<h4 id="1-API-Server的配置和初始化过程"><a href="#1-API-Server的配置和初始化过程" class="headerlink" title="1. API Server的配置和初始化过程"></a>1. API Server的配置和初始化过程</h4><p>首先，在docker/daemon.go#CmdDaemon中，Docker会继续按照用户的配置完成server的初始化并启动它。server又称为APi Server，顾名思义就是专门负责响应用户请求并将请求交给daemon具体方法去处理的进程。它的启动过程如下。</p>
+<ul>
+<li><1> 整理解析用户指定的各项参数。</1></li>
+<li><2>    创建PID文件。</2></li>
+<li><3> 加载所需的server辅助配置，包括日志、是否允许远程访问、版本以及TLS认证信息等。</3></li>
+<li><4> 根据上述server配置，加上之前解析出来的用户指定的server配置（比如Hosts），通过goroutine的方式启动API Server。这个server监听的socker位置就是Hosts的值。</4></li>
+<li><5> 创建一个负责处理业务的daemon对象（对应daemon/damone.go）作为负责处理用户请求的逻辑实体。</5></li>
+<li><6> 对APIserver中的路由表进行初始化，即将用户的请求和对应的处理函数相对应起来。</6></li>
+<li><7> 设置一个channel，保证上述goroutine只有在server出错的情况下才会退出。</7></li>
+<li><8> 设置信号捕获，当Docker daemon进程收到INT、TERM、QUIT信号时，关闭API Server，调用shutdownDaemon停止这个daemon。</8></li>
+<li><9> 如果上述操作都成功，API Server就会与上述daemon绑定，并允许接收来自client的连接。</9></li>
+<li><10> 最后，Docker daemon进程向宿主机的init守护进程发送“READY<br>=1”信号，表示这个Docker daemon已经开始工作了。</10></li>
+</ul>
+<p>那么shutdownDaemon是如何来关闭一个daemon的呢？这个流程如下步骤。</p>
+<ul>
+<li>(1) 创建并设置一个channel，使用select监听数据。在正确完成关闭daemon工作后将该channel关闭，标识该工作的完成；狗则在超时（15秒）后报错。</li>
+<li>(2) 调用daemon/daemon.go#Shutdown方法执行如下工作。<ul>
+<li>便利所有运行中的容器，先使用SIGTERM软件杀死容器进程，如果10秒内不能完成，则使用SIGKILL强制杀死。</li>
+<li>入宫netController被初始化过，调用#libnetwork/controller.go#GC方法进行垃圾回收。</li>
+<li>结束运行中的镜像存储驱动进程。</li>
+</ul>
+</li>
+</ul>
+<p>在1.6版本的早期和以前的所有版本，上述server的启动和初始化使用了一种复杂的Job机制（API Server即被看作一种Job），并且依赖于一个专门的Docker Engine来管理和运行这些Job。到1.7版本，这个设计已经在整个社区的推动下被重构了，浙江大学SEL实验室云计算团队也参与到了此次重构得过程中。所以本书介绍的新的server初始化流程，该server会通过与daemon对象绑定来接收并处理完成具体得请求（类似一个API接收器绑定了一个业务逻辑处理器）。目前得1.10版仍保持了这个设计。</p>
+<h4 id="2-daemon对象得创建与初始化过程"><a href="#2-daemon对象得创建与初始化过程" class="headerlink" title="2. daemon对象得创建与初始化过程"></a>2. daemon对象得创建与初始化过程</h4><p>既然API Serverr是同daemon对象绑定起来共同完成工作得，那么这个daemon对象是如何创建出来的呢？事实上，这个过程对应的正是daemon/daemon.go#NewDaemon方法。</p>
+<p>NewDaemon过程会按照Docker的功能点，逐条为daemon对象所需的属性设置用户或者系统指定的值，这是一个相当复杂的过程。</p>
+<p>截至到本书截稿，这个过程需要完成的而配置至少包括了如下功能点：Docker容器的配置信息、检测系统支持及用户权限、配置工具路径、加载并配置graphdriver、创建Docker网络环境、创建并初始化镜像数据库、创建容器管理驱动、检测DNS配置和加载已有Docker容器等。下面将为读者一一解释。</p>
+<h5 id="Docker容器的配置信息"><a href="#Docker容器的配置信息" class="headerlink" title="Docker容器的配置信息"></a>Docker容器的配置信息</h5><p>容器配置信息的主要功能是：供用户自由配置Dokcer容器的可选功能，使得Docker容器的运行更贴近用户期待的运行场景。配置信息的处理包含以下几个部分。</p>
+<ul>
+<li>设置默认的网络最大传输单元：当用户没有对-mtu参数进行指定时，将其设置为1500.否则，沿用用户指定的参数值。</li>
+<li>检测网桥配置信息：此部分配置为进一步配置Docker网桥提供铺垫，将在后续详细介绍。</li>
+</ul>
+<h5 id="检测系统支持及用户权限"><a href="#检测系统支持及用户权限" class="headerlink" title="检测系统支持及用户权限"></a>检测系统支持及用户权限</h5><p>初步处理完Docker的配置信息之后，Docker对自身运行的环境进行了一系列的检测，主要包括3个方面。</p>
+<ul>
+<li>操作系统类型对Docker daemon的支持，目前Docker daemon只能运行在Linux系统上。</li>
+<li>用户权限的级别，必须是root权限。</li>
+<li>内核版本与处理器的支持，支持amd64架构的处理器，且内核版本必须升至3.10.0及以上。</li>
+</ul>
+<h5 id="配置daemon工作路径"><a href="#配置daemon工作路径" class="headerlink" title="配置daemon工作路径"></a>配置daemon工作路径</h5><p>配置Docker daemon的工作路径，主要是创建Docker daemon运行中所在的工作目录，默认为/var/lib/docker。若该目录不存在，则会创建，并赋予0700权限。</p>
+<h5 id="配置Docker容器所需的文件环境"><a href="#配置Docker容器所需的文件环境" class="headerlink" title="配置Docker容器所需的文件环境"></a>配置Docker容器所需的文件环境</h5><p>这一步Docker daemon会在Docker工作根目录/bar/lib/docker下面初始化一些重要的目录和文件，来构建Docker容器工作所需的文件系统环境。</p>
+<p><strong>第一</strong> ，创建容器配置文件目录。Docker daemon再创建Docker容器之后，需要将容器内的配置文件放到这个目录下统一管理。目录默认位置为：/var/lib/docker/containers，它下面会为每个具体容器保存如下几个配置文件，其中xxx为容器ID：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># ls /var/lib/docker/containers/xxx</span><br><span class="line">checkpoints  config.v2.json  hostconfig.json  hostname  hosts  resolv.conf  secrets  shm</span><br></pre></td></tr></table></figure>
+<p>这些配置文件里包含了这个容器的所有元数据。</p>
+<p><strong>第二</strong> ，配置graphdriver目录。它用于完成Docker容器镜像管理所需的底层存储驱动层。所以，在这一步的配置工作就是加载并配置镜像存储驱动graphdriver，创建存储驱动管理镜像层文件系统所需的目录和环境，初始化镜像层元数据存储。</p>
+<p>创建graphdriver时，首先会从环境变量DOCKER_DRIVER中读用户指定的驱动，若为空，则开始遍历优先级数组选择一个graphdriver。在Linux环境下，优先级从高到低依次为aufs、btfs、zfs、devicemapper、overlay和vfs。在不同操作系统下，优先级列表的内容和顺序都会不同，而且随着内核的发展以及驱动的完善，会继续发生变化。</p>
+<p>需要注意，目前vfs在Docker中是用来管理volume的，并不作为镜像存储使用。另外，由于目前在overlay文件系统上运行的Docker容器不兼容SELinux，因此当config中及配置信息需要启用SELinux并且driver的类型为overlay时，该过程就会报错。</p>
+<p>当识别出对应的driver（比如aufs）后，Docker会执行这个driver对应的初始化方法（位于daemon/graphdriver/aufs/aufs.go），这个初始化的主要工作包括：尝试加载内核aufs模块来确定Docker主机支持aufs；发起statfs系统调用获取当前Docker主目录（/var/lib/docker/）的文件系统信息，确定aufs是否支持该文件系统；创建aufs驱动根目录（默认：/var/lib/docker/aufs）并将该目录配置为私有挂载；在根目录下创建mnt、diff和layers目录作为aufs驱动的工作环境。</p>
+<p>上述工作完成后，graphdriver的配置工作就完成了。</p>
+<p><strong>第三</strong> ，配置镜像目录。主要工作是在Docker主目录下创建一个image目录，来存储所有镜像和镜像层管理数据，默认目录为“/var/lib/docker/image/”。在image目录下，每一个graphdriver都有一个具体的目录用于存储使用该graphdriver存储的镜像相关的元数据。</p>
+<p>根据上一步graphdriver的选择情况（这里以aufs为例），创建image/aufs/layerdb/目录作为镜像层元数据存储目录，并创建MetadataStore用来管理这些元数据。根据graphdriver与元数据存储结构创建layerStore，用来管理所有的景象层和容器曾，将逻辑镜像层的操作映射到物理存储驱动根层graphdriver的操作；创建用于对registry的镜像上传下载的uploadManager和downloadManager。</p>
+<p>创建image/aufs/imagedb/目录用于存储镜像的元数据，并根据layerStore创建imageStore，用来管理镜像的元数据。layerdb和imagedb目录结构和作用会在后续详细说明。</p>
+<p><strong>第四</strong> ，调用volume/local/local.go#New创建volume驱动目录（默认为/var/lib/docker/volumes），Docker中volume是宿主机上挂载到Docker容器内部的特定目录。volumes目录下有一个metadata.db数据库文件用于存储volume相关的元数据，其余以volume ID命名的文件夹用于存储具体的volume内容。默认的volume驱动式local，用户也可以通过插件的形式使用其他volume驱动来存储。</p>
+<p><strong>第五</strong> ，准备“可信镜像”所需的工作目录。在Docker工作根目录下创建trust目录。这个存储目录可以根据用户给出的可信URL加载授权文件，用来处理可信镜像的授权和验证过程。</p>
+<p><strong>第六</strong> ，创建distributionMetadataStore和referenceStore。referenceStore用于存储镜像的仓库列表。记录镜像仓库的持久化文件位于Docker根目录下的image/[graphdriver]/repositories.json中，主要用于做镜像ID与镜像仓库之间的映射。distributionMetadataStore存储与第二版镜像仓库registry有关的元数据，主要用于做镜像层的diff_id与registry中镜像层数据之间的映射。</p>
+<p><strong>第七</strong>，将持久化在Docker根目录中的镜像、镜像层以及镜像仓库等的元数据内容恢复到daemon的imageStore、layerStore和referenceStore中。</p>
+<p><strong>第八</strong> ，执行镜像迁移。由于Docker 1.10版本以后，镜像管理部分使用率基于内容寻址存储（content-addressable storage）。升级到1.10以上的新版本后，在第一次启动daemon时，为例将老版本中的graph镜像管理迁移到新的经此昂管理体系中，这里会检查Docker根目录总是否存在graph文件夹，如果存在就会读取graph中的老版本镜像信息，计算校验和并将镜像数据写入到新版的imageStore和layerStore中。读者需要注意的是，迁移镜像中计算校验和是一个非常占用CPU的工作，并且在未完成镜像迁移时，Docker daemon是不会响应任何请求的，所以如果你本地的老板本镜像和容器比较多，或者是在对服务器负载和响应比较敏感的线上环境尝试升级Docker版本，那就要注意妥善安排时间了。Docker官方也提供了迁移工具让用户在老版本daemon运行的时候进行镜像的迁移。</p>
+<p>综上，这里Docker daemon需要在Docker根目（/var/lib/docker）下创建初始化一系列根容器文件密切相关的目录和文件。这些文件和目录的具体作用我们会在讲解镜像和volume的时候做详细解释，这里献给读者进行一个简答的总结。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-11.png" title="Docker根目录"></center>
+
+
+<h5 id="创建Docker-daemon网络"><a href="#创建Docker-daemon网络" class="headerlink" title="创建Docker daemon网络"></a>创建Docker daemon网络</h5><p>创建Docker daemon运行环境的时候，创建网络环境时极为重要的一个部分。这不仅关系着容器对外的通信，同样也关系着容器间的通信。网络部分早已被抽离出来作为要给单独的模块，称为libnetwork。libnetwork通过插件的形式为Docker提供网络功能，使得用户可以根据自己的需求实现自己的driver来提供不同的网络功能。截止到Docker 1.10版本，libnetwork实现了host、null、bridge和overlay的驱动。其中，bridge driver为默认驱动，和之前版本中的Docker网络功能是基本等价的。需要注意的是，同之前的Docker网络一样，bridge driver并不能提供跨主机通信的能力，overlay driver则适用于多主机环境。</p>
+<h5 id="初始化execdriver"><a href="#初始化execdriver" class="headerlink" title="初始化execdriver"></a>初始化execdriver</h5><p>execdriver是Docker中用来管理Docker容器的驱动。Docker会调用execdrivers中的eNewDriver()函数来创建新的execdriver。</p>
+<p>在创建execdriver的时候，需哟啊注意以下5部分信息。</p>
+<ul>
+<li>运行时中指定使用的驱动类别，在默认配置文件中默认使用nativer，即其对应的容器运行时为libcontainer；</li>
+<li>用户定义的execdriver选项，即-exec-opt参数值；</li>
+<li>用户定义的-exec-root参数值，Docker execdriver运行的root路径，默认为/var/run/docker；</li>
+<li>Docker运行时的root路径，默认为/var/lib/docker；</li>
+<li>系统功能信息，包括容器的内存限制功能、交换分区限制功能、数据转发功能以及AppArmor安全功能等。</li>
+</ul>
+<p>AppArmor通过host主机是否存在/sys/kernel/security/apparmor来判断是否加入AppArmor配置，这部分会在后续内容中介绍。</p>
+<p>最后，如果选择了native作为这个execdriver的驱动实现，上述driver的创建过程就会新建一个libcontainer，这个elibcontainer会在后面创建和启动Linux容器时发挥作用。</p>
+<h5 id="daemon对象诞生"><a href="#daemon对象诞生" class="headerlink" title="daemon对象诞生"></a>daemon对象诞生</h5><p>DOcker daemon进程在经过以上诸多设置以及创建对象之后，最终创建出了daemon对象实例，其属性总结如下：</p>
+<ul>
+<li>ID：根据传入的证书生成的容器ID，若并没有换入则自动使用ECDSA加密算法生成。</li>
+<li>repository：部署所有DOcker容器的路径。</li>
+<li>containers：用于存储具体Docker容器信息的对象。</li>
+<li>execCommadns：Docker容器所执行的命令</li>
+<li>referenceStore：存储Docker镜像仓库名和镜像ID的映射。</li>
+<li>distributionMetadataStore：v2版registry相关的元数据存储</li>
+<li>trustKey：可信任证书</li>
+<li>idIndex：用于通过简短有效的字符串前缀定位唯一的镜像。</li>
+<li>sysInfo：Docker所在宿主机的系统信息</li>
+<li>configStore：Docker所需要的配置信息。</li>
+<li>execDriver：Docker容器执行驱动，默认为native类型。</li>
+<li>statsCollector：收集容器网络及cgroup状态信息。</li>
+<li>defaultLogConfig：提供日志的默认配置信息</li>
+<li>registryService：镜像存储服务相关信息。</li>
+<li>EventsService：时间服务相关信息</li>
+<li>volumes：volume所使用的驱动，默认为local类型。</li>
+<li>root：Docker运行的工作根目录。</li>
+<li>uidMaps：uid的对应图</li>
+<li>gidMaps：gid的对应图</li>
+<li>seccompEnable：是否使用seccompute。</li>
+<li>nameIndex：记录键和其名字的对应关系</li>
+<li>linkIndex：容器的link目录，记录容器的link关系。</li>
+</ul>
+<h5 id="恢复已有的Docker容器"><a href="#恢复已有的Docker容器" class="headerlink" title="恢复已有的Docker容器"></a>恢复已有的Docker容器</h5><p>当Docker daemon启动时，回去查看在daemon.repository也就是在/var/lib/docker/containers中的内容。若有已经存在的Docker容器，则将相应信息收集并进行维护，同期重启restart policy为always的容器。</p>
+<p>综上所述，Docker daemon的启动看起来非常复杂，这是Docker在演进的过程中不断添加功能点造成的。但不管今后Docker的功能点增加多少，Docker daemon进程的启动都将遵循以下3步。</p>
+<p>(1) 首先是启动一个API Server，它工作在用户通过-H指定的socker上面；</p>
+<p>(2) 然后Docker使用NewDaemon方法创建一个daemon对象来保存信息和处理了业务逻辑；</p>
+<p>(3) 最后将上述API Server和daemon对象绑定起来，接收并处理client的请求。</p>
+<p>只不过，NewDaemon方法的长度会不断增减而已。</p>
+<blockquote>
+<p>提示 上述过程住哟啊设计daemon/daemon.go#NewDaemon这部分源码，读者若有兴趣可以进一步深入研究。</p>
+</blockquote>
+<h3 id="从-client到daemon"><a href="#从-client到daemon" class="headerlink" title="从 client到daemon"></a>从 client到daemon</h3><p>在前面的小节中已经描述过Docker client和daemon启动并初始化的全过程，接下来的问题是，一个已经在运行的daemon是如何相应并处理来自client的请求的呢？就从docker run这个命令说起吧。</p>
+<h4 id="1-发起请求"><a href="#1-发起请求" class="headerlink" title="1. 发起请求"></a>1. 发起请求</h4><ul>
+<li>(1) docker run命令开始运行，用户端的Docker进入client模式，开始了上文中讲述的client工作过程；</li>
+<li>(2) 经过初始化，新建出了一个client；</li>
+<li>(3) 上述client通过反射机制找到了CmdRun方法。</li>
+</ul>
+<p>CmdRun在解析过用户提供的容器参数一些列操作后，最终发出了这样两个请求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;POST&quot;, &quot;/containers/create?&quot;+containerValues	//创建容器</span><br><span class="line">&quot;POST&quot;,  &quot;/containers/&quot;+createResponse.ID+&quot;start&quot;	//启动容器</span><br></pre></td></tr></table></figure>
+<p>至此，client的主要任务结束。</p>
+<p>前面说过，daemon在启动后维护了一个API Server来相应上述请求，同样遵循“约定大于配置”的原则，daemon端负责响应第一个create请求的方法是；api/server/server.go#postContainersCreate。</p>
+<p>在1.6版本以前，Docker daemon会将一个创建容器的Job交给所谓的Docker Engine来管接下来的任务。不过这个过程已经被完全废弃并且再也不会回来了。所以接下来我们会按照1.10版本的方式讲解daemon创建和启动容器的过程，解析过程读者完全不需要翻阅代码。</p>
+<h4 id="2-创建容器"><a href="#2-创建容器" class="headerlink" title="2. 创建容器"></a>2. 创建容器</h4><p>估计读者已经猜到，在这一部Docker daemon并不需要真正创建一个Linux容器，它只需要解析用户通过client提交的POST表单，然后使用这些参数在daemon中新建一个container对象出来即可。这个container实体就是container/container_unix.go，其中的CommonContainer字段定义在container/container.go中，为Linux平台和windows平台上容器共有的属性，本书主要以Linux平台为主，这里将Linux平台上容器最重要的定义片段一并列举如下。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-12.png" title="container/container.go"></center>
+
+
+<p>这里需要额外注意的是daemon属性，即container是能够知道管理它的daemon进程信息的，很快会看到这个关系的作用。</p>
+<p>上述过程完成后，container的信息会作为Response返回给client，client会紧接着发送start请求。</p>
+<h4 id="3-启动容器"><a href="#3-启动容器" class="headerlink" title="3. 启动容器"></a>3. 启动容器</h4><p>这时候daemon这边的重点来了。API Server接收到start请求后会告诉Dcoekr daemon进行container启动容器操作，这个过程是daemon/start.go。</p>
+<blockquote>
+<p>注意：1.7版本以后的Docke不仅把所有的client端的请求都是用了一个对应的api/client/{请求名称}.go文件来定义，在daemon端，所有请求的处理过程也放在daemon/{请求名称}.go文件中来定义。读者可以根据自己想了解的内容寻找对应的文件。</p>
+</blockquote>
+<p>此时，由于container所需的各项参数，比如NetworkSettings、ImageID等，都已经在创建容器过程中赋好了值，Docker daemon会在start.go中直接执行daemon.ContainerStart，就能够在宿主机上创建对应的容器了。</p>
+<p>等一下，创建容器的过程不是要创建namespace，配置cgroup，挂载rootfs？谁负责做这些事情呢？答案当然还是Docker daemon。containerMonitor将daemon设置为自己的supervisor。所以经过一些类调用后，daemon.ContainerStart实际上执行操作的是：</p>
+<p><code>containerMonitor.daemon.Run(container ...)</code></p>
+<p>即告诉daemon进程：请使用本container县官信息做参数，执行对应execdriver的Run方法。</p>
+<blockquote>
+<p>提示    具体来说，daemon/container.go#ContainerStart其实是经过了waitForstart以及daemon/monitor.go#start的连续调用最终编程daemon.Run的，读者可以自行跟踪上述几个方法。</p>
+</blockquote>
+<h4 id="4-最后一步"><a href="#4-最后一步" class="headerlink" title="4. 最后一步"></a>4. 最后一步</h4><p>“万事俱备，只欠东风。”在Docker daemon已经完成了所有的准备工作，最后下达了执行Run操作的命令后，Docker该如何指挥操作系统，来为用户启动一个容器出来呢？</p>
+<p>答案很简单，所有需要跟操作系统打交道的任务都交给ExecDriver.run（具体是哪种Driver由container决定）来完成。</p>
+<p>读者应该了解，execdriver的daemon的一个重要组成布恩，它封装了对namespace、cgroup等所有对OS资源进行操作的所有方法。而在Docker中，execdriver的默认实现（native）就是libcontainer了。</p>
+<p>所以在这最后一部，Docker daemon只需要向execdriver提供如下三大参数，接着等待返回结果就可以了。</p>
+<ul>
+<li>commandv：该容器需要的所有配置信息集合（container的属性之一）；</li>
+<li>pipes：用于将容器stdin、stdout、stderr重定向到daemon；</li>
+<li>starttCallback()：回调方法</li>
+</ul>
+<p>在下一节里，将会带领读者进入到libcontainer的世界，深入解析它如何仅凭借上述三项内容完成Docker容器的创建。</p>
+<p><strong>建议：</strong>  希望读者能够学会上述跟踪一个Docker命令运行的过程，以1.10版本为例总结如下。</p>
+<ul>
+<li>docker/docker.go是所有命令的起始。它创建出来的client（DockerCli）对应api/client/cli.go。</li>
+<li>api目录下是所有与“client如何发送请求” “server如何响应请求” 相关的文件。</li>
+<li>api/client/xxx.go中定义Cmdxxx函数，其中调用的cli.client.xxx函数指明了该命令滚发起何种HTTP请求。</li>
+<li>api/server/router中则按照不同的请求类型定义了所有响应具体请求的方法。</li>
+<li>每个请求的处理函数都会对应一个edaemon/xxx.go文件，daemon会使用其中相应的函数来对请求进行处理。</li>
+<li>处理过程中负责执行具体动作的daemon对象是daemon/daemon.go#NewDaemon创建出来的。</li>
+<li>daemon所使用到的Container对象即container/container_unix.go。</li>
+<li>一般daemon对象的具体动作再执行下去就是去掉偶用execdriver了。比如启动容器调用的就是daemon/execdriver/native/driver.go#Run（三大参数），然后交由底层模块处理。</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>发布时间:</span>2018-07-21, 11:15:18</p>
+        <p><span>最后更新:</span>2018-07-21, 11:16:17</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/21/Docker-client-daemon/" title="docker client和daemon">https://www.ihaiyun.cc/2018/07/21/Docker-client-daemon/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/07/21/Docker-client-daemon/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/07/21/Docker-libcontainer/">
+                    libcontainer
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/21/Docker-arch/">
+                    Docker 架构概览
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#client模式"><span class="toc-number">1.</span> <span class="toc-text">client模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-解析flag信息"><span class="toc-number">1.1.</span> <span class="toc-text">1. 解析flag信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-创建client实例"><span class="toc-number">1.2.</span> <span class="toc-text">2. 创建client实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-执行具体的命令"><span class="toc-number">1.3.</span> <span class="toc-text">3. 执行具体的命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#从命令映射到对应的方法"><span class="toc-number">1.3.1.</span> <span class="toc-text">从命令映射到对应的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#执行对应的方法，发起请求"><span class="toc-number">1.3.2.</span> <span class="toc-text">执行对应的方法，发起请求</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#daemon-模式"><span class="toc-number">2.</span> <span class="toc-text">daemon 模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-API-Server的配置和初始化过程"><span class="toc-number">2.1.</span> <span class="toc-text">1. API Server的配置和初始化过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-daemon对象得创建与初始化过程"><span class="toc-number">2.2.</span> <span class="toc-text">2. daemon对象得创建与初始化过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Docker容器的配置信息"><span class="toc-number">2.2.1.</span> <span class="toc-text">Docker容器的配置信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#检测系统支持及用户权限"><span class="toc-number">2.2.2.</span> <span class="toc-text">检测系统支持及用户权限</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#配置daemon工作路径"><span class="toc-number">2.2.3.</span> <span class="toc-text">配置daemon工作路径</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#配置Docker容器所需的文件环境"><span class="toc-number">2.2.4.</span> <span class="toc-text">配置Docker容器所需的文件环境</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建Docker-daemon网络"><span class="toc-number">2.2.5.</span> <span class="toc-text">创建Docker daemon网络</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#初始化execdriver"><span class="toc-number">2.2.6.</span> <span class="toc-text">初始化execdriver</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#daemon对象诞生"><span class="toc-number">2.2.7.</span> <span class="toc-text">daemon对象诞生</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#恢复已有的Docker容器"><span class="toc-number">2.2.8.</span> <span class="toc-text">恢复已有的Docker容器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从-client到daemon"><span class="toc-number">3.</span> <span class="toc-text">从 client到daemon</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-发起请求"><span class="toc-number">3.1.</span> <span class="toc-text">1. 发起请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-创建容器"><span class="toc-number">3.2.</span> <span class="toc-text">2. 创建容器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-启动容器"><span class="toc-number">3.3.</span> <span class="toc-text">3. 启动容器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-最后一步"><span class="toc-number">3.4.</span> <span class="toc-text">4. 最后一步</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/07/21/Docker-libcontainer/" title="上一篇: libcontainer">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/21/Docker-arch/" title="下一篇: Docker 架构概览">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-use/">Dockerfile的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-security/">Dcoekr与容器安全</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume-2/">Docker 数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-storage-manage/">Docker 存储管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-image/">Docker 镜像管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-libcontainer/">libcontainer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-arch/">Docker 架构概览</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network/">Docker网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume/">Docker数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-Install/">Docker安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Linux-iftop/">网络带宽监控工具 iftop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/06/Linux-iotop/">磁盘io监控工具 iotop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/05/Jenkins/">Jenkins</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/CI/">持续集成是什么?</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/ELK/">开源日志实时分析平台ELK</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/Linux-opt-map/">Linux 运维技能树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/Linux-top/">top 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 侯海云
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    </body>
+</html>

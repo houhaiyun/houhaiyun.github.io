@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="侯海云" />
+
+
+
+<meta name="description" content="Docker高级网络实践在前面的文章中，我们已经详细解读了Docker中libnetwor提供的4种驱动，它们各有千秋，但实际上每一种方式都有一定的局限性。假设需要运营一个数据中心的网络，我们有许多宿主机，每台宿主机上运行了数百个甚至上千个Docker容器，使用4种网络驱动的具体情况如下。">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker高级网络实践">
+<meta property="og:url" content="https://www.ihaiyun.cc/2018/07/21/Docker-network-3/index.html">
+<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:description" content="Docker高级网络实践在前面的文章中，我们已经详细解读了Docker中libnetwor提供的4种驱动，它们各有千秋，但实际上每一种方式都有一定的局限性。假设需要运营一个数据中心的网络，我们有许多宿主机，每台宿主机上运行了数百个甚至上千个Docker容器，使用4种网络驱动的具体情况如下。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-16.png">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-17.png">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-18.png">
+<meta property="og:updated_time" content="2018-07-21T11:42:24.691Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker高级网络实践">
+<meta name="twitter:description" content="Docker高级网络实践在前面的文章中，我们已经详细解读了Docker中libnetwor提供的4种驱动，它们各有千秋，但实际上每一种方式都有一定的局限性。假设需要运营一个数据中心的网络，我们有许多宿主机，每台宿主机上运行了数百个甚至上千个Docker容器，使用4种网络驱动的具体情况如下。">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Docker-16.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Docker高级网络实践 | 侯海云的个人网站</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">侯海云</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Docker-network-3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-network-3/" class="article-date">
+      <time datetime="2018-07-21T11:41:29.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Docker高级网络实践
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker高级网络实践/">Docker高级网络实践</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="Docker高级网络实践"><a href="#Docker高级网络实践" class="headerlink" title="Docker高级网络实践"></a>Docker高级网络实践</h3><p>在前面的文章中，我们已经详细解读了Docker中libnetwor提供的4种驱动，它们各有千秋，但实际上每一种方式都有一定的局限性。假设需要运营一个数据中心的网络，我们有许多宿主机，每台宿主机上运行了数百个甚至上千个Docker容器，使用4种网络驱动的具体情况如下。</p>
+<a id="more"></a>
+<ul>
+<li>使用host驱动可以让容器与宿主机共用一个网络栈，这么看似解决了网络问题，可实际上并未使用network namespace的隔离，缺乏安全性。</li>
+<li>使用Docker默认的bridge驱动，容器没有对外IP，只能通过NAT来实现对外通信。这种方式不饿能解决跨主机容器间直接通信的问题，难以满足复杂场景下的需求。</li>
+<li>使用overlay驱动，可以用于支持快主机网络通信，但必须要配合Swarm进行配置和使用才能实现跨主机的网络通信。</li>
+<li>使用null驱动实际上不进行任何网络设置。</li>
+</ul>
+<p>可见，为了实现数据中心大量容器间的跨主机网络通信，为了更加灵活地实现容器间网络的共享与隔离，也为了在管理成千上万容器时可以更加自动化进行网络配置，我们需要学习更高级的网络实践方案。</p>
+<p>本节主要讲述Docker网络的高级实践部分，将通过一些工具和额外的操作来突破Docker网络原有的限制，实现一些更高级的功能，以满足实际运用种的复杂需求。</p>
+<h3 id="玩转-Linux-network-namespace"><a href="#玩转-Linux-network-namespace" class="headerlink" title="玩转 Linux network namespace"></a>玩转 Linux network namespace</h3><p>ip是Linux系统下一个强大的网络配置工具，它不仅可以替代一些传统的网络管理工具，如ifconfig、route等，还可以实现更为丰富的功能。下面将介绍如何使用ip命令来配置管理network namespace。</p>
+<h4 id="1-使用ip-netns命令操作network-namesapce"><a href="#1-使用ip-netns命令操作network-namesapce" class="headerlink" title="1. 使用ip netns命令操作network namesapce"></a>1. 使用ip netns命令操作network namesapce</h4><p>ip netns命令是用来操作network namespace的指令，具体使用方法如下。</p>
+<p>创建一个netwokr namespace：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个名为nstest的network namespace</span><br><span class="line"># ip netns add nstest</span><br></pre></td></tr></table></figure>
+<p>列出系统中已存在的network namespace：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># ip netns ls</span><br><span class="line">nstest</span><br></pre></td></tr></table></figure>
+<p>删除一个natwork namespace：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 删除nstest</span><br><span class="line"># ip netns delete nstest</span><br></pre></td></tr></table></figure>
+<p>在network namespace中执行一条命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 命令格式</span><br><span class="line">ip netns exec  &lt;network namespace name&gt; &lt;command&gt;</span><br><span class="line"># 如显示nstest namespace中的网卡信息</span><br><span class="line">ip netns exec nstest ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN qlen 1</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br></pre></td></tr></table></figure>
+<p>使用ip netns exec来执行命令稍显麻烦，可以使用一个更直接的办法——在network namespace中启动一个shell，具体示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 命令格式</span><br><span class="line">ip netns exec &lt;network namespae name&gt; bash</span><br></pre></td></tr></table></figure>
+<p>这样就可以在上面执行命令，就好像使用者进入了这个network namespace中；若要退出则输入exit即可。</p>
+<h4 id="2-使用ip命令为network-namespace配置网卡"><a href="#2-使用ip命令为network-namespace配置网卡" class="headerlink" title="2. 使用ip命令为network namespace配置网卡"></a>2. 使用ip命令为network namespace配置网卡</h4><p>当使用ip netns add命令创建了一个network namespace后，就拥有了一个独立的网络空间，可以根据需求来配置该网络空间，如添加网卡、配置IP、设置路由规则等。下面以之前建立的名为nstest的network namespace为例来演示如何进行这些操作。</p>
+<p>当使用ip命令创建一个network namespace时，会默认创建一个回环设备（loopback interface:lo）。该设备默认不启动，用户最好将其启动。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip netns exec nstest ip link set dev lo up</span><br></pre></td></tr></table></figure>
+<p>在主机上创建两张虚拟网卡veth-a和veth-b</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip link add veth-a type veth peer name veth-b</span><br></pre></td></tr></table></figure>
+<p>将veth-b设备添加到nstest这个network namespace中，veth-a留在主机中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip link set veth-b netns nstest</span><br></pre></td></tr></table></figure>
+<p>现在nstest这个network namespace就有了两块网卡lo和veth-b，来验证一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip netns exec nstest ip link</span><br><span class="line"></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT qlen 1</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">7: veth-b@if8: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT qlen 1000</span><br><span class="line">    link/ether 9e:fa:80:47:86:e8 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br></pre></td></tr></table></figure>
+<p>现在可以为网卡分配IP并启动网卡了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 在主机上为veth-a配置IP并启动</span><br><span class="line">ip addr add 10.0.0.1/24 dev veth-a</span><br><span class="line">ip link set dev veth-a up</span><br><span class="line"></span><br><span class="line"># 为nstest的veth-b配置IP并启动</span><br><span class="line">ip netns exec nstest ip addr add 10.0.0.2/24 dev veth-b</span><br><span class="line">ip netns exec nstest ip link set dev veth-b  up</span><br></pre></td></tr></table></figure>
+<p>给两张网卡配置了IP后，会在各自的network namespace中生成一条路由，用ip route或route -a命令查看一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 在主机中</span><br><span class="line">ip route</span><br><span class="line">...</span><br><span class="line">10.0.0.0/24 dev veth-a  proto kernel  scope link  src 10.0.0.1</span><br><span class="line"></span><br><span class="line"># 在nstest network namespace中</span><br><span class="line">ip netns exec nstest ip route</span><br><span class="line">10.0.0.0/24 dev veth-b  proto kernel  scope link  src 10.0.0.2</span><br></pre></td></tr></table></figure>
+<p>这两条路由表明的意义时目的地址为10.0.0.0/24网络的IP包分别从veth-a和veth-b发出。</p>
+<p>现在nstest这个network namespace有了自己的网卡、IP地址、路由表等信息，俨然成了一台小型的“虚拟机”。测试一下它的连通性，以检查配置是否正确。</p>
+<p>从主机的veth-a网卡ping nstest network namesapc的veth-b网卡：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># ping 10.0.0.2</span><br><span class="line">PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.</span><br><span class="line">64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=0.051 ms</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">从nstest network namespace的veth-b网卡ping主机的veth-a网卡：</span><br><span class="line"># ip netns exec nstest ping 10.0.0.1</span><br><span class="line">PING 10.0.0.1 (10.0.0.1) 56(84) bytes of data.</span><br><span class="line">64 bytes from 10.0.0.1: icmp_seq=1 ttl=64 time=0.037 ms</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h4 id="3-将两个network-namespace连接起来"><a href="#3-将两个network-namespace连接起来" class="headerlink" title="3. 将两个network namespace连接起来"></a>3. 将两个network namespace连接起来</h4><p>很多时候，想搭建一个复杂的网络环境来测试数据，往往受困于没有足够的资源来创建虚拟机。掌握了如何配置network namespace后，便可以轻松解决这个问题。可以在一台普通的机器上，以非常简答的方式创建很多相互隔离的network namespace，然后通过网卡、网桥等虚拟设备将它们连接起来，组成想要的拓扑网络。下面来演示一个简单的例子——将连个network namespace通过veth pair设备连接起来。具体过程如下；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># 创建两个network namespace ns1，ns2</span><br><span class="line">ip netns add ns1</span><br><span class="line">ip netns add ns2</span><br><span class="line"></span><br><span class="line"># 创建veth pair设备veth-a，veth-b</span><br><span class="line">ip link add veth-a type peer name veth-b</span><br><span class="line"></span><br><span class="line"># 将网卡分别放到两个namespace中</span><br><span class="line">ip link set veth-a netns ns1</span><br><span class="line">ip link set veth-b netns ns2</span><br><span class="line"></span><br><span class="line"># 启动两张网卡</span><br><span class="line">ip netns exec ns1 ip link set dev veth-a up</span><br><span class="line">ip netns exec ns2 ip link set dev veth-v up</span><br><span class="line"></span><br><span class="line"># 分配IP</span><br><span class="line">ip netns exec ns1 ip addr add 10.0.0.1/24 dev veth-a</span><br><span class="line">ip netns exec ns2 ip addr add 10.0.0.2/24 dev veth-b</span><br><span class="line"></span><br><span class="line"># 验证连通</span><br><span class="line">ip netns exec ns1 ping 10.0.0.2</span><br><span class="line">PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.</span><br><span class="line">64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=0.044 ms</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>通过veth pair设备连接起来的两个network namespace就好像直接通过网线连接起来的两台机器。</p>
+<p>如果有更多的network namespace需要连接，那就有必要引入虚拟网桥了，就如同Docker网络一样。</p>
+<h4 id="4-使用ip命令配置Docker"><a href="#4-使用ip命令配置Docker" class="headerlink" title="4. 使用ip命令配置Docker"></a>4. 使用ip命令配置Docker</h4><p>Docker是使用Linux namespace技术进行资源隔离的，网路也是如此。当用默认网络模式（bridge模式）启动一个Docker容器时，一定是在主机上新创建了一个Linux network namespace。用户可以按照network namespace中配置网络的方法来配置Docker容器的网络。</p>
+<p>首先，启动一个名为tes1的Docker容器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name test1 ubuntu /bin/bash</span><br></pre></td></tr></table></figure>
+<p>然后，使用ip netns list命令查看是否可以看到新创建的network namespace。执行命令后发现并没有看到新增的network namespace。这并不代表Docker容器没有创建network namespace，只是ip nettns命令无法查看罢了，这与ip netns命令的工作方式有关。</p>
+<p>当使用ip netns命令创建了两个network namespce（ns1和ns2）后，会在/var/run/netns目录下看到ns1和ns2两项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># ls -la /var/run/netns/</span><br><span class="line">total 0</span><br><span class="line">drwxr-xr-x  2 root root 100 Jul 19 11:08 .</span><br><span class="line">drwxr-xr-x 25 root root 860 Jul 19 11:18 ..</span><br><span class="line">-r--r--r--  1 root root   0 Jul 19 11:08 ns1</span><br><span class="line">-r--r--r--  1 root root   0 Jul 19 11:08 ns2</span><br></pre></td></tr></table></figure>
+<p>ip netns list命令在/var/run/netns目录留下查找network namespace。由于Docker创建的network namespace并不会在此目录下创建任何项，因此，需要一些额外的操作来使ip命令可以操纵Docker创建的network namespace。</p>
+<p>Linux下的每一个进程都会属于一个特定的network namespace，来看一下不同netowrk namespace环境中/proc/$PID/ns目录下有何区别。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># /proc/self链接到当前正在运行的进程</span><br><span class="line"># 主机默认的network namespace中</span><br><span class="line">ls -la /proc/self/ns</span><br><span class="line">...</span><br><span class="line">lrwxrwxrwx 1 root root 0 Jul 19 11:23 net -&gt; net:[4026531956]</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 在ns1中</span><br><span class="line">ip netns exec ns1 ls -ls /proc/self/ns</span><br><span class="line">...</span><br><span class="line">0 lrwxrwxrwx 1 root root 0 Jul 19 11:25 net -&gt; net:[4026532572]</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 在ns2中</span><br><span class="line">ip netns exec ns2 ls -ls /proc/self/ns</span><br><span class="line">...</span><br><span class="line">0 lrwxrwxrwx 1 root root 0 Jul 19 11:25 net -&gt; net:[4026532629]</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>从上面可以发现，不同的network namespace中的进程有不同的net:[]号码分配。这些号码代表着不同的network namespace，拥有相同的net:[]号码的进程属于同一个network namespace。只要将代表Docker创建的network namespace的文件链接到/var/run/netns目录下，就可以使用ip netns命令进行操作了，具体步骤如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 用docker inspect查看test1容器的PID</span><br><span class="line">docker inspect --format &apos;&#123;&#123;.State.Pid&#125;&#125;&apos; test1</span><br><span class="line">2908</span><br><span class="line"></span><br><span class="line"># 若不存在/var/run/netns目录，则创建</span><br><span class="line">mkdir -p /var/run/netns</span><br><span class="line"></span><br><span class="line"># 在/var/run/netns目录下创建软链接，指向test1容器的network namespace</span><br><span class="line">ln -s /proc/2908/ns/net /var/run/netns/test1</span><br><span class="line"></span><br><span class="line"># 测试是否成功</span><br><span class="line">ip netns list</span><br><span class="line"></span><br><span class="line">test1</span><br><span class="line">ns2</span><br><span class="line">ns1</span><br><span class="line"></span><br><span class="line">ip netns exec test1 ip link </span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT qlen 1</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">9: eth0@if10: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP mode DEFAULT </span><br><span class="line">    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br></pre></td></tr></table></figure>
+<p>完成以上配置后，就可以自行配置Docker的网络环境了。另外，需要读者注意的是，在不开特权模式的情况下（–privileged=false），是没有权限直接在Docker容器内部进行网络配置的，而特权模式会给主机带来安全隐患，因此最好使用ip netns exec来进行Docker容器网络的配置。</p>
+<p>除了ip netns命令外，还有一些其他工具可以进入Linux namespace，比如nsenter。nsenter可以更方便的操作Docker的namespace，但需要额外安装。在Ubuntu下，由于util-linux软件包版本较早，需要从源码安装。为此，Jerome Petazzoni使用了Docker容器来帮助用户完成安装，相见nsenter。</p>
+<h3 id="pipework原理解析"><a href="#pipework原理解析" class="headerlink" title="pipework原理解析"></a>pipework原理解析</h3><p>Docker现有的网络模式比较简单，扩展性和灵活性都不能满足很多复杂应用场景的需求。很多时候用户都需要自定义Docker容器的网络，而非使用Docker默认创建的IP和NAT规则。</p>
+<h4 id="1-将Docker容器配置到本地网络环境中"><a href="#1-将Docker容器配置到本地网络环境中" class="headerlink" title="1. 将Docker容器配置到本地网络环境中"></a>1. 将Docker容器配置到本地网络环境中</h4><p>如果想要使用Docker容器和容器主机处于同一个网络，那么容器和主机应该处在一个二层网络中。能想到的场景就是把两台机器连在同一个交换机上，或者连在不同的级联交换机上。在虚拟场景下，虚拟网桥可以将容器连在一个二层网络中，只要将主机的网卡桥接到虚拟网桥中，就能将容器和主机的网络连接起来。构建完拓扑结构后，只需再给Docker容器分配一个本地局域网IP就大功告成了。</p>
+<p>下面通过一个例子来分析一下这个过程。本地网络为192.168.8.0/24，网关为192.168.8.1，有一台IP地址为192.168.8.12/24的主机（网卡为eth0），要在这台主机上启动一个名为test1的Docker容器，并给它配置IP为192.168.8.15/24。由于并不需要Docker提供的网络，所以用–net=none参数来启动容器。具体示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># 启动一个名为test1的Docker容器</span><br><span class="line">docker run -itd --name test1 --network none ubuntu /bin/bash</span><br><span class="line"></span><br><span class="line"># 创建一个供容器连接的网桥br0</span><br><span class="line">brctl addbr br0</span><br><span class="line">ip link set br0 up</span><br><span class="line"></span><br><span class="line"># 将主机eth0桥接到br0上，并把eth0的IP配置在br0上。由于远程操作，会导致网络断开，因此这里放在一条命令中执行</span><br><span class="line">ip addr add 192.168.8.12/24 dev br0 ;\</span><br><span class="line">	ip addr del 192.168.8.12/24 dev ens34;\</span><br><span class="line">	brctl addif br0 ens34 ;\</span><br><span class="line">	ip route del default ;\</span><br><span class="line">	ip route add default via 192.168.8.1 dev br0</span><br><span class="line"></span><br><span class="line"># 找到test1的PID，保存到pid中</span><br><span class="line">pid=$(docker inspect --format &apos;&#123;&#123;.State.Pid&#125;&#125;&apos; test1) </span><br><span class="line"></span><br><span class="line"># 将容器的network namespace添加到/var/run/netns目录下</span><br><span class="line">mkdir -p /var/run/netns</span><br><span class="line">ln -s /proc/$pid/ns/net /var/run/netns/$pid</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 创建用于连接网桥和Docker容器的网卡设备</span><br><span class="line"># 将veth-a连接到br0网桥中</span><br><span class="line">ip link add veth-a type veth peer name veth-b</span><br><span class="line">brctl addif br0 veth-a</span><br><span class="line">ip link set veth-a up</span><br><span class="line"></span><br><span class="line"># 将veth-b放到test1的network namespace中，重命名为eth0，并为其配置IP和默认路由</span><br><span class="line">ip link set veth-b netns $pid</span><br><span class="line">ip netns exec $pid ip link set dev veth-b name eth0</span><br><span class="line">ip netns exec $pid ip link set eth0 up</span><br><span class="line">ip netns exec $pid ip addr add 192.168.8.15/24 dev eth0</span><br><span class="line">ip netns exec $pid ip route add default via 192.168.8.1</span><br></pre></td></tr></table></figure>
+<p>现在test1容器可以很方便地实现与本地主机相互访问，并且test1容器可以通过本地网络的网关192.168.8.1访问外部网络。</p>
+<h4 id="2-pipework解析"><a href="#2-pipework解析" class="headerlink" title="2. pipework解析"></a>2. pipework解析</h4><p>从上面可以发现，配置Docker容器的网络是相当繁琐的。如果需要经常自定义Docker网络，可以考虑提炼上述过程，编写成shell脚本，方便操作。事实上，目前已经有了一个这样的工具来帮助用户扩展Docker的网络功能，这就是由Docker公司工程师Jerome Petazzoni在GitHub上发布的名为pipework的工具。pipework号称是容器的SDN解决方案，可以在复杂场景下将容器连接起来。它既支持普通的LXC容器，也支持Docker容器。随着Docker网络的不断改进，pipework工具的很多功能可能会被Docker原生支持，因此pipework只是目前的过渡方案之一。下面来看下pipework的功能和实现。</p>
+<h5 id="支持Linux网桥连接容器并配置容器IP地址"><a href="#支持Linux网桥连接容器并配置容器IP地址" class="headerlink" title="支持Linux网桥连接容器并配置容器IP地址"></a>支持Linux网桥连接容器并配置容器IP地址</h5><p>在上一个例子中，用来很多ip命令来配置test1容器的IP地址ihe网关，用Pipework工具则可以很方便地完成配置，具体示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 下载pipework</span><br><span class="line">git clone https://github.com/jpetazzo/pipework.git</span><br><span class="line"></span><br><span class="line"># 将pipework脚本放入PATH环境变量所指定的目录下，如/usr/local/bin</span><br><span class="line">cp ~/pipework/pipework /usr/local/bin</span><br><span class="line"></span><br><span class="line"># 完成test1的配置</span><br><span class="line">pipework br0 test1 192.168.8.15/24@192.168.8.1</span><br></pre></td></tr></table></figure>
+<p>这一行配置命令执行的操作如下：</p>
+<ul>
+<li>查看主机中是否存在br0网桥，不存在就创建；</li>
+<li>向test1中加入一块名为eth1的网卡，并配置IP地址为192.168.8.15/24；</li>
+<li>若test1中已经有默认路由，则删掉，把192.168.8.1设为默认路由的网关；</li>
+<li>将test1容器连接到之前创建的网桥br0上。</li>
+</ul>
+<h5 id="支持使用macvlan设备将容器连接到本地网络"><a href="#支持使用macvlan设备将容器连接到本地网络" class="headerlink" title="支持使用macvlan设备将容器连接到本地网络"></a>支持使用macvlan设备将容器连接到本地网络</h5><p>除了使用Linux Bridge将Docker容器桥连接到本地网络之中，还有另外一种方式，即使用主机网卡的macvlan子设备。macvlan设备是从网卡上虚拟出的一块新网卡，它和主网卡分别由不同的MAC地址，可以配置独立的IP地址。macvlan早前在LXC中被广泛使用，目前Docker网络本身不提供macvlan支持，但可以借助pipework来完成macvlan配置。如果采用macvlan来完成之前例子，那么整个过程只需要执行一条命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipework eth0 test1 192.168.8.15/24@192.168.8.1</span><br></pre></td></tr></table></figure>
+<p>这里，pipework的第一个参数是主机上的一块以太网卡，而非网桥。pipework不会再创建veth pair设备来连接容器和网桥，转而采用macvlan设备作为test1容器的网卡，操作过程如下：</p>
+<ol>
+<li>从主机的eth0上创建一块macvlan设备，将macvlan设备放入到test1中并命名为儿童和<br>；</li>
+<li>为test1中新添加的网卡配置IP地址为192.168.8.15/24；</li>
+<li>若test1中已经有默认路由，则删掉，把192.168.8.1设为默认路由的网关。</li>
+</ol>
+<h5 id="支持DHCP获取容器的IP"><a href="#支持DHCP获取容器的IP" class="headerlink" title="支持DHCP获取容器的IP"></a>支持DHCP获取容器的IP</h5><p>Docker社区中经常会有使用者发问，如何让Docker容器通过DHCP方式获取IP地址？看来DHCP获取IP的需求也非常迫切。目前较好的解决方案还是依赖pipework。如果Docker要接入的网络环境中存在DHCP服务器，那么Docker容器就可以通过发送DHCP请求获取新网卡的网络配置信息。具体用法是将pipework指令中的IP地址参数替换为dhcp，示例如下；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 手动配置IP地址的命令</span><br><span class="line">pipework eth0 test1 192.168.8.15/24@192.168.8.1 </span><br><span class="line"></span><br><span class="line"># 通过主机网络中的DHCP服务器获取IP地址的命令</span><br><span class="line">pipework eth0 test1 dhcp</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：DHCP服务除了要求主机环境中存在DHCP服务器外，Docker主机上还必须安装有DHCP客户端（如udhcpc、dhclient或者dhcpcd）。pipework根据不同的DHCP客户端执行不同的命令发送DHCP请求。</p>
+</blockquote>
+<h5 id="支持Open-vSwitch"><a href="#支持Open-vSwitch" class="headerlink" title="支持Open vSwitch"></a>支持Open vSwitch</h5><p>Open vSwitch是一个开源的虚拟交换机，相比于Linux Bridge，Open vSwitch支持VLAN、QoS等功能，同时还提供对OpenFlow协议的支持，可以很好地与SDN体系融合。因此，提供对Open vSwitch的支持，有助于借助Open vSwitch的强大功能来扩展Docker网络。不过，目前pipework对OpenvSwitch的支持相对简单，并没有涉及很多高级的功能。</p>
+<p>具体做法是将pipework第一个参数设为Open vSwitch网桥。若需要pipework创建Open vSwitch网桥，则要将网桥的名称以 “ovs” 开头。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipework ovsbr0 $CONTAINERID 192.168.8.15/24</span><br></pre></td></tr></table></figure>
+<h5 id="支持设置网卡MAC地址以及配置容器VLAN"><a href="#支持设置网卡MAC地址以及配置容器VLAN" class="headerlink" title="支持设置网卡MAC地址以及配置容器VLAN"></a>支持设置网卡MAC地址以及配置容器VLAN</h5><p>pipework除了支持给网卡配置IP外，还可以指定网卡的MAC地址。具体用法是在IP参数后面再加一个MAC参数，示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipework br0 $CONTAINERID dhcp 02:42:fe:65:e4:59</span><br></pre></td></tr></table></figure>
+<p>如果想给Docker容器划分VLAN，那么可以把MAC参数写成[MAC]@VID，其中，MAC地址可以省略，VID为VLAN的ID号。设置VLAN只支持Open vSwitch和macvlan设备，不支持普通的Linux网桥。示例如下；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipework ovsbr0 $CONTAINERID dhcp @10</span><br></pre></td></tr></table></figure>
+<h3 id="pipework-跨主机通信"><a href="#pipework-跨主机通信" class="headerlink" title="pipework 跨主机通信"></a>pipework 跨主机通信</h3><p>如果将Docker容器应用在大规模集群环境中，不可避免地会遭遇Docker容器跨主机通信的问题。在目前Docker默认网络环境下，单台主机上的Docker容器可以通过docker0网桥直接通信，而不同主机上的Docker容器之间只能通过在主机上做端口映射的方法进行通信。这种端口映射方式对很多集群应用来说极不方便。如果能使Docker容器之间直接使用本身IP地址进行通信，很多问题便会自然化解。那么，如何在当前Docker网络环境下实现这样的需求呢？下面来介绍两种实现方法。</p>
+<h4 id="1-桥接"><a href="#1-桥接" class="headerlink" title="1. 桥接"></a>1. 桥接</h4><p>上面刚刚演示了如何使用虚拟网桥将Docker容器桥接到本地网络环境中。按照这种方法，把同一个局域网中不同主机上的Docker容器都配置在主机网络环境中，它们之间可以直接通信。但这么做可能会出现下列问题：</p>
+<ul>
+<li>Docker容器占用主机网络的IP地址；</li>
+<li>大量Docker容器引起广播风暴，导致主机所在网络性能下降；</li>
+<li>Docker容器连在主机网络中可能引起安全问题。</li>
+</ul>
+<p>因此，如果情况不是无法回避，必须将Docker容器连接在主机网络中，最好还是将其分离开。为了隔离Docker容器间网络和主机网络，需要额外使用一块网卡桥接Docker容器。思路还是与采用一块网卡时一样：在所有主机上用虚拟网桥将本机的Docker容器连接起来，然后将一块网卡加入到虚拟网桥中，使所有主机上用虚拟网桥将本机的Docker容器连接起来，然后将一块网卡加入到虚拟网桥中，使所有主机上的虚拟网桥级联在一起，这样，不同主机上的Docker容器也就如同连在了一个大的逻辑交换机上。</p>
+<p>关于Docker容器的IP，由于不同机器上的Docker容器可能获得相同的IP地址，因此需要解决IP的冲突问题。一种方法是使用pipework为每一个容器分配一个不同的IP，而不使用Dockersdaemon分配的IP。此种方法相当繁琐，因此一般采用另外一种方法——为每一台主机上的Docker daemon指定不同的–fixed-cidr参数，将不同主机的Docker容器限定在不同网段中。</p>
+<h4 id="2-直接路由"><a href="#2-直接路由" class="headerlink" title="2. 直接路由"></a>2. 直接路由</h4><p>桥接的方式将所有主机上的Docker容器放在一个二层网络中，它们之间的通信是由交换机直接转发，不通过路由器。另一种跨主机通信的方式是通过在主机中添加静态路由实现的。如果有两台主机host1和host2，两主机上的Docker容器是两个独立的二层网络，将con1法网con2的数据流现转发到主机host2上，再由host2再转发到其上的Docker容器中；反之亦然。</p>
+<p>由于使用容器的IP进行路由，就需要避免不同主机上的Docker容器使用相同的IP，所以应该为不同的主机分配不同的IP子网。</p>
+<p>本节介绍的两种跨主机通信方式简单有效，但他们都要求主机在同一个局域网中。如果两台主机在不同的二层网络中，又该如何实现容器间的跨主机通信呢？后面内容继续介绍。</p>
+<h3 id="OVS划分VLAN"><a href="#OVS划分VLAN" class="headerlink" title="OVS划分VLAN"></a>OVS划分VLAN</h3><p>在计算机网络中，传统的交换机虽然能隔离冲突域，提高每一个端口的性能，但并不能隔离广播域，当网络中的机器足够多时会引发广播风暴。同时，不同部门、不同组织的机器连接在同一个二层网络中也会造成安全问题。因此，在交换机中划分子网、隔离广播域的思路便形成了VLAN的概念。VLAN（Virtual Local Area Network）即虚拟局域网，按照功能、部门等因素将网络中的机器进行划分，使之分属于不同的部分，每一个部分形成一个虚拟的局域网络，共享一个单独的广播域。这样就可以把一个大型交换网络划分为许多个独立的广播域，即VLAN。</p>
+<p>VLAN技术将一个二层网络中的机器隔离开来，那么如何区分不同VLAN的流量呢？IEEE802.1q协议规定了VLAN的实现方法，即在传统的以太网帧中再台南佳一个VLAN tag字段，用于标识不同的VLAN。这样，支持VLAN的交换机在转发帧时，不仅会关注MAC地址，还会考虑到VLAN tag字段。VLAN tag包括了TPID、PCP、CFI、VID，其中VID（VLAN ID）部分用来具体指出帧时属于哪个VLAN的。VID占12位，所以其取值范围为0到4095.</p>
+<p>在分析下图之前，先来介绍一下交换机的access端口和trunk端口。图中，Port1、Port2、Port5、Port5、Port6、Port7、Port8为access端口，每一个access端口都会分配一个VLAN ID，标识它所连接的设备属于哪一个VLAN。当数据帧从外界通过access端口进入交换机时，数据帧原本是不带tag的额，access端口给数据帧打上tag（VLAN ID即为access端口所分配的VLAN ID）；当数据帧从交换机内部通过access端口发送时，数据帧的VLAN ID必须和access端口的VLAN ID一致，access端口菜接收此帧，接着access端口将帧的tag信息去掉，再发送出去。Port3、Port4为trunk端口，trunk端口不属于某个特定的VLAN，而是交换机和交换机之间多个VLAN的通道。trunk端口声明了一组VLAN ID，表明只允许带有这些VLAN ID的数据帧通过，从trunk端口进入和出去的数据帧都是带tag的（不考虑默认VLAN的情况）。PC1和PC3属于uVLAN100，PC2和PC4属于VLAN200，所以PC1和PC3处在同一个二层网络中，PC2和PC4处在同一个二层网络中。尽管PC1和PC2连接在同一台交换机中，但它们之间的通信是需要经过路由器的。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-16.png" title="多交换机VLAN划分"></center>
+
+<p>在这个例子中，VLAN tag是如何发挥作用的呢？当PC1向PC3发送数据时，PC1将IP包封装在以太帧中，帧的目的MAC地址为PC3的地址，此时帧并没有tag信息。当帧到达Port1时，Port1给帧打上tag（VID=100），帧进入switch1，然后帧通过Port3、Port4到达Switch2（Port3、Port4允许VLAN ID为100、200的帧通过）。在switch2中，Port5所标记的VID和帧相同，MAC地址也匹配，帧就发送到Port5上，Port5将帧的信息去掉，然后发给PC3.由于PC2、PC4与PC1的VLAN不同，因此收不到PC1发出的帧。</p>
+<p>在多租户的云环境中，VLAN是一个最基本的隔离手段。作为云计算的新宠儿——Docker，如何实现VLAN的划分呢？曾提到过pipework支持配置容器的VLAN，本节将详细介绍如何使用pipework实现Docker容器的VLAN划分。</p>
+<h4 id="1-单主机Docker容器的VLAN划分"><a href="#1-单主机Docker容器的VLAN划分" class="headerlink" title="1. 单主机Docker容器的VLAN划分"></a>1. 单主机Docker容器的VLAN划分</h4><p>在Docker默认网络模式下，所有的容器都连在docker0网桥上。docker0网桥时普通的Linux网桥，不支持VLAN功能，为了方便操作，使用Open vSwitch代替docker0进行VLAN划分。下图时一个在一台主机上进行Docker容器VLAN划分的例子。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-17.png" title="单主机Docker容器VLAN划分"></center> 
+
+<p>为了演示隔离效果，图中四个容器都在同一个网段中，但实际上它们时二层隔离的两个网络，有不同的广播域。为完成上图所示的配置，我们在主机A上做如下操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 在主机A上创建4个Docker容器：con1、con2、con3、con4</span><br><span class="line">docker run -itd --name con1 ubuntu /bin/bash</span><br><span class="line">docker run -itd --name con2 ubuntu /bin/bash</span><br><span class="line">docker run -itd --name con3 ubuntu /bin/bash</span><br><span class="line">docker run -itd --name con4 ubuntu /bin/bash</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 安装并启动open-vswitch</span><br><span class="line">yum install -y epel-release</span><br><span class="line">yum install -y openvswitch</span><br><span class="line">systemctl start openvswitch.service	</span><br><span class="line"></span><br><span class="line"># 使用pipework将con1、con2划分到一个VLAN中</span><br><span class="line">pipework ovs0 con1 192.168.0.1/24 @100</span><br><span class="line">pipework ovs0 con2 192.168.0.2/24 @200</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 使用pipework将con3、con4划分到一个VLAN中</span><br><span class="line">pipework ovs0 con3 192.168.0.3/24 @200</span><br><span class="line">pipework ovs0 con4 192.168.0.4/24 @200</span><br></pre></td></tr></table></figure>
+<p>pipework配置完成后，每个容器都多了一块eth1网卡，eth1连在ovs0网桥上，并且执行力VLAN的隔离。通过nc命令测试各容器之间的连通性时发现，con1和con2可以相同通信，但与con3和con4隔离。如此一来，一个简单的VLAN隔离容器网络就完成了。</p>
+<p>使用Open vSwitch配置VLAN比较简单，如创建access端口使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 在ovs0网桥上增加两个端口port1、port2</span><br><span class="line">ovs-vsctl add-port ovs0 port1 tag=100</span><br><span class="line">ovs-vsctl add-port ovs0 port2 trunk=100,200</span><br></pre></td></tr></table></figure>
+<p>pipework就是使用这样的方式将veth pair的一段加入到ovs0网桥的，只不过并不需要用到trunk端口。在向Open vSwitch中添加端口时，若不添加任何限制，此端口则转发所有帧。</p>
+<h4 id="多主机Docker容器的VLAN划分"><a href="#多主机Docker容器的VLAN划分" class="headerlink" title="多主机Docker容器的VLAN划分"></a>多主机Docker容器的VLAN划分</h4><p>介绍完单主机VLAN的隔离，将进一步讲解多主机的情况。多主机VLAN的情况下，可定有属于同一VLAN但又在不同主机上的容器，因此多主机VLAN划分的前提时跨主机通信。在上面介绍过两种跨主机通信的方式，要使不同主机上的容器处于同一VLAN，就只能采用桥接方式。桥接需要将主机的一块网卡桥接到容器所连接的Open vSwitch网桥上，使用一块额外的网卡eth1来完成，桥接的网卡需要卡其混杂模式。下图演示了一个多主机Docker容器VLAN划分的例子。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-18.png" title="多主机Docker容器VLAN划分"></center>
+
+<p>这里，我们将不同VLAN的容器设在同一个子网中，仅仅是为了演示隔离效果。上图中，host1上的 con1和host2的con3属于VLAN100，con2和con4属于VLAN200.由于会有VLAN ID为100和VLAN ID为200的帧通过，物理交换机上连接host1和host2的端口映射为trynk端口。host1和host2上eth1没有设置VLAN的限制，是允许所有帧通过的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 在host1上</span><br><span class="line">docker run -itd --name con1 busybox </span><br><span class="line">docker run -itd --name con2 busybox</span><br><span class="line">pipework ovs0 con1 192.168.0.1/24 @100</span><br><span class="line">pipework ovs0 con2 192.168.0.2/24 @200</span><br><span class="line">ovs-vsctl add-port ovs0 eth1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 在host2上</span><br><span class="line">docker run -itd --name con3 busybox </span><br><span class="line">docker run -itd --name con4 busybox</span><br><span class="line">pipework ovs0 con3 192.168.0.3/24 @100</span><br><span class="line">pipework ovs0 con4 192.168.0.4/24 @200</span><br><span class="line">ovs-vsctl add-port ovs0 eth1</span><br></pre></td></tr></table></figure>
+<p>完成之后，通过ping命令测试实验效果即可。</p>
+<h3 id="OVS隧道模式"><a href="#OVS隧道模式" class="headerlink" title="OVS隧道模式"></a>OVS隧道模式</h3><p>在上面的内容中，讲述了跨主机通信的两种方法，并提到了这两种方法有一个局限——要求主机在同一个子网中。当基础设施的规模足够强大时，这种局限性就会暴露出来，比如两个数据中心的Docker容器需要通信时，这两种方法就会失效。 当前的主流隔离技术VLAN在Docker中的应用，然而VLAN也有诸多限制。首先，VLAN是在二层帧头上做文章，也要求主机在同一个子网中。其次，提到过VLAN ID只有12各比特位，即可用的数量为4000个左右，这样的数量对于公有云或大型虚拟化环境而言捉襟见肘。除此之外，VLAN配置比较繁琐且不够灵活。这些问题就是当前云计算所面临的网络考验，目前比较普遍的解决方法是使用Overlay的虚拟化网络技术。</p>
+<h4 id="1-OVerlay技术模型"><a href="#1-OVerlay技术模型" class="headerlink" title="1. OVerlay技术模型"></a>1. OVerlay技术模型</h4><p>Overlay网络其实就是隧道技术，即将一种网络协议包装在另一种协议中传输的技术。如果有两个使用IPv6的站点之间需要通信，而它们之间的网路哦使用IPv4协议，这是就需要IPv6的数据包在IPv4数据包中进行传输。隧道被广泛用于连接因而使用不同网络而被隔离的主机和网络，使用隧道技术搭建的网络就是i所谓Overlay网络。它能有效地覆盖在基础网络之上，该模型可以很好地解决跨网络Docker容器实现二层通信的需求。</p>
+<p>在普通的网络传输中，源IP地址和目的IP地址是不变的，而二层的帧头在每个路由器节点上都会改变，这是TCP/IP协议所作的规定。那么，如何使两个中间隔离了因特网的主机像连在同一台交换机上一样通信呢？如果将以以太网帧封装在IP包中，通过中间的因特网，最后传输到目的网络中再解封装，这样就可以保证二层帧头在传输过程中不改变，这也就是早起Ethernet in IP的二层Overlay技术。至于多租户隔离问题，解决思路是将不同租户的流量放在不同的隧道中进行隔离。用于封装传输数据的协议也会有一个类似VLAN ID的标识，以区分不同的隧道。</p>
+<p>当前主要的OVerlay技术有VXLAN（Virtual Extensible LAAN）和NVAGE（Network Virtualization using Generic Routing Encapsulation）。VXLAN是将以太网保温封装在UDP传输层上的一种隧道转发模式，它采用24位比特标识二层网络分段，成为VNI（VXLAN Network Identifier），类似于VLAN ID的作用。NVGRE同VXLAN类似，它使用GRE的方法来打通二层与三层的通路，采用24位比特的GRE key来作为网络标识（TNI）。</p>
+<h4 id="2-GRE简介"><a href="#2-GRE简介" class="headerlink" title="2. GRE简介"></a>2. GRE简介</h4><p>NVGRE使用GRE协议来封装需要传送的数据，因此需要先了解一下GRE。GRE协议可以用来封装任何其他网络层的协议。</p>
+<h4 id="3-GRE实现Docker容器跨网络通信（容器在同一子网中）"><a href="#3-GRE实现Docker容器跨网络通信（容器在同一子网中）" class="headerlink" title="3. GRE实现Docker容器跨网络通信（容器在同一子网中）"></a>3. GRE实现Docker容器跨网络通信（容器在同一子网中）</h4><p>既然GRE共呢个如此强大，可以实现真正的容器间跨主机通信，那么我们该如何使用它呢？目前比较普遍的方式是结合Open vSwitch使用。前文简单介绍过Open vSwitch是一个功能强大的虚拟交换机，支持GRE、VXLAN等协议，因此Open vSwitch是一个不错的选择。</p>
+<h4 id="4-GRE实现Docker容器跨网络通信（容器在不同子网中）"><a href="#4-GRE实现Docker容器跨网络通信（容器在不同子网中）" class="headerlink" title="4. GRE实现Docker容器跨网络通信（容器在不同子网中）"></a>4. GRE实现Docker容器跨网络通信（容器在不同子网中）</h4><h4 id="5-多租户环境下的GRE网络"><a href="#5-多租户环境下的GRE网络" class="headerlink" title="5. 多租户环境下的GRE网络"></a>5. 多租户环境下的GRE网络</h4><p>在多租户云环境下，租户之间的隔离显得非常重要。传统的VLAN方法有诸多限制，在大型公有云环境下并不合适。Overlay网络在虚拟化场景中除了实现虚拟机间的跨网路通信外，还能填补VLAN的不足，满足多租户的隔离需求，OpenStack的Neutron项目就是一个很好的实现例子。</p>
+<p>OpenStack是一个开源的IaaS云平台，简而言之，就是能为用户提供虚拟机服务，如计算、存储和网络。Neutron是OpenStack的一个子项目，提供虚拟环境下的网络功能。Neutron有多种模式以满足不同的需求，其中GRE模式就是一个典型的多租户场景网络解决方案。鉴于OpenStack可以很好地管理虚拟机，并且有强大的网络功能，不妨学习一下Neutron的GRE模式，这对解决Docker网络问题有很好的启发作用。</p>
+<p>Neutron的GRE模式也是使用Open vSwitch来实现的，不同在于，Neutron的GRE模式中有一个专门用来做GRE隧道的Open vSwitch网桥br-tun，该网桥使用流表来转发数据包。流表是什么呢？其实，在Open vSwitchh中，有两种工作方式——普通模式和流表模式。</p>
+<p>在普通模式下，Open vSwitch交换机就如同一台普通的二层MAC地址自学习交换机一样，对于每一个收到帧，记录其源MAC地址和进入的端口，然后根据目的MAC地址转发到合适的端口，或者洪泛到所有的端口。</p>
+<p>流表是OpenFlow引入的一个概念，OpenFloe是一种新型的网络模型，可以用来实现SDN（Software Defined Network）。流表是由流表项组成的，每个流表项就是一个转发规则。每个流表项由匹配域、处理指令、优先级等组成。匹配域定义了流表的匹配规则，匹配域的匹配字段相当丰富，可以是二层MAC地址、三层IP地址、四层TCP端口等，而不仅仅是MAC地址。处理指定定义了当数据包满足匹配域的规则时，需要执行的动作。常见的处理动作包括将数据从某个端口转发出去、修改数据协议头部的某个字段、提交给其他流表等。每一个流表项属于一个特定的流表，并有一个给定的优先级。当有数据进入流表模式的Open vSwitch交换机后，首先会进入table 0，按照流表项的优先级从高到低匹配。如果在table 0中没有匹配到相应的规则则丢弃；如果匹配成功，则执行相应的动作。</p>
+<p>Open vSwitch的流表模式就是按照流表项转发数据的工作方式。如何判断Open vSwitch交换机使用的是哪种模式呢？可以使用ovs-ofctl dump-flows <bridgenname>命令查看，如果仅有一条“NORMAL”的规则，则使用的是普通模式，如下所示。</bridgenname></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ovs-ofctl dump-flows ovs0</span><br><span class="line">NXST_FLOW reply (xid=0x4):</span><br><span class="line"> cookie=0x0, duration=3702.998s, table=0, n_packets=37, n_bytes=2442, idle_age=3633, priority=0 actions=NORMAL</span><br></pre></td></tr></table></figure>
+<p>具体实验过程略。。。</p>
+<p>下面介绍其中需要用到的一些关键命令的示例。</p>
+<ol>
+<li>使用pipework将Docker容器连接在br-int网桥上，并设置VLAN。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># ovs-ctl add-br br-int</span><br><span class="line"># pipework br-int con1 192.168.100.1/24 @1</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>使用ovs-ofctl add-flow <bridgename>命令向Open vSwitch添加流表信息。</bridgename></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ovs-ofctl add-flow vr-tun &quot;hard_timeout idle_timeout=0 priority in_port=1 actions=resubmit(,1)&quot;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>在Open vSwitch创建GRE隧道</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ovs-vsctl add-port br-tun gre0 --set Interface gre0 type=gre options:local_ip=192.168.100.100 options:in_key=flow options:remote_ip=192.168.100.101 options:out_key=flow</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>发布时间:</span>2018-07-21, 11:41:29</p>
+        <p><span>最后更新:</span>2018-07-21, 11:42:24</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/21/Docker-network-3/" title="Docker高级网络实践">https://www.ihaiyun.cc/2018/07/21/Docker-network-3/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/07/21/Docker-network-3/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/07/21/Docker-dockerfile-use/">
+                    Dockerfile的使用
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/21/Docker-security/">
+                    Dcoekr与容器安全
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker高级网络实践"><span class="toc-number">1.</span> <span class="toc-text">Docker高级网络实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#玩转-Linux-network-namespace"><span class="toc-number">2.</span> <span class="toc-text">玩转 Linux network namespace</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-使用ip-netns命令操作network-namesapce"><span class="toc-number">2.1.</span> <span class="toc-text">1. 使用ip netns命令操作network namesapce</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-使用ip命令为network-namespace配置网卡"><span class="toc-number">2.2.</span> <span class="toc-text">2. 使用ip命令为network namespace配置网卡</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-将两个network-namespace连接起来"><span class="toc-number">2.3.</span> <span class="toc-text">3. 将两个network namespace连接起来</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-使用ip命令配置Docker"><span class="toc-number">2.4.</span> <span class="toc-text">4. 使用ip命令配置Docker</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pipework原理解析"><span class="toc-number">3.</span> <span class="toc-text">pipework原理解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-将Docker容器配置到本地网络环境中"><span class="toc-number">3.1.</span> <span class="toc-text">1. 将Docker容器配置到本地网络环境中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-pipework解析"><span class="toc-number">3.2.</span> <span class="toc-text">2. pipework解析</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#支持Linux网桥连接容器并配置容器IP地址"><span class="toc-number">3.2.1.</span> <span class="toc-text">支持Linux网桥连接容器并配置容器IP地址</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#支持使用macvlan设备将容器连接到本地网络"><span class="toc-number">3.2.2.</span> <span class="toc-text">支持使用macvlan设备将容器连接到本地网络</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#支持DHCP获取容器的IP"><span class="toc-number">3.2.3.</span> <span class="toc-text">支持DHCP获取容器的IP</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#支持Open-vSwitch"><span class="toc-number">3.2.4.</span> <span class="toc-text">支持Open vSwitch</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#支持设置网卡MAC地址以及配置容器VLAN"><span class="toc-number">3.2.5.</span> <span class="toc-text">支持设置网卡MAC地址以及配置容器VLAN</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pipework-跨主机通信"><span class="toc-number">4.</span> <span class="toc-text">pipework 跨主机通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-桥接"><span class="toc-number">4.1.</span> <span class="toc-text">1. 桥接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-直接路由"><span class="toc-number">4.2.</span> <span class="toc-text">2. 直接路由</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OVS划分VLAN"><span class="toc-number">5.</span> <span class="toc-text">OVS划分VLAN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-单主机Docker容器的VLAN划分"><span class="toc-number">5.1.</span> <span class="toc-text">1. 单主机Docker容器的VLAN划分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多主机Docker容器的VLAN划分"><span class="toc-number">5.2.</span> <span class="toc-text">多主机Docker容器的VLAN划分</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OVS隧道模式"><span class="toc-number">6.</span> <span class="toc-text">OVS隧道模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-OVerlay技术模型"><span class="toc-number">6.1.</span> <span class="toc-text">1. OVerlay技术模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-GRE简介"><span class="toc-number">6.2.</span> <span class="toc-text">2. GRE简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-GRE实现Docker容器跨网络通信（容器在同一子网中）"><span class="toc-number">6.3.</span> <span class="toc-text">3. GRE实现Docker容器跨网络通信（容器在同一子网中）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-GRE实现Docker容器跨网络通信（容器在不同子网中）"><span class="toc-number">6.4.</span> <span class="toc-text">4. GRE实现Docker容器跨网络通信（容器在不同子网中）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-多租户环境下的GRE网络"><span class="toc-number">6.5.</span> <span class="toc-text">5. 多租户环境下的GRE网络</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/07/21/Docker-dockerfile-use/" title="上一篇: Dockerfile的使用">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/21/Docker-security/" title="下一篇: Dcoekr与容器安全">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-use/">Dockerfile的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-security/">Dcoekr与容器安全</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume-2/">Docker 数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-storage-manage/">Docker 存储管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-image/">Docker 镜像管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-libcontainer/">libcontainer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-arch/">Docker 架构概览</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network/">Docker网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume/">Docker数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-Install/">Docker安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Linux-iftop/">网络带宽监控工具 iftop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/06/Linux-iotop/">磁盘io监控工具 iotop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/05/Jenkins/">Jenkins</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/CI/">持续集成是什么?</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/ELK/">开源日志实时分析平台ELK</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/Linux-opt-map/">Linux 运维技能树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/Linux-top/">top 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 侯海云
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    </body>
+</html>

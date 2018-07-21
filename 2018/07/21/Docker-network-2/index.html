@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="侯海云" />
+
+
+
+<meta name="description" content="Docker 网络管理虚拟化技术是云计算的主要推动技术，而相较于服务器虚拟化及存储虚拟化的不断突破和成熟，网络虚拟化似乎有些跟不上节奏，成为目前云计算发展的一大瓶颈。Docker作为云计算领域的一颗耀眼新星，彻底释放了轻量级虚拟化的威力，使得云计算资源的利用率提升到了一个新的层次，大有取代虚拟机的趋势。Docker借助强大的镜像技术，让应用的分发、部署与管理变得异常便捷。那么，Docker的网络功">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 网络管理">
+<meta property="og:url" content="https://www.ihaiyun.cc/2018/07/21/Docker-network-2/index.html">
+<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:description" content="Docker 网络管理虚拟化技术是云计算的主要推动技术，而相较于服务器虚拟化及存储虚拟化的不断突破和成熟，网络虚拟化似乎有些跟不上节奏，成为目前云计算发展的一大瓶颈。Docker作为云计算领域的一颗耀眼新星，彻底释放了轻量级虚拟化的威力，使得云计算资源的利用率提升到了一个新的层次，大有取代虚拟机的趋势。Docker借助强大的镜像技术，让应用的分发、部署与管理变得异常便捷。那么，Docker的网络功">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-13.png">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-14.png">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-15.png">
+<meta property="og:updated_time" content="2018-07-21T11:37:01.045Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker 网络管理">
+<meta name="twitter:description" content="Docker 网络管理虚拟化技术是云计算的主要推动技术，而相较于服务器虚拟化及存储虚拟化的不断突破和成熟，网络虚拟化似乎有些跟不上节奏，成为目前云计算发展的一大瓶颈。Docker作为云计算领域的一颗耀眼新星，彻底释放了轻量级虚拟化的威力，使得云计算资源的利用率提升到了一个新的层次，大有取代虚拟机的趋势。Docker借助强大的镜像技术，让应用的分发、部署与管理变得异常便捷。那么，Docker的网络功">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/Docker-13.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Docker 网络管理 | 侯海云的个人网站</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">侯海云</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Docker-network-2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-network-2/" class="article-date">
+      <time datetime="2018-07-21T11:36:16.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Docker 网络管理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker-网络管理/">Docker 网络管理</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="Docker-网络管理"><a href="#Docker-网络管理" class="headerlink" title="Docker 网络管理"></a>Docker 网络管理</h3><p>虚拟化技术是云计算的主要推动技术，而相较于服务器虚拟化及存储虚拟化的不断突破和成熟，网络虚拟化似乎有些跟不上节奏，成为目前云计算发展的一大瓶颈。Docker作为云计算领域的一颗耀眼新星，彻底释放了轻量级虚拟化的威力，使得云计算资源的利用率提升到了一个新的层次，大有取代虚拟机的趋势。Docker借助强大的镜像技术，让应用的分发、部署与管理变得异常便捷。那么，Docker的网络功能又如何，能否满足各种场景的需求？下面介绍Docker网络的功能和实现方式。</p>
+<a id="more"></a>
+<h3 id="Docker-网络基础"><a href="#Docker-网络基础" class="headerlink" title="Docker 网络基础"></a>Docker 网络基础</h3><p>在深入Docker内部的网络实现原理之前，从一个用户的角度来直观感受一下Docker的网络架构与基本操作。</p>
+<h4 id="1-Docker网络架构"><a href="#1-Docker网络架构" class="headerlink" title="1. Docker网络架构"></a>1. Docker网络架构</h4><p>Docker在1.9版本中引入了一整套的docker network子命令和跨主机网络支持。这允许用户可以根据他们应用的拓扑结构创建虚拟网络并将容器接入其所对应的网络。其实，早在Docker1.7版本中，网络部分代码就已经被抽离并单独成为了Docker的网络库，即libnetwork。在此之后，容器的网络模式也被抽象变成了统一接口的驱动。</p>
+<p>为了标准化网络驱动的开发步骤和支持多种网络驱动，Docker公司在libnetwork中使用了CNM（Container Netwokr Model）。CNM定义了构建容器虚拟化网络的模型，同时还提供了可以用于开发多种网络驱动的标准化接口和组件。</p>
+<p>libnetwork和Docker及各个网络驱动的关系可以通过下图进行形象的表示。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-13.png" title="Docker网络虚拟化架构"></center>
+
+<p>如上图所示，Docker daemon通过调用libnetwork对外提供的API完成网络的创建和管理等功能。libnetwork中则使用率CNM来完成网络功能的提供。而CNM中主要有沙盒（sandbox）、端点（endpoint）和网络（network）这3中组件。libnetwork中内置的5中驱动则为libnetwork提供了不同类型的网路服务。下面分别对CNM中的3个核心组件和libnetwork中的5种内置驱动进行介绍。</p>
+<p>CNM中的3个核心组件如下。</p>
+<ul>
+<li>沙盒：一个沙盒包含了一个容器网络栈的信息。沙盒可以对容器的接口、路由和DNS设置等进行管理。沙盒的实现可以是Linux network namespace、FreeBSD Jail或者类似的机制。一个沙盒可以有多个端点和多个网络。</li>
+<li>端点：一个端点可以加入一个沙盒和一个网络。端点的实现可以是veth pair、Open vSwitch内部端口或者相似的设备。一个端点只可以属于一个网络并且只属于一个沙盒。</li>
+<li>网络：一个网络是一组可以直接互相连通的端点。网络的实现可以是Linux bridge、VLAN等。一个网络可以包含多个端点。</li>
+</ul>
+<p>libnetwork中的5中内置驱动如下。</p>
+<ul>
+<li>Bridge驱动。此驱动为Docker的默认设置，使用这个驱动的时候，libnetwork将创建出来的Docker容器连接到Docker网桥上。作为最常规的模式，bridge模式已经可以满足Docker容器最基本的使用需求了。然而其与外界通信使用NAT，增加了通信的复杂性，在复杂场景下使用会有诸多限制。</li>
+<li>host驱动。使用这种驱动的时候，libnetwork将不为Docker容器创建网络协议栈，即不会创建独立的network namespace。Docker容器中的进程处于宿主机的网路环境中，相当于Docker容器和宿主机共用一个network namespace，使用宿主机的网卡、IP和端口等信息。但是，容器其他方面，如文件系统、进程列表等还是和宿主机隔离的。host模式很好地解决了容器与外界通信的地址转换问题，可以直接使用宿主机的IP进行通信，不存在虚拟化网络带来的额外性能负担。但是host驱动也降低了容器与容器之间、容器与宿主机之间网络层面的隔离性，引起网络资源的竞争与冲突。因此可以认为host驱动适用于对容器集群规模不大的场景。</li>
+<li>overlay驱动。此驱动采用IETF标准的VXLAN方式，并且是VXLAN中被普通认为最适合大规模的云计算虚拟化环境的SDN controller模式。在使用的过程中，需要一个额外的配置存储服务，例如Consul、etcd或ZooKeeper。还需要在启动Docker daemon的时候额外添加菜蔬来指定所使用的配置存储服务地址。</li>
+<li>remote驱动。这个驱动实际上并未做真正的网络服务实现，而是调用了用户自行的网络驱动插件，是libnetwork实现了驱动的插件化，更好地满足了用户的多种需求。用户只要根据libnetwork提供的协议标准，实现其所要求的各个接口并向Docker daemon进行注册。</li>
+<li>null驱动。使用这种驱动的时候，Docker容器拥有自己的network namespace，但是并不为Docker容器进行任何网络配置。也就是说，这个Docker容器除了network namespace自带的loopback网卡外，没有其他任何网络、IP、路由等信息，需要用户为Docker容器添加网卡、配置IP等。这种模式如果不进行特定的配置是无法正常使用的额，但是有点也非常明显，它给用户最大的自由度来自定义容器的网络环境。</li>
+</ul>
+<p>在初步了解了libnetwork中各个组件和驱动后，为了帮助读者更加深入地理解libnetwork中的CNM模型和熟悉docker network子命令的使用，这里介绍一个libnetwork官方GitHub上示例的搭建过程，并在搭建成功后对其中容器之间的连通性进行验证，如下图。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-14.png" title="CNM主要组件示例图"></center>
+
+<p>在这个例子中，使用Docker默认的bridge驱动进行演示。在此示例中，会在Docker上组成一个网络拓扑的应用。</p>
+<ul>
+<li>它有两个网络，其中backend network为后端网络，frontend network则为前端网络，两个网络互不连通。</li>
+<li>其中container1和container3各拥有一个端点，并且分别加入到后端网络和前端网络中。而container2则有两个端点，它们分别加入到后端网络和前端网络中。</li>
+</ul>
+<p>通过以下命令分别创建名为backend和frontend的两个网络。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># docker network create backend</span><br><span class="line"># docker network create frontend</span><br></pre></td></tr></table></figure>
+<p>使用docker network ls可以查看这台主机上所有的Docker网络。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NETWORK ID          NAME                DRIVER              SCOPE</span><br><span class="line">c7a255b38671        backend             bridge              local</span><br><span class="line">fd6f92791e3a        bridge              bridge              local</span><br><span class="line">ed38c6583f19        frontend            bridge              local</span><br><span class="line">64a1f808576f        host                host                local</span><br><span class="line">25e3fa8dc1ee        none                null                local</span><br></pre></td></tr></table></figure>
+<p>除了刚才创建的backend和frontend之外，还有3各网络。这3个网络是Docker daemon默认创建的，分别使用了三种不同的驱动，而这3种驱动则对应了Docker原来的3种网络模式，这个在后面做详细讲解。需要注意的是，3种内置的默认网络是无法使用docker network rm进行删除的。</p>
+<p>在创建了所需要的两个网络之后，接下来创建3个容器，并使用如下命令将名为container1和container2的容器加入到backend网络中，将名为container3的容器加入到frontend网络中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># docker run -itd --name container1 --network backend busybox</span><br><span class="line"># docker run -itd --name container2 --network backend busybox</span><br><span class="line"># docker run -itd --name container3 --network frontend busybox</span><br></pre></td></tr></table></figure>
+<p>分别在container1和container3中使用ping命令测试其与container2的连通性，因为container1与container2都在backend网络中，所以两者可以连通。但是，因为container3和container2不再一个网络中，所以两个之间并不能连通。</p>
+<p>可以在container2中使用ifconfig来查看此容器中的网卡及其配置情况。可以看到，此容器中只有一块以太网卡，其名称为eth0，并且配置了和网桥backend同在一个IP段的IP地址，这个网卡就是CNM的端点。</p>
+<p>最后，使用如下命令将container2加入到frontend网络中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network connect frontend container2</span><br></pre></td></tr></table></figure>
+<p>再次，在container2中使用命令ifconfig来查看此容器中的网卡及配置情况。发现多了一块名为eth1的以太网卡，并且其IP和网桥frontend同在一个IP段。测试container2与container3的连通性后，可以发现两者已经连通。</p>
+<p>可以看出，docker network connect命令会在所连接的容器中创建新的网卡，以完成其与所指定网络的连接。</p>
+<h4 id="2-bridge驱动实现机制分析"><a href="#2-bridge驱动实现机制分析" class="headerlink" title="2. bridge驱动实现机制分析"></a>2. bridge驱动实现机制分析</h4><p>前面我们演示了bridge驱动下的CNM使用方式，接下来本节将会分析bridge驱动的实现机制。</p>
+<h5 id="docker0网桥"><a href="#docker0网桥" class="headerlink" title="docker0网桥"></a>docker0网桥</h5><p>当在一台未经特殊网络配置的Ubuntu机器上安装完Docker之后，在宿主机上通过使用ifconfig命令可以看到多了一块名为docker0的网卡，假设IP为172.17.0.1/16。有了这样一块网卡，宿主机也会在内核路由表添加一条到达相应网络的静态路由，可通过route -n命令查看。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ route -n</span><br><span class="line">...</span><br><span class="line">172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0</span><br></pre></td></tr></table></figure>
+<p>此条路由表示所有目的IP地址为172.17.0.0/16的数据包从docker0网卡发出。</p>
+<p>然后使用docker run命令创建一个执行shell（/bin/bash）的Docker容器，假设容器名称为con1.</p>
+<p>在con1容器中可以看到它有两块网卡lo和eth0.lo设备不必多说，是容器的回环网卡；eth0即为容器与外界通信的网卡，eth0的IP为172.17.0.2.16，和宿主机上的网桥docker0在同一个网段。</p>
+<p>查看con1的路由表，可以发现con1的默认网关正是宿主机的docker0网卡，通过测试，con1可以顺利访问外网和宿主机的网络，因此表明con1的eth0网卡与宿主机的docker0网卡是相互连通的。</p>
+<p>这时在其他控制台窗口查看宿主机的网络设备，会发现有一块以“veth”开头的网卡，如veth6c137e9，我们可以大胆猜测这块网卡肯定就是veth设备了，而veth pair总是成对出现的。veth pair通常用来连接两个network namespace，那么另一个应该是Docker容器con1中的eth0了。之前已经判断con1容器的eth0和宿主机的docker0是相连的，那么veth6c137e9也应该是与docker0相连的，不难想到，docker0就不只是一个简单的网卡设备了，而是一个网桥。</p>
+<p>真实情况正是如此，下图即为Docker默认网络模式（bridge模式）下的网络环境拓扑图，创建了docker0网桥，并以veth pair连接各容器的网络，容器中的数据通过docker0网桥转发到eth0网卡上。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-15.png" title="Docker网络bridge模式示意图"></center>
+
+<p>这里网桥的概念等同于交换机，为连在其上的设备转发数据帧。王桥上的veth网卡设备相当于交换机上的端口，可以将多个容器或虚拟机连接在其上，这些端口工作在二层，所以是不需要配置IP信息的。图中docker0网桥就为连在其上的容器转发数据帧，使得同一台宿主机上的Docker容器之间可以相互通信。读者应该注意到docker0既然是二层设备，其上怎么也配置了IP呢？docker0是普通的Linux网桥，它是可以在上面配置IP的，可以认为其内部有一个可以用于配置IP信息的网卡接口（如同每一个Open vSwitch网桥都有一个同名的内部接口一样）。在Docker的桥接网络模式中，docker0的IP地址作为连于之上的容器的默认网关地址存在。</p>
+<p>在Linux中，可以使用brctl命令查看和管理网桥（需要安装bridge-utils软件包）如果查看本机上的Linux网桥以及其上的端口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># brctl show</span><br><span class="line">bridge name	bridge id		STP enabled	interfaces</span><br><span class="line">docker0		8000.0242d7865058	no		veth6c137e9</span><br></pre></td></tr></table></figure>
+<p>更多关于brctl命令的功能和使用方法，请读者通过man brctl或brctl –help查阅。</p>
+<p>docker0网桥是在Docker daemon启动时自动创建的，其IP默认为172.17.0.1/16，之后创建的Docker容器都会在docker0子网的范围内选区一个未占用的IP使用，并连接到docker0王桥上。Docker提供了如下参数可以帮助用户自定义docker0的设置。</p>
+<ul>
+<li>–bip=CIDR: 设置docker0的IP地址和子网范围，使用CIDR格式，如192.168.100.1/24。注意这个参数仅仅是配置docker0的，对其他自定义的网桥无效。并且在指定这个参数的时候，宿主机是不存在docker0的或者docker0已经存在且docker0的IP和参数指定的IP一致才行。</li>
+<li>fixed-cidr=CIDR：限制Docker容器获取IP的范围。Docker容器默认获取的IP范围为Docker网桥（docker0网桥或者–bridge指定的网桥）的整个子网范围，此参数可将其缩小到某个子网范围内，所以这个参数必须在Docker网桥的子网范围内。如docker0的IP为172.17.0.1/16，可将–fixed-cidr设为172.17.1.1/24，那么Docker容器的IP范围将为172.17.1.1 ~ 172.17.1.254。</li>
+<li>–mtu=BYTES：指定docker0的最大传输单元（MTU）。</li>
+</ul>
+<p>除了使用docker0网桥外，还可以使用自己创建的网桥，使用–bridge=BRIDGE参数指定。是用如下命令添加一个名为br0的网桥，并且为其配置IP。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brctl addbr br0</span><br><span class="line">ifconfig br0 188.18.0.1</span><br></pre></td></tr></table></figure>
+<p>然后在启动Docker daemon的时候使用–bridge=br0指定使用br0网桥即可。注意此参数若和–bip参数同时使用会产生冲突。</p>
+<p>以上参数在Docker daemon启动时指定，如docker daemon –fixed-cidr=172.17.1.1/24。在Ubuntu中，也可以将这些参数写在DOCKER_OPTS变量中（位于/etc/default/docker文件中），然后重启Docker服务。</p>
+<h5 id="iptables规则"><a href="#iptables规则" class="headerlink" title="iptables规则"></a>iptables规则</h5><p>Docker安装完成后，将默认在宿主机系统上增加一些iptables规则，以用于Docker容器和容器之间的容器之间以及和而外界的通信，可以使用iptables-save命令查看。其中nat表上的POSTROUTING链有这么一条规则：</p>
+<p><code>-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE</code></p>
+<p>这条规则关系着Docker容器和外界的通信，含义是将源地址为172.17.0.0/16的数据包（即Docker容器发出的数据），当不是从docker0网卡发出时做SNAT（源地址转换，将IP包的源地址替换为相应网卡的地址）。这样一来，从Docker容器访问外网的流量，在外部看来就是从宿主机上发出的，外部感觉不到Docker容器的存在。那么，外界想要访问Docker容器的服务时该怎么办？我们启动一个简单的Web服务容器，观察iptables规则有何变化。</p>
+<p>首先启动一个Web容器，将其5000端口映射到宿主机的5000端口上。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 5000:5000 training/webapp python app.py</span><br></pre></td></tr></table></figure>
+<p>然后查看iptables规则，省略部分无用信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">*nat</span><br><span class="line">-A DOCKER ! -i docker0 -p tcp -m tcp --dport 5000 -j DNAT --to-destination 172.17.0.4:5000</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">*filter</span><br><span class="line">-A DOCKER -d 172.17.0.4/32 ! -i docker0 -o docker0 -p tcp -m tcp --dport 5000 -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>可以看到，在nat和filter的DOCKER链中分别增加了一条规则，这两条规则将访问宿主机5000端口的流量转发到172.1.0.4的5000端口上（真正提供服务的Docker容器IP端口），所以外界访问Docker容器是通过iptables做DNAT（目的地址转换）实现的。此外，Docker的forward规则默认允许所有的外部IP访问容器，可以通过在filter的DOCKER链上添加规则来对外部的IP访问做出限制，如只允许源IP8.8.8.8的数据包访问容器，需要添加如下规则：</p>
+<p><code>iptables -I DOCKER -i docker0 ! -s 8.8.8.8 -j DROP</code></p>
+<p>不仅仅是与外界间通信，Docker容器之间互相通信也受到iptables规则限制。通过前面的学习，了解到同一台宿主机上的Docker容器默认都连在docker0网桥上，它们属于一个子网，这时满足相互通信的第一步。同时，Docker daemon会在filter的FORWARD链中增加一条ACCEPT的规则（–ic=true）：</p>
+<p><code>-A FORWARD -i docker0 -o docker0 -j ACCEPT</code></p>
+<p>这时满足互相通信的第二步。当Docker daemon启动参数–icc（icc参数表示是否允许容器间互相通信）设置为false时，以上规则会被设置为DROP，Docker容器间的相互通信就被禁止，这种情况下，想让两个容器间通信就需要在docker run时使用–link选项。</p>
+<p>在Docker容器和外界通信的过程中，还涉及了数据包在多个网卡间的转发（如从docker0网卡到宿主机eth0的转发），这需要内核将ip-forward功能打开，即将ip_forward系统参数设为1。Docker daemon启动的时候默认会将其设为1（–ip-forward=true），也可以通过以下命令手动设置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># echo 1 &gt; /proc/sys/net/ipv4/ip_forward</span><br><span class="line"># cat /proc/sys/net/ipv4/ip_forward</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<p>以上过程中涉及的Docker daemon启动参数如下。</p>
+<ul>
+<li>–iptables：是否允许Docker daemon设置宿主机的iptables规则，默认为true。当设为false时，Docker daemon将不会改变你宿主机上的iptables规则。</li>
+<li>–icc：是否允许Docker容器间相互通信，默认为true。true或false改变的是FORWARD链中相应的iptables规则的策略（ACCEPT、DROP）。由于操作的是iptables规则，所以需要–iptables=true才能生效。</li>
+<li>–ip-forward：是否将ip_forward参数设为1，默认为true，用于打开Linux内核的ip数据包转发功能。</li>
+</ul>
+<p>这些参数也是在Dcoekr daemon启动时进行设置的，所以可以设置在DOCKER_OPTS变量中。</p>
+<h5 id="Docker容器的DNS和主机名"><a href="#Docker容器的DNS和主机名" class="headerlink" title="Docker容器的DNS和主机名"></a>Docker容器的DNS和主机名</h5><p>同一个Docker镜像可以启动很多个Docker容器，通过查看，它们的主机名并不一样，也就是说主机名并非是写入镜像中的。实际上容器中/etc目录下有3各文件是容器启动后被虚拟文件覆盖掉的，分别是/etc/hostname、/etc/hosts、/etc/resolv.conf，通过在容器中运行mount命令可以查看。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># mount</span><br><span class="line">...</span><br><span class="line">/dev/sda2 on /etc/hosts type xfs (rw,relatime,attr2,inode64,noquota)</span><br><span class="line">/dev/sda2 on /etc/resolv.conf type xfs (rw,relatime,attr2,inode64,noquota)</span><br><span class="line">/dev/sda2 on /etc/hostname type xfs (rw,relatime,attr2,inode64,noquota)</span><br></pre></td></tr></table></figure>
+<p>这样就能解决主机名的问题，同时也能让DNS及时更新（改变resolv.conf）。由于这些文件的维护方法随着Docker版本演进而不断变化，因此尽量不要修改这些文件，而是通过Docker提供的参数进行相关参数设置，参数配置方式如下。</p>
+<ul>
+<li><p>-h HOSTNAME 或者 –hostname=HOSTNAME: 设置容器的主机名，此名称会写在/etc/hostname和/etc/hosts文件中，也会在容器的bash提示符中看到。但是在外部，容器的主机名是无法查看的，不会出现在其他容器的hosts文件中，即使使用docker ps命令也查看不到。此参数是docker run命令的参数，而非Docker daemon的启动参数。</p>
+</li>
+<li><p>–dns=IP_ADDRESS…：为容器配置DNS，写在/etc/resolv.conf中。该参数既可以在Docker daemon启动的时候设置也可以在docker run时设置，默认为8.8.8.8和4.4.4.4。</p>
+</li>
+</ul>
+<p>注意对以上3各文件的修改不会被docker commit保存，也就是不会保存在镜像中，重启容器也会导致修改失效。另外，在不稳定的网络环境下使用需要特别注意DNS的设置。</p>
+<h3 id="Docker-daemon-网络配置原理"><a href="#Docker-daemon-网络配置原理" class="headerlink" title="Docker daemon 网络配置原理"></a>Docker daemon 网络配置原理</h3><p>在对Docker的网络环境有了一定的认识之后，将深入到源码中理解Docker的网络原理。在Docker 1.6以及之前的版本中，Docker自身的网络主要分为两部分：Docker daemon的网络配置和libcontainer的网络配置。Docker daemon的网络指daemon启动时，在主机系统上所做的网络设置，可以被所有Docker容器所使用；libcontainer的网络配置针对具体的容器，是在使用docker run命令启动容器时，根据传入的参数为容器做的网络配置工作。</p>
+<p>但是随着社区和用户对网络功能改善的需求日益迫切，Docker网络的代码也在快速地变化，在1.7以及后续的版本中，Docker网络将变为Docker中的“一等公民”，所有跟网络县官的代码都已经从Docker daemon主代码和libcontainer的代码中分离出来，整合成为一个单独的库——libnetwork。libnetwork通过插件的形式允许用户可以根据自己的需求来是西安自己的network driver。所谓driver，就是以前Docker daemon中网络相关代码加上libcontainer中网络相关的代码的集合。目前libcontainer实现了5种驱动，其中的bridge驱动为libnetwork的默认驱动，本节讲解中也将以bridge驱动为主。</p>
+<p>Docker daemon在每次启动的过程中，都会初始化自身的网络环境，这样的网络环境最终为Docker容器提供网络通信服务。</p>
+<h4 id="1-与网络相关的配置参数"><a href="#1-与网络相关的配置参数" class="headerlink" title="1. 与网络相关的配置参数"></a>1. 与网络相关的配置参数</h4><p>Docker daemon启动的过程中，在配置参数Config结构体中保存了一个用于网络配置的结构体bridgeConfig。daemon启动过程中与网络相关的参数配置都定义在bridgeConfig中，主要包括以下几项：EnableIptables、EnableIpForward、EnableIpMasq、DefaultIp、Iface、IP、FixedCIDR、InterContainerCommunication，这些变量在Config中的默认值以及作用如下。</p>
+<ul>
+<li>EnableIptables：默认值为true，对应于Docker daemon启动时的–iptables参数，作用为是否允许Docker daemon在宿主上添加iptables规则。</li>
+<li>EnableIpMasq：默认为true，对应于Docker daemon启动时的–ip-masq参数，作用为是否为Docker容器通往外界的包做SNAT。MASQUERADE的iptables桂萼，此变量即控制是否添加那条规则。</li>
+<li>DefaultIp：对应–ip参数，默认值为“0.0.0.0”。这个变量的作用为：当启动容器做端口映射时，将DefaultIp作为默认使用的IP地址。</li>
+<li>EnableIpForward、Iface、IP、FixedCIDR、InterContainerCommunication分别对应–ip-forward、–bridge、–bip、–fixed-cidr、–icc。</li>
+</ul>
+<p>Docker daemon通过这些配置项来决定如何初始化网络。每一个配置项都有其默认值，单用户可以使用Docker daemon的启动参数来改变其默认值，达到自定义Docker daemon网络的效果。</p>
+<h4 id="2-初始化过程"><a href="#2-初始化过程" class="headerlink" title="2. 初始化过程"></a>2. 初始化过程</h4><h5 id="网络参数校验"><a href="#网络参数校验" class="headerlink" title="网络参数校验"></a>网络参数校验</h5><p>当Docker daemon启动时，首先对启动参数进行解析，将参数值赋予相应的变量。然后对这些配置选项进行判断和校验。关于网络方面，主要检查烈3对互斥配置选项。</p>
+<p>首先是iface和IP，也就是不能在指定自定义网桥的同时又指定新建网桥的IP。为什么？如果指定了自定义的网桥，那么该网桥已经存在，无需指定网桥的IP地hi；相反，若用户指定网桥IP，那么该网桥肯定还未新建成功，则Docker daemon在新建网桥时使用默认网桥名docker0，并绑定IP。这也说明了–bip参数之恩呢配置docker0网桥的原因。</p>
+<p>第二队互斥选项时EnableIptables和InterContainerCommunication，上面介绍过–icc参数的原理，如果InterContainerCommunicationg为false，就需要修改iptables规则，而EnableIptables为false则规定不允许Docker daemon修改宿主机的iptales规则，因此两参数不能同为false。此外，EnableIpMasq选项也与iptables规则相关，因此在iptables规则禁止的情况下，EnableIpMasq也不能为true。</p>
+<h5 id="是否初始化bridge驱动"><a href="#是否初始化bridge驱动" class="headerlink" title="是否初始化bridge驱动"></a>是否初始化bridge驱动</h5><p>参数校验完成后，接着判断Iface和disableNetworkBridge的值是否相同，Iface保存的是网桥名称，disableNetworkBridge是一个字符串常量，值为none。因此，若用户通过传过来的参数将Iface设为none，则config.DisableBridge变量为true，否则为false。</p>
+<p>接下来会调用libnetwork.New()生成网络控制器controller，这个控制器主要用于创建和管理Network。然后会通过null驱动和host驱动来进行默认的网络创建。</p>
+<p>最后会根据DisableBridge的值来决定bridge驱动是否进行初始化。若DisableNetwork为false，则运行initBridgeDriver函数。initBridgeDriver函数就是完成默认的bridge驱动的初始化任务。</p>
+<h5 id="处理网桥参数"><a href="#处理网桥参数" class="headerlink" title="处理网桥参数"></a>处理网桥参数</h5><p>已经直到Docker网桥默认为docker0，也可以通过–bridge参数指定自定义的网桥。处理用户自定义网桥的流程分为如下两步。</p>
+<ol>
+<li>将用户指定的网桥名传入Iface，若Iface不为空，则将其传赋值给bridgeName。如果Iface为空，则将bridgeName指定为DefaultNetworkBridge。DefaultNetworkBridge是一个字符串常量，为docker0，即表示当用户没有传入网桥参数时，启动默认网桥docker0。</li>
+<li>首先，寻找Docker网桥名是否在宿主机上又对应的显卡，如果存在则返回其IP等信息，否则则从系统预定义的IP列表中非配一个可用IP。如果用户没有使用–bip来指定Docker网桥的IP地址，那么上面得到的IP会被写入ipamV4Conf结构体中，此结构体用于保存关于Docker网桥上有关于IPV4的相关信息，如果用户进行了指定则会将指定的IP信息写入ipamV4Conf结构体中。如果默认的网关不为空，则将其信息写入到ipamV4Conf结构体中。然后，入宫FixedCIDRv6，则将用户指定的IPV6网络范围和相关的IPV6配置信息写入ipamV6Conf中。最后使用上述信息作为参数调用controller.NetNetwork()函数，并指定bridge驱动来创建Docker网桥。</li>
+</ol>
+<h5 id="创建网桥设置队列"><a href="#创建网桥设置队列" class="headerlink" title="创建网桥设置队列"></a>创建网桥设置队列</h5><p>当需要Docker daemon创建网络时，则调用controller.NewNetwork()函数来通过libnetwork完成创建，实现过程的主要步骤如下。</p>
+<ol>
+<li>使用IP管理器的默认驱动创建IP管理器，并使用IP管理器从其自身维护的iP池中获取参数中指定的IP地址段。</li>
+<li>在确保新的网络设置和已经存在的网路不冲突之后，创建与这个驱动（即bridge驱动）相符的配置结构体network。接下来根据配置中的网桥名寻找对应的网桥。如果网桥不存在，则将创建网桥的步骤加入设置对垒。</li>
+<li>定义关于网络隔离的iptables规则设置的函数，在接下来的步骤加入到设置队列中，以确保不同额昂罗之间相互隔离。</li>
+<li>将IPV4配置到网桥上、IPV6配置、IPV6转发、开启本地回环接口的地址路由、开启iptables、IPV4和IPV6的网关信息配置、网络隔离的iptalbes规则设置和网桥过滤等步骤加入到设置队列中。</li>
+<li>最后，运行设置队列中的所有步骤，主要通过netlink进行系统调用来完成Docker网桥的创建和配置工作。</li>
+</ol>
+<h5 id="更新相关配置信息"><a href="#更新相关配置信息" class="headerlink" title="更新相关配置信息"></a>更新相关配置信息</h5><p>完成上述操作后，libnetwork会将各种县官配置信息存储到Docker的LibKV数据仓库中，以备后续的查找和使用。</p>
+<p>到这里，initNetworkController函数的执行就完成了，也代表着Docker daemon启动过程中网络初始化的部分也已完成。</p>
+<h3 id="libcontainer网络配置原理"><a href="#libcontainer网络配置原理" class="headerlink" title="libcontainer网络配置原理"></a>libcontainer网络配置原理</h3><p>Docker容器的网络就是在创建特定容器的时候，根据传入的参数为容器配置特定的网络环境，主要内容包括为容器配置网卡、IP、路由、DNS等一些列任务。Docker容器一般使用docker run命令来创建，其关于网络方面的参数有–net、–dns等。–net是一个非常重要的参数，用于指定docker的网络模式。</p>
+<h4 id="1-命令行参数阶段"><a href="#1-命令行参数阶段" class="headerlink" title="1. 命令行参数阶段"></a>1. 命令行参数阶段</h4><h4 id="2-创建容器阶段"><a href="#2-创建容器阶段" class="headerlink" title="2. 创建容器阶段"></a>2. 创建容器阶段</h4><h4 id="3-启动容器阶段"><a href="#3-启动容器阶段" class="headerlink" title="3. 启动容器阶段"></a>3. 启动容器阶段</h4><h5 id="initializeNetworking函数"><a href="#initializeNetworking函数" class="headerlink" title="initializeNetworking函数"></a>initializeNetworking函数</h5><h5 id="populateCommand函数"><a href="#populateCommand函数" class="headerlink" title="populateCommand函数"></a>populateCommand函数</h5><h5 id="waitForStart函数"><a href="#waitForStart函数" class="headerlink" title="waitForStart函数"></a>waitForStart函数</h5><h4 id="4-execdriver网络执行流程"><a href="#4-execdriver网络执行流程" class="headerlink" title="4. execdriver网络执行流程"></a>4. execdriver网络执行流程</h4><h4 id="5-libcontainer网络执行流程"><a href="#5-libcontainer网络执行流程" class="headerlink" title="5. libcontainer网络执行流程"></a>5. libcontainer网络执行流程</h4><h4 id="6-linnetwork实现内核态网络配置"><a href="#6-linnetwork实现内核态网络配置" class="headerlink" title="6. linnetwork实现内核态网络配置"></a>6. linnetwork实现内核态网络配置</h4><h5 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h5><h5 id="libcontainer网络执行流程"><a href="#libcontainer网络执行流程" class="headerlink" title="libcontainer网络执行流程"></a>libcontainer网络执行流程</h5><h3 id="传统的link原理解析"><a href="#传统的link原理解析" class="headerlink" title="传统的link原理解析"></a>传统的link原理解析</h3><p>在使用Docker容器部署服务的时候，经常会遇到需要容器间交互的情况，如Web应用与数据库服务。容器间的通信有Docker daemon的启动参数–icc控制。很多情况下，为了保证容器以及主机的安全，–icc通常设置为false。这种情况下该如何解决容器间的通信呢？通过容器向外界进行端口映射的方式可以实现通信，但这种方式不够安全，因为提供服务的容器仅希望个别容器可以访问。除此之外，这种方式需要经过NAT，效率也不高。这时候，就需要使用Docker的连接（linking）系统了。Docker的链接系统可以再两个容器之间建立一个安全的通道，使得接收容器（如Web应用）可以通过通道得到源容器（如数据库服务）指定的相关信息。</p>
+<p>在Docker 1.9版本后，网络操作独立成为一个命令组（docker network），link胸痛也与原来不同了，Docker为了保持对向上兼容，若容器使用默认的bridge模式网络，则会默认使用传统额link系统；而使用用户自定义的网络（user-defined network），则会使用新的link系统。</p>
+<h4 id="1-使用link通信"><a href="#1-使用link通信" class="headerlink" title="1. 使用link通信"></a>1. 使用link通信</h4><h4 id="2-设置接收容器的环境变量"><a href="#2-设置接收容器的环境变量" class="headerlink" title="2. 设置接收容器的环境变量"></a>2. 设置接收容器的环境变量</h4><h4 id="3-更新接收容器的-etc-hosts文件"><a href="#3-更新接收容器的-etc-hosts文件" class="headerlink" title="3. 更新接收容器的/etc/hosts文件"></a>3. 更新接收容器的/etc/hosts文件</h4><h4 id="4-建立iptables规则进行通信"><a href="#4-建立iptables规则进行通信" class="headerlink" title="4. 建立iptables规则进行通信"></a>4. 建立iptables规则进行通信</h4><h3 id="新的link介绍"><a href="#新的link介绍" class="headerlink" title="新的link介绍"></a>新的link介绍</h3><p>相比于传统的link系统提供的名字和别名解析、容器间网络隔离（–icc=false）以及环境变量的注入，Docker v1.9后为用户自定义网络提供了DNS自动名字解析、同一个网络中容器间的隔离、可以动态加入或者退出多个网络、支持–link为源容器设定别名等服务。在使用上，可以说除了环境变量的注入，新的网络模型给用户提供了更便捷和更自然的使用方式而不影响原有的使用习惯。</p>
+<p>在新的网络模型中，link系统只是在当前网络给源容器起了一个别名，并且这个别名只对接收容器有效。新旧link系统的另一个重要的区别是新的link系统在创建一个link时并不要求源容器已经创建或者启动。</p>
+<p>从本节的介绍中，可以看到Docker通过libnetwork库使用Linux网桥、端口映射、iptables规则和link等技术完成了Docker的网络功能，已经能满足简单应用在单机环境下的几把呢需求。此外，linetwork还通过overlay驱动构建overlay网络允许跨主机通信；通过为用户创建独立的网络环境来实现多租户的隔离；通过配置IPAM也可以实现容器的固定IP等功能。目前，Docker将网络单独成一个库——libnetwork，但是其还属于雏形阶段。在Docker官方完善网络功能之前，就需哟啊引入额外的机制来扩展Docker的网络。后续继续介绍如何解决Docker用户的复杂网络需求。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>发布时间:</span>2018-07-21, 11:36:16</p>
+        <p><span>最后更新:</span>2018-07-21, 11:37:01</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/21/Docker-network-2/" title="Docker 网络管理">https://www.ihaiyun.cc/2018/07/21/Docker-network-2/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/07/21/Docker-network-2/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/07/21/Docker-security/">
+                    Dcoekr与容器安全
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/21/Docker-volume-2/">
+                    Docker 数据卷
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-网络管理"><span class="toc-number">1.</span> <span class="toc-text">Docker 网络管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-网络基础"><span class="toc-number">2.</span> <span class="toc-text">Docker 网络基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Docker网络架构"><span class="toc-number">2.1.</span> <span class="toc-text">1. Docker网络架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-bridge驱动实现机制分析"><span class="toc-number">2.2.</span> <span class="toc-text">2. bridge驱动实现机制分析</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#docker0网桥"><span class="toc-number">2.2.1.</span> <span class="toc-text">docker0网桥</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#iptables规则"><span class="toc-number">2.2.2.</span> <span class="toc-text">iptables规则</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Docker容器的DNS和主机名"><span class="toc-number">2.2.3.</span> <span class="toc-text">Docker容器的DNS和主机名</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-daemon-网络配置原理"><span class="toc-number">3.</span> <span class="toc-text">Docker daemon 网络配置原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-与网络相关的配置参数"><span class="toc-number">3.1.</span> <span class="toc-text">1. 与网络相关的配置参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-初始化过程"><span class="toc-number">3.2.</span> <span class="toc-text">2. 初始化过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#网络参数校验"><span class="toc-number">3.2.1.</span> <span class="toc-text">网络参数校验</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#是否初始化bridge驱动"><span class="toc-number">3.2.2.</span> <span class="toc-text">是否初始化bridge驱动</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#处理网桥参数"><span class="toc-number">3.2.3.</span> <span class="toc-text">处理网桥参数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#创建网桥设置队列"><span class="toc-number">3.2.4.</span> <span class="toc-text">创建网桥设置队列</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#更新相关配置信息"><span class="toc-number">3.2.5.</span> <span class="toc-text">更新相关配置信息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#libcontainer网络配置原理"><span class="toc-number">4.</span> <span class="toc-text">libcontainer网络配置原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-命令行参数阶段"><span class="toc-number">4.1.</span> <span class="toc-text">1. 命令行参数阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-创建容器阶段"><span class="toc-number">4.2.</span> <span class="toc-text">2. 创建容器阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-启动容器阶段"><span class="toc-number">4.3.</span> <span class="toc-text">3. 启动容器阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#initializeNetworking函数"><span class="toc-number">4.3.1.</span> <span class="toc-text">initializeNetworking函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#populateCommand函数"><span class="toc-number">4.3.2.</span> <span class="toc-text">populateCommand函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#waitForStart函数"><span class="toc-number">4.3.3.</span> <span class="toc-text">waitForStart函数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-execdriver网络执行流程"><span class="toc-number">4.4.</span> <span class="toc-text">4. execdriver网络执行流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-libcontainer网络执行流程"><span class="toc-number">4.5.</span> <span class="toc-text">5. libcontainer网络执行流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-linnetwork实现内核态网络配置"><span class="toc-number">4.6.</span> <span class="toc-text">6. linnetwork实现内核态网络配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#启动容器"><span class="toc-number">4.6.1.</span> <span class="toc-text">启动容器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#libcontainer网络执行流程"><span class="toc-number">4.6.2.</span> <span class="toc-text">libcontainer网络执行流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#传统的link原理解析"><span class="toc-number">5.</span> <span class="toc-text">传统的link原理解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-使用link通信"><span class="toc-number">5.1.</span> <span class="toc-text">1. 使用link通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-设置接收容器的环境变量"><span class="toc-number">5.2.</span> <span class="toc-text">2. 设置接收容器的环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-更新接收容器的-etc-hosts文件"><span class="toc-number">5.3.</span> <span class="toc-text">3. 更新接收容器的/etc/hosts文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-建立iptables规则进行通信"><span class="toc-number">5.4.</span> <span class="toc-text">4. 建立iptables规则进行通信</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新的link介绍"><span class="toc-number">6.</span> <span class="toc-text">新的link介绍</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/07/21/Docker-security/" title="上一篇: Dcoekr与容器安全">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/21/Docker-volume-2/" title="下一篇: Docker 数据卷">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-use/">Dockerfile的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-security/">Dcoekr与容器安全</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume-2/">Docker 数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-storage-manage/">Docker 存储管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-image/">Docker 镜像管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-libcontainer/">libcontainer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-arch/">Docker 架构概览</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network/">Docker网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume/">Docker数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-Install/">Docker安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Linux-iftop/">网络带宽监控工具 iftop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/06/Linux-iotop/">磁盘io监控工具 iotop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/05/Jenkins/">Jenkins</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/CI/">持续集成是什么?</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/ELK/">开源日志实时分析平台ELK</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/Linux-opt-map/">Linux 运维技能树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/Linux-top/">top 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 侯海云
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    </body>
+</html>

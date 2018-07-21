@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="侯海云" />
+
+
+
+<meta name="description" content="镜像的生成途径 Dockerfile 基于容器的制作 Docker Hub automated builds">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过commit方式制作Docker镜像">
+<meta property="og:url" content="https://www.ihaiyun.cc/2018/07/21/Docker-commit-image/index.html">
+<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:description" content="镜像的生成途径 Dockerfile 基于容器的制作 Docker Hub automated builds">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/1f1e9-1f1ea.png?v8">
+<meta property="og:updated_time" content="2018-07-21T10:43:07.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过commit方式制作Docker镜像">
+<meta name="twitter:description" content="镜像的生成途径 Dockerfile 基于容器的制作 Docker Hub automated builds">
+<meta name="twitter:image" content="https://assets-cdn.github.com/images/icons/emoji/unicode/1f1e9-1f1ea.png?v8">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>通过commit方式制作Docker镜像 | 侯海云的个人网站</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">侯海云</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Docker-commit-image" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-commit-image/" class="article-date">
+      <time datetime="2018-07-21T10:41:29.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      通过commit方式制作Docker镜像
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/通过commit方式制作Docker镜像/">通过commit方式制作Docker镜像</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="镜像的生成途径"><a href="#镜像的生成途径" class="headerlink" title="镜像的生成途径"></a>镜像的生成途径</h3><ol>
+<li>Dockerfile</li>
+<li>基于容器的制作</li>
+<li>Docker Hub automated builds</li>
+</ol>
+<a id="more"></a>
+<h3 id="基于容器的制作"><a href="#基于容器的制作" class="headerlink" title="基于容器的制作"></a>基于容器的制作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker run --name b1 -it centos:latest bash       # 首先运行一个容器；</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# docker ps     # 容器已经运行；</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span><br><span class="line">cf95941eacaa        centos:latest       &quot;bash&quot;              2 minutes ago       Up 2 minutes                            b1</span><br><span class="line">[root@centos7 ~]# docker commit -a &quot;houhaiyun &lt;hou_haiyun@weitac.com&gt;&quot; -p -m &quot;web site resource&quot; b1        # 制作镜像，-a指定作者，-p指定在制作镜像时暂停容器的所有操作，-m指定镜像描述信息，b1是容器名称；</span><br><span class="line">sha256:339a47fcd8315e35e8412c888137140db592b10265603afee1889e1a7c2f959e</span><br><span class="line">[root@centos7 ~]# docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">&lt;none&gt;              &lt;none&gt;              339a47fcd831        11 seconds ago      204MB</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        8 weeks ago         1.13MB</span><br></pre></td></tr></table></figure>
+<h4 id="为刚刚制作的镜像打标签"><a href="#为刚刚制作的镜像打标签" class="headerlink" title="为刚刚制作的镜像打标签"></a>为刚刚制作的镜像打标签</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker images         # 列出所有镜像；</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">&lt;none&gt;              &lt;none&gt;              339a47fcd831        11 seconds ago      204MB</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        8 weeks ago         1.13MB</span><br><span class="line">[root@centos7 ~]# docker tag 339a47fcd831 registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc:web0.1       # 339a47fcd831为镜像ID，registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc:web0.1为仓库名:标签；</span><br><span class="line">[root@centos7 ~]# docker images     # 已经有仓库和标签；</span><br><span class="line">REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc   web0.1              339a47fcd831        7 minutes ago       204MB</span><br><span class="line">centos                                                   latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox                                                  1.27.2              6ad733544a63        8 weeks ago         1.13MB</span><br></pre></td></tr></table></figure>
+<h4 id="登陆阿里云开发者平台"><a href="#登陆阿里云开发者平台" class="headerlink" title="登陆阿里云开发者平台"></a>登陆阿里云开发者平台</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker login dev.aliyun.com</span><br><span class="line">Username: 13718403393</span><br><span class="line">Password: </span><br><span class="line">Login Succeeded</span><br></pre></td></tr></table></figure>
+<h3 id="为新创建的镜像打第二个标签"><a href="#为新创建的镜像打第二个标签" class="headerlink" title="为新创建的镜像打第二个标签"></a>为新创建的镜像打第二个标签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker images     # 列出所有镜像；</span><br><span class="line">REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc   web0.1              339a47fcd831        15 minutes ago      204MB</span><br><span class="line">centos                                                   latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox                                                  1.27.2              6ad733544a63        8 weeks ago         1.13MB</span><br><span class="line">[root@centos7 ~]# docker tag 339a47fcd831 websrv:0.1        # 打标签；</span><br><span class="line">[root@centos7 ~]# docker images     # 已经有标签；</span><br><span class="line">REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">websrv                                                   0.1                 339a47fcd831        17 minutes ago      204MB</span><br><span class="line">registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc   web0.1              339a47fcd831        17 minutes ago      204MB</span><br><span class="line">centos                                                   latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox                                                  1.27.2              6ad733544a63        8 weeks ago         1.13MB</span><br></pre></td></tr></table></figure>
+<h3 id="创建新镜像并指定默认运行命令"><a href="#创建新镜像并指定默认运行命令" class="headerlink" title="创建新镜像并指定默认运行命令"></a>创建新镜像并指定默认运行命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker commit -a &quot;houhaiyun &lt;hou_haiyun@weitac.com&gt;&quot; -p -m &quot;web server&quot; -c &apos;CMD [&quot;/usr/sbin/httpd&quot;,&quot;-f&quot;,&quot;-h&quot;,&quot;/web/html&quot;]&apos; b1     # 创建进行-c表示指定默认运行命令；</span><br><span class="line">sha256:5eb3758631b82331b0ea8f5d12bdb8d449df61579ecb69df5b2f55eba78a3fb5</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# docker images     # 显示所有镜像；</span><br><span class="line">REPOSITORY                                               TAG                 IMAGE ID            CREATED              SIZE</span><br><span class="line">&lt;none&gt;                                                   &lt;none&gt;              5eb3758631b8        About a minute ago   323MB</span><br><span class="line">web                                                      0.1                 273281a7964b        10 minutes ago       323MB</span><br><span class="line">websrv                                                   0.1                 339a47fcd831        11 hours ago         204MB</span><br><span class="line">registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc   web0.1              339a47fcd831        11 hours ago         204MB</span><br><span class="line">centos                                                   latest              3fa822599e10        4 weeks ago          204MB</span><br><span class="line">busybox                                                  1.27.2              6ad733544a63        8 weeks ago          1.13MB</span><br><span class="line">[root@centos7 ~]# docker tag 5eb3758631b8 web:0.2       # 为新创建的镜像打标签；</span><br><span class="line">[root@centos7 ~]# docker images             # 显示所有镜像；</span><br><span class="line">REPOSITORY                                               TAG                 IMAGE ID            CREATED              SIZE</span><br><span class="line">web                                                      0.2                 5eb3758631b8        About a minute ago   323MB</span><br><span class="line">web                                                      0.1                 273281a7964b        11 minutes ago       323MB</span><br><span class="line">websrv                                                   0.1                 339a47fcd831        11 hours ago         204MB</span><br><span class="line">registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc   web0.1              339a47fcd831        11 hours ago         204MB</span><br><span class="line">centos                                                   latest              3fa822599e10        4 weeks ago          204MB</span><br><span class="line">busybox                                                  1.27.2              6ad733544a63        8 weeks ago          1.13MB</span><br></pre></td></tr></table></figure>
+<h3 id="docker删除镜像"><a href="#docker删除镜像" class="headerlink" title="docker删除镜像"></a>docker删除镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker images</span><br><span class="line">REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc   web0.1              339a47fcd831        23 hours ago        204MB</span><br><span class="line">centos                                                   latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox                                                  1.27.2              6ad733544a63        2 months ago        1.13MB</span><br><span class="line">[root@centos7 ~]# docker rmi 339a47fcd831</span><br><span class="line">Untagged: registry.cn-hangzhou.aliyuncs.com/houhaiyun/ihaiyun.cc:web0.1</span><br><span class="line">Deleted: sha256:339a47fcd8315e35e8412c888137140db592b10265603afee1889e1a7c2f959e</span><br><span class="line">Deleted: sha256:79923bbbcf9f2cb45ba7ae035553b7e67026853cd5808e03a4ff35402bd3a7fa</span><br><span class="line">[root@centos7 ~]# docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        2 months ago        1.13MB</span><br></pre></td></tr></table></figure>
+<h3 id="commit制作命令并指定默认运行命令"><a href="#commit制作命令并指定默认运行命令" class="headerlink" title="commit制作命令并指定默认运行命令"></a>commit制作命令并指定默认运行命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 docker commit -a &quot;houhaiyun &lt;hou_haiyun@weitac.com&gt;&quot; -p -m &quot;web server&quot; -c &apos;CMD [&quot;/bin/httpd&quot;,&quot;-f&quot;]&apos; bbox1</span><br><span class="line">sha256:87aadc5b53c75e1ff9cefa62541eec46534c7d490814ff0d6285d2e8f291f8dd</span><br><span class="line">[root@centos7 ~]# docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">&lt;none&gt;              &lt;none&gt;              87aadc5b53c7        7 seconds ago       1.13MB</span><br><span class="line">web                 0.1                 fcd0885091c8        About an hour ago   1.13MB</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        2 months ago        1.13MB</span><br><span class="line">[root@centos7 ~]# docker tag 87aadc5b53c7 web:0.2</span><br><span class="line">[root@centos7 ~]# docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">web                 0.2                 87aadc5b53c7        22 seconds ago      1.13MB</span><br><span class="line">web                 0.1                 fcd0885091c8        About an hour ago   1.13MB</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        2 months ago        1.13MB</span><br><span class="line">[root@centos7 ~]# docker run --name web2 -d web:0.2 </span><br><span class="line">d8e57eea043d27c65d7c3f8768bfed272fc4efb935cb86a475b55e51a77f7098</span><br><span class="line">[root@centos7 ~]# docker ps </span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span><br><span class="line">d8e57eea043d        web:0.2             &quot;/bin/httpd -f&quot;     3 seconds ago       Up 2 seconds                            web2</span><br><span class="line">83430a68dae7        busybox:1.27.2      &quot;sh&quot;                3 minutes ago       Up 3 minutes                            bbox1</span><br></pre></td></tr></table></figure>
+<h3 id="镜像的导出"><a href="#镜像的导出" class="headerlink" title="镜像的导出"></a>镜像的导出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker images </span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">web                 0.2                 87aadc5b53c7        24 minutes ago      1.13MB</span><br><span class="line">web                 0.1                 fcd0885091c8        2 hours ago         1.13MB</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        2 months ago        1.13MB</span><br><span class="line">[root@centos7 ~]# docker save -o /root/web:0.2.tar web:0.2      # 导出镜像，-o指定导出的位置；</span><br><span class="line">[root@centos7 ~]# ll -h </span><br><span class="line">total 1.3M</span><br><span class="line">-rw------- 1 root root 1.3M Jan  3 11:07 web:0.2.tar</span><br></pre></td></tr></table></figure>
+<h3 id="导入镜像"><a href="#导入镜像" class="headerlink" title="导入镜像"></a>导入镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# scp ./web\:0.2.tar  192.168.8.12:     # 将镜像复制到192.168.8.12这台主机；</span><br><span class="line">The authenticity of host &apos;192.168.8.12 (192.168.8.12)&apos; can&apos;t be established.</span><br><span class="line">ECDSA key fingerprint is b2:9b:a5:92:1a:0a:1f:ee:0d:e4:b8:15:03<img class="github-emoji" title="de" alt="de" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f1e9-1f1ea.png?v8" height="20" width="20">13:b4.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">Warning: Permanently added &apos;192.168.8.12&apos; (ECDSA) to the list of known hosts.</span><br><span class="line">root@192.168.8.12&apos;s password: </span><br><span class="line">web:0.2.tar                                                                                                                        100% 1324KB   1.3MB/s   00:00    </span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">docker.io/centos    latest              3fa822599e10        4 weeks ago         203.5 MB</span><br><span class="line">docker.io/busybox   1.27.2              6ad733544a63        8 weeks ago         1.129 MB</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# docker load  -i web\:0.2.tar      # 导入镜像；</span><br><span class="line">d0e09d960c2a: Loading layer [==================================================&gt;] 4.608 kB/4.608 kB</span><br><span class="line">Loaded image: web:0.2 layer [=====&gt;                                             ]    512 B/4.608 kB</span><br><span class="line">[root@centos7 ~]# docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">web                 0.2                 87aadc5b53c7        36 minutes ago      1.129 MB</span><br><span class="line">docker.io/centos    latest              3fa822599e10        4 weeks ago         203.5 MB</span><br><span class="line">docker.io/busybox   1.27.2              6ad733544a63        8 weeks ago         1.129 MB</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# docker run -d --name web web:0.2      # 运行容器；</span><br><span class="line">61e6335a5d3fd325a8158da027c8fd043340ff9ef2c73909f58978e04449b943</span><br><span class="line">[root@centos7 ~]# docker ps</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span><br><span class="line">61e6335a5d3f        web:0.2             &quot;/bin/httpd -f&quot;     3 seconds ago       Up 2 seconds                            web</span><br></pre></td></tr></table></figure>
+<h3 id="查看镜像历史"><a href="#查看镜像历史" class="headerlink" title="查看镜像历史"></a>查看镜像历史</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">web                 0.2                 87aadc5b53c7        44 minutes ago      1.13MB</span><br><span class="line">web                 0.1                 fcd0885091c8        2 hours ago         1.13MB</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        2 months ago        1.13MB</span><br><span class="line">[root@centos7 ~]# docker history web:0.2 </span><br><span class="line">IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</span><br><span class="line">87aadc5b53c7        44 minutes ago      sh                                              133B                web server</span><br><span class="line">6ad733544a63        2 months ago        /bin/sh -c #(nop)  CMD [&quot;sh&quot;]                   0B                  </span><br><span class="line">&lt;missing&gt;           2 months ago        /bin/sh -c #(nop) ADD file:264af0c48e23e8b8f…   1.13MB</span><br></pre></td></tr></table></figure>
+<h3 id="显示容器状态"><a href="#显示容器状态" class="headerlink" title="显示容器状态"></a>显示容器状态</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker stats web2     # 显示web2的状态；</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# docker stats -a       # 显示所有容器的状态；</span><br></pre></td></tr></table></figure>
+<h3 id="制作镜像并且打上标签"><a href="#制作镜像并且打上标签" class="headerlink" title="制作镜像并且打上标签"></a>制作镜像并且打上标签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# docker images </span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">web                 0.2                 87aadc5b53c7        9 hours ago         1.13MB</span><br><span class="line">web                 0.1                 fcd0885091c8        11 hours ago        1.13MB</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        2 months ago        1.13MB</span><br><span class="line">[root@centos7 ~]# docker ps -a</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span><br><span class="line">98490a0fa139        busybox:1.27.2      &quot;sh&quot;                13 minutes ago      Up 13 minutes                           b1</span><br><span class="line">[root@centos7 ~]# docker commit -a &quot;houhaiyun &lt;hou_haiyun@weitac.com&gt;&quot; -m &quot;test page&quot; -p b1 testbox:v0.1</span><br><span class="line">sha256:da2444a15176b3fc764d5093b19d1a40ab2d7c2ccc193a55f1ab62aa727bf4f3</span><br><span class="line">[root@centos7 ~]# docker images </span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">testbox             v0.1                da2444a15176        7 seconds ago       1.13MB</span><br><span class="line">web                 0.2                 87aadc5b53c7        9 hours ago         1.13MB</span><br><span class="line">web                 0.1                 fcd0885091c8        11 hours ago        1.13MB</span><br><span class="line">centos              latest              3fa822599e10        4 weeks ago         204MB</span><br><span class="line">busybox             1.27.2              6ad733544a63        2 months ago        1.13MB</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>发布时间:</span>2018-07-21, 10:41:29</p>
+        <p><span>最后更新:</span>2018-07-21, 10:43:07</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/21/Docker-commit-image/" title="通过commit方式制作Docker镜像">https://www.ihaiyun.cc/2018/07/21/Docker-commit-image/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/07/21/Docker-commit-image/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/07/21/Docker-volume/">
+                    Docker数据卷
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/21/Docker-manage-1/">
+                    Docker镜像管理及容器管理
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#镜像的生成途径"><span class="toc-number">1.</span> <span class="toc-text">镜像的生成途径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于容器的制作"><span class="toc-number">2.</span> <span class="toc-text">基于容器的制作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#为刚刚制作的镜像打标签"><span class="toc-number">2.1.</span> <span class="toc-text">为刚刚制作的镜像打标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#登陆阿里云开发者平台"><span class="toc-number">2.2.</span> <span class="toc-text">登陆阿里云开发者平台</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为新创建的镜像打第二个标签"><span class="toc-number">3.</span> <span class="toc-text">为新创建的镜像打第二个标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建新镜像并指定默认运行命令"><span class="toc-number">4.</span> <span class="toc-text">创建新镜像并指定默认运行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker删除镜像"><span class="toc-number">5.</span> <span class="toc-text">docker删除镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#commit制作命令并指定默认运行命令"><span class="toc-number">6.</span> <span class="toc-text">commit制作命令并指定默认运行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#镜像的导出"><span class="toc-number">7.</span> <span class="toc-text">镜像的导出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#导入镜像"><span class="toc-number">8.</span> <span class="toc-text">导入镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看镜像历史"><span class="toc-number">9.</span> <span class="toc-text">查看镜像历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示容器状态"><span class="toc-number">10.</span> <span class="toc-text">显示容器状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#制作镜像并且打上标签"><span class="toc-number">11.</span> <span class="toc-text">制作镜像并且打上标签</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/07/21/Docker-volume/" title="上一篇: Docker数据卷">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/21/Docker-manage-1/" title="下一篇: Docker镜像管理及容器管理">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-use/">Dockerfile的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-security/">Dcoekr与容器安全</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume-2/">Docker 数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-storage-manage/">Docker 存储管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-image/">Docker 镜像管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-libcontainer/">libcontainer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-arch/">Docker 架构概览</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network/">Docker网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume/">Docker数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-Install/">Docker安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Linux-iftop/">网络带宽监控工具 iftop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/06/Linux-iotop/">磁盘io监控工具 iotop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/05/Jenkins/">Jenkins</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/CI/">持续集成是什么?</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/ELK/">开源日志实时分析平台ELK</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/Linux-opt-map/">Linux 运维技能树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/Linux-top/">top 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 侯海云
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    </body>
+</html>
