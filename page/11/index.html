@@ -221,6 +221,125 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Memcached-Tomcat-Session-Manager" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/09/Memcached-Tomcat-Session-Manager/" class="article-date">
+      <time datetime="2017-11-09T16:33:03.000Z" itemprop="datePublished">2017-11-09</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Memcached-Tomcat-Session-Manager-1.jpg" title="拓扑图"></center>
+
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>系统版本</th>
+<th>软件版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nginx</td>
+<td>192.168.8.17/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>nginx.x86_64 1:1.10.2</td>
+<td>反向代理</td>
+</tr>
+<tr>
+<td>Tomcat1</td>
+<td>192.168.8.12/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Tomcat2</td>
+<td>192.168.8.15/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Memcached1</td>
+<td>192.168.8.11/24</td>
+<td>CentOS release 6.9 (Final)</td>
+<td>memcached.x86_64 0:1.4.4-5</td>
+<td>缓存服务</td>
+</tr>
+<tr>
+<td>Memcached2</td>
+<td>192.168.8.13/24</td>
+<td>CentOS release 6.9 (Final)</td>
+<td>memcached.x86_64 0:1.4.4-5</td>
+<td>缓存服务</td>
+</tr>
+</tbody>
+</table>
+<p>简单说明下：<code>tomcat1</code>为主要把它的<code>session</code>存储到<code>memcached2</code>上，而<code>memcache2</code>是运行在另一台主机上的（一般情况下，<code>memcached</code>是存<code>tomcat1</code>的<code>session</code>），只有当<code>memcached2</code>不可用时，<code>tomcat1</code>才会把<code>session</code>存在<code>memcached1</code>上，也就是说<code>memcached1</code>是为了<code>tomcat1</code>做故障切换用的节点。这要的话，当<code>machine1</code>挂了的时候，<code>session</code>是不会丢失的。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Memcached/">Memcached</a><a class="article-category-link" href="/categories/Memcached/tomcat-memcached-session-manager共享session/">tomcat + memcached session manager共享session</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Memcached/">Memcached</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/09/Memcached-Tomcat-Session-Manager/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Memcached-Install-Changyong-Commands" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1000,75 +1119,6 @@
       
         <p class="article-more-link">
           <a href="/2017/11/07/Tomcat-Session/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Varnish-Log" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/06/Varnish-Log/" class="article-date">
-      <time datetime="2017-11-06T23:20:38.000Z" itemprop="datePublished">2017-11-06</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/06/Varnish-Log/">Varnish日志</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="Varnishlog"><a href="#Varnishlog" class="headerlink" title="Varnishlog"></a>Varnishlog</h3><p><code>varnishlog</code>：显示原始日志格式信息</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/Varnish日志/">Varnish日志</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/06/Varnish-Log/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

@@ -221,6 +221,81 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Docker-volume" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-volume/" class="article-date">
+      <time datetime="2018-07-21T10:44:49.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/21/Docker-volume/">Docker数据卷</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="容器存储数据存在的问题"><a href="#容器存储数据存在的问题" class="headerlink" title="容器存储数据存在的问题"></a>容器存储数据存在的问题</h3><p>关闭并重启容器，其数据不受影响；但删除容器，则其更改的数据将会全部丢失；</p>
+<p>存在的问题：</p>
+<ol>
+<li>存储于联合文件系统中，不易于宿主机的访问；</li>
+<li>容器间数据共享不便；</li>
+<li>删除容器其数据会丢失；</li>
+</ol>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker数据卷/">Docker数据卷</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2018/07/21/Docker-volume/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Docker-commit-image" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -839,122 +914,6 @@
       
         <p class="article-more-link">
           <a href="/2018/07/03/document-style-guide/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-ELK-Deploy" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/07/03/ELK-Deploy/" class="article-date">
-      <time datetime="2018-07-03T08:23:38.000Z" itemprop="datePublished">2018-07-03</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><table>
-<thead>
-<tr>
-<th style="text-align:center"><strong>服务器</strong></th>
-<th style="text-align:center"><strong>IP</strong></th>
-<th style="text-align:center"><strong>主机名</strong></th>
-<th style="text-align:center"><strong>系统</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Elastic search</td>
-<td style="text-align:center">192.168.8.12</td>
-<td style="text-align:center">ES1.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">Elastic search</td>
-<td style="text-align:center">192.168.8.13</td>
-<td style="text-align:center">ES2.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">Elastic search</td>
-<td style="text-align:center">192.168.814</td>
-<td style="text-align:center">ES3.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">Logstash</td>
-<td style="text-align:center">192.168.8.15</td>
-<td style="text-align:center">Logstash.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">Kibana</td>
-<td style="text-align:center">192.168.8.16</td>
-<td style="text-align:center">Kibana.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">nginx应用服务器</td>
-<td style="text-align:center">192.168.8.17</td>
-<td style="text-align:center">app.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-</tbody>
-</table>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/ELK/">ELK</a><a class="article-category-link" href="/categories/ELK/ELK部署/">ELK部署</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ELK/">ELK</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2018/07/03/ELK-Deploy/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
