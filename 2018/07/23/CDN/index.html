@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="侯海云" />
+
+
+
+<meta name="description" content="前言Internet的告诉发展，给人们的工作和生活带来了极大的便利，对Internet的服务品质和访问速度要求越来越高，虽然带宽不断增加，用户数量也在不断增加，受Web服务器的负载和传输距离等因素的影响，响应速度慢还是经常抱怨和困扰。解决方案就是在网络传输上利用缓存技术使得Web服务数据流能就近访问，是优化网络数据传输非常有效的技术，从而获得高速的体验和品质保证。">
+<meta name="keywords" content="CDN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CDN技术原理">
+<meta property="og:url" content="https://www.ihaiyun.cc/2018/07/23/CDN/index.html">
+<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:description" content="前言Internet的告诉发展，给人们的工作和生活带来了极大的便利，对Internet的服务品质和访问速度要求越来越高，虽然带宽不断增加，用户数量也在不断增加，受Web服务器的负载和传输距离等因素的影响，响应速度慢还是经常抱怨和困扰。解决方案就是在网络传输上利用缓存技术使得Web服务数据流能就近访问，是优化网络数据传输非常有效的技术，从而获得高速的体验和品质保证。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/CDN-1.jpg">
+<meta property="og:image" content="https://houhaiyun.github.io/img/images/CDN-2.jpg">
+<meta property="og:updated_time" content="2018-07-23T08:04:23.196Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CDN技术原理">
+<meta name="twitter:description" content="前言Internet的告诉发展，给人们的工作和生活带来了极大的便利，对Internet的服务品质和访问速度要求越来越高，虽然带宽不断增加，用户数量也在不断增加，受Web服务器的负载和传输距离等因素的影响，响应速度慢还是经常抱怨和困扰。解决方案就是在网络传输上利用缓存技术使得Web服务数据流能就近访问，是优化网络数据传输非常有效的技术，从而获得高速的体验和品质保证。">
+<meta name="twitter:image" content="https://houhaiyun.github.io/img/images/CDN-1.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>CDN技术原理 | 侯海云的个人网站</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">侯海云</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-CDN" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/23/CDN/" class="article-date">
+      <time datetime="2018-07-23T08:02:38.000Z" itemprop="datePublished">2018-07-23</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CDN技术原理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/CDN/">CDN</a><a class="article-category-link" href="/categories/CDN/CDN技术原理/">CDN技术原理</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CDN/">CDN</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Internet的告诉发展，给人们的工作和生活带来了极大的便利，对Internet的服务品质和访问速度要求越来越高，虽然带宽不断增加，用户数量也在不断增加，受Web服务器的负载和传输距离等因素的影响，响应速度慢还是经常抱怨和困扰。解决方案就是在网络传输上利用缓存技术使得Web服务数据流能就近访问，是优化网络数据传输非常有效的技术，从而获得高速的体验和品质保证。</p>
+<a id="more"></a>
+<p>网络缓存技术，其目的就是减少网络中冗余数据的重复传输，使之最小化，将广域传输转为本地或就近访问。互联网上传递的内容，大部分为重复的Web/FTP数据，Cache服务器即应用Caching技术的网络设备，可大大优化数据链路性能，消除数据峰值访问造成的节点设备阻塞。Cache服务器具有缓存功能，所以大部分网页对象（Web page object），如html、htm、php等页面文件，git、tif、png、bmp等图片文件，以及其他格式的文件，在有效期（TTL）内，对于重复的访问，不必从原始网站重新传送文件实体，只需要通过简单的认证（Freshness Validation）传送几十字节的Header，即可将本地的副本直接传送给访问者。由于缓存服务器通常部署在靠近用户端，所有能够获得近似局域网的相应速度，并有效减少广域带宽的消耗。据统计，Internet上超过80%的用户重复访问20%的信息资源，给缓存技术的应用提供了先觉的条件。缓存服务器的体系结构与Web服务器不同，缓存服务器能比Web服务器获得更高的性能，缓存服务器不仅能够提高相应速度，节约带宽，对于加速Web服务器，有效减轻源服务器的负荷是非常有效的。</p>
+<p>高速缓存服务器（Cache Server）是软硬件高度集成的专业功能服务器，主要做高速缓存加速服务，一般部署在网络边缘。根据加速对象不同，分为客户端加速和服务器加速，客户端加速Cache部署在网路出口处，把常访问的内容缓存在本地，提高相应速度和节约带宽；服务器加速，Cache部署在服务器前端，作为Web服务器的前置机，提高Web服务器的性能，加速访问速度。如果堕胎Cache加速服务器且分布在不同地域，需要通过有效地机制管理Cache网络，引导用户就近访问，全局负载均衡流量，这就是CDN内容传输网络的基本思想。</p>
+<h3 id="什么是CDN？"><a href="#什么是CDN？" class="headerlink" title="什么是CDN？"></a>什么是CDN？</h3><p>CDN的全称是Content Delivery Network，即内容分发发网络。其目的是通过在现有的Internet中增加一层新的网路架构，将网站的内容发布到最接近用户的网络“边缘”，使用户可以就近取得所需的内容，解决Internet网络拥塞状况，提高用户访问网站的相应速度。从技术上全面解决由于网络带宽小、用户访问量大、网点分布不均等原因，解决用户访问网站的相应速度慢的根本原因。</p>
+<p>狭义地将，内容分发网络（CDN）是一种新型的网络构建方式，它是为能在传统的IP网发布宽带丰富媒体而特别优化的网络覆盖层；而从广义的角度，CDN代表了一种基于质量与秩序的网络服务模式。简单地说，内容发布网（CDN）是一个经策略性部署的整体系统，包括分布式存储、负载均衡、网络请求的重定向和内容管理4个要件，而内容管理和全局的网络流量管理（Traffic Management）是CDN的核心所在。通过用户就近性和服务器负载的判断，CDN确保内容以一种极为高效的方式为用户的请求提供服务。总的来说，内容服务基于缓存服务器，也称作代理缓存（Surrogate），它位于网络的边缘，距用户仅有“一跳”（Single Hop）之遥。同时，代理缓存是内容提供商源服务器（通常位于CDN服务提供商的数据中心）的一个透明镜像。这样的架构使得CDN服务提供商能够代表他们的客户，即内容供应商，想最终用户提供尽可能好的体验而这些用户是不能容忍请求响应时间有任何延迟的。据统计，采用CDN技术，能处理真个网站页面的70% ~ 95%的内容访问量，减轻服务器的压力，提升了网站的性能和可扩展性。</p>
+<p>与目前现有的内容发布模式相比较，CDN强调了网络在内容罚不中的重要性。通过引入主动的内容管理层和全局负载均衡，CDN从根本上区别于传统的内容发布模式。在传统的内容发布模式中，内容的发布由ICP的应用服务器完成，而网络只表现为一个透明的数据传输通道，这种透明的表现在网络的质量保证仅仅停留在数据包的层面，而不能根据内容对象的不同区分服务质量。此外，由于IP网的“尽力而为”的特性使得其质量保证是依靠在用户和应用服务器之间端到端地提供充分的、远大于实际所需的带宽通量来实现的。在这样的内容发布模式下，不仅大量宝贵的骨干带宽被占用，同时ICP的应用服务器的负载也变得非常重，而且不可预计。当发生一些热点事件和出现浪涌流量时，会产生局部热点效应，从而使应用服务器过载退出服务。这种基于中心的应用服务器的内容发布模式的另外一个缺陷在于个性化服务的缺失和对带宽服务价值链的扭曲，内容提供商承担了他们不该干也干不好的内容发布服务。</p>
+<p>纵观整个带宽服务的价值链，聂荣提供商和用户位于整个加制链的两端，中间依靠网络服务提供商将其串接起来。随着互联网工业的成熟和商业模式的变革，在这条价值链上的角涉越来越多也越来越细分。比如内容/应用的运营商、托管服务提供商、骨干网络服务提供商、接入服务提供商等等。在这一条价值链上的每一个角色都要分工核作、各司其职才能为客户提供良好的服务，从而带来多赢的局面。从内容与网络的结合模式上看，内容的发布已经走过了ICP的内容（应用）服务器和IDC这两个阶段。IDC的热潮也催生了托管服务提供商这一角色。但是，IDC并不能解决内容的有效发布问题。内容位于网络的中心并不能解决骨干带宽的占用和建立IP网络上的流量秩序。因此将内容推到网络的边缘，为用户提供就近性的边缘服务，从而保证服务的质量和整个网络上的访问秩序就成了一种显而易见的选择。而这就是内容发布网（CDN）服务模式。CDN的建立解决了困扰内容运营商的内容“集中与分散”的两难选择。无疑对于构建良好的互联网加制链是有价值的也是不可或缺的。</p>
+<h3 id="CDN新应用和客户"><a href="#CDN新应用和客户" class="headerlink" title="CDN新应用和客户"></a>CDN新应用和客户</h3><p>目前的CDN服务主要应用于证券、金融保险、ISP、ICP、网上交易、门户网站、大中型公司、网络教学等领域。另外在行业专网、互联网中都可以用到，甚至可以对局域网进行网络优化。利用CDN，这些网站无需投资昂贵的各类服务器、建立分站点，特别是流媒体信息的广泛应用、远程教学课件等消耗带宽资源多的媒体信息，应用CDN网络，把内容复制到网络的最边缘，使内容请求点和交付点之间的距离缩至最小，从而促进Web站点性能的提高，具有重要的意义。CDN网络的建设主要有企业建设的CDN网络，为企业服务；IDC的CDN网络，主要服务于IDC和增值服务；网络运营商主建的CDn网络，主要提供内容推送服务；CDN网络服务商，专门建设的CDN用于做服务，用户通过与CDN机构进行合作，CDN负责信息传递工作，保证信息正常传输，维护传送网络，而网站只需要内容维护，不再需要考虑流量问题。</p>
+<p>CDN能够为网络的快速、安全、稳定、可扩展等方面提供保障。</p>
+<p>IDC建立CDN网络，IDC运营商一般需要有分部各地的多个IDC中心，服务对象是托管在IDC中心的客户，利用现有的网络资源，投资较少，容易建设。例如某IDC全国有10个机房，加入IDC的CDN网络，托管在一个节点的Web服务器，相当于有了10个镜像服务器，就近供客户访问。带宽城域网，域内网络速度很快，出城带宽一般会瓶颈，为了体现局域网的高速体验，解决方案就是将Internet网上内容高速缓存到本地，将Cache部署在城域网各POP点上，这样形成高效有序的网络，用户仅一跳就能访问大部分的内容，这也是一种加速所有网站CDN的应用。</p>
+<h3 id="CDN的工作原理"><a href="#CDN的工作原理" class="headerlink" title="CDN的工作原理"></a>CDN的工作原理</h3><p>在描述CDN的实现原理，让我们先看传统的未加缓存服务的访问过程，以便了解CDN缓存访问方式与未加缓存访问方式的差别：</p>
+<center><img src="https://houhaiyun.github.io/img/images/CDN-1.jpg" title="传统的未加缓存服务的访问过程"></center>
+
+<p>由上图可见，用户访问未使用CDN缓存网站的过程为：</p>
+<ol>
+<li>用户向浏览器提供要访问的域名；</li>
+<li>浏览器调用域名解析函数库对域名进行解析，以得到此域名对应的IP地址；</li>
+<li>浏览器使用所得到得IP地址，域名得服务主机发出数据访问请求；</li>
+<li>浏览器根据域名主机返回的数据显示网页的内容。</li>
+</ol>
+<p>通过以上四个步骤，浏览器完成从用户处接收用户要访问的域名到从域名服务主机获取数据的整个过程。CDN网络是在用户和服务器之间增加Cache层，如何将用户的请求引导到Cache上获得源服务器的数据，主要是通过接管DNS实现，下面让我们看看访问使用CDN缓存后的网站的过程：</p>
+<center><img src="https://houhaiyun.github.io/img/images/CDN-2.jpg" title="使用CDN后缓存服务的访问过程"></center>
+
+<p>通过上图，我们可以了解到，使用了CDN缓存后的网站的访问过程变为：</p>
+<ol>
+<li>用户向浏览器提供要访问的域名；</li>
+<li>浏览器调用域名解析库对其域名进行解析，由于CDN对域名解析过程进行了调整，所以解析函数库一般得到的是该域名对应的CNAME记录，为了得到实际的IP地址，浏览器需要再次对获得的CNAME域名进行解析以得到实际的IP地址；在此过程中，使用的全局负载均衡DNS解析，如根据地理位置信息解析对应的IP地址，使得用户能就近访问；</li>
+<li>此次解析得到的CDN缓存服务器的IP地址，浏览器在得到实际的IP地址以后，向缓存服务器发出访问请求；</li>
+<li>缓存服务器根据提供的要访问的域名，通过Cache内部专用DNS解析得到此域名的实际IP地址，再由缓存服务器向此实际IP地址提交访问请求；</li>
+<li>缓存服务器从实际IP地址得到内容以后，一方面在本地进行保存，以备以后使用；二方面把获取的数据返回给客户端，完成数据服务过程；</li>
+<li><p>通过以上的分析我们可以得到，为了实现既要对普通用户透明（即加入缓存以后用户客户端无需进行任何设置，直接使用被加速网站原有的域名访问即可），又要在为指定的网站提供加速服务的同时降低对ICP的影响，只要修改整个访问过程中的域名解析部分以实现透明的加速服务，下面是CDN网络实现的具体操作过程。</p>
+</li>
+<li><p>作为ICP，只要把域名解释权交给CDN运营商，其他方面不需要进行任何的修改；操作时，ICP修改自己的域名解析记录，一般用cname方式指向CDN网络Cache服务器的地址。</p>
+</li>
+<li>作为CDN运营商，首先需要为ICP的域名提供公开的解析，为了实现sorlit，一般是把ICP的域名解释结果指向同一个CNAME记录；</li>
+<li>当需要进行sorlist时，CDN运营商可以利用DNS对CNAME指向的域名解析过程进行特殊处理，是DNS服务器在接收到客户端请求时可以根据客户端的IP地址，返回相同域名的不同IP地址；</li>
+<li>由于从cname获得的IP地址，并且带有hostname信息，请求到达Cache之后，Cache必须知道源服务器的IP地址，所以在CDN运营商内部维护一个内部的DNS服务器，用于解释用户所访问的域名的真实IP地址；</li>
+<li>在维护内部DNS服务器时，还需要维护一台授权服务器，控制哪些域名可以进行缓存，而哪些又不进行缓存，以免发生开发代理的情况。</li>
+</ol>
+<h3 id="CDN的技术手段"><a href="#CDN的技术手段" class="headerlink" title="CDN的技术手段"></a>CDN的技术手段</h3><p>实现CDN的主要技术手段时高速缓存、镜像服务器。可工作于DNS解析或HTTP重定向两种方式，通过Cache服务器，或异地的镜像站点完成内容的传送与同步更新。DNS方式用户位置判断准确率大于85%，HTTP方式准确率为99%以上；一般情况，各Cache服务器集群的用户访问流入流量与CAche服务器到原始网站取内容的数据量之比在2：1到3：1之间，即分担50%到70%的到原始网站重复访问的数据量（主要是图片，流媒体文件等内容）；对于镜像，除数据同步的流量，其余均在本地完成，不访问原始服务器。</p>
+<p>镜像站点（Mirror Site）服务器是我们经常看到的，它让内容直截了当地进行分布，适用于静态和准动态的数据同步。但是购买和维护新服务器的费用较高，另外还必须在各个地区设置镜像服务器，配备专业技术人员进行管理与维护。大型网站在随时更新各地服务器的同时，对带宽的需求也会显著增加，因此一般的互联网公司不会建立太多的镜像服务器。</p>
+<p>高速缓存手段的成本低，适用于静态内容。Internet的统计声明，超过80%的用户经常访问的是20%的网站的内容，在这个规律下，缓存服务器可以处理大部分客户的静态请求，而原始的WWW服务器只需处理20%左右的非缓存请求的和动态请求，于是大大加快了客户请求的响应时间，并降低了原始WWW服务器的负载。根据美国IDC公司的调查，作为CDN的一项重要指标-缓存的市场正在以每年近100%的速度增长，全球的营业额在2004年将达到45亿美元。网络流媒体的发展还将刺激这个市场。</p>
+<h3 id="CDN的网络架构"><a href="#CDN的网络架构" class="headerlink" title="CDN的网络架构"></a>CDN的网络架构</h3><p>CDN的网络架构主要由两大部分，分为中心和边缘两部分，中心指CDN网关中心和DNS重定向解析中心，负责全局负载均衡，设备系统安装在管理中心机房，边缘主要指异地节点，CDN分发的载体，主要由Cache和负载均衡器等组成。</p>
+<p>当用户访问加入CDN服务的网站时，域名解析请求将最终交给全局负载均衡DNS进行处理。全局负载均衡DNS通过一组预先定义好的策略，将当时最接近用户的节点地址提供给用户，使用户能够得到快速的服务。同时，他还与分布在世界各地的所有CDN节点保持通信，搜集各节点的通信状态，确保不讲用户的请求分配到不可用的CDN节点上，实际上是通过DNS做全局负载。</p>
+<p>对于普通的Internet用户来讲，每个CDN节点就相当于一个放置在它周围的WEB。通过全局负载均衡DNS的控制，用户的请求被透明地指向离他最近的节点，节点中的CDN服务器会像网站的原始服务器一样，响应用户的请求。由于它离用户更近，因而响应时间必然更快。</p>
+<p>每个CDN节点由两部分组成：负载均衡设备和高速缓存服务器</p>
+<p>负载均衡设备负责每个节点中各个Cache的负载均衡，保证节点的工作效率；同时，负载均衡设备还负责手机节点与周围环境的信息，保持与全局负载DNS的通信，实现整个系统的负载均衡。</p>
+<p>高速缓存服务器（Cache）负责存储客户网站的大量信息，就像一个靠近用户的网站服务器一样响应本地用户的访问请求。</p>
+<p>CDN的管理系统是整个系统能够正常运转的保证。它不仅能够对系统中的各个子系统和设备进行实时监控，对各种故障产生响应的警告，还可以实时检测到系统中总的流量和各节点的流量，并保存在系统的数据库中，是网管人员能够方便地进行进一步分析。通过完善的网管系统，用户可以对系统配置进行修改。</p>
+<p>理论上，最简单的CDN网络有一个负责全局负载均衡的DNS和各节点一台Cache，即可运行。DNS支持根据用户源IP地址解析不同的IP，实现就近访问。为了保证高可用性等需要监视各节点的流量、健康状况的。一个节点的单台Cache承载数量不够时，才需要多台Cache，多条Cache同时工作，才需要负载均衡器，使Cache群协同工作。</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><strong>本博客转自：</strong><a href="https://kb.cnblogs.com/page/121664/" target="_blank" rel="noopener">博客园：CDN技术原理</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/23/CDN/">CDN技术原理</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>发布时间:</span>2018-07-23, 08:02:38</p>
+        <p><span>最后更新:</span>2018-07-23, 08:04:23</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/23/CDN/" title="CDN技术原理">https://www.ihaiyun.cc/2018/07/23/CDN/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/07/23/CDN/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/09/21/Docker-Catalog/">
+                    置顶  Docker文章目录
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/21/Docker-container/">
+                    容器化思维
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是CDN？"><span class="toc-number">2.</span> <span class="toc-text">什么是CDN？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CDN新应用和客户"><span class="toc-number">3.</span> <span class="toc-text">CDN新应用和客户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CDN的工作原理"><span class="toc-number">4.</span> <span class="toc-text">CDN的工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CDN的技术手段"><span class="toc-number">5.</span> <span class="toc-text">CDN的技术手段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CDN的网络架构"><span class="toc-number">6.</span> <span class="toc-text">CDN的网络架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">7.</span> <span class="toc-text">致谢</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/09/21/Docker-Catalog/" title="上一篇: 置顶  Docker文章目录">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/21/Docker-container/" title="下一篇: 容器化思维">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/21/Docker-Catalog/">置顶  Docker文章目录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/23/CDN/">CDN技术原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-container/">容器化思维</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-1/">Dockerfile 实践心得</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-use/">Dockerfile的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-security/">Dcoekr与容器安全</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume-2/">Docker 数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-storage-manage/">Docker 存储管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-image/">Docker 镜像管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-libcontainer/">libcontainer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-arch/">Docker 架构概览</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network/">Docker网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume/">Docker数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-Install/">Docker安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Linux-iftop/">网络带宽监控工具 iftop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/06/Linux-iotop/">磁盘io监控工具 iotop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/05/Jenkins/">Jenkins</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/CI/">持续集成是什么?</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/ELK/">开源日志实时分析平台ELK</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/Linux-opt-map/">Linux 运维技能树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/Linux-top/">top 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 侯海云
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    </body>
+</html>
