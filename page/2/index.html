@@ -221,6 +221,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Docker-network-3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-network-3/" class="article-date">
+      <time datetime="2018-07-21T11:41:29.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="Docker高级网络实践"><a href="#Docker高级网络实践" class="headerlink" title="Docker高级网络实践"></a>Docker高级网络实践</h3><p>在前面的文章中，我们已经详细解读了Docker中libnetwor提供的4种驱动，它们各有千秋，但实际上每一种方式都有一定的局限性。假设需要运营一个数据中心的网络，我们有许多宿主机，每台宿主机上运行了数百个甚至上千个Docker容器，使用4种网络驱动的具体情况如下。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker高级网络实践/">Docker高级网络实践</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2018/07/21/Docker-network-3/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Docker-security" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -828,75 +897,6 @@
       
         <p class="article-more-link">
           <a href="/2018/07/21/Docker-cgroups/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Docker-namespace" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/07/21/Docker-namespace/" class="article-date">
-      <time datetime="2018-07-21T11:05:12.000Z" itemprop="datePublished">2018-07-21</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="namespace-资源隔离"><a href="#namespace-资源隔离" class="headerlink" title="namespace 资源隔离"></a>namespace 资源隔离</h3><p>Docker大热之后，热衷技术的开发者就会思考，想要实现一个资源隔离的容器，应该从哪些方面下手？也许第一反应就是chroot命令，这条命令给用户最直观的感受就是再使用后根目录/的挂载点切换了，即文件系统被隔离了。接着，为了在分布式的环境下进行通信和定位，容器必须要有独立的IP、端口、路由等，自然就联想到了网络的隔离。同时，容器还需要一个独立的主机名以便在网络中标识自己。有了网络，自然离不开通信，也就想到了进程间通信需要隔离。开发者可能也已想到了权限的问题，对用户和用户组的隔离就实现了用户权限的隔离。最后，运行在容器中的应用需要有进程号（PID），自然也需要与宿主机中的PID进行隔离。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/namespace资源隔离/">namespace资源隔离</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2018/07/21/Docker-namespace/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
