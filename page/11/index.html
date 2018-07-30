@@ -221,6 +221,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-MySQL" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/11/MySQL/" class="article-date">
+      <time datetime="2017-11-11T14:58:48.000Z" itemprop="datePublished">2017-11-11</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/11/MySQL/">MySQL</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="什么是MySQL？"><a href="#什么是MySQL？" class="headerlink" title="什么是MySQL？"></a>什么是MySQL？</h3><p><code>MySQL</code>是一个关系型数据库管理系统，由瑞典 <code>MySQL AB</code> 公司开发，目前属于 <code>Oracle</code> 旗下公司。<code>MySQL</code> 最流行的关系型数据库管理系统，在 <code>WEB</code> 应用方面 <code>MySQL</code> 是最好的 RDBMS应用软件之一。<code>MySQL</code> 是一种关联数据库管理系统，关联数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。<code>MySQL</code> 所使用的 <code>SQL</code> 语言是用于访问数据库的最常用标准化语言。<code>MySQL</code> 软件采用了双授权政策（本词条“授权政策”），它分为社区版和商业版，由于其体积小、速度快、总体拥有成本低，尤其是开放源码这一特点，一般中小型网站的开发都选择 MySQL 作为网站数据库。由于其社区版的性能卓越，搭配 <code>PHP</code> 和 <code>Apache</code> 可组成良好的开发环境。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/11/MySQL/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-MySQL-Liuxing-Database" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -925,110 +994,6 @@
       
         <p class="article-more-link">
           <a href="/2017/11/08/Tomcat-Session-Jiqun/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Tomcat-Httpd-session-Bangding-Tomcat" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/" class="article-date">
-      <time datetime="2017-11-08T00:00:58.000Z" itemprop="datePublished">2017-11-08</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Httpd-session-Bangding-Tomcat-1.jpg" title="拓扑图"></center>
-
-<table>
-<thead>
-<tr>
-<th>服务</th>
-<th>IP</th>
-<th>系统版本</th>
-<th>软件版本</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Httpd</td>
-<td>192.168.8.17/24</td>
-<td>CentOS Linux release 7.3.1611 (Core)</td>
-<td>httpd.x86_64 0:2.4.6-45</td>
-<td>反向代理</td>
-</tr>
-<tr>
-<td>Tomcat1</td>
-<td>192.168.8.12/24</td>
-<td>CentOS Linux release 7.3.1611 (Core)</td>
-<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
-<td>应用服务</td>
-</tr>
-<tr>
-<td>Tomcat2</td>
-<td>192.168.8.15/24</td>
-<td>CentOS Linux release 7.3.1611 (Core)</td>
-<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
-<td>应用服务</td>
-</tr>
-</tbody>
-</table>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/实现httpd会话绑定/">实现httpd会话绑定</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
