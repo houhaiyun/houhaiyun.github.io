@@ -221,6 +221,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Docker-container" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-container/" class="article-date">
+      <time datetime="2018-07-21T12:01:28.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/21/Docker-container/">容器化思维</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="容器化思维"><a href="#容器化思维" class="headerlink" title="容器化思维"></a>容器化思维</h3>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/容器化思维/">容器化思维</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2018/07/21/Docker-container/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Docker-dockerfile-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -823,77 +892,6 @@
       
         <p class="article-more-link">
           <a href="/2018/07/21/Docker-manage-image/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Docker-libcontainer" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/07/21/Docker-libcontainer/" class="article-date">
-      <time datetime="2018-07-21T11:18:00.000Z" itemprop="datePublished">2018-07-21</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/21/Docker-libcontainer/">libcontainer</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="libcontainer简介"><a href="#libcontainer简介" class="headerlink" title="libcontainer简介"></a>libcontainer简介</h3><p>说到底，容器是一个与宿主机系统共享内核但与系统中的其他进程资源相隔离的执行环境。Docker通过对namespaces、cgroups、capabilities以及文件系统的管理和分配来“隔离”出一个上述执行环境，这就是Docker容器。</p>
-<p>如果读者直接阅读Docker execdriver的代码，可能会觉得这部分对libcontainer的使用比较晦涩难懂。其实，execdriver首先要完成的工作是再拿到了Docker daemon提交command信息之后，生成一份专门的容器配置。</p>
-<p>这个容器配置的生成过程虽然复杂，但是原理很简单。例如，再Docker daemon提交过来的command中，包含namespace、cgroups以及未来容器中将要运行的进程的重要信息。其中Network、Ipc、Pid等字段描述了隔离容器所需的namespace。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/libcontainer/">libcontainer</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2018/07/21/Docker-libcontainer/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
