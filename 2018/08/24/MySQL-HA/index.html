@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="侯海云" />
+
+
+
+<meta name="description" content="概述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常见MySQL高可用解决方案">
+<meta property="og:url" content="https://www.ihaiyun.cc/2018/08/24/MySQL-HA/index.html">
+<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:description" content="概述">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-1.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-2.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-3.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-4.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-5.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-6.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-7.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-8.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-9.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-10.jpg">
+<meta property="og:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-11.jpg">
+<meta property="og:updated_time" content="2018-08-24T08:15:42.494Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常见MySQL高可用解决方案">
+<meta name="twitter:description" content="概述">
+<meta name="twitter:image" content="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-1.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>常见MySQL高可用解决方案 | 侯海云的个人网站</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">侯海云</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-MySQL-HA" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/08/24/MySQL-HA/" class="article-date">
+      <time datetime="2018-08-24T03:37:04.000Z" itemprop="datePublished">2018-08-24</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      常见MySQL高可用解决方案
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a><a class="article-category-link" href="/categories/数据库/常见MySQL高可用解决方案/">常见MySQL高可用解决方案</a>
+    </div>
+
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><a id="more"></a>
+<p>我们在考虑MySQL数据库的高可用架构时，主要考虑如下几方面：</p>
+<ol>
+<li>如果数据库发生了宕机或者意外中断等故障，能尽快恢复数据库的可用性，尽可能的减少停机时间，保证业务不会因为数据库的故障而中断。</li>
+<li>用作备份、只读副本等功能的非主节点的数据应该和主节点的数据实时或者最终保持一致。</li>
+<li>当业务发生数据库切换时，切换前后的数据库内容应当一致，不会因为数据缺失或者数据不一致而影响业务。</li>
+</ol>
+<h3 id="高可用方案"><a href="#高可用方案" class="headerlink" title="高可用方案"></a>高可用方案</h3><h3 id="1-主从或主主半同步复制"><a href="#1-主从或主主半同步复制" class="headerlink" title="1. 主从或主主半同步复制"></a>1. 主从或主主半同步复制</h3><p>使用双节点数据库，搭建单向或者双向的半同步复制。在5.7以后的版本中，由于lossless replication、logical多线程复制等一些列新特性的引入，使得MySQL原生半同步复制更加可靠。</p>
+<p>常见架构如下：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-1.jpg"></center>
+
+<p>通常会和<code>Proxy</code>、<code>Keepalived</code>等第三方软件同时使用，即可以用来监控数据库的健康，又可以执行一系列管理命令。如果主库发生故障，切换到备库后仍然可以继续使用数据库。</p>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>架构比较简单，使用原生半同步复制作为数据同步的依据</li>
+<li>双节点，没有主机宕机后的选主问题，直接切换即可</li>
+<li>双节点，需求资源少，部署简单</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>完全依赖于半同步复制，如果半同步复制退化为异步复制，数据一致性无法得到保证</li>
+<li>需要额外考虑<code>HAProxy</code>、<code>Keepalived</code>的高可用机制</li>
+</ul>
+<h3 id="2-半同步复制优化"><a href="#2-半同步复制优化" class="headerlink" title="2. 半同步复制优化"></a>2. 半同步复制优化</h3><p>半同步复制机制是可靠的。如果半同步复制一直是生效的，那么可以认为数据是一致的。但是由于网络波动等一些客观原因，导致半同步复制发生超时而切换为异步复制，这时便不能保证数据的一致性。所以尽可能的保证半同步复制，就可以提高数据的一致性。</p>
+<p>该方案同样使用双节点架构，但是在原有半同复制的基础上做了功能上的优化，使半同步复制的机制变得更加可靠。</p>
+<p>可参考的优化方案如下：</p>
+<p><strong>双通道复制</strong></p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-2.jpg"></center>
+
+<p>半同步复制由于发生超时后，复制断开，当再次建立起复制时，同时建立两条通道，其中一条半同步复制通道从当前位置开始复制，保证从机知道当前主机执行的进度。另外一条异步复制通道开始追补从机落后的数据。当异步复制通道追赶到半同步复制的起始位置时，恢复半同步复制。</p>
+<p><strong>binlog文件服务器</strong></p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-3.jpg"></center>
+
+<p>搭建两条半同步复制通道，其中连接文件服务器的半同步通道正常情况下不启用，当主从的半同步复制发生网络问题退化后，启动与文件服务器的半同步复制通道。当主从半同步复制恢复后，关闭与文件服务器的半同步复制通道。</p>
+<h4 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>双节点，需求资源少，部署简单</li>
+<li>架构简单，没有选主的问题，直接切换即可</li>
+<li>相比于原生复制，优化后的半同步复制更能保证数据的一致性</li>
+</ul>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>需要修改内核源码或者使用MySQL通信协议。需要对源码有一定的了解，并能做一定程度的二次开发</li>
+<li>依旧依赖于半同步复制，没有从根本上解决数据一致性问题</li>
+</ul>
+<h3 id="3-高可用架构优化"><a href="#3-高可用架构优化" class="headerlink" title="3. 高可用架构优化"></a>3. 高可用架构优化</h3><p>将双节点数据库扩展到多节点数据库，或者多节点数据库集群。可以根据自己的需要选择一主两从、一主多从或者多主多从的集群。</p>
+<p>由于半同步复制，存在接收到一个从机的成功应答即认为半同步复制成功的特性，所以多从半同步复制的可靠性要优于单从半同步复制的可靠性。并且多节点同时宕机的几率也要小于单节点宕机的几率，所以多节点架构在一定程度上可以认为高可用性是好于双节点架构。</p>
+<p>但由于数据库数量较多，所以需要数据库管理软件来保证数据库的可维护性。可以选择<code>MMM</code>、<code>MHA</code>或者各个版本的<code>Proxy</code>等等。常见方案如下：</p>
+<h4 id="MHA-多节点集群"><a href="#MHA-多节点集群" class="headerlink" title="MHA+多节点集群"></a>MHA+多节点集群</h4><center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-4.jpg"></center>
+
+<p><code>MHA Manager</code>会定时探测集群中的<code>master</code>节点，当<code>master</code>出现故障时，它可以自动将最新数据的<code>slave</code>提升为新的<code>master</code>，然后将所有其他的<code>slave</code>重新指向新的<code>master</code>，整个故障转移过程对应用程序完全透明。</p>
+<p><code>MHA Node</code>运行在每台<code>MySQL</code>服务器上，主要作用是切换时处理二进制日志，确保切换尽量少丢数据。</p>
+<p><code>MHA</code>也可以扩展到如下的多节点集群：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-5.jpg"></center>
+
+
+
+<h5 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h5><ul>
+<li>可以进行故障的自动检测和转移</li>
+<li>可扩展性较好，可以根据需要扩展MySQL的节点数量和结构</li>
+<li>相比于双节点的MySQL复制，三节点/多节点的MySQL发生不可用的概率更低</li>
+</ul>
+<h5 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h5><ul>
+<li>至少需要三节点，相对于双节点需要更多的资源</li>
+<li>逻辑较为复杂，发生故障后排查问题，定位问题更加困难</li>
+<li>数据一致性仍然靠原生半同步复制保证，仍然存在数据不一致的风险</li>
+<li>可能因为网络分区发生脑裂现象。</li>
+</ul>
+<h4 id="ZooKeeper-Proxy"><a href="#ZooKeeper-Proxy" class="headerlink" title="ZooKeeper+Proxy"></a>ZooKeeper+Proxy</h4><p><code>ZooKeeper</code>使用分布式算法保证集群数据的一致性，使用<code>ZooKeeper</code>可以有效的保证<code>Proxy</code>的高可用性，可以较好地避免网络分区现象的产生。</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-6.jpg"></center>
+
+
+<h5 id="优点：-1"><a href="#优点：-1" class="headerlink" title="优点："></a>优点：</h5><ul>
+<li>较好的保证了整个系统的高可用性，包括<code>Proxy</code>、<code>MySQL</code></li>
+<li>扩展性较好，可以扩展为大规模集群</li>
+</ul>
+<h5 id="缺点：-1"><a href="#缺点：-1" class="headerlink" title="缺点："></a>缺点：</h5><ul>
+<li>数据一致性仍然依赖于原生的<code>mysql</code>半同步复制</li>
+<li>引入<code>ZK</code>，整个系统的逻辑变得更加复杂</li>
+</ul>
+<h3 id="4-共享存储"><a href="#4-共享存储" class="headerlink" title="4. 共享存储"></a>4. 共享存储</h3><p>共享存储实现了数据库服务器和存储设备的解耦，不同数据库之间的数据同步不再依赖于<code>MySQL</code>的原生复制功能，而是通过磁盘数据同步的手段，来保证数据的一致性。</p>
+<h4 id="SAN共享储存"><a href="#SAN共享储存" class="headerlink" title="SAN共享储存"></a>SAN共享储存</h4><p><code>SAN</code>的概念是允许存储设备和处理器（服务器）之间建立直接的高速网络（与<code>LAN</code>相比）连接，通过这种连接实现数据的集中式存储。常用架构如下：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-7.jpg"></center>
+
+<p>使用共享存储时，<code>MySQL</code>服务器能够正常挂载文件系统并操作，如果主库发生宕机，备库可以挂载相同的文件系统，保证主库和备库使用相同的数据。</p>
+<h5 id="优点：-2"><a href="#优点：-2" class="headerlink" title="优点："></a>优点：</h5><ul>
+<li>两节点即可，部署简单，切换逻辑简单</li>
+<li>很好的保证数据的强一致性</li>
+<li>不会因为<code>MySQL</code>的逻辑错误发生数据不一致的情况</li>
+</ul>
+<h5 id="缺点：-2"><a href="#缺点：-2" class="headerlink" title="缺点："></a>缺点：</h5><ul>
+<li>需要考虑共享存储的高可用</li>
+<li>价格昂贵</li>
+</ul>
+<h4 id="DRBD磁盘复制"><a href="#DRBD磁盘复制" class="headerlink" title="DRBD磁盘复制"></a>DRBD磁盘复制</h4><p><code>DRBD</code>是一种基于软件、基于网络的块复制存储解决方案，主要用于对服务器之间的磁盘、分区、逻辑卷等进行数据镜像，当用户将数据写入本地磁盘时，还会将数据发送到网络中另一台主机的磁盘上，这样的本地主机(主节点)与远程主机(备节点)的数据就可以保证实时同步。常用架构如下：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-8.jpg"></center>
+
+<p>当本地主机出现问题，远程主机上还保留着一份相同的数据，可以继续使用，保证了数据的安全。</p>
+<p><code>DRBD</code>是<code>Linux</code>内核模块实现的快级别的同步复制技术，可以与<code>SAN</code>达到相同的共享存储效果。</p>
+<h5 id="优点：-3"><a href="#优点：-3" class="headerlink" title="优点："></a>优点：</h5><ul>
+<li>两节点即可，部署简单，切换逻辑简单</li>
+<li>相比于<code>SAN</code>储存网络，价格低廉</li>
+<li>保证数据的强一致性</li>
+</ul>
+<h5 id="缺点：-3"><a href="#缺点：-3" class="headerlink" title="缺点："></a>缺点：</h5><ul>
+<li>对<code>IO</code>性能影响较大</li>
+<li>从库不提供读操作</li>
+</ul>
+<h3 id="5-分布式协议"><a href="#5-分布式协议" class="headerlink" title="5. 分布式协议"></a>5. 分布式协议</h3><p>分布式协议可以很好地解决数据一致性问题。比较常见的方案如下：</p>
+<h4 id="MySQL-Cluster"><a href="#MySQL-Cluster" class="headerlink" title="MySQL Cluster"></a>MySQL Cluster</h4><p><code>MySQL Cluster</code>是官方集群的部署方案，通过使用<code>NDB</code>存储引擎实时备份冗余数据，实现数据库的高可用性和数据一致性。</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-9.jpg"></center>
+
+<h5 id="优点：-4"><a href="#优点：-4" class="headerlink" title="优点："></a>优点：</h5><ul>
+<li>全部使用官方组件，不依赖于第三方软件</li>
+<li>可以实现数据的强一致性</li>
+</ul>
+<h5 id="缺点：-4"><a href="#缺点：-4" class="headerlink" title="缺点："></a>缺点：</h5><ul>
+<li>国内使用的较少</li>
+<li>配置较复杂，需要使用<code>NDB</code>储存引擎，与<code>MySQL</code>常规引擎存在一定差异</li>
+<li>至少三节点</li>
+</ul>
+<h4 id="Galera"><a href="#Galera" class="headerlink" title="Galera"></a>Galera</h4><p>基于<code>Galera</code>的<code>MySQL</code>高可用集群， 是多主数据同步的<code>MySQL</code>集群解决方案，使用简单，没有单点故障，可用性高。常见架构如下：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-10.jpg"></center>
+
+
+<h5 id="优点：-5"><a href="#优点：-5" class="headerlink" title="优点："></a>优点：</h5><ul>
+<li>多主写入，无延迟复制，能保证数据强一致性</li>
+<li>有成熟的社区，有互联网公司在大规模的使用</li>
+<li>自动故障转移，自动添加、剔除节点</li>
+</ul>
+<h5 id="缺点：-5"><a href="#缺点：-5" class="headerlink" title="缺点："></a>缺点：</h5><ul>
+<li>需要为原生<code>MySQL</code>节点打<code>wsrep</code>补丁</li>
+<li>只支持innodb储存引擎</li>
+<li>至少三节点</li>
+</ul>
+<h4 id="Paxos"><a href="#Paxos" class="headerlink" title="Paxos"></a>Paxos</h4><p><code>Paxos</code>算法解决的问题是一个分布式系统如何就某个值（决议）达成一致。这个算法被认为是同类算法中最有效的。<code>Paxos</code>与<code>MySQL</code>相结合可以实现在分布式的<code>MySQL</code>数据的强一致性。常见架构如下：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MySQL-Gaokeyong-11.jpg"></center>
+
+<h5 id="优点：-6"><a href="#优点：-6" class="headerlink" title="优点："></a>优点：</h5><ul>
+<li>多主写入，无延迟复制，能保证数据强一致性</li>
+<li>有成熟理论基础</li>
+<li>自动故障转移，自动添加、剔除节点</li>
+</ul>
+<h5 id="缺点：-6"><a href="#缺点：-6" class="headerlink" title="缺点："></a>缺点：</h5><ul>
+<li>只支持<code>InnoDB</code>储存引擎</li>
+<li>至少三节点</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>随着人们对数据一致性要求不断的提高，越来越多的方法被尝试用来解决分布式数据一致性的问题，如<code>MySQL</code>自身的优化、<code>MySQL</code>集群架构的优化、<code>Paxos</code>、<code>Raft</code>、<code>2PC</code>算法的引入等。</p>
+<p>而使用分布式算法用来解决<code>MySQL</code>数据库数据一致性问题的方法，也越来越被人们所接受，一系列成熟的产品如<code>PhxSQL</code>、<code>MariaDB Galera Cluster</code>、<code>Percona XtraDB Cluster</code>等越来越多的被大规模使用。</p>
+<p>随着官方<code>MySQL Group Replication</code>的<code>GA</code>，使用分布式协议来解决数据一致性问题已经成为了主流的方向。期望越来越多优秀的解决方案被提出，<code>MySQL</code>高可用问题也可以被更好的解决。</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://dbaplus.cn/news-11-1127-1.html" target="_blank" rel="noopener">10款常见MySQL高可用方案选型解读：http://dbaplus.cn/news-11-1127-1.html</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/08/24/MySQL-HA/">常见MySQL高可用解决方案</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>发布时间:</span>2018-08-24, 03:37:04</p>
+        <p><span>最后更新:</span>2018-08-24, 08:15:42</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/08/24/MySQL-HA/" title="常见MySQL高可用解决方案">https://www.ihaiyun.cc/2018/08/24/MySQL-HA/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/08/24/MySQL-HA/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/09/21/Docker-Catalog/">
+                    置顶  Docker文章目录
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/08/24/MySQL-MHA-1/">
+                    MHA工作原理
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高可用方案"><span class="toc-number">2.</span> <span class="toc-text">高可用方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-主从或主主半同步复制"><span class="toc-number">3.</span> <span class="toc-text">1. 主从或主主半同步复制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#优点"><span class="toc-number">3.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缺点"><span class="toc-number">3.2.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-半同步复制优化"><span class="toc-number">4.</span> <span class="toc-text">2. 半同步复制优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#优点-1"><span class="toc-number">4.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缺点-1"><span class="toc-number">4.2.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-高可用架构优化"><span class="toc-number">5.</span> <span class="toc-text">3. 高可用架构优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MHA-多节点集群"><span class="toc-number">5.1.</span> <span class="toc-text">MHA+多节点集群</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#优点："><span class="toc-number">5.1.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#缺点："><span class="toc-number">5.1.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ZooKeeper-Proxy"><span class="toc-number">5.2.</span> <span class="toc-text">ZooKeeper+Proxy</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#优点：-1"><span class="toc-number">5.2.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#缺点：-1"><span class="toc-number">5.2.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-共享存储"><span class="toc-number">6.</span> <span class="toc-text">4. 共享存储</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SAN共享储存"><span class="toc-number">6.1.</span> <span class="toc-text">SAN共享储存</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#优点：-2"><span class="toc-number">6.1.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#缺点：-2"><span class="toc-number">6.1.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DRBD磁盘复制"><span class="toc-number">6.2.</span> <span class="toc-text">DRBD磁盘复制</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#优点：-3"><span class="toc-number">6.2.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#缺点：-3"><span class="toc-number">6.2.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-分布式协议"><span class="toc-number">7.</span> <span class="toc-text">5. 分布式协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL-Cluster"><span class="toc-number">7.1.</span> <span class="toc-text">MySQL Cluster</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#优点：-4"><span class="toc-number">7.1.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#缺点：-4"><span class="toc-number">7.1.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Galera"><span class="toc-number">7.2.</span> <span class="toc-text">Galera</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#优点：-5"><span class="toc-number">7.2.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#缺点：-5"><span class="toc-number">7.2.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Paxos"><span class="toc-number">7.3.</span> <span class="toc-text">Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#优点：-6"><span class="toc-number">7.3.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#缺点：-6"><span class="toc-number">7.3.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">9.</span> <span class="toc-text">致谢</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/09/21/Docker-Catalog/" title="上一篇: 置顶  Docker文章目录">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/08/24/MySQL-MHA-1/" title="下一篇: MHA工作原理">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/21/Docker-Catalog/">置顶  Docker文章目录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-HA/">常见MySQL高可用解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-MHA-1/">MHA工作原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-replication-4/">MySQL 主从复制 SHOW SLAVE STATUS 参数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-replication-3/">MySQL 主主同步部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-replication-2/">MySQL 主从复制部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-replication-1/">MySQL 主从复制原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/Percona-XtraBackup/">Percona XtraBackup</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/Mysqldump/">一次完整的mysqldump备份和恢复操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/zookeeper/">Zookeeper 的功能以及工作原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/CAP/">CAP 定理的含义</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/31/Linux-Centos7-VNC/">CentOS 7 配置 VNC</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/30/Linux-question-1/">linux删除文件未释放空间问题处理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/30/Linux-lsof/">lsof 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/26/Kubernetes-ContainerCreating/">Kubernetes创建容器状态一直为ContainerCreating问题排查</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/26/Kubernetes/">Kubernetes</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/25/KVM/">KVM</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/23/CDN/">CDN技术原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-container/">容器化思维</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-1/">Dockerfile 实践心得</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-use/">Dockerfile的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-security/">Dcoekr与容器安全</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume-2/">Docker 数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-storage-manage/">Docker 存储管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-image/">Docker 镜像管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-libcontainer/">libcontainer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-arch/">Docker 架构概览</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network/">Docker网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume/">Docker数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-Install/">Docker安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Linux-iftop/">网络带宽监控工具 iftop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/06/Linux-iotop/">磁盘io监控工具 iotop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/05/Jenkins/">Jenkins</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/CI/">持续集成是什么?</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/ELK/">开源日志实时分析平台ELK</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/Linux-opt-map/">Linux 运维技能树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/Linux-top/">top 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 侯海云
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    </body>
+</html>
