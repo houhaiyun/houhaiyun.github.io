@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="侯海云" />
+
+
+
+<meta name="description" content="proxysql简介">
+<meta name="keywords" content="MySQL读写分离">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Proxy SQL实现 MySQL主从复制的读写分离">
+<meta property="og:url" content="https://www.ihaiyun.cc/2018/08/24/MySQL-ProxySQL/index.html">
+<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:description" content="proxysql简介">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-24T08:19:27.903Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于Proxy SQL实现 MySQL主从复制的读写分离">
+<meta name="twitter:description" content="proxysql简介">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>基于Proxy SQL实现 MySQL主从复制的读写分离 | 侯海云的个人网站</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">侯海云</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小生姓侯，名海云，河北人。性豁达，善言谈，平家子也。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/about" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/houhaiyun" title="GitHub"></a>
+                            
+                                <a class="fa Twitter" target="_blank" href="https://twitter.com/houhaiyun18?lang=zh-cn" title="Twitter"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-MySQL-ProxySQL" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/08/24/MySQL-ProxySQL/" class="article-date">
+      <time datetime="2018-08-24T08:18:14.000Z" itemprop="datePublished">2018-08-24</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      基于Proxy SQL实现 MySQL主从复制的读写分离
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a><a class="article-category-link" href="/categories/数据库/基于Proxy-SQL实现-MySQL主从复制的读写分离/">基于Proxy SQL实现 MySQL主从复制的读写分离</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL读写分离/">MySQL读写分离</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="proxysql简介"><a href="#proxysql简介" class="headerlink" title="proxysql简介"></a>proxysql简介</h3><a id="more"></a>
+<p><a href="http://www.proxysql.com/" target="_blank" rel="noopener">proxysql</a> 是一个 MySQL 中间层的代理, 其源代码 <a href="https://github.com/sysown/proxysql" target="_blank" rel="noopener">proxysql</a>在github 上托管, 兼容 MySQL 协议, 所以同样支持 Percona 和 MariaDB 分之版本. 同类的产品有 <a href="https://github.com/Qihoo360/Atlas" target="_blank" rel="noopener">Atlas</a> 和 <a href="https://github.com/flike/kingshard" target="_blank" rel="noopener">kingshard</a>, 三者相比较起来, Atlas 和 kingshard 的功能类似, 仅能代理指定的库, 同样都支持表分区处理; proxysql 则可以代理整个实例, 配置方便则是 cnf 文件 + sqlite3 + runtime 的方式实现, 特别灵活, 不过目前还没有实现表分区功能, 其它功能可以在官网介绍中查找.</p>
+<p>proxysql 的简单配置使用可以参考 <a href="https://www.percona.com/blog/2016/09/16/consul-proxysql-mysql-ha/" target="_blank" rel="noopener">consul-proxysql-mysql-ha</a><br>管理接口参见 <a href="https://github.com/sysown/proxysql/wiki/Tables-in-Admin-interface" target="_blank" rel="noopener">proxysql wiki</a></p>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>软件版本</th>
+<th>系统版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mariadb1</td>
+<td>192.168.8.12</td>
+<td>mariadb-server-5.5.52</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>MySQL主服务器</td>
+</tr>
+<tr>
+<td>mariadb2</td>
+<td>192.168.8.15</td>
+<td>mariadb-server-5.5.52</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>MySQL从服务器</td>
+</tr>
+<tr>
+<td>proxysql</td>
+<td>192.168.8.17</td>
+<td>proxysql-1.4.2-1</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>实现读写分离</td>
+</tr>
+</tbody>
+</table>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><h4 id="主机名"><a href="#主机名" class="headerlink" title="主机名"></a>主机名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># mysql1配置</span><br><span class="line">[root@master ~]# hostnamectl set-hostname mysql1.ihaiyun.cc &amp;&amp; exec bash </span><br><span class="line">[root@mysql1 ~]# </span><br><span class="line"></span><br><span class="line"># mysql2配置</span><br><span class="line">[root@slave ~]# hostnamectl set-hostname mysql2.ihaiyun.cc &amp;&amp; exec bash</span><br><span class="line">[root@mysql2 ~]# </span><br><span class="line"></span><br><span class="line"># proxy-sql配置</span><br><span class="line">[root@centos7 ~]# hostnamectl set-hostname proxy-sql.ihaiyun.cc &amp;&amp; exec bash</span><br><span class="line">[root@proxy-sql ~]# </span><br><span class="line"></span><br><span class="line"># 主机名也可以写到hosts文件中，或添加到DNS解析，本次实验就不做了</span><br></pre></td></tr></table></figure>
+<h4 id="同步时间"><a href="#同步时间" class="headerlink" title="同步时间"></a>同步时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># mysql1配置</span><br><span class="line">[root@mysql1 ~]# ntpdate 172.18.0.1</span><br><span class="line"> 4 Dec 11:31:53 ntpdate[13570]: adjust time server 172.18.0.1 offset 0.001148 sec</span><br><span class="line">[root@mysql1 ~]# date</span><br><span class="line">Mon Dec  4 11:31:54 CST 2017</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># mysql2配置</span><br><span class="line">[root@mysql2 ~]# ntpdate 172.18.0.1</span><br><span class="line"> 4 Dec 11:31:53 ntpdate[13505]: adjust time server 172.18.0.1 offset 0.001293 sec</span><br><span class="line">[root@mysql2 ~]# date</span><br><span class="line">Mon Dec  4 11:31:54 CST 2017</span><br><span class="line"></span><br><span class="line"># proxy-sql配置</span><br><span class="line">[root@proxy-sql ~]# ntpdate 172.18.0.1</span><br><span class="line"> 4 Dec 11:31:53 ntpdate[2342]: step time server 172.18.0.1 offset 6.089175 sec</span><br><span class="line">[root@proxy-sql ~]# date</span><br><span class="line">Mon Dec  4 11:31:54 CST 2017</span><br></pre></td></tr></table></figure>
+<h3 id="安装数据库"><a href="#安装数据库" class="headerlink" title="安装数据库"></a>安装数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># mysql1配置</span><br><span class="line">[root@mysql1 ~]# yum install -y mariadb-server</span><br><span class="line"></span><br><span class="line"># mysql2配置</span><br><span class="line">[root@mysql2 ~]# yum install -y mariadb-server</span><br></pre></td></tr></table></figure>
+<h3 id="开启MySQL主服务器二进制日志和server-id"><a href="#开启MySQL主服务器二进制日志和server-id" class="headerlink" title="开启MySQL主服务器二进制日志和server_id"></a>开启MySQL主服务器二进制日志和server_id</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@mysql1 ~]# vim /etc/my.cnf.d/server.cnf</span><br><span class="line">[server]</span><br><span class="line">skip_name_resolve = ON</span><br><span class="line">innodb_file_per_table = ON</span><br><span class="line"></span><br><span class="line">log_bin = /var/log/mariadb/bin-log</span><br><span class="line">server_id = 1</span><br></pre></td></tr></table></figure>
+<h3 id="启动MySQL主服务器并查看二进制日志status"><a href="#启动MySQL主服务器并查看二进制日志status" class="headerlink" title="启动MySQL主服务器并查看二进制日志status"></a>启动MySQL主服务器并查看二进制日志status</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@mysql1 ~]# systemctl start mariadb</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; SHOW MASTER STATUS;</span><br><span class="line">+----------------+----------+--------------+------------------+</span><br><span class="line">| File           | Position | Binlog_Do_DB | Binlog_Ignore_DB |</span><br><span class="line">+----------------+----------+--------------+------------------+</span><br><span class="line">| bin-log.000003 |      245 |              |                  |</span><br><span class="line">+----------------+----------+--------------+------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; Bye</span><br></pre></td></tr></table></figure>
+<h3 id="开启MySQL从服务器中继日志和server-id并启动MySQL数据库"><a href="#开启MySQL从服务器中继日志和server-id并启动MySQL数据库" class="headerlink" title="开启MySQL从服务器中继日志和server_id并启动MySQL数据库"></a>开启MySQL从服务器中继日志和server_id并启动MySQL数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@mysql2 ~]# vim /etc/my.cnf.d/server.cnf</span><br><span class="line">[server]</span><br><span class="line">skip_name_resolve = ON</span><br><span class="line">innodb_file_per_table = ON</span><br><span class="line"></span><br><span class="line">relay_log = /var/log/mariadb/relau-log</span><br><span class="line">server_id = 2</span><br><span class="line">read_only = ON      # 设置从服务器为只读，仅对没有MySQL超级管理权限的生效；</span><br><span class="line">[root@mysql2 ~]# systemctl start mariadb</span><br></pre></td></tr></table></figure>
+<h3 id="在MySQL主服务器授权用户"><a href="#在MySQL主服务器授权用户" class="headerlink" title="在MySQL主服务器授权用户"></a>在MySQL主服务器授权用户</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [(none)]&gt; GRANT REPLICATION CLIENT,REPLICATION SLAVE ON *.*  TO &apos;repluser&apos;@&apos;192.168.8.15&apos; IDENTIFIED BY &apos;replpass&apos; ;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; FLUSH PRIVILEGES;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="设置MySQL从服务器复制参数"><a href="#设置MySQL从服务器复制参数" class="headerlink" title="设置MySQL从服务器复制参数"></a>设置MySQL从服务器复制参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [(none)]&gt; CHANGE MASTER TO MASTER_HOST=&apos;192.168.8.12&apos;,MASTER_USER=&apos;repluser&apos;,MASTER_PASSWORD=&apos;replpass&apos;,MASTER_LOG_FILE=&apos;bin-log.000003&apos;,MASTER_LOG_POS=499;</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; SHOW SLAVE STATUS\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: </span><br><span class="line">                  Master_Host: 192.168.8.12</span><br><span class="line">                  Master_User: repluser</span><br><span class="line">                  Master_Port: 3306</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: bin-log.000003</span><br><span class="line">          Read_Master_Log_Pos: 499</span><br><span class="line">               Relay_Log_File: relay-log.000001</span><br><span class="line">                Relay_Log_Pos: 4</span><br><span class="line">        Relay_Master_Log_File: bin-log.000003</span><br><span class="line">             Slave_IO_Running: No</span><br><span class="line">            Slave_SQL_Running: No</span><br><span class="line">              Replicate_Do_DB: </span><br><span class="line">          Replicate_Ignore_DB: </span><br><span class="line">           Replicate_Do_Table: </span><br><span class="line">       Replicate_Ignore_Table: </span><br><span class="line">      Replicate_Wild_Do_Table: </span><br><span class="line">  Replicate_Wild_Ignore_Table: </span><br><span class="line">                   Last_Errno: 0</span><br><span class="line">                   Last_Error: </span><br><span class="line">                 Skip_Counter: 0</span><br><span class="line">          Exec_Master_Log_Pos: 499</span><br><span class="line">              Relay_Log_Space: 245</span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File: </span><br><span class="line">                Until_Log_Pos: 0</span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File: </span><br><span class="line">           Master_SSL_CA_Path: </span><br><span class="line">              Master_SSL_Cert: </span><br><span class="line">            Master_SSL_Cipher: </span><br><span class="line">               Master_SSL_Key: </span><br><span class="line">        Seconds_Behind_Master: NULL</span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: 0</span><br><span class="line">                Last_IO_Error: </span><br><span class="line">               Last_SQL_Errno: 0</span><br><span class="line">               Last_SQL_Error: </span><br><span class="line">  Replicate_Ignore_Server_Ids: </span><br><span class="line">             Master_Server_Id: 0</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; START SLAVE IO_THREAD,SQL_THREAD;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; SHOW SLAVE STATUS\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: Waiting for master to send event</span><br><span class="line">                  Master_Host: 192.168.8.12</span><br><span class="line">                  Master_User: repluser</span><br><span class="line">                  Master_Port: 3306</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: bin-log.000003</span><br><span class="line">          Read_Master_Log_Pos: 499</span><br><span class="line">               Relay_Log_File: relay-log.000002</span><br><span class="line">                Relay_Log_Pos: 527</span><br><span class="line">        Relay_Master_Log_File: bin-log.000003</span><br><span class="line">             Slave_IO_Running: Yes</span><br><span class="line">            Slave_SQL_Running: Yes</span><br><span class="line">              Replicate_Do_DB: </span><br><span class="line">          Replicate_Ignore_DB: </span><br><span class="line">           Replicate_Do_Table: </span><br><span class="line">       Replicate_Ignore_Table: </span><br><span class="line">      Replicate_Wild_Do_Table: </span><br><span class="line">  Replicate_Wild_Ignore_Table: </span><br><span class="line">                   Last_Errno: 0</span><br><span class="line">                   Last_Error: </span><br><span class="line">                 Skip_Counter: 0</span><br><span class="line">          Exec_Master_Log_Pos: 499</span><br><span class="line">              Relay_Log_Space: 815</span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File: </span><br><span class="line">                Until_Log_Pos: 0</span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File: </span><br><span class="line">           Master_SSL_CA_Path: </span><br><span class="line">              Master_SSL_Cert: </span><br><span class="line">            Master_SSL_Cipher: </span><br><span class="line">               Master_SSL_Key: </span><br><span class="line">        Seconds_Behind_Master: 0</span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: 0</span><br><span class="line">                Last_IO_Error: </span><br><span class="line">               Last_SQL_Errno: 0</span><br><span class="line">               Last_SQL_Error: </span><br><span class="line">  Replicate_Ignore_Server_Ids: </span><br><span class="line">             Master_Server_Id: 1</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="测试主从同步"><a href="#测试主从同步" class="headerlink" title="测试主从同步"></a>测试主从同步</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"># 在MySQL主服务器上面创建一个数据库mydb</span><br><span class="line">MariaDB [(none)]&gt; CREATE DATABASE mydb;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"># 在MySQL从服务器查看，已经同步</span><br><span class="line">MariaDB [(none)]&gt; SHOW DATABASES;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mydb               |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; SHOW SLAVE STATUS\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: Waiting for master to send event</span><br><span class="line">                  Master_Host: 192.168.8.12</span><br><span class="line">                  Master_User: repluser</span><br><span class="line">                  Master_Port: 3306</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: bin-log.000003</span><br><span class="line">          Read_Master_Log_Pos: 582</span><br><span class="line">               Relay_Log_File: relay-log.000002</span><br><span class="line">                Relay_Log_Pos: 610</span><br><span class="line">        Relay_Master_Log_File: bin-log.000003</span><br><span class="line">             Slave_IO_Running: Yes</span><br><span class="line">            Slave_SQL_Running: Yes</span><br><span class="line">              Replicate_Do_DB: </span><br><span class="line">          Replicate_Ignore_DB: </span><br><span class="line">           Replicate_Do_Table: </span><br><span class="line">       Replicate_Ignore_Table: </span><br><span class="line">      Replicate_Wild_Do_Table: </span><br><span class="line">  Replicate_Wild_Ignore_Table: </span><br><span class="line">                   Last_Errno: 0</span><br><span class="line">                   Last_Error: </span><br><span class="line">                 Skip_Counter: 0</span><br><span class="line">          Exec_Master_Log_Pos: 582</span><br><span class="line">              Relay_Log_Space: 898</span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File: </span><br><span class="line">                Until_Log_Pos: 0</span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File: </span><br><span class="line">           Master_SSL_CA_Path: </span><br><span class="line">              Master_SSL_Cert: </span><br><span class="line">            Master_SSL_Cipher: </span><br><span class="line">               Master_SSL_Key: </span><br><span class="line">        Seconds_Behind_Master: 0</span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: 0</span><br><span class="line">                Last_IO_Error: </span><br><span class="line">               Last_SQL_Errno: 0</span><br><span class="line">               Last_SQL_Error: </span><br><span class="line">  Replicate_Ignore_Server_Ids: </span><br><span class="line">             Master_Server_Id: 1</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="安装proxysql-1-4-2"><a href="#安装proxysql-1-4-2" class="headerlink" title="安装proxysql-1.4.2"></a>安装proxysql-1.4.2</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@proxy-sql ~]# ls      # rpm包已经下载好；</span><br><span class="line">proxysql-1.4.2-1-centos7.x86_64.rpm</span><br><span class="line">[root@proxy-sql ~]# yum install -y proxysql-1.4.2-1-centos7.x86_64.rpm</span><br><span class="line">[root@proxy-sql ~]# rpm -ql proxysql        # 安装完成后生成的文件；</span><br><span class="line">/etc/init.d/proxysql</span><br><span class="line">/etc/proxysql.cnf</span><br><span class="line">/usr/bin/proxysql</span><br><span class="line">/usr/share/proxysql/tools/proxysql_galera_checker.sh</span><br><span class="line">/usr/share/proxysql/tools/proxysql_galera_writer.pl</span><br></pre></td></tr></table></figure>
+<h3 id="为proxysql授权用户"><a href="#为proxysql授权用户" class="headerlink" title="为proxysql授权用户"></a>为proxysql授权用户</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [(none)]&gt; GRANT ALL ON *.* TO &apos;dbadmin&apos;@&apos;192.168.8.%&apos; IDENTIFIED BY &apos;dbpass&apos;;</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; FLUSH PRIVILEGES;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="修改proxysql配置文件"><a href="#修改proxysql配置文件" class="headerlink" title="修改proxysql配置文件"></a>修改proxysql配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line">[root@proxy-sql ~]# cp /etc/proxysql.cnf&#123;,.bak&#125;         # 备份配置文件；</span><br><span class="line"></span><br><span class="line">[root@proxy-sql ~]# vim /etc/proxysql.cnf</span><br><span class="line"></span><br><span class="line">datadir=&quot;/var/lib/proxysql&quot;         </span><br><span class="line"></span><br><span class="line">admin_variables=</span><br><span class="line">&#123;</span><br><span class="line">    admin_credentials=&quot;admin:admin&quot;         # 用户名和密码；</span><br><span class="line">    mysql_ifaces=&quot;127.0.0.1:6032;/tmp/proxysql_admin.sock&quot;      # 监听的端口活着本地链接sock；</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">mysql_variables=</span><br><span class="line">&#123;</span><br><span class="line">    threads=4           # 并发线程，单线程响应多个请求。建议为CPU核心数；</span><br><span class="line">    max_connections=2048        # 最大连接数；</span><br><span class="line">    default_query_delay=0       # 默认查询延迟时间</span><br><span class="line">    default_query_timeout=36000000      # 默认查询超时时间</span><br><span class="line">    have_compress=true      # 是否压缩</span><br><span class="line">    poll_timeout=2000       # 轮询时超时时间</span><br><span class="line">    interfaces=&quot;0.0.0.0:3306;/tmp/mysql.sock&quot;       # 本地监听转发端口，用户通过此端口来访问；</span><br><span class="line">    default_schema=&quot;information_schema&quot;         # 用户连接后默认使用的数据库；</span><br><span class="line">    stacksize=1048576           # 栈大小；</span><br><span class="line">    server_version=&quot;5.5.30&quot;         # 服务器版本；</span><br><span class="line">    connect_timeout_server=3000     # 连接超时时间；</span><br><span class="line">    monitor_username=&quot;monitor&quot;      </span><br><span class="line">    monitor_password=&quot;monitor&quot;</span><br><span class="line">    monitor_history=600000</span><br><span class="line">    monitor_connect_interval=60000</span><br><span class="line">    monitor_ping_interval=10000</span><br><span class="line">    monitor_read_only_interval=1500</span><br><span class="line">    monitor_read_only_timeout=500</span><br><span class="line">    ping_interval_server_msec=120000</span><br><span class="line">    ping_timeout_server=500</span><br><span class="line">    commands_stats=true</span><br><span class="line">    sessions_sort=true</span><br><span class="line">    connect_retries_on_failure=10</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># MySQL服务器组</span><br><span class="line">mysql_servers =</span><br><span class="line">(</span><br><span class="line">    &#123;           # 主节点(mysql1)；</span><br><span class="line">        address = &quot;192.168.8.12&quot;        # MySQL server IP；</span><br><span class="line">        port = 3306                     # Port；</span><br><span class="line">        hostgroup = 0                   # 组；</span><br><span class="line">        status = &quot;ONLINE&quot;               # 在线还是离线；</span><br><span class="line">        weight = 1                      # 权重；</span><br><span class="line">        compression = 0                 # 是否压缩；</span><br><span class="line">        max_connections=200             # 最大并发连接数；</span><br><span class="line"># max_replication_lag = 10       # 如果是读服务器，是否启用延迟。尽量不要开启；    </span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">    &#123;           # 从节点(mysql2)；</span><br><span class="line">        address = &quot;192.168.8.15&quot;</span><br><span class="line">        port = 3306           </span><br><span class="line">        hostgroup = 1         </span><br><span class="line">        status = &quot;ONLINE&quot;     </span><br><span class="line">        weight = 1            </span><br><span class="line">        compression = 0    </span><br><span class="line"># max_replication_lag = 10       # 如果是读服务器，是否启用延迟。尽量不要开启；   </span><br><span class="line">    &#125;</span><br><span class="line">    # 注意最后一个&#123;，这个后面没有逗号</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 登录后端MySQL主机的账号和密码</span><br><span class="line">mysql_users:</span><br><span class="line">(</span><br><span class="line">    &#123;</span><br><span class="line">        username = &quot;dbadmin&quot;        # 用户名；</span><br><span class="line">        password = &quot;dbpass&quot;         # 密码；</span><br><span class="line">        default_hostgroup = 0       # 默认连接到哪个组中，默认连接到主服务组；</span><br><span class="line">        active = 1                  # 是否激活；</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 语句路由，将指定的SQL语句，路由到指定的服务器上</span><br><span class="line">mysql_query_rules:</span><br><span class="line">(</span><br><span class="line">    &#123;</span><br><span class="line">        rule_id=1</span><br><span class="line">        active=1</span><br><span class="line">        match_pattern=&quot;^SELECT .* FOR UPDATE$&quot;</span><br><span class="line">        destination_hostgroup=0</span><br><span class="line">        apply=1</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        rule_id=2</span><br><span class="line">        active=1</span><br><span class="line">        match_pattern=&quot;^SELECT&quot;</span><br><span class="line">        destination_hostgroup=1</span><br><span class="line">        apply=1</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># MySQL复制集群的定义：指定读组、写组</span><br><span class="line"># 这里组号是之前在mysql_servers段中设置的hostgroup的ID</span><br><span class="line">mysql_replication_hostgroups=</span><br><span class="line">(</span><br><span class="line">        &#123;       </span><br><span class="line">                writer_hostgroup=0                  # 写组；</span><br><span class="line">                reader_hostgroup=1                  # 读组；</span><br><span class="line">                comment=&quot;Application Server&quot;        # 注释信息；</span><br><span class="line">       &#125;</span><br><span class="line">#       &#123;</span><br><span class="line">#                writer_hostgroup=50</span><br><span class="line">#                reader_hostgroup=60</span><br><span class="line">#                comment=&quot;test repl 2&quot;</span><br><span class="line">#        &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="启动proxysql并连接数据库"><a href="#启动proxysql并连接数据库" class="headerlink" title="启动proxysql并连接数据库"></a>启动proxysql并连接数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">[root@proxy-sql ~]# systemctl start proxysql</span><br><span class="line"></span><br><span class="line">[root@proxy-sql ~]# ss -tnl     # 查看端口，已经开启；</span><br><span class="line">State       Recv-Q Send-Q Local Address:Port                Peer Address:Port              </span><br><span class="line">LISTEN      0      128                *:3306                           *:*                  </span><br><span class="line">LISTEN      0      128                *:3306                           *:*                  </span><br><span class="line">LISTEN      0      128                *:3306                           *:*                  </span><br><span class="line">LISTEN      0      128                *:3306                           *:*                  </span><br><span class="line">LISTEN      0      128        127.0.0.1:6032                           *:*                  </span><br><span class="line">LISTEN      0      128                *:22                             *:*                  </span><br><span class="line">LISTEN      0      100        127.0.0.1:25                             *:*                  </span><br><span class="line">LISTEN      0      128               :::22                            :::*                  </span><br><span class="line">LISTEN      0      100              ::1:25                            :::*      </span><br><span class="line"></span><br><span class="line">[root@proxy-sql ~]# mysql -h 192.168.8.17 -udbadmin -pdbpass        # 这里的用户和密码是MySQL的密码，而非proxySQL的管理账号密码;</span><br><span class="line">Welcome to the MariaDB monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 1</span><br><span class="line">Server version: 5.5.30 (ProxySQL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2016, Oracle, MariaDB Corporation Ab and others.</span><br><span class="line"></span><br><span class="line">Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.</span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; SHOW DATABASES;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; Bye</span><br></pre></td></tr></table></figure>
+<h3 id="通过ProxySQL连接的数据库进行创建表，进行测试-默认连接的是主服务器，具有读写功能"><a href="#通过ProxySQL连接的数据库进行创建表，进行测试-默认连接的是主服务器，具有读写功能" class="headerlink" title="通过ProxySQL连接的数据库进行创建表，进行测试(默认连接的是主服务器，具有读写功能)"></a>通过ProxySQL连接的数据库进行创建表，进行测试(默认连接的是主服务器，具有读写功能)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; CREATE DATABASE DB;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; SHOW DATABASES;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| DB                 |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; USE DB;</span><br><span class="line">Database changed</span><br><span class="line">MySQL [DB]&gt; CREATE TABLE T1 (id int(10));</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">MySQL [DB]&gt; SHOW TABLES;</span><br><span class="line">+--------------+</span><br><span class="line">| Tables_in_DB |</span><br><span class="line">+--------------+</span><br><span class="line">| T1           |</span><br><span class="line">+--------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 在主服务器和两台从节点查看是否创建了tb1这张表，如果有，则成功；</span><br></pre></td></tr></table></figure>
+<h3 id="ProxySQL节点查看主从节点信息"><a href="#ProxySQL节点查看主从节点信息" class="headerlink" title="ProxySQL节点查看主从节点信息"></a>ProxySQL节点查看主从节点信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">[root@proxy-sql ~]# mysql -h 127.0.0.1 -uadmin -padmin -P6032       # 通过管理接口连接；</span><br><span class="line">Welcome to the MariaDB monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 5</span><br><span class="line">Server version: 5.5.30 (ProxySQL Admin Module)      # 注意标识符是不同的；</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2016, Oracle, MariaDB Corporation Ab and others.</span><br><span class="line"></span><br><span class="line">Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.</span><br><span class="line">MySQL [(none)]&gt; SHOW TABLES;        # 查看所有表</span><br><span class="line">+--------------------------------------------+</span><br><span class="line">| tables                                     |</span><br><span class="line">+--------------------------------------------+</span><br><span class="line">| global_variables                           |</span><br><span class="line">| mysql_collations                           |</span><br><span class="line">| mysql_group_replication_hostgroups         |</span><br><span class="line">| mysql_query_rules                          |</span><br><span class="line">| mysql_replication_hostgroups               |</span><br><span class="line">| mysql_servers                              |</span><br><span class="line">| mysql_users                                |</span><br><span class="line">| proxysql_servers                           |</span><br><span class="line">| runtime_checksums_values                   |</span><br><span class="line">| runtime_global_variables                   |</span><br><span class="line">| runtime_mysql_group_replication_hostgroups |</span><br><span class="line">| runtime_mysql_query_rules                  |</span><br><span class="line">| runtime_mysql_replication_hostgroups       |</span><br><span class="line">| runtime_mysql_servers                      |</span><br><span class="line">| runtime_mysql_users                        |</span><br><span class="line">| runtime_proxysql_servers                   |</span><br><span class="line">| runtime_scheduler                          |</span><br><span class="line">| scheduler                                  |</span><br><span class="line">+--------------------------------------------+</span><br><span class="line">18 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; SELECT hostgroup_id,hostname,port,status FROM mysql_servers;</span><br><span class="line">+--------------+--------------+------+--------+</span><br><span class="line">| hostgroup_id | hostname     | port | status |</span><br><span class="line">+--------------+--------------+------+--------+</span><br><span class="line">| 0            | 192.168.8.12 | 3306 | ONLINE |</span><br><span class="line">| 1            | 192.168.8.15 | 3306 | ONLINE |</span><br><span class="line">+--------------+--------------+------+--------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; SELECT * FROM mysql_servers;        # 查看你MySQL server；</span><br><span class="line">+--------------+--------------+------+--------+--------+-------------+-----------------+---------------------+---------+----------------+---------+</span><br><span class="line">| hostgroup_id | hostname     | port | status | weight | compression | max_connections | max_replication_lag | use_ssl | max_latency_ms | comment |</span><br><span class="line">+--------------+--------------+------+--------+--------+-------------+-----------------+---------------------+---------+----------------+---------+</span><br><span class="line">| 0            | 192.168.8.12 | 3306 | ONLINE | 1      | 0           | 1000            | 0                   | 0       | 0              |         |</span><br><span class="line">| 1            | 192.168.8.15 | 3306 | ONLINE | 1      | 0           | 1000            | 0                   | 0       | 0              |         |</span><br><span class="line">+--------------+--------------+------+--------+--------+-------------+-----------------+---------------------+---------+----------------+---------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; SELECT * FROM runtime_mysql_replication_hostgroups;     # 查看组信息；</span><br><span class="line">+------------------+------------------+--------------------+</span><br><span class="line">| writer_hostgroup | reader_hostgroup | comment            |</span><br><span class="line">+------------------+------------------+--------------------+</span><br><span class="line">| 0                | 1                | Application Server |</span><br><span class="line">+------------------+------------------+--------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://maxiecloud.com/2017/07/14/mysql-replication/" target="_blank" rel="noopener">MySQL Replication 主从复制：http://maxiecloud.com/2017/07/14/mysql-replication/</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/08/24/MySQL-ProxySQL/">基于Proxy SQL实现 MySQL主从复制的读写分离</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>发布时间:</span>2018-08-24, 08:18:14</p>
+        <p><span>最后更新:</span>2018-08-24, 08:19:27</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/08/24/MySQL-ProxySQL/" title="基于Proxy SQL实现 MySQL主从复制的读写分离">https://www.ihaiyun.cc/2018/08/24/MySQL-ProxySQL/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/08/24/MySQL-ProxySQL/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/09/21/Docker-Catalog/">
+                    置顶  Docker文章目录
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/08/24/MySQL-HA/">
+                    常见MySQL高可用解决方案
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#proxysql简介"><span class="toc-number">1.</span> <span class="toc-text">proxysql简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境"><span class="toc-number">2.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备"><span class="toc-number">3.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主机名"><span class="toc-number">3.1.</span> <span class="toc-text">主机名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#同步时间"><span class="toc-number">3.2.</span> <span class="toc-text">同步时间</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装数据库"><span class="toc-number">4.</span> <span class="toc-text">安装数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启MySQL主服务器二进制日志和server-id"><span class="toc-number">5.</span> <span class="toc-text">开启MySQL主服务器二进制日志和server_id</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动MySQL主服务器并查看二进制日志status"><span class="toc-number">6.</span> <span class="toc-text">启动MySQL主服务器并查看二进制日志status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启MySQL从服务器中继日志和server-id并启动MySQL数据库"><span class="toc-number">7.</span> <span class="toc-text">开启MySQL从服务器中继日志和server_id并启动MySQL数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在MySQL主服务器授权用户"><span class="toc-number">8.</span> <span class="toc-text">在MySQL主服务器授权用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置MySQL从服务器复制参数"><span class="toc-number">9.</span> <span class="toc-text">设置MySQL从服务器复制参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试主从同步"><span class="toc-number">10.</span> <span class="toc-text">测试主从同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装proxysql-1-4-2"><span class="toc-number">11.</span> <span class="toc-text">安装proxysql-1.4.2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为proxysql授权用户"><span class="toc-number">12.</span> <span class="toc-text">为proxysql授权用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改proxysql配置文件"><span class="toc-number">13.</span> <span class="toc-text">修改proxysql配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动proxysql并连接数据库"><span class="toc-number">14.</span> <span class="toc-text">启动proxysql并连接数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过ProxySQL连接的数据库进行创建表，进行测试-默认连接的是主服务器，具有读写功能"><span class="toc-number">15.</span> <span class="toc-text">通过ProxySQL连接的数据库进行创建表，进行测试(默认连接的是主服务器，具有读写功能)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ProxySQL节点查看主从节点信息"><span class="toc-number">16.</span> <span class="toc-text">ProxySQL节点查看主从节点信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">17.</span> <span class="toc-text">致谢</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE1MS83NzAw">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/09/21/Docker-Catalog/" title="上一篇: 置顶  Docker文章目录">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/08/24/MySQL-HA/" title="下一篇: 常见MySQL高可用解决方案">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/21/Docker-Catalog/">置顶  Docker文章目录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-ProxySQL/">基于Proxy SQL实现 MySQL主从复制的读写分离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-HA/">常见MySQL高可用解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-MHA-1/">MHA工作原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-replication-4/">MySQL 主从复制 SHOW SLAVE STATUS 参数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-replication-3/">MySQL 主主同步部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-replication-2/">MySQL 主从复制部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/MySQL-replication-1/">MySQL 主从复制原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/Percona-XtraBackup/">Percona XtraBackup</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/24/Mysqldump/">一次完整的mysqldump备份和恢复操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/zookeeper/">Zookeeper 的功能以及工作原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/CAP/">CAP 定理的含义</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/31/Linux-Centos7-VNC/">CentOS 7 配置 VNC</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/30/Linux-question-1/">linux删除文件未释放空间问题处理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/30/Linux-lsof/">lsof 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/26/Kubernetes-ContainerCreating/">Kubernetes创建容器状态一直为ContainerCreating问题排查</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/26/Kubernetes/">Kubernetes</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/25/KVM/">KVM</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/23/CDN/">CDN技术原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-container/">容器化思维</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-1/">Dockerfile 实践心得</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-monitor/">Docker容器的监控手段</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile-use/">Dockerfile的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-3/">Docker高级网络实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-security/">Dcoekr与容器安全</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network-2/">Docker 网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume-2/">Docker 数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-storage-manage/">Docker 存储管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-image/">Docker 镜像管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-libcontainer/">libcontainer</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-client-daemon/">docker client和daemon</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-arch/">Docker 架构概览</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-namespace/">namespace资源隔离</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-harbor/">使用vmware harbor构建镜像仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-repertory/">Docker构建私有仓库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-dockerfile/">Dockerfile编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-network/">Docker网络管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-volume/">Docker数据卷</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-manage-1/">Docker镜像管理及容器管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Docker-Install/">Docker安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Linux-iftop/">网络带宽监控工具 iftop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/06/Linux-iotop/">磁盘io监控工具 iotop</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/05/Jenkins/">Jenkins</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/CI/">持续集成是什么?</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/ELK/">开源日志实时分析平台ELK</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/Linux-opt-map/">Linux 运维技能树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/24/Ansible-CMDB/">Ansible CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS-Deploy/">GlusterFS 部署</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/GlusterFS/">GlusterFS 存储结构原理介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/Linux-top/">top 命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/10/Python-if/">Python基础 之 if语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/OpenvSwitch-Install/">安装Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/09/Why-Use-OpenvSwitch/">为什么要用Open vSwitch？</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/OVS/">What Is Open vSwitch</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-tuple/">Python常用数据类型-元组</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-list2/">Python常用数据类型-列表2</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Python-for-range/">Python 之 for循环和range()函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Jira/">Jira</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-list/">Python常用数据类型-列表</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-Notes/">Python 之 注释</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-digital/">Python常用数据类型-数字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/06/Python-data-type-string/">Python常用数据类型-字符串</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python-variable/">Python变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python3-print/">Python3 print函数</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/OOP/">面向对象程序设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/05/Python/">Python简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/dokuwiki/">开源WIKI：DokuWIKI</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/telnet-lanjin-CMDB/">腾讯蓝鲸CMDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/26/ISA/">指令集架构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Jianjie/">Docker简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Wechat-Baojing/">Zabbix：实现新版微信告警</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Caozuo-Action/">Zabbix：操作Actions</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Huandengpian/">Zabbix：幻灯片演示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Zidingyi/">Zabbix：自定义图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Graph-Jiandan/">Zabbix：简单图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Changyong-Peizhi/">Zabbix常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix/">Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Macro/">Zabbix：宏macro</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Zidingyi/">Zabbix：事件通知 自定义警报提示</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi-Email/">Zabbix：事件通知 E-mail</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Shijian-Tongzhi/">Zabbix：事件通知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph-Juhe/">Zabbix：聚合图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Tuoputu/">Zabbix：拓扑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Graph/">Zabbix：图形Graph</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Danweifuhao/">Zabbix：触发器trigger单位符号</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Dependencies/">Zabbix：触发器trigger依赖关系Dependencies</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Tirigger-Peizhi/">Zabbix：配置触发器trigger</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Zidingyi-Keys/">Zabbix：监控项item中自定义key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-All-Keys/">Zabbix：监控项item中所有agent key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Time-Jiange/">Zabbix：监控项item自定义间隔</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Item-Key/">Zabbix：监控项item的key</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Disk/">Zabbix系统所需磁盘空间计算公式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/23/Zabbix-Install/">安装Zabbix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Yum/">MarraiDB安装-yum方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-MariaDB-Install-Binary/">MarraiDB安装-通用二进制方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL/">MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Liuxing-Database/">目前流行的开源RDBMS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Guanxi-Database/">关系型数据概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Fanshi/">设计关系数据库的范式基础概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-Data-Jiegou/">数据结构模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/11/MySQL-DataBase/">数据库简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached-Install-Changyong-Commands/">Memcached安装和常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/Memcached/">Memcached</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Session-Jiqun/">搭建Tomcat会话集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/08/Tomcat-Httpd-session-Bangding-Tomcat/">实现httpd会话绑定</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-ajp-Diaodu-Tomcat/">Httpd基于ajp协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Nginx-Diaodu-Tomcat/">Nginx调度Tomcat集群</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Keep-Session/">会话保持解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Log/">Varnish日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm-status/">varnishadm设定后台server状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-healthy/">实现后端server负载均衡+健康检测</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Fuzaijunhen-Server/">实现后端server负载均衡</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Many-Server/">定义多个后端server</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Qingli-Cache/">Varnish缓存清理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish/">Varnish</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Varnish-Cache/">Cache缓存相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-solo/">部署solo应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Httpd-Proxy/">Httpd代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Nginx-Proxy/">Nginx代理Tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Web/">Tomcat web管理界面</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-configure/">Tomcat常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Tomcat-Install/">安装tomcat</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-configure/">Haproxy常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Diaodu-Suanfa/">HAProxy调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Log/">HAProxy log日志设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy-Configuration-File/">HAProxy配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/Haproxy/">Haproxy简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure2/">Ansible常用模块二</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-configure1/">Ansible常用模块一</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Ansible-Install/">Ansible安装与使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/30/Expect-Copy-Ssh-Key/">脚本实例四：批量拷贝SSH密钥</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-Nginx/">实现Nginx+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Log/">KeepAlived单独记录日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Shuangzhu-LVS/">实现LVS+KeepAlived双主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu-LVS/">实现LVS+KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Danzhu/">实现KeepAlived单主模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived-Configuration-File/">Keepalived配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/KeepAlived/">Keepalived简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-ngx-stream-core-module/">模块  ngx_stream_core_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/Nginx-make/">Nginx编译安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-upstream-module/">模块  ngx_http_upstream_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-LNAMP/">LNAMP搭建WordPress</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-fastcgi-module/">模块 ngx_http_fastcgi_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-headers-module/">模块 ngx_http_headers_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-proxy-module/">模块 ngx_http_proxy_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-rewrite-module/">模块 ngx_http_rewrite_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/Nginx-ngx-http-referer-module/">模块 ngx_http_referer_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-ssl-module/">模块 ngx_http_ssl_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Nginx-ngx-http-log-module/">模块 ngx_http_log_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-auth-basic-module/">模块 ngx_http_auth_basic_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-http-access-module/">模块 ngx_http_access_module</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-LVS/">LVS负载均衡技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Linux-iptables-SNAT/">SNAT与DNAT</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-SSL/">实现基于SSL的FTPS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/16/FTP-config/">Vsftp常用配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/Httpd-https/">httpd-2.2 实现https</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/11/Dropbear/">Dropbear-轻量级SSH服务器和客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/10/AIDE/">AIDE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/Linux-IP-Address/">IP地址</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/28/JiHuaRenWu-AT/">at命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/Linux-shell-script1/">脚本实例一：创建脚本的脚本</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/Linux-Shell-bianliang/">Shell 变量简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Linux-Disk-jiegou/">硬盘结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Linux-Disk/">硬盘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/23/User-Administration/">用户组管理相关命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/IO-chongdingxiang/">输入输出重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/Linux-Shell/">Linux Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/Linux-GUI-CLI/">GUI和CLI</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/Linux-Terminal/">终端 Terminal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/Linux-Centos6-9-Install/">Centos6.9 安装详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-User-space/">用户空间和内核空间</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/Linux-time/">Linux 发行版时间线</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-open-source/">常见开源协议</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/Linux-history/">Linux 历史?</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux/">什么Linux？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-fengnuoyiman/">冯.诺依曼体系结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/Linux-ABI-API/">ABI和API</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 侯海云
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+    </body>
+</html>
