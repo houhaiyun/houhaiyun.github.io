@@ -221,6 +221,110 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Tomcat-Httpd-http-Diaodu-Tomcat" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/" class="article-date">
+      <time datetime="2017-11-07T23:57:13.000Z" itemprop="datePublished">2017-11-07</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/">Httpd基于http协议调度Tomcat集群</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Httpd-http-Diaodu-Tomcat-1.jpg" title="拓扑图"></center><br><center> 拓扑</center>
+
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>系统版本</th>
+<th>软件版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Httpd</td>
+<td>192.168.8.17/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>httpd.x86_64 0:2.4.6-45</td>
+<td>反向代理</td>
+</tr>
+<tr>
+<td>Tomcat1</td>
+<td>192.168.8.12/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Tomcat2</td>
+<td>192.168.8.15/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+</tbody>
+</table>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/Httpd基于http协议调度Tomcat集群/">Httpd基于http协议调度Tomcat集群</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/07/Tomcat-Httpd-http-Diaodu-Tomcat/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Tomcat-Nginx-Diaodu-Tomcat" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -861,80 +965,6 @@
       
         <p class="article-more-link">
           <a href="/2017/11/06/Varnish-Qingli-Cache/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Varnish-varnishadm" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/06/Varnish-varnishadm/" class="article-date">
-      <time datetime="2017-11-06T23:08:47.000Z" itemprop="datePublished">2017-11-06</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/06/Varnish-varnishadm/">varnishadm(命令行接口)常用子命令</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="命令行管理接口命令"><a href="#命令行管理接口命令" class="headerlink" title="命令行管理接口命令"></a>命令行管理接口命令</h3><p><code>varnishadm  [-t  timeout] [-S secret_file] [-T address:port] [-n name] [command[...]]</code></p>
-<ul>
-<li><code>-S secret_file</code>：指定秘钥文件路径(<code>/etc/varnish/secret</code>)</li>
-<li><code>-T -T address:port</code>: 指定连接命令行接口的地址和端口</li>
-</ul>
-<p>默认可不指选项参数，<code>varnishadm</code>即可连接到命令行管理接口</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/varnishadm-命令行接口-常用子命令/">varnishadm(命令行接口)常用子命令</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/06/Varnish-varnishadm/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
