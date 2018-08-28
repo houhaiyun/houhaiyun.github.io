@@ -221,6 +221,77 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Docker-Xunnihua" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/12/23/Docker-Xunnihua/" class="article-date">
+      <time datetime="2017-12-23T22:28:27.000Z" itemprop="datePublished">2017-12-23</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="XEN"><a href="#XEN" class="headerlink" title="XEN"></a>XEN</h3><p><a href="http://xen.org/" target="_blank" rel="noopener">官网：http://xen.org/</a></p>
+<p><code>Xen</code> 由剑桥大学开发，它是基于硬件的完全分割，物理上有多少的资源就只能分配多少资源，因此很难超售。可分为<code>Xen-PV</code>（半虚拟化），和<code>Xen-HVM</code>（全虚拟化）。</p>
+<p><code>Xen</code>是不能超售内存和硬盘的，当母服务器只有16<code>G</code>内存以及100<code>G</code>硬盘时，当开 <code>Xen</code>架构（任意一个虚拟化）的1<code>G</code>内存、25<code>G</code>硬盘的子机时，会直接占用服务器1<code>G</code> 内存，以及25<code>G</code>硬盘，所以<code>Xen</code>的性能，相比<code>OpenVZ</code>在超售的情况下要好。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/虚拟化/">虚拟化</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/12/23/Docker-Xunnihua/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Zabbix-Jiankong-Nginx" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -844,76 +915,6 @@
       
         <p class="article-more-link">
           <a href="/2017/11/27/Zabbix-Open-Source-Tools/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Zabbix-Jiankong-MySQL" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/26/Zabbix-Jiankong-MySQL/" class="article-date">
-      <time datetime="2017-11-26T23:58:40.000Z" itemprop="datePublished">2017-11-26</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><code>zabbix</code>自带了一个监控<code>mysql</code>的模板，但是真正监控<code>mysql</code>的并不是<code>zabbix</code>自带的模板。而是<code>percona</code>公司的一个监控<code>mysql</code>模板</p>
-<p><a href="www.percona.com">percona官网： www.percona.com</a></p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/监控MySQL/">监控MySQL</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/26/Zabbix-Jiankong-MySQL/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
