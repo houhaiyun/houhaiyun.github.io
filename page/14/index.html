@@ -221,6 +221,196 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-MySQL-DataBase" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/11/MySQL-DataBase/" class="article-date">
+      <time datetime="2017-11-11T14:45:11.000Z" itemprop="datePublished">2017-11-11</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/11/MySQL-DataBase/">数据库简介</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <center><img src="https://houhaiyun.github.io/img/images/MySQL-DataBase-1.png" title="数据库"></center>
+
+<h3 id="什么是数据库？"><a href="#什么是数据库？" class="headerlink" title="什么是数据库？"></a>什么是数据库？</h3><p><strong>数据库，简单来说可视为电子化的文件柜——存储电子文件的处所，用户可以对文件中的数据运行新增、截取、更新、删除等操作。</strong></p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a><a class="article-category-link" href="/categories/数据库/数据库简介/">数据库简介</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库基础/">数据库基础</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/11/MySQL-DataBase/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Memcached-Tomcat-Session-Manager" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/09/Memcached-Tomcat-Session-Manager/" class="article-date">
+      <time datetime="2017-11-09T16:33:03.000Z" itemprop="datePublished">2017-11-09</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/09/Memcached-Tomcat-Session-Manager/">tomcat + memcached session manager共享session</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><center><img src="https://houhaiyun.github.io/img/images/Memcached-Tomcat-Session-Manager-1.jpg" title="拓扑图"></center>
+
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>系统版本</th>
+<th>软件版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nginx</td>
+<td>192.168.8.17/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>nginx.x86_64 1:1.10.2</td>
+<td>反向代理</td>
+</tr>
+<tr>
+<td>Tomcat1</td>
+<td>192.168.8.12/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Tomcat2</td>
+<td>192.168.8.15/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>tomcat-7.0.69(java-1.8.0-openjdk)</td>
+<td>应用服务</td>
+</tr>
+<tr>
+<td>Memcached1</td>
+<td>192.168.8.11/24</td>
+<td>CentOS release 6.9 (Final)</td>
+<td>memcached.x86_64 0:1.4.4-5</td>
+<td>缓存服务</td>
+</tr>
+<tr>
+<td>Memcached2</td>
+<td>192.168.8.13/24</td>
+<td>CentOS release 6.9 (Final)</td>
+<td>memcached.x86_64 0:1.4.4-5</td>
+<td>缓存服务</td>
+</tr>
+</tbody>
+</table>
+<p>简单说明下：<code>tomcat1</code>为主要把它的<code>session</code>存储到<code>memcached2</code>上，而<code>memcache2</code>是运行在另一台主机上的（一般情况下，<code>memcached</code>是存<code>tomcat1</code>的<code>session</code>），只有当<code>memcached2</code>不可用时，<code>tomcat1</code>才会把<code>session</code>存在<code>memcached1</code>上，也就是说<code>memcached1</code>是为了<code>tomcat1</code>做故障切换用的节点。这要的话，当<code>machine1</code>挂了的时候，<code>session</code>是不会丢失的。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Memcached/">Memcached</a><a class="article-category-link" href="/categories/Memcached/tomcat-memcached-session-manager共享session/">tomcat + memcached session manager共享session</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Memcached/">Memcached</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/09/Memcached-Tomcat-Session-Manager/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Memcached-Install-Changyong-Commands" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -931,144 +1121,6 @@
       
         <p class="article-more-link">
           <a href="/2017/11/07/Tomcat-Keep-Session/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Tomcat-Session" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/07/Tomcat-Session/" class="article-date">
-      <time datetime="2017-11-07T23:48:45.000Z" itemprop="datePublished">2017-11-07</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/07/Tomcat-Session/">HTTP会话原理解释与应用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="一、什么是会话"><a href="#一、什么是会话" class="headerlink" title="一、什么是会话"></a>一、什么是会话</h3><p> 首先解释一下什么是会话。在计算机术语中，会话是指一个终端用户与交互系统进行通讯的过程，比如从输入账户密码进入操作系统到退出操作系统就是一个会话过程。会话较多用于网络上，TCP的三次握手就创建了一个会话，TCP关闭连接就是关闭会话。用平述的语言可以解释为：你拔打你女友的电话号码，你女友接听，然后一翻“亲爱的”，直到任何一方挂掉电话，这个过程就是一个会话。你挑逗一只小狗，它跟你互动，也是会话；它不鸟你，那就不形成会话。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/TOMCAT/">TOMCAT</a><a class="article-category-link" href="/categories/TOMCAT/HTTP会话原理解释与应用/">HTTP会话原理解释与应用</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tomcat/">Tomcat</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/07/Tomcat-Session/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Varnish-Log" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/06/Varnish-Log/" class="article-date">
-      <time datetime="2017-11-06T23:20:38.000Z" itemprop="datePublished">2017-11-06</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/06/Varnish-Log/">Varnish日志</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="Varnishlog"><a href="#Varnishlog" class="headerlink" title="Varnishlog"></a>Varnishlog</h3><p><code>varnishlog</code>：显示原始日志格式信息</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/Varnish日志/">Varnish日志</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/06/Varnish-Log/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
