@@ -221,6 +221,220 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Nginx-configure2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/Nginx-configure2/" class="article-date">
+      <time datetime="2017-10-25T17:39:43.000Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/25/Nginx-configure2/">Nginx配置文件2</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="http协议相关的配置结构"><a href="#http协议相关的配置结构" class="headerlink" title="http协议相关的配置结构"></a>http协议相关的配置结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    ...</span><br><span class="line">    ... 各server的公共配置</span><br><span class="line">    server &#123; 每个server用于定义一个虚拟主机</span><br><span class="line">        ...</span><br><span class="line">        &#125;</span><br><span class="line">    server &#123;</span><br><span class="line">        ...</span><br><span class="line">        server_name 虚拟主机名</span><br><span class="line">        root 主目录</span><br><span class="line">        alias 路径别名</span><br><span class="line">        location [OPERATOR] URL &#123; 指定URL的特性</span><br><span class="line">            ...</span><br><span class="line">            if CONDITION &#123;</span><br><span class="line">            ...</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/Nginx配置文件/">Nginx配置文件</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/25/Nginx-configure2/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Nginx-configure" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/Nginx-configure/" class="article-date">
+      <time datetime="2017-10-25T17:37:07.000Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/25/Nginx-configure/">Nginx配置文件</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="配置文件组成部分"><a href="#配置文件组成部分" class="headerlink" title="配置文件组成部分"></a>配置文件组成部分</h3><ul>
+<li>主配置文件： nginx.conf<ul>
+<li>子配置文件 include conf.d/*.conf</li>
+</ul>
+</li>
+<li>fastcgi， uwsgi， scgi等协议相关的配置文件</li>
+<li>mime.types：支持的mime类型</li>
+</ul>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/Nginx配置文件/">Nginx配置文件</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/25/Nginx-configure/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Linux-LVS-suanfa" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/21/Linux-LVS-suanfa/" class="article-date">
+      <time datetime="2017-10-21T22:50:34.000Z" itemprop="datePublished">2017-10-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/21/Linux-LVS-suanfa/">LVS调度算法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="LVS的调度算法分为静态与动态两类："><a href="#LVS的调度算法分为静态与动态两类：" class="headerlink" title="LVS的调度算法分为静态与动态两类："></a>LVS的调度算法分为静态与动态两类：</h3><center><img src="https://houhaiyun.github.io/img/images/Linux-LVS-suanfa-1.jpg" title="LVS调度算法"></center>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/负载均衡/">负载均衡</a><a class="article-category-link" href="/categories/负载均衡/LVS调度算法/">LVS调度算法</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LVS/">LVS</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/21/Linux-LVS-suanfa/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Linux-LVS" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -712,221 +926,9 @@
 
 
   
-    <article id="post-SSH-mianmi" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/08/SSH-mianmi/" class="article-date">
-      <time datetime="2017-09-08T12:57:06.000Z" itemprop="datePublished">2017-09-08</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/08/SSH-mianmi/">SSH命令与ssh免密登陆</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="what-is-SSH"><a href="#what-is-SSH" class="headerlink" title="what is SSH?"></a>what is SSH?</h3><p>Secure Shell（缩写为SSH），由IETF的网络工作小组（Network Working Group）所制定；SSH为一项创建在应用层和传输层基础上的安全协议，为计算机上的Shell（壳层）提供安全的传输和使用环境。使用Tcp 22端口。</p>
-<p>ssh协议目前有SSH1和SSH2，SSH2协议兼容SSH1。目前实现SSH1和SSH2协议的主要软件有OpenSSH和SSH Communications Security Corporation　公司的SSH Communications 软件。前者是OpenBSD组织开发的一款免费的SSH软件，后者是商业软件，因此在linux、FreeBSD、OpenBSD、NetBSD等免费类UNIX系统种，通畅都使用OpenSSH作为SSH协议的实现软件。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/SSH/">SSH</a><a class="article-category-link" href="/categories/SSH/SSH命令与ssh免密登陆/">SSH命令与ssh免密登陆</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssh/">ssh</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/09/08/SSH-mianmi/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Openssl" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/06/Openssl/" class="article-date">
-      <time datetime="2017-09-06T12:50:28.000Z" itemprop="datePublished">2017-09-06</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/06/Openssl/">Openssl证书请求和自签名</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h3><h4 id="PKI、CA、X-509"><a href="#PKI、CA、X-509" class="headerlink" title="PKI、CA、X.509"></a>PKI、CA、X.509</h4><p><strong>PKI:</strong> Public Key Infrastructure </p>
-<p><strong>公开密钥基础建设：</strong> 是一组由硬件、软件、参与者、管理政策与流程组成的基础架构，其目的在于创造、管理、分配、使用、存储以及撤销数字证书。</p>
-<p><strong>X.509：</strong> 是由ITU-T为了公开密钥基础建设（PKI）与授权管理基础建设（PMI）提出的产业标准。X.509标准，规范了公开密钥认证、证书吊销列表、授权证书、证书路径验证算法等。</p>
-<p><strong>CA：</strong> 数字证书认证机构(英文全称：Catificate Authority)。主要负责：证书发放、证书更新、证书撤销和证书验证。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/安全相关/">安全相关</a><a class="article-category-link" href="/categories/安全相关/Openssl证书请求和自签名/">Openssl证书请求和自签名</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Openssl/">Openssl</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/09/06/Openssl/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Linux-IP-Address" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/01/Linux-IP-Address/" class="article-date">
-      <time datetime="2017-09-01T20:27:23.000Z" itemprop="datePublished">2017-09-01</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/01/Linux-IP-Address/">IP地址</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>互联网协议地址（英语：Internet Protocol Address，又译为网际协议地址），缩写为IP地址（英语：IP Address），是分配给网络上使用网际协议（英语：Internet Protocol, IP）的设备的数字标签。常见的IP地址分为IPv4与IPv6两大类。</p>
-<center><img src="https://houhaiyun.github.io/img/images/Linux-IP-Address-1.jpg" title="IP地址"></center>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/网络/">网络</a><a class="article-category-link" href="/categories/网络/IP地址/">IP地址</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IP地址/">IP地址</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/09/01/Linux-IP-Address/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/21/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/23/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/21/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><a class="page-number" href="/page/24/">24</a><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/23/">Next &raquo;</a>
     </nav>
   
 </div>
