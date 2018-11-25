@@ -221,6 +221,145 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Nginx-make2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/28/Nginx-make2/" class="article-date">
+      <time datetime="2017-10-28T20:59:27.000Z" itemprop="datePublished">2017-10-28</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/28/Nginx-make2/">Nginx编译安装模块（非重装）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="添加mail模块"><a href="#添加mail模块" class="headerlink" title="添加mail模块"></a>添加mail模块</h3><h4 id="查看本地已经编译的模块"><a href="#查看本地已经编译的模块" class="headerlink" title="查看本地已经编译的模块"></a>查看本地已经编译的模块</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# cd /usr/local/nginx/sbin/</span><br><span class="line">[root@centos7 sbin]# ./nginx -V</span><br><span class="line">nginx version: HaiYunNginx/6.6.6</span><br><span class="line">built by gcc 4.8.5 20150623 (Red Hat 4.8.5-11) (GCC) </span><br><span class="line">built with OpenSSL 1.0.1e-fips 11 Feb 2013</span><br><span class="line">TLS SNI support enabled</span><br><span class="line">configure arguments: --prefix=/usr/local/nginx </span><br><span class="line">--conf-path=/etc/nginx/nginx.conf </span><br><span class="line">--error-log-path=/var/log/nginx/error.log </span><br><span class="line">--http-log-path=/var/log/nginx/access.log</span><br><span class="line">--pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock</span><br><span class="line">--http-proxy-temp-path=/var/lib/nginx/tmp/proxy </span><br><span class="line">--http-fastcgi-temp-path=/var/lib/nginx/tmp/fastcgi</span><br><span class="line">--pid-path=/run/nginx.pid --with-http_mp4_module --with-http_gunzip_module</span><br><span class="line">--http-scgi-temp-path=/var/cache/nginx/scgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp</span><br><span class="line">--with-stream_ssl_module --user=nginx --group=nginx --with-http_ssl_module --with-http_v2_module</span><br><span class="line">--with-http_dav_module --with-http_stub_status_module --with-threads --with-file-aio</span><br></pre></td></tr></table></figure>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/Nginx编译安装模块（非重装）/">Nginx编译安装模块（非重装）</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/28/Nginx-make2/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Nginx-make" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/28/Nginx-make/" class="article-date">
+      <time datetime="2017-10-28T20:56:18.000Z" itemprop="datePublished">2017-10-28</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/28/Nginx-make/">Nginx编译安装</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="安装必备软件包"><a href="#安装必备软件包" class="headerlink" title="安装必备软件包"></a>安装必备软件包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# yum -y install  openssl-devel pcre-devel      # 安装必备包</span><br><span class="line">[root@centos7 nginx-1.10.3]# yum install gcc make gcc-c++       # 安装编译工具</span><br></pre></td></tr></table></figure>
+<h3 id="下载源码包"><a href="#下载源码包" class="headerlink" title="下载源码包"></a>下载源码包</h3><p>目前最新的版本是<code>1.13.6</code>，先来尝个鲜。（生产中可不要这么干！）</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/Nginx编译安装/">Nginx编译安装</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/28/Nginx-make/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Nginx-ngx-http-upstream-module" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -767,145 +906,6 @@
       
         <p class="article-more-link">
           <a href="/2017/10/26/Nginx-ngx-http-ssl-module/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Nginx-ngx-http-gzip-module" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/26/Nginx-ngx-http-gzip-module/" class="article-date">
-      <time datetime="2017-10-26T23:14:42.000Z" itemprop="datePublished">2017-10-26</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/26/Nginx-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="gzip-on-off"><a href="#gzip-on-off" class="headerlink" title="gzip on | off;"></a>gzip on | off;</h3><p><strong>官网帮助：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	gzip on | off;</span><br><span class="line">Default:	</span><br><span class="line">gzip off;</span><br><span class="line">Context:	http, server, location, if in location</span><br></pre></td></tr></table></figure></p>
-<p><a href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html#gzip" target="_blank" rel="noopener">帮助文档：http://nginx.org/en/docs/http/ngx_http_gzip_module.html#gzip</a></p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/模块-ngx-http-gzip-module/">模块 ngx_http_gzip_module</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/26/Nginx-ngx-http-gzip-module/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Nginx-ngx-http-stub-status-module" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/26/Nginx-ngx-http-stub-status-module/" class="article-date">
-      <time datetime="2017-10-26T23:12:39.000Z" itemprop="datePublished">2017-10-26</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/26/Nginx-ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="模块ngx-http-stub-status-module"><a href="#模块ngx-http-stub-status-module" class="headerlink" title="模块ngx_http_stub_status_module"></a>模块ngx_http_stub_status_module</h3><p>用于输出nginx的基本状态信息</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/模块ngx-http-stub-status-module/">模块ngx_http_stub_status_module</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/26/Nginx-ngx-http-stub-status-module/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
