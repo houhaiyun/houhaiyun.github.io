@@ -221,6 +221,224 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Zabbix-Action-Shoudong-Guanbi" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/" class="article-date">
+      <time datetime="2017-11-26T23:27:10.000Z" itemprop="datePublished">2017-11-26</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/">Zabbix：手动关闭事件</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>当触发器的状态从“问题（<code>Problem</code>）”变成“正常（<code>OK</code>）”时，问题事件通常会自动解决，但是很<br>难判断是通过触发器表达式的方式解决。在这种情况下，就需要手动解决问题。</p>
+<p>例如，<code>syslog</code>可能会报告一些内核参数需要调整以获得最佳性能，在这种情况下，问题报告给<code>Linux</code>管理员，它们会修复它，然后手动关闭此问题。</p>
+<p>只有在触发器选项中启用“允许手动关闭”选项，问题事件才可以被手动关闭。</p>
+<p>当一个问题事件是“手动关闭”时，<code>Zabbix</code>会为<code>Zabbix Server</code>生成了一个新的内部任务，然后<br>任务管理器进程执行这个任务，并生成正常事件。</p>
+<p>手动关闭问题事件并不意味着底层的触发器将永远不会再次进入“问题”状态。当触发器中包含的任何监控项有新数据达到时，将重新评估整个表达式，并可能会再次生成问题。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/手动关闭事件/">手动关闭事件</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/26/Zabbix-Action-Shoudong-Guanbi/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Zabbix-Action" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/26/Zabbix-Action/" class="article-date">
+      <time datetime="2017-11-26T23:25:05.000Z" itemprop="datePublished">2017-11-26</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/26/Zabbix-Action/">Zabbix：事件</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在<code>Zabbix</code>可以生成以下几种类型的事件：</p>
+<ul>
+<li><code>trigger events</code> - 触发器事件，当触发器改变他的状态时（<code>OK</code>→<code>PROBLEM</code>→<code>OK</code>）；</li>
+<li><code>discovery events</code> - 发现事件，当主机或服务被检测到；</li>
+<li><code>auto registration events</code> - 自动注册事件，当主动的<code>agents</code>被自动注册到<code>server</code>时</li>
+<li><code>internal events</code> - 内部事件，当监控项<code>item</code>/自动发现规则<code>low</code>-<code>level discovery rule</code>变得不受支持或触发器进入了一个未知状态。</li>
+</ul>
+<p>事件是以时间戳的，并可以发送电子邮件等动作得得基础。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/事件/">事件</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/26/Zabbix-Action/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Zabbix-Tirigger-Yanzhongxin" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/" class="article-date">
+      <time datetime="2017-11-23T23:31:13.000Z" itemprop="datePublished">2017-11-23</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/">Zabbix：触发器trigger严重性</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="触发器trigger严重性"><a href="#触发器trigger严重性" class="headerlink" title="触发器trigger严重性"></a>触发器trigger严重性</h3><p>触发器严重性定义了触发器的重要程度，Zabbix支持以下触发器的严重程度：</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/触发器trigger严重性/">触发器trigger严重性</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/23/Zabbix-Tirigger-Yanzhongxin/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Zabbix-Tirigger-Danweifuhao" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -715,224 +933,6 @@
 
 
   
-    <article id="post-Zabbix-Create-Item" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/23/Zabbix-Create-Item/" class="article-date">
-      <time datetime="2017-11-23T23:09:07.000Z" itemprop="datePublished">2017-11-23</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/23/Zabbix-Create-Item/">Zabbix：创建监控项items</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>要在<code>Zabbix</code>管理页面创建一个监控项，请执行以下操作：</p>
-<ul>
-<li>进入到: <code>Configuration</code> → <code>Hosts</code></li>
-<li>在主机所在的行单击 <code>Items</code></li>
-<li>点击屏幕右上角的<code>Create item</code></li>
-<li>输入表单中监控项的参数</li>
-</ul>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/创建监控项items/">创建监控项items</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/23/Zabbix-Create-Item/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Zabbix-Piliang-Host" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/23/Zabbix-Piliang-Host/" class="article-date">
-      <time datetime="2017-11-23T23:07:25.000Z" itemprop="datePublished">2017-11-23</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/23/Zabbix-Piliang-Host/">Zabbix：批量更新主机信息</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>有时你可能想要一次更改多个主机的某些属性，那么你可以使用批量更新功能来代替打开每个主机进行编辑。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/批量更新主机信息/">批量更新主机信息</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/23/Zabbix-Piliang-Host/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Zabbix-Add-Host" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/23/Zabbix-Add-Host/" class="article-date">
-      <time datetime="2017-11-23T23:05:55.000Z" itemprop="datePublished">2017-11-23</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/23/Zabbix-Add-Host/">Zabbix：配置主机hosts和主机组</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="配置主机"><a href="#配置主机" class="headerlink" title="配置主机"></a>配置主机</h3><h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>按照以下步骤在<code>Zabbix</code>前端创建一台主机：</p>
-<ul>
-<li>定位到：<code>Configuration</code> → <code>Hosts</code></li>
-<li>在右侧点击 <code>Create host</code> (或者在主机名上编辑一台已有的主机)</li>
-<li>在表单中输入主机的相关参数</li>
-</ul>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/配置主机hosts和主机组/">配置主机hosts和主机组</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/23/Zabbix-Add-Host/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/13/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/15/">Next &raquo;</a>
@@ -944,7 +944,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2017-2018 侯海云
+                2017-2019 侯海云
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>

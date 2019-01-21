@@ -221,6 +221,215 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Docker-Why-Use" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/12/23/Docker-Why-Use/" class="article-date">
+      <time datetime="2017-12-23T22:32:27.000Z" itemprop="datePublished">2017-12-23</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/23/Docker-Why-Use/">为什么要用Docker？</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="为什么要用Docker？"><a href="#为什么要用Docker？" class="headerlink" title="为什么要用Docker？"></a>为什么要用Docker？</h3><p>作为一种新兴的虚拟化方式，<code>Docker</code> 跟传统的虚拟化方式相比具有众多的优势。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/为什么要用Docker？/">为什么要用Docker？</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/12/23/Docker-Why-Use/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Docker-Xunnihua" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/12/23/Docker-Xunnihua/" class="article-date">
+      <time datetime="2017-12-23T22:28:27.000Z" itemprop="datePublished">2017-12-23</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/23/Docker-Xunnihua/">Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="XEN"><a href="#XEN" class="headerlink" title="XEN"></a>XEN</h3><p><a href="http://xen.org/" target="_blank" rel="noopener">官网：http://xen.org/</a></p>
+<p><code>Xen</code> 由剑桥大学开发，它是基于硬件的完全分割，物理上有多少的资源就只能分配多少资源，因此很难超售。可分为<code>Xen-PV</code>（半虚拟化），和<code>Xen-HVM</code>（全虚拟化）。</p>
+<p><code>Xen</code>是不能超售内存和硬盘的，当母服务器只有16<code>G</code>内存以及100<code>G</code>硬盘时，当开 <code>Xen</code>架构（任意一个虚拟化）的1<code>G</code>内存、25<code>G</code>硬盘的子机时，会直接占用服务器1<code>G</code> 内存，以及25<code>G</code>硬盘，所以<code>Xen</code>的性能，相比<code>OpenVZ</code>在超售的情况下要好。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/虚拟化/">虚拟化</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/12/23/Docker-Xunnihua/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Zabbix-Jiankong-Nginx" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/27/Zabbix-Jiankong-Nginx/" class="article-date">
+      <time datetime="2017-11-27T12:06:42.000Z" itemprop="datePublished">2017-11-27</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/27/Zabbix-Jiankong-Nginx/">Zabbix：监控Nginx状态</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="安装nginx，并修改nginx配置文件，开启status"><a href="#安装nginx，并修改nginx配置文件，开启status" class="headerlink" title="安装nginx，并修改nginx配置文件，开启status"></a>安装nginx，并修改nginx配置文件，开启status</h3>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/监控Nginx状态/">监控Nginx状态</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/27/Zabbix-Jiankong-Nginx/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Zabbix-Wechat-Baojing" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -725,219 +934,6 @@
 
 
   
-    <article id="post-Zabbix-Open-Source-Tools" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/27/Zabbix-Open-Source-Tools/" class="article-date">
-      <time datetime="2017-11-27T12:01:22.000Z" itemprop="datePublished">2017-11-27</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/27/Zabbix-Open-Source-Tools/">开源监控工具</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="Cacti"><a href="#Cacti" class="headerlink" title="Cacti"></a>Cacti</h3><p><a href="https://www.cacti.net/" target="_blank" rel="noopener">官网：https://www.cacti.net/</a></p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/开源监控工具/">开源监控工具</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/27/Zabbix-Open-Source-Tools/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Zabbix-Jiankong-MySQL" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/26/Zabbix-Jiankong-MySQL/" class="article-date">
-      <time datetime="2017-11-26T23:58:40.000Z" itemprop="datePublished">2017-11-26</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/26/Zabbix-Jiankong-MySQL/">Zabbix：监控MySQL</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><code>zabbix</code>自带了一个监控<code>mysql</code>的模板，但是真正监控<code>mysql</code>的并不是<code>zabbix</code>自带的模板。而是<code>percona</code>公司的一个监控<code>mysql</code>模板</p>
-<p><a href="www.percona.com">percona官网： www.percona.com</a></p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/监控MySQL/">监控MySQL</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/26/Zabbix-Jiankong-MySQL/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Zabbix-User" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/26/Zabbix-User/" class="article-date">
-      <time datetime="2017-11-26T23:55:03.000Z" itemprop="datePublished">2017-11-26</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/26/Zabbix-User/">Zabbix：用户</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>根据以下步骤来配置一个用户：</p>
-<ul>
-<li>在 <code>Zabbix</code> 前端页面跳转到 管理 → 用户；</li>
-<li>在当前页面点击创建用户 （或在用户名中编辑现有的用户）；</li>
-<li>在窗口中编辑用户属性。</li>
-</ul>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/监控/">监控</a><a class="article-category-link" href="/categories/监控/用户/">用户</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/26/Zabbix-User/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/11/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/13/">Next &raquo;</a>
@@ -949,7 +945,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2017-2018 侯海云
+                2017-2019 侯海云
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>

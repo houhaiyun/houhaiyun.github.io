@@ -221,6 +221,222 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Varnish-VCL" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish-VCL/" class="article-date">
+      <time datetime="2017-11-06T23:06:52.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish-VCL/">vcl：缓存策略配置工具</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><code>“域”</code>专用的编程语言或状态引擎(<code>state engine</code>)，用于配置缓存策略。</p>
+<p>若要配置缓存规则，则需要先了解varnish的缓存处理流程，各状态引擎(有限状态机)的工作方式。</p>
+<p> <code>VCL</code>存在多个状态引擎，状态之间有关联性，但彼此之间互相隔离，每个引擎使用<code>return</code>来退出当前状态，并转入下一状态。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/vcl：缓存策略配置工具/">vcl：缓存策略配置工具</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish-VCL/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Varnish" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish/" class="article-date">
+      <time datetime="2017-11-06T23:05:02.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish/">Varnish</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="Varnish简介"><a href="#Varnish简介" class="headerlink" title="Varnish简介"></a>Varnish简介</h3><p><code>Varnish</code> 是一款高性能且开源的反向代理服务器和 <code>HTTP</code> 加速器，其采用全新的软件体系机构，和现在的硬件体系紧密配合，与传统的 <code>squid</code> 相比，<code>varnish</code> 具有性能更高、速度更快、管理更加方便等诸多优点，很多大型的网站都开始尝试使用 varnish 来替换 <code>squid</code>，这些都促进 <code>varnish</code> 迅速发展起来。</p>
+<p>挪威的最大的在线报纸 <code>Verdens Gang</code>(<code>vg.no</code>) 使用 3 台 <code>Varnish</code> 代替了原来的 12 台 <code>Squid</code>，性能比以前更好，这是 <code>Varnish</code> 最成功的应用案例。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Varnish-1.jpg" title="Varnish"></center>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/Varnish/">Varnish</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Varnish-Cache2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Varnish-Cache2/" class="article-date">
+      <time datetime="2017-11-06T23:03:05.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/Varnish-Cache2/">Cache缓存相关二</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="http-cache-解决方案"><a href="#http-cache-解决方案" class="headerlink" title="http cache 解决方案"></a>http cache 解决方案</h3><p><code>squid</code><strong>VS</strong><code>varnish</code></p>
+<ul>
+<li>基于<code>http</code>协议提专业的供缓存控制的程序有<code>squid</code>和<code>varnish</code>，<code>squid</code>比较重量级，是个老家伙，不过，老当益壮。</li>
+<li>在高并发的情况下仍能保持较好的稳定性，而<code>varnish</code>比较轻量，也是比较<code>young</code>的一款缓存管理程序，性能与<code>squid</code>不相上下。</li>
+<li>而在高并发的情况下，<code>varnish</code>可能就没有<code>squid</code>稳定，不过又有使用者反映<code>varnish</code>的性能和稳定性高于<code>squid</code>，不管是否如此，两款开源程序都是不错的<code>http</code>缓存解决方案，本文仅以<code>varnish</code>作为学习对象。</li>
+</ul>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/缓存服务/">缓存服务</a><a class="article-category-link" href="/categories/缓存服务/Cache缓存相关二/">Cache缓存相关二</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Varnish/">Varnish</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/11/06/Varnish-Cache2/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Varnish-Cache" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -708,214 +924,6 @@
 
 
   
-    <article id="post-Haproxy-Https" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/05/Haproxy-Https/" class="article-date">
-      <time datetime="2017-11-05T23:29:30.000Z" itemprop="datePublished">2017-11-05</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/05/Haproxy-Https/">HAProxy支持https协议</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="生成证书"><a href="#生成证书" class="headerlink" title="生成证书"></a>生成证书</h3>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/负载均衡/">负载均衡</a><a class="article-category-link" href="/categories/负载均衡/HAProxy支持https协议/">HAProxy支持https协议</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Haproxy/">Haproxy</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/05/Haproxy-Https/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Haproxy-TCP-Proxy" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/05/Haproxy-TCP-Proxy/" class="article-date">
-      <time datetime="2017-11-05T23:27:08.000Z" itemprop="datePublished">2017-11-05</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/05/Haproxy-TCP-Proxy/">HAProxy四层TCP代理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="格式如下"><a href="#格式如下" class="headerlink" title="格式如下"></a>格式如下</h3><p>根据第4层条件对传入连接执行操作<br><code>tcp-request connection {accept|reject} [{if | unless}&lt;condition&gt;]</code></p>
-<h3 id="实现对mysql-3306-的代理"><a href="#实现对mysql-3306-的代理" class="headerlink" title="实现对mysql(3306)的代理"></a>实现对mysql(3306)的代理</h3>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/负载均衡/">负载均衡</a><a class="article-category-link" href="/categories/负载均衡/HAProxy四层TCP代理/">HAProxy四层TCP代理</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Haproxy/">Haproxy</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/05/Haproxy-TCP-Proxy/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Haproxy-configure-ACL" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/05/Haproxy-configure-ACL/" class="article-date">
-      <time datetime="2017-11-05T23:24:51.000Z" itemprop="datePublished">2017-11-05</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/05/Haproxy-configure-ACL/">HAPoxy-ACL</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><code>acl</code>：访问控制列表（<code>ACL</code>）的使用提供了一个灵活的解决方案来执行内容交换，并且通常基于从请求中提取的内容、响应或任何环境状态进行决策</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/负载均衡/">负载均衡</a><a class="article-category-link" href="/categories/负载均衡/HAPoxy-ACL/">HAPoxy-ACL</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Haproxy/">Haproxy</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/05/Haproxy-configure-ACL/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/17/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><span class="page-number current">18</span><a class="page-number" href="/page/19/">19</a><a class="page-number" href="/page/20/">20</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/19/">Next &raquo;</a>
@@ -927,7 +935,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2017-2018 侯海云
+                2017-2019 侯海云
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
