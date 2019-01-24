@@ -15,18 +15,18 @@
 
 
 
-<meta name="description" content="NGINX 内置变量参数详解">
-<meta name="keywords" content="Nginx">
+<meta name="description" content="实战篇关于实战篇：主来来自于个人学习以及工作中所用到的知识。">
+<meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="NGINX内置变量参数详解">
-<meta property="og:url" content="https://www.ihaiyun.cc/2019/01/21/Nginx-Built-in-Variable/index.html">
+<meta property="og:title" content="置顶  Docker文章目录">
+<meta property="og:url" content="https://www.ihaiyun.cc/2019/01/28/Docker-Catalog/index.html">
 <meta property="og:site_name" content="侯海云的个人网站">
-<meta property="og:description" content="NGINX 内置变量参数详解">
+<meta property="og:description" content="实战篇关于实战篇：主来来自于个人学习以及工作中所用到的知识。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-21T16:22:49.528Z">
+<meta property="og:updated_time" content="2019-01-24T10:32:14.035Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="NGINX内置变量参数详解">
-<meta name="twitter:description" content="NGINX 内置变量参数详解">
+<meta name="twitter:title" content="置顶  Docker文章目录">
+<meta name="twitter:description" content="实战篇关于实战篇：主来来自于个人学习以及工作中所用到的知识。">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -51,7 +51,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>NGINX内置变量参数详解 | 侯海云的个人网站</title>
+<title>置顶  Docker文章目录 | 侯海云的个人网站</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -218,11 +218,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Nginx-Built-in-Variable" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Docker-Catalog" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2019/01/21/Nginx-Built-in-Variable/" class="article-date">
-      <time datetime="2019-01-21T16:17:54.000Z" itemprop="datePublished">2019-01-21</time>
+      <a href="/2019/01/28/Docker-Catalog/" class="article-date">
+      <time datetime="2019-01-28T12:08:12.000Z" itemprop="datePublished">2019-01-28</time>
 </a>
 
 
@@ -237,7 +237,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      NGINX内置变量参数详解
+      置顶  Docker文章目录
     </h1>
   
 
@@ -246,13 +246,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Nginx/">Nginx</a><a class="article-category-link" href="/categories/Nginx/NGINX内置变量参数详解/">NGINX内置变量参数详解</a>
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/Docker-文章目录/">Docker 文章目录</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -262,10 +262,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="NGINX-内置变量参数详解"><a href="#NGINX-内置变量参数详解" class="headerlink" title="NGINX 内置变量参数详解"></a>NGINX 内置变量参数详解</h3><a id="more"></a>
-<p>参考：<a href="http://nginx.org/en/docs/varindex.html" target="_blank" rel="noopener">http://nginx.org/en/docs/varindex.html</a> </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>args                    #请求中的参数值</span><br><span class="line"><span class="meta">$</span>query_string            #同 $args</span><br><span class="line"><span class="meta">$</span>arg_NAME                #GET请求中NAME的值</span><br><span class="line"><span class="meta">$</span>is_args                 #如果请求中有参数，值为"?"，否则为空字符串</span><br><span class="line"><span class="meta">$</span>uri                     #请求中的当前URI(不带请求参数，参数位于$args)，可以不同于浏览器传递的$request_uri的值，它可以通过内部重定向，或者使用index指令进行修改，$uri不包含主机名，如"/foo/bar.html"。</span><br><span class="line"><span class="meta">$</span>document_uri            #同 $uri</span><br><span class="line"><span class="meta">$</span>document_root           #当前请求的文档根目录或别名</span><br><span class="line"><span class="meta">$</span>host                    #优先级：HTTP请求行的主机名&gt;"HOST"请求头字段&gt;符合请求的服务器名.请求中的主机头字段，如果请求中的主机头不可用，则为服务器处理请求的服务器名称</span><br><span class="line"><span class="meta">$</span>hostname                #主机名</span><br><span class="line"><span class="meta">$</span>https                   #如果开启了SSL安全模式，值为"on"，否则为空字符串。</span><br><span class="line"><span class="meta">$</span>binary_remote_addr      #客户端地址的二进制形式，固定长度为4个字节</span><br><span class="line"><span class="meta">$</span>body_bytes_sent         #传输给客户端的字节数，响应头不计算在内；这个变量和Apache的mod_log_config模块中的"%B"参数保持兼容</span><br><span class="line"><span class="meta">$</span>bytes_sent              #传输给客户端的字节数</span><br><span class="line"><span class="meta">$</span>connection              #TCP连接的序列号</span><br><span class="line"><span class="meta">$</span>connection_requests     #TCP连接当前的请求数量</span><br><span class="line"><span class="meta">$</span>content_length          #"Content-Length" 请求头字段</span><br><span class="line"><span class="meta">$</span>content_type            #"Content-Type" 请求头字段</span><br><span class="line"><span class="meta">$</span>cookie_name             #cookie名称</span><br><span class="line"><span class="meta">$</span>limit_rate              #用于设置响应的速度限制</span><br><span class="line"><span class="meta">$</span>msec                    #当前的Unix时间戳</span><br><span class="line"><span class="meta">$</span>nginx_version           #nginx版本</span><br><span class="line"><span class="meta">$</span>pid                     #工作进程的PID</span><br><span class="line"><span class="meta">$</span>pipe                    #如果请求来自管道通信，值为"p"，否则为"."</span><br><span class="line"><span class="meta">$</span>proxy_protocol_addr     #获取代理访问服务器的客户端地址，如果是直接访问，该值为空字符串</span><br><span class="line"><span class="meta">$</span>realpath_root           #当前请求的文档根目录或别名的真实路径，会将所有符号连接转换为真实路径</span><br><span class="line"><span class="meta">$</span>remote_addr             #客户端地址</span><br><span class="line"><span class="meta">$</span>remote_port             #客户端端口</span><br><span class="line"><span class="meta">$</span>remote_user             #用于HTTP基础认证服务的用户名</span><br><span class="line"><span class="meta">$</span>request                 #代表客户端的请求地址、方法和协议，如：GET /ff.php?a=13 HTTP/1.1</span><br><span class="line"><span class="meta">$</span>request_body            #客户端的请求主体：此变量可在location中使用，将请求主体通过proxy_pass，fastcgi_pass，uwsgi_pass和scgi_pass传递给下一级的代理服务器</span><br><span class="line"><span class="meta">$</span>request_body_file       #将客户端请求主体保存在临时文件中。文件处理结束后，此文件需删除。如果需要之一开启此功能，需要设置client_body_in_file_only。如果将次文件传 递给后端的代理服务器，需要禁用request body，即设置proxy_pass_request_body off，fastcgi_pass_request_body off，uwsgi_pass_request_body off，or scgi_pass_request_body off</span><br><span class="line"><span class="meta">$</span>request_completion      #如果请求成功，值为"OK"，如果请求未完成或者请求不是一个范围请求的最后一部分，则为空</span><br><span class="line"><span class="meta">$</span>request_filename        #当前连接请求的文件路径，由root或alias指令与URI请求生成</span><br><span class="line"><span class="meta">$</span>request_length          #请求的长度 (包括请求的地址，http请求头和请求主体)</span><br><span class="line"><span class="meta">$</span>request_method          #HTTP请求方法，通常为"GET"或"POST"</span><br><span class="line"><span class="meta">$</span>request_time            #处理客户端请求使用的时间,单位为秒，精度毫秒； 从读入客户端的第一个字节开始，直到把最后一个字符发送给客户端后进行日志写入为止。</span><br><span class="line"><span class="meta">$</span>request_uri             #这个变量等于包含一些客户端请求参数的原始URI，它无法修改，请查看$uri更改或重写URI，不包含主机名，例如："/index/test.php?arg=freemouse"</span><br><span class="line"><span class="meta">$</span>scheme                  #请求使用的Web协议，"http" 或 "https"</span><br><span class="line"><span class="meta">$</span>server_addr             #服务器端地址，需要注意的是：为了避免访问linux系统内核，应将ip地址提前设置在配置文件中</span><br><span class="line"><span class="meta">$</span>server_name             #服务器名</span><br><span class="line"><span class="meta">$</span>server_port             #服务器端口</span><br><span class="line"><span class="meta">$</span>server_protocol         #服务器的HTTP版本，通常为 "HTTP/1.0" 或 "HTTP/1.1"</span><br><span class="line"><span class="meta">$</span>status                  #HTTP响应代码</span><br><span class="line"><span class="meta">$</span>time_iso8601            #服务器时间的ISO 8610格式</span><br><span class="line"><span class="meta">$</span>time_local              #服务器时间（LOG Format 格式）</span><br><span class="line"><span class="meta">$</span>cookie_NAME             #客户端请求Header头中的cookie变量，前缀"$cookie_"加上cookie名称的变量，该变量的值即为cookie名称的值</span><br><span class="line"><span class="meta">$</span>http_NAME               #匹配任意请求头字段；变量名中的后半部分NAME可以替换成任意请求头字段，如在配置文件中需要获取http请求头："Accept-Language"，$http_accept_language即可</span><br><span class="line"><span class="meta">$</span>http_cookie</span><br><span class="line"><span class="meta">$</span>http_host               #请求地址，即浏览器中你输入的地址（IP或域名）</span><br><span class="line"><span class="meta">$</span>http_referer            #url跳转来源,用来记录从那个页面链接访问过来的</span><br><span class="line"><span class="meta">$</span>http_user_agent         #用户终端浏览器等信息</span><br><span class="line"><span class="meta">$</span>http_x_forwarded_for</span><br><span class="line"><span class="meta">$</span>sent_http_NAME          #可以设置任意http响应头字段；变量名中的后半部分NAME可以替换成任意响应头字段，如需要设置响应头Content-length，$sent_http_content_length即可</span><br><span class="line"><span class="meta">$</span>sent_http_cache_control</span><br><span class="line"><span class="meta">$</span>sent_http_connection</span><br><span class="line"><span class="meta">$</span>sent_http_content_type</span><br><span class="line"><span class="meta">$</span>sent_http_keep_alive</span><br><span class="line"><span class="meta">$</span>sent_http_last_modified</span><br><span class="line"><span class="meta">$</span>sent_http_location</span><br><span class="line"><span class="meta">$</span>sent_http_transfer_encoding</span><br></pre></td></tr></table></figure>
-
+        <h3 id="实战篇"><a href="#实战篇" class="headerlink" title="实战篇"></a>实战篇</h3><p><strong>关于实战篇</strong>：主来来自于个人学习以及工作中所用到的知识。</p>
+<a id="more"></a>
+<h4 id="一、IaaS-PaaS-SaaS的区别"><a href="#一、IaaS-PaaS-SaaS的区别" class="headerlink" title="一、IaaS, PaaS, SaaS的区别"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/IaaS-PaaS-SaaS/"><strong>一、IaaS, PaaS, SaaS的区别</strong></a></center></h4><h4 id="二、Docker简介"><a href="#二、Docker简介" class="headerlink" title="二、Docker简介"></a><center><a href="https://www.ihaiyun.cc/2017/12/23/Docker-Jianjie/"><strong>二、Docker简介</strong></a></center></h4><h4 id="三、为什么要用Docker？"><a href="#三、为什么要用Docker？" class="headerlink" title="三、为什么要用Docker？"></a><center><a href="https://www.ihaiyun.cc/2017/12/23/Docker-Why-Use/"><strong>三、为什么要用Docker？</strong></a></center></h4><h4 id="四、Docker安装"><a href="#四、Docker安装" class="headerlink" title="四、Docker安装"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-Install/"><strong>四、Docker安装</strong></a></center></h4><h4 id="五、Docker镜像管理及容器管理"><a href="#五、Docker镜像管理及容器管理" class="headerlink" title="五、Docker镜像管理及容器管理"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-manage-1/"><strong>五、Docker镜像管理及容器管理</strong></a></center></h4><h4 id="六、通过commit方式制作Docker镜像"><a href="#六、通过commit方式制作Docker镜像" class="headerlink" title="六、通过commit方式制作Docker镜像"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-commit-image/"><strong>六、通过commit方式制作Docker镜像</strong></a></center></h4><h4 id="七、Docker数据卷"><a href="#七、Docker数据卷" class="headerlink" title="七、Docker数据卷"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-volume/"><strong>七、Docker数据卷</strong></a></center></h4><h4 id="八、Docker网络管理"><a href="#八、Docker网络管理" class="headerlink" title="八、Docker网络管理**"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-network/">八、Docker网络管理**</a></center></h4><h4 id="九、Dockerfile编写"><a href="#九、Dockerfile编写" class="headerlink" title="九、Dockerfile编写"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-dockerfile/"><strong>九、Dockerfile编写</strong></a></center></h4><h4 id="十、Docker构建私有仓库"><a href="#十、Docker构建私有仓库" class="headerlink" title="十、Docker构建私有仓库"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-repertory/"><strong>十、Docker构建私有仓库</strong></a></center></h4><h4 id="十一、使用vmware-harbor构建镜像仓库"><a href="#十一、使用vmware-harbor构建镜像仓库" class="headerlink" title="十一、使用vmware harbor构建镜像仓库"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-harbor/"><strong>十一、使用vmware harbor构建镜像仓库</strong></a></center></h4><h3 id="原理篇"><a href="#原理篇" class="headerlink" title="原理篇"></a>原理篇</h3><p><strong>关于原理篇</strong>：大多数文章都摘抄于《Docker 容器与云》(第二版)。非常感谢浙江大学SEL实验室写出如此优秀的书籍。</p>
+<h4 id="十二、namespace资源隔离"><a href="#十二、namespace资源隔离" class="headerlink" title="十二、namespace资源隔离"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-namespace/"><strong>十二、namespace资源隔离</strong></a></center></h4><h4 id="十三、cgroups资源限制"><a href="#十三、cgroups资源限制" class="headerlink" title="十三、cgroups资源限制"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-cgroups/"><strong>十三、cgroups资源限制</strong></a></center></h4><h4 id="十四、Docker架构概览"><a href="#十四、Docker架构概览" class="headerlink" title="十四、Docker架构概览"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-arch/"><strong>十四、Docker架构概览</strong></a></center></h4><h4 id="十五、client-和-daemon"><a href="#十五、client-和-daemon" class="headerlink" title="十五、client 和 daemon"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-client-daemon/"><strong>十五、client 和 daemon</strong></a></center></h4><h4 id="十六、libcontainer"><a href="#十六、libcontainer" class="headerlink" title="十六、libcontainer"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-libcontainer/"><strong>十六、libcontainer</strong></a></center></h4><h4 id="十七、Docker镜像管理"><a href="#十七、Docker镜像管理" class="headerlink" title="十七、Docker镜像管理"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-manage-image/"><strong>十七、Docker镜像管理</strong></a></center></h4><h4 id="十七、Docker存储管理"><a href="#十七、Docker存储管理" class="headerlink" title="十七、Docker存储管理"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-storage-manage/"><strong>十七、Docker存储管理</strong></a></center></h4><h4 id="十八、Docker数据卷"><a href="#十八、Docker数据卷" class="headerlink" title="十八、Docker数据卷"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-volume-2/"><strong>十八、Docker数据卷</strong></a></center></h4><h4 id="十九、Docker网络管理"><a href="#十九、Docker网络管理" class="headerlink" title="十九、Docker网络管理"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-network-2/"><strong>十九、Docker网络管理</strong></a></center></h4><h4 id="二十、Dcoekr与容器安全"><a href="#二十、Dcoekr与容器安全" class="headerlink" title="二十、Dcoekr与容器安全"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-security/"><strong>二十、Dcoekr与容器安全</strong></a></center></h4><h4 id="二十一、Docker高级网络实践"><a href="#二十一、Docker高级网络实践" class="headerlink" title="二十一、Docker高级网络实践"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-network-3/"><strong>二十一、Docker高级网络实践</strong></a></center></h4><h4 id="二十二、Dockerfile的使用"><a href="#二十二、Dockerfile的使用" class="headerlink" title="二十二、Dockerfile的使用"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-dockerfile-use/"><strong>二十二、Dockerfile的使用</strong></a></center></h4><h4 id="二十三、Dockerfile-实践心得"><a href="#二十三、Dockerfile-实践心得" class="headerlink" title="二十三、Dockerfile 实践心得"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-dockerfile-1/"><strong>二十三、Dockerfile 实践心得</strong></a></center></h4><h4 id="二十四、Docker容器的监控手段"><a href="#二十四、Docker容器的监控手段" class="headerlink" title="二十四、Docker容器的监控手段"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-monitor/"><strong>二十四、Docker容器的监控手段</strong></a></center></h4><h4 id="二十五、容器化思维"><a href="#二十五、容器化思维" class="headerlink" title="二十五、容器化思维"></a><center><a href="https://www.ihaiyun.cc/2018/07/21/Docker-container/"><strong>二十五、容器化思维</strong></a></center></h4>
       
     </div>
     
@@ -273,13 +273,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2019/01/21/Nginx-Built-in-Variable/">NGINX内置变量参数详解</a></p>
+        <p><span>本文标题:</span><a href="/2019/01/28/Docker-Catalog/">置顶  Docker文章目录</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
-        <p><span>发布时间:</span>2019-01-21, 16:17:54</p>
-        <p><span>最后更新:</span>2019-01-21, 16:22:49</p>
+        <p><span>发布时间:</span>2019-01-28, 12:08:12</p>
+        <p><span>最后更新:</span>2019-01-24, 10:32:14</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2019/01/21/Nginx-Built-in-Variable/" title="NGINX内置变量参数详解">https://www.ihaiyun.cc/2019/01/21/Nginx-Built-in-Variable/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2019/01/21/Nginx-Built-in-Variable/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/01/28/Docker-Catalog/" title="置顶  Docker文章目录">https://www.ihaiyun.cc/2019/01/28/Docker-Catalog/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2019/01/28/Docker-Catalog/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -291,16 +291,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2019/01/21/Nginx-Jump-Accord-Phone/">
-                    Nginx根据手机电脑进行不同跳转
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/11/25/Other-1/">
-                    良好的用户体验几句箴言
+                <a href="/2019/01/21/Linux-ClamAV/">
+                    linux杀毒软件ClamAV
                 </a>
             </div>
         
@@ -312,7 +306,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#NGINX-内置变量参数详解"><span class="toc-number">1.</span> <span class="toc-text">NGINX 内置变量参数详解</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#实战篇"><span class="toc-number">1.</span> <span class="toc-text">实战篇</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、IaaS-PaaS-SaaS的区别"><span class="toc-number">1.1.</span> <span class="toc-text">一、IaaS, PaaS, SaaS的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、Docker简介"><span class="toc-number">1.2.</span> <span class="toc-text">二、Docker简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、为什么要用Docker？"><span class="toc-number">1.3.</span> <span class="toc-text">三、为什么要用Docker？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#四、Docker安装"><span class="toc-number">1.4.</span> <span class="toc-text">四、Docker安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#五、Docker镜像管理及容器管理"><span class="toc-number">1.5.</span> <span class="toc-text">五、Docker镜像管理及容器管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#六、通过commit方式制作Docker镜像"><span class="toc-number">1.6.</span> <span class="toc-text">六、通过commit方式制作Docker镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#七、Docker数据卷"><span class="toc-number">1.7.</span> <span class="toc-text">七、Docker数据卷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#八、Docker网络管理"><span class="toc-number">1.8.</span> <span class="toc-text">八、Docker网络管理**</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#九、Dockerfile编写"><span class="toc-number">1.9.</span> <span class="toc-text">九、Dockerfile编写</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十、Docker构建私有仓库"><span class="toc-number">1.10.</span> <span class="toc-text">十、Docker构建私有仓库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十一、使用vmware-harbor构建镜像仓库"><span class="toc-number">1.11.</span> <span class="toc-text">十一、使用vmware harbor构建镜像仓库</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原理篇"><span class="toc-number">2.</span> <span class="toc-text">原理篇</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#十二、namespace资源隔离"><span class="toc-number">2.1.</span> <span class="toc-text">十二、namespace资源隔离</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十三、cgroups资源限制"><span class="toc-number">2.2.</span> <span class="toc-text">十三、cgroups资源限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十四、Docker架构概览"><span class="toc-number">2.3.</span> <span class="toc-text">十四、Docker架构概览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十五、client-和-daemon"><span class="toc-number">2.4.</span> <span class="toc-text">十五、client 和 daemon</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十六、libcontainer"><span class="toc-number">2.5.</span> <span class="toc-text">十六、libcontainer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十七、Docker镜像管理"><span class="toc-number">2.6.</span> <span class="toc-text">十七、Docker镜像管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十七、Docker存储管理"><span class="toc-number">2.7.</span> <span class="toc-text">十七、Docker存储管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十八、Docker数据卷"><span class="toc-number">2.8.</span> <span class="toc-text">十八、Docker数据卷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#十九、Docker网络管理"><span class="toc-number">2.9.</span> <span class="toc-text">十九、Docker网络管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二十、Dcoekr与容器安全"><span class="toc-number">2.10.</span> <span class="toc-text">二十、Dcoekr与容器安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二十一、Docker高级网络实践"><span class="toc-number">2.11.</span> <span class="toc-text">二十一、Docker高级网络实践</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二十二、Dockerfile的使用"><span class="toc-number">2.12.</span> <span class="toc-text">二十二、Dockerfile的使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二十三、Dockerfile-实践心得"><span class="toc-number">2.13.</span> <span class="toc-text">二十三、Dockerfile 实践心得</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二十四、Docker容器的监控手段"><span class="toc-number">2.14.</span> <span class="toc-text">二十四、Docker容器的监控手段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二十五、容器化思维"><span class="toc-number">2.15.</span> <span class="toc-text">二十五、容器化思维</span></a></li></ol></li></ol>
         
     </div>
     <style>
@@ -363,15 +357,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2019/01/21/Nginx-Jump-Accord-Phone/" title="上一篇: Nginx根据手机电脑进行不同跳转">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/11/25/Other-1/" title="下一篇: 良好的用户体验几句箴言">
+            <a href="/2019/01/21/Linux-ClamAV/" title="下一篇: linux杀毒软件ClamAV">
                 <i class="fa fa-angle-right"></i>
             </a>
         
