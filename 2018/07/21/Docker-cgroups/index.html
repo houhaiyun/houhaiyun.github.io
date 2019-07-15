@@ -11,7 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="format-detection" content="telephone=no" />
-<meta name="author" content="侯海云" />
+<meta name="author" content="Peter" />
 
 
 
@@ -20,7 +20,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="cgroups资源限制">
 <meta property="og:url" content="https://www.ihaiyun.cc/2018/07/21/Docker-cgroups/index.html">
-<meta property="og:site_name" content="侯海云的个人网站">
+<meta property="og:site_name" content="Peter&#39;s technology stack.">
 <meta property="og:description" content="上一节中，我们了解了Docker背后使用额资源隔离技术namespace，通过系统调用构建一个相对隔离的shell环境，也可以称之为简单的“容器”。这一届将讲解另一个强大的内核工具——cgroups。它不仅可以限制被namespace隔离起来的资源，还可以为资源设置权重、计算使用量、操控任务（进程或线程）启停等。在本节最后介绍完基本概念后，将详细讲解Docker中使用到的cgroups内容。  注">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://houhaiyun.github.io/img/images/Docker-6.png">
@@ -56,7 +56,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>cgroups资源限制 | 侯海云的个人网站</title>
+<title>cgroups资源限制 | Peter&#39;s technology stack.</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -101,11 +101,11 @@
             <img src="/img/avatar.png" class="animated zoomIn">
         </a>
         <hgroup>
-          <h1 class="header-author"><a href="/">侯海云</a></h1>
+          <h1 class="header-author"><a href="/">Peter</a></h1>
         </hgroup>
 
         
-        <p class="header-subtitle">自主、跨界、终身学习!</p>
+        <p class="header-subtitle">Keep learn!</p>
         
 
         
@@ -181,7 +181,7 @@
       <nav id="mobile-nav">
       <div class="overlay">
           <div class="slider-trigger"></div>
-          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">侯海云</a></h1>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Peter</a></h1>
       </div>
     <div class="intrude-less">
         <header id="header" class="inner">
@@ -189,10 +189,10 @@
                 <img src="/img/avatar.png" class="animated zoomIn">
             </a>
             <hgroup>
-              <h1 class="header-author"><a href="/" title="回到主页">侯海云</a></h1>
+              <h1 class="header-author"><a href="/" title="回到主页">Peter</a></h1>
             </hgroup>
             
-            <p class="header-subtitle">自主、跨界、终身学习!</p>
+            <p class="header-subtitle">Keep learn!</p>
             
             <nav class="header-menu">
                 <ul>
@@ -372,12 +372,12 @@
     
     <div class="copyright">
         <p><span>本文标题:</span><a href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">侯海云</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Peter</a></p>
         <p><span>发布时间:</span>2018-07-21, 11:09:09</p>
         <p><span>最后更新:</span>2018-07-21, 11:10:45</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/07/21/Docker-cgroups/" title="cgroups资源限制">https://www.ihaiyun.cc/2018/07/21/Docker-cgroups/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/07/21/Docker-cgroups/　　作者: 侯海云" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span class="copy-path" data-clipboard-text="原文: https://www.ihaiyun.cc/2018/07/21/Docker-cgroups/　　作者: Peter" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -490,7 +490,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2017-2019 侯海云
+                2017-2019 Peter
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
