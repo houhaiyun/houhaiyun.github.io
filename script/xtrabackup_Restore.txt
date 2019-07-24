@@ -1,0 +1,63 @@
+#!/bin/sh
+#Description: MySQL backup script
+#Author:Peter
+#Date:2019.07.10
+
+
+source /etc/init.d/functions
+
+
+USERNAME=root
+PASSWORD=root123456
+HOST=192.168.8.14
+NULL=/dev/null
+# 备份次数
+BACKUP_NUMBER=3
+RESTOR_DIR=/Backup/Bak_2019_07_14_19_16_02
+MYSQL_DATADIR=/var/lib/mysql
+
+
+CHECK_BAK_DIR () {
+	[ !d $RESTOR_DIR ] && echo "Restore dir not exist..." && exit 2
+}
+
+
+# 判断执行状态函数
+CHECK_STATUS () {
+    if [ $? -eq 0 ] ; then      
+        action "$1"  /bin/true
+    else
+        action "$1" /bin/false
+    fi  
+}
+
+# 准备恢复函数
+READY_RESTOR () {
+	xtrabackup --prepare --apply-log-only --target-dir=$RESTOR_DIR/0	&> $NULL
+	CHECK_STATUS "Ready restor"
+}
+
+
+
+# 合并增量备份函数
+APPLY_LOG () {
+	for LOG in `seq 1 $BACKUP_NUMBER`
+	do
+		let NUMBER+=1
+		xtrabackup --prepare --apply-log-only \
+		--target-dir=$RESTOR_DIR/0/ \
+		--incremental-dir=$RESTOR_DIR/$LOG/ &> $NULL
+		CHECK_STATUS "Apply log $NUMBER"	
+	done
+}
+
+
+RESTORE_LOG () {
+	rsync -avrP $RESTOR_DIR/0/ /var/lib/mysql/ &> $NULL
+	CHECK_STATUS "Restore log"
+}
+
+
+READY_RESTOR
+APPLY_LOG
+RESTORE_LOG
