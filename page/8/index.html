@@ -209,6 +209,78 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Docker-cgroups" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/21/Docker-cgroups/" class="article-date">
+      <time datetime="2018-07-21T11:09:09.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/21/Docker-cgroups/">cgroups资源限制</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p>上一节中，我们了解了Docker背后使用额资源隔离技术namespace，通过系统调用构建一个相对隔离的shell环境，也可以称之为简单的“容器”。这一届将讲解另一个强大的内核工具——cgroups。它不仅可以限制被namespace隔离起来的资源，还可以为资源设置权重、计算使用量、操控任务（进程或线程）启停等。在本节最后介绍完基本概念后，将详细讲解Docker中使用到的cgroups内容。</p>
+<blockquote>
+<p>注意：在Linux系统中，内核本身的调度和管理并不对进程和线程进行区分，只根据clone创建时传入参数的不同，来从概念上区别进程和线程，所以本节同一称之为任务。</p>
+</blockquote>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/cgroups资源限制/">cgroups资源限制</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2018/07/21/Docker-cgroups/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Docker-namespace" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -822,76 +894,6 @@
       
         <p class="article-more-link">
           <a href="/2018/07/21/Docker-Install/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-IaaS-PaaS-SaaS" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/07/21/IaaS-PaaS-SaaS/" class="article-date">
-      <time datetime="2018-07-21T10:25:10.000Z" itemprop="datePublished">2018-07-21</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/21/IaaS-PaaS-SaaS/">IaaS, PaaS, SaaS的区别</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="IaaS-PaaS-SaaS简介"><a href="#IaaS-PaaS-SaaS简介" class="headerlink" title="IaaS, PaaS, SaaS简介"></a>IaaS, PaaS, SaaS简介</h3><p>越来越多的软件，开始采用云服务。</p>
-<p>云服务只是一个统称，可以分成三大类。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/容器/">容器</a><a class="article-category-link" href="/categories/容器/IaaS-PaaS-SaaS的区别/">IaaS, PaaS, SaaS的区别</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2018/07/21/IaaS-PaaS-SaaS/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
