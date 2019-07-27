@@ -81,19 +81,19 @@
 <li><strong>答：</strong> 当然访问的是<code>configuration A</code>中的内容了。为什么呢？因为：利用排除法来解决此问题，首先我们访问的是/，就把后面的三项都排除了，最后就剩下A和B了。=比不带符号的优先级要高，所以就是A了。</li>
 </ul>
 <ul>
-<li><strong>问：</strong> 假如我们访问：<a href="http://www.ihaiyun.cc/index.html将会匹配那个呢？">http://www.ihaiyun.cc/index.html将会匹配那个呢？</a></li>
+<li><strong>问：</strong> 假如我们访问：<a href="http://www.ihaiyun.cc/index.html将会匹配那个呢？" target="_blank" rel="noopener">http://www.ihaiyun.cc/index.html将会匹配那个呢？</a></li>
 <li><strong>答：</strong> 当然访问的是<code>configuration B</code>中的内容了。为什么呢？因为：指定了路径。</li>
 </ul>
 <ul>
-<li><strong>问：</strong> 假如我们访问：<a href="http://www.ihaiyun.cc/documents/index.html将会匹配那个呢？">http://www.ihaiyun.cc/documents/index.html将会匹配那个呢？</a></li>
+<li><strong>问：</strong> 假如我们访问：<a href="http://www.ihaiyun.cc/documents/index.html将会匹配那个呢？" target="_blank" rel="noopener">http://www.ihaiyun.cc/documents/index.html将会匹配那个呢？</a></li>
 <li><strong>答：</strong> 当然访问的是<code>configuration C</code>中的内容了。为什么呢？因为：指定了路径。</li>
 </ul>
 <ul>
-<li><strong>问：</strong> 假如我们访问：<a href="http://www.ihaiyun.cc/documents/images/test.jpg将会匹配那个呢？">http://www.ihaiyun.cc/documents/images/test.jpg将会匹配那个呢？</a></li>
+<li><strong>问：</strong> 假如我们访问：<a href="http://www.ihaiyun.cc/documents/images/test.jpg将会匹配那个呢？" target="_blank" rel="noopener">http://www.ihaiyun.cc/documents/images/test.jpg将会匹配那个呢？</a></li>
 <li><strong>答：</strong> 当然访问的是<code>configuration D</code>中的内容了。为什么呢？因为：指定了路径。</li>
 </ul>
 <ul>
-<li><strong>问：</strong> 假如我们访问：<a href="http://www.ihaiyun.cc/documents/test.jpg将会匹配那个呢？">http://www.ihaiyun.cc/documents/test.jpg将会匹配那个呢？</a></li>
+<li><strong>问：</strong> 假如我们访问：<a href="http://www.ihaiyun.cc/documents/test.jpg将会匹配那个呢？" target="_blank" rel="noopener">http://www.ihaiyun.cc/documents/test.jpg将会匹配那个呢？</a></li>
 <li><strong>答：</strong> 当然访问的是<code>configuration E</code>中的内容了。为什么呢？因为：只有E能配置到此URL，且没有比E优先级高的location</li>
 </ul>
 <h4 id="4-alias-path"><a href="#4-alias-path" class="headerlink" title="4.  alias path;"></a>4.  alias path;</h4><p>路径别名，文档映射的另一种机制；仅能用于location上下文</p>
