@@ -1,0 +1,88 @@
+#!/bin/sh
+#Description: MySQL backup script
+#Author:Peter
+#Date:2019.07.10
+
+
+source /etc/init.d/functions
+
+
+USERNAME=root
+PASSWORD=root123456
+HOST=192.168.8.14
+BACKUP_DIR=/Backup
+NULL=/dev/null
+# 备份次数
+BACKUP_NUMBER=3
+# 增量备份时间间隔单位为分钟
+BACKUP_INTERVAL=1
+let BACKUP_INTERVALM=$BACKUP_INTERVAL*60
+
+
+CHECK_BAK_DIR () {
+	DIR_NAME=Bak_`date +%Y_%m_%d_%H_%M_%S`
+
+	for i in `seq 0 $BACKUP_NUMBER`
+	do	
+		mkdir -p  $BACKUP_DIR/$DIR_NAME/$i
+	done
+}
+
+
+# 判断执行状态函数
+CHECK_STATUS () {
+    if [ $? -eq 0 ] ; then      
+        action "$1"  /bin/true
+    else
+        action "$1" /bin/false
+    fi  
+}
+
+
+# 全量备份函数
+FULL_BACKUP () {
+
+	xtrabackup  --host=$HOST --user=$USERNAME --password=$PASSWORD --backup \
+	--target-dir=$BACKUP_DIR/$DIR_NAME/0/  &> $NULL
+
+	CHECK_STATUS "Full backup"
+}
+
+
+
+# 增量备份函数
+INCREMENTAL_BACKUP () {
+
+	xtrabackup  --host=$HOST --user=$USERNAME --password=$PASSWORD --backup \
+	--target-dir=$BACKUP_DIR/$DIR_NAME/$1/  --incremental-basedir=$BACKUP_DIR/$DIR_NAME/$2/	 &> $NULL
+	CHECK_STATUS "Incremental backup"
+}
+
+
+
+# 控制增量备份次数
+LIMIT_BACKUP_TIMES () {
+#	CHECK_BAK_DIR
+	
+	echo -e "\nFull backup Start: `date '+%F %T'`" >> $BACKUP_DIR/$DIR_NAME/backup.info
+	FULL_BACKUP 
+	echo -e "Full backup Stop: `date '+%F %T'` " >> $BACKUP_DIR/$DIR_NAME/backup.info
+	sleep $BACKUP_INTERVALM
+
+	for NUMBER in `seq 1 $BACKUP_NUMBER`
+	do
+		echo -e "\nIncremental backup times: $NUMBER. Start: `date '+%F %T'`" >> $BACKUP_DIR/$DIR_NAME/backup.info
+		let NUMBER2=$NUMBER-1
+		INCREMENTAL_BACKUP $NUMBER $NUMBER2 
+		echo -e "Incremental backup times: $NUMBER. Stop: `date '+%F %T'`" >> $BACKUP_DIR/$DIR_NAME/backup.info
+		sleep $BACKUP_INTERVALM
+	done
+	
+}
+
+
+while true 
+do
+	CHECK_BAK_DIR
+	LIMIT_BACKUP_TIMES
+done
