@@ -1,4 +1,10 @@
-<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Keep learn! | 愚昧无知。 ▄︻┳═一</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><header class="wrapper header"><div class="container blog-title"><a class="title" id="logo" href="/.">Keep learn!</a><span class="subtitle">愚昧无知。 ▄︻┳═一</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div><input id="menu" type="checkbox"><div class="container nav-items"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></div></header><article class="wrapper"><div class="container entries" id="index-main"><div class="post-entry"><div class="post-desc"><div class="post-title"><a href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></div><div class="post-content"><h3 id="镜像的生成途径"><a href="#镜像的生成途径" class="headerlink" title="镜像的生成途径"></a>镜像的生成途径</h3><ol>
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Keep learn! | 愚昧无知。 ▄︻┳═一</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><header class="wrapper header"><div class="container blog-title"><a class="title" id="logo" href="/.">Keep learn!</a><span class="subtitle">愚昧无知。 ▄︻┳═一</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div><input id="menu" type="checkbox"><div class="container nav-items"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></div></header><article class="wrapper"><div class="container entries" id="index-main"><div class="post-entry"><div class="post-desc"><div class="post-title"><a href="/2018/07/21/Docker-volume/">Docker数据卷</a></div><div class="post-content"><h3 id="容器存储数据存在的问题"><a href="#容器存储数据存在的问题" class="headerlink" title="容器存储数据存在的问题"></a>容器存储数据存在的问题</h3><p>关闭并重启容器，其数据不受影响；但删除容器，则其更改的数据将会全部丢失；</p>
+<p>存在的问题：</p>
+<ol>
+<li>存储于联合文件系统中，不易于宿主机的访问；</li>
+<li>容器间数据共享不便；</li>
+<li>删除容器其数据会丢失；</li>
+</ol></div><div class="post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Docker/">Docker</a></div><div class="post-time">2018-07-21</div></div></div></div><div class="post-entry"><div class="post-desc"><div class="post-title"><a href="/2018/07/21/Docker-commit-image/">通过commit方式制作Docker镜像</a></div><div class="post-content"><h3 id="镜像的生成途径"><a href="#镜像的生成途径" class="headerlink" title="镜像的生成途径"></a>镜像的生成途径</h3><ol>
 <li>Dockerfile</li>
 <li>基于容器的制作</li>
 <li>Docker Hub automated builds</li>
@@ -14,54 +20,7 @@
 </ul></div><div class="post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Jenkins/">Jenkins</a></div><div class="post-time">2018-07-05</div></div></div></div><div class="post-entry"><div class="post-desc"><div class="post-title"><a href="/2018/07/04/CI/">持续集成是什么?</a></div><div class="post-content"><p>互联网软件的开发和发布，已经形成了一套标准流程，最重要的组成部分就是持续集成（Continuous integration，简称CI）。</p>
 <p>本文简要介绍持续集成的概念和做法。</p>
 <center><img src="https://houhaiyun.github.io/img/images/Jenkins-1.png" title="持续集成"></center></div><div class="post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/CI-CD/">CI/CD</a></div><div class="post-time">2018-07-04</div></div></div></div><div class="post-entry"><div class="post-desc"><div class="post-title"><a href="/2018/07/03/document-style-guide/">中文技术文档的写作规范</a></div><div class="post-content"><p>中文技术文档的写作规范。</p>
-<p><strong>本规范转自 Ruan YiFeng ， GitHub 地址：<a href="https://github.com/ruanyf/document-style-guide" target="_blank" rel="noopener">https://github.com/ruanyf/document-style-guide</a></strong></p></div><div class="post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/相关规范/">相关规范</a></div><div class="post-time">2018-07-03</div></div></div></div><div class="post-entry"><div class="post-desc"><div class="post-title"><a href="/2018/07/03/ELK-Deploy/">ELK 6.3 部署</a></div><div class="post-content"><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><table>
-<thead>
-<tr>
-<th style="text-align:center"><strong>服务器</strong></th>
-<th style="text-align:center"><strong>IP</strong></th>
-<th style="text-align:center"><strong>主机名</strong></th>
-<th style="text-align:center"><strong>系统</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Elastic search</td>
-<td style="text-align:center">192.168.8.12</td>
-<td style="text-align:center">ES1.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">Elastic search</td>
-<td style="text-align:center">192.168.8.13</td>
-<td style="text-align:center">ES2.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">Elastic search</td>
-<td style="text-align:center">192.168.814</td>
-<td style="text-align:center">ES3.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">Logstash</td>
-<td style="text-align:center">192.168.8.15</td>
-<td style="text-align:center">Logstash.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">Kibana</td>
-<td style="text-align:center">192.168.8.16</td>
-<td style="text-align:center">Kibana.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-<tr>
-<td style="text-align:center">nginx应用服务器</td>
-<td style="text-align:center">192.168.8.17</td>
-<td style="text-align:center">app.haiyun.com</td>
-<td style="text-align:center">CentOS 7.3</td>
-</tr>
-</tbody>
-</table></div><div class="post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/ELK/">ELK</a></div><div class="post-time">2018-07-03</div></div></div></div></div></article><div class="wrapper page-navigator-wrapper"><div class="page-navigator"><a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a></div></div><footer class="footer wrapper"><div class="social"><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer-content">© 2019 <a href="/" rel="nofollow">Keep learn!</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/hexo-theme-noise">noise</a>.</div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+<p><strong>本规范转自 Ruan YiFeng ， GitHub 地址：<a href="https://github.com/ruanyf/document-style-guide" target="_blank" rel="noopener">https://github.com/ruanyf/document-style-guide</a></strong></p></div><div class="post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/相关规范/">相关规范</a></div><div class="post-time">2018-07-03</div></div></div></div></div></article><div class="wrapper page-navigator-wrapper"><div class="page-navigator"><a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a></div></div><footer class="footer wrapper"><div class="social"><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer-content">© 2019 <a href="/" rel="nofollow">Keep learn!</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/hexo-theme-noise">noise</a>.</div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
   $(".fancybox").fancybox();
 });
 </script></body></html>
