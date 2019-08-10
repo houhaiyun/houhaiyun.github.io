@@ -1,0 +1,84 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>开源监控工具 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-27</div></div></div><div class="container post-header"><h1>开源监控工具</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cacti"><span class="toc-number">1.</span> <span class="toc-text">Cacti</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主要特点"><span class="toc-number">1.1.</span> <span class="toc-text">主要特点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nagios"><span class="toc-number">2.</span> <span class="toc-text">nagios</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主要功能"><span class="toc-number">2.1.</span> <span class="toc-text">主要功能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Zabbix"><span class="toc-number">3.</span> <span class="toc-text">Zabbix</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主要特点-1"><span class="toc-number">3.1.</span> <span class="toc-text">主要特点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">4.</span> <span class="toc-text">致谢</span></a></li></ol></details></div><div class="container post-content"><h3 id="Cacti"><a href="#Cacti" class="headerlink" title="Cacti"></a>Cacti</h3><p><a href="https://www.cacti.net/" target="_blank" rel="noopener">官网：https://www.cacti.net/</a></p>
+<a id="more"></a>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Open-Source-Tools-1.jpg" title="Cacti"></center>
+
+<p><code>Cacti</code>是一个开源的，基于网络的网络监控和绘图工具，被设计为开源的行业标准数据记录工具<code>RRDtool</code> 的前端应用程序。<code>Cacti</code>允许用户以预定的时间间隔轮询服务并绘制结果数据。通常用于绘制诸如<code>CPU</code>负载和网络带宽利用率等指标的时间序列数据。常见的用法是通过简单网络管理协议（<code>SNMP</code>）轮询网络交换机或路由器接口来监视网络流量。</p>
+<p>前端可以处理多个用户，每个都有自己的图形集，因此有时通过使用网络托管提供商（尤其是专用服务器， 虚拟专用服务器，并搭配提供商）来显示带宽统计为他们的顾客。它可以用来配置数据收集本身，允许监测某些设置，而无需手动配置<code>RRDtool</code>。<code>Cacti</code>可以扩展到通过<code>shell</code>脚本和可执行文件来监视任何源代码。</p>
+<p><code>Cacti</code>可以使用两个后端中的一个：<code>“cmd.php”</code>，一个适合较小安装的<code>PHP</code>脚本，或<code>“Spine”</code>（以前称为<code>Cactid</code>），一种基于<code>C</code>的轮询器，可以扩展到数千个主机。</p>
+<p><code>Cacti</code> 是一款 <code>LAMP</code> 应用，它能为各类数据绘制出一个完整的图形框架。</p>
+<h4 id="主要特点"><a href="#主要特点" class="headerlink" title="主要特点"></a>主要特点</h4><ul>
+<li>无限的图形项目</li>
+<li>自动填充支持图形</li>
+<li>图表数据操作</li>
+<li>灵活的数据源</li>
+<li>数据收集在一个非标准的时间跨度</li>
+<li>自定义数据收集脚本</li>
+<li>内置的SNMP支持</li>
+<li>图表模板</li>
+<li>数据源模板</li>
+<li>主机模板</li>
+<li>树，列表以及图形数据的预览视图</li>
+<li>基于用户的管理和安全</li>
+</ul>
+<h3 id="nagios"><a href="#nagios" class="headerlink" title="nagios"></a>nagios</h3><p><a href="https://www.nagios.org/" target="_blank" rel="noopener">官网：https://www.nagios.org/</a></p>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Open-Source-Tools-2.jpg" title="nagios"></center>
+
+<p><code>Nagios</code>是一个流行的电脑系统和网络监控程序，它检测主机和服务，当异常发生和解除时能提醒用户。它是基于<code>GPLv2</code>开发的开源软件，可免费获得及使用。</p>
+<p><code>Nagios</code>原名为<code>NetSaint</code>，由<code>Ethan Galstad</code>开发并维护至今。</p>
+<h4 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h4><ul>
+<li>网络服务监控（<code>SMTP</code>、<code>POP3</code>、<code>HTTP</code>、<code>NNTP</code>、<code>ICMP</code>、<code>SNMP</code>、<code>FTP</code>、<code>SSH</code>）</li>
+<li>主机资源监控（<code>CPU load</code>、<code>disk usage</code>、<code>system logs</code>），也包括<code>Windows</code>主机（使用<code>NSClient++ plugin</code>）</li>
+<li>可以指定自己编写的<code>Plugin</code>通过网络收集数据来监控任何情况（温度、警告……）</li>
+<li>可以通过配置<code>Nagios</code>远程执行插件远程执行脚本</li>
+<li>远程监控支持<code>SSH</code>或<code>SSL</code>加通道方式进行监控</li>
+<li>简单的<code>plugin</code>设计允许用户很容易的开发自己需要的检查服务,支持很多开发语言（<code>shell scripts&gt;</code>、<code>C++</code>、<code>Perl</code>、<code>ruby</code>、<code>Python</code>、<code>PHP</code>、<code>C#</code>等）</li>
+<li>包含很多图形化数据<code>Plugins</code>（<code>Nagiosgraph</code>、<code>Nagiosgrapher</code>、<code>PNP4Nagios</code>等）</li>
+<li>可并行服务检查</li>
+<li>能够定义网络主机的层次, 允许逐级检查, 就是从父主机开始向下检查</li>
+<li>当服务或主机出现问题时发出通告，可通过<code>email</code>, <code>pager</code>, <code>sms</code> 或任意用户自定义的<code>plugin</code>进行通&gt;<br>知</li>
+<li>能够自定义事件处理机制重新激活出问题的服务或主机</li>
+<li>自动日志循环</li>
+<li>支持冗余监控 </li>
+<li>包括<code>Web</code>界面可以查看当前网络状态，通知，问题历史，日志文件等</li>
+</ul>
+<h3 id="Zabbix"><a href="#Zabbix" class="headerlink" title="Zabbix"></a>Zabbix</h3><p><a href="https://www.zabbix.com/" target="_blank" rel="noopener">官网：https://www.zabbix.com/</a></p>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Open-Source-Tools-3.jpg" title="Zabbix"></center>
+
+<p><code>Zabbix</code> 是由 <code>Alexei Vladishev</code> 开发的一种网路监视、管理系统，基于 <code>Server-Client</code> 架构。可用于监视各种网路服务、伺服器和网路机器等状态。</p>
+<p>使用各种 <code>Database-end</code> 如 <code>MySQL</code>, <code>PostgreSQL</code>, <code>SQLite</code>, <code>Oracle</code> 或 <code>IBM DB2</code> 储存资料。<code>Server</code> 端基于 <code>C</code>语言、<code>Web</code> 管理端 <code>frontend</code> 则是基于 <code>PHP</code> 所制作的。<code>Zabbix</code> 可以使用多种方式监视。可以只使用 <code>Simple Check</code> 不需要安装 <code>Client</code> 端，亦可基于 <code>SMTP</code> 或 <code>HTTP</code> … 各种协定做死活监视。在客户端如 <code>UNIX</code>, <code>Windows</code> 中安装 <code>Zabbix Agent</code> 之后，可监视 <code>CPU Load</code>、网路使用状况、硬碟容量等各种状态。而就算没有安装 <code>Agent</code> 在监视对象中，<code>Zabbix</code> 也可以经由 <code>SNMP</code>、<code>TCP</code>、<code>ICMP</code>、利用 <code>IPMI</code>、<code>SSH</code>、<code>telnet</code> 对目标进行监视。另外，<code>Zabbix</code> 包含 <code>XMPP</code> 等各种 <code>Item</code> 警示功能。<br><code>Zabbix</code> 的授权是属于 <code>GPLv2</code>。</p>
+<h4 id="主要特点-1"><a href="#主要特点-1" class="headerlink" title="主要特点"></a>主要特点</h4><ul>
+<li>高性能，高容量（能够监视数十万个设备）。- 自动发现服务器和网络设备。</li>
+<li>低级别的发现。</li>
+<li>集中式Web管理的分布式监控。</li>
+<li>支持轮询和陷印机制。</li>
+<li>本地高性能代理（用于<code>Linux</code>，<code>Solaris</code>，<code>HP-UX</code>，<code>AIX</code>，<code>FreeBSD</code>，<code>OpenBSD</code>，<code>OS X</code>，<code>Tru64 / OSF1</code>，<code>Windows 2000</code>，<code>Windows Server 2003</code>，<code>Windows XP</code>，<code>Windows Vista</code>，<code>Windows Server 2008</code>，<code>Windows 7</code>的客户端软件）</li>
+<li>无代理监视。</li>
+<li>JMX监视。</li>
+<li>网络监控。</li>
+<li>安全的用户认证。</li>
+<li>灵活的用户权限。</li>
+<li>基于<code>Web</code>的界面。</li>
+<li><code>SLA</code>和<code>ITIL KPI</code>度量标准。</li>
+<li>灵活的电子邮件通知预定义的事件。</li>
+<li>监视资源的高级（业务）视图，通过用户定义的可视化控制台屏幕和仪表盘。</li>
+<li>审计日志。</li>
+</ul>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="https://en.wikipedia.org/wiki/Cacti_(software" target="_blank" rel="noopener">维基百科：Cacti_(software)</a>)</p>
+<p><a href="https://zh.wikipedia.org/wiki/Nagios" target="_blank" rel="noopener">维基百科：Nagios</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Zabbix" target="_blank" rel="noopener">维基百科：ZABBIX</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/27/Zabbix-Open-Source-Tools/';
+var disqus_title = '开源监控工具';
+var disqus_url = 'https://keeplearn.vip/2017/11/27/Zabbix-Open-Source-Tools/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

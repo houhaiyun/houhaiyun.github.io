@@ -1,0 +1,169 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：创建监控项items | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-23</div></div></div><div class="container post-header"><h1>Zabbix：创建监控项items</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#进入到-Configuration-→-Hosts"><span class="toc-number">1.1.</span> <span class="toc-text">进入到: Configuration → Hosts</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#点击屏幕右上角的Create-item"><span class="toc-number">1.2.</span> <span class="toc-text">点击屏幕右上角的Create item</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#输入表单中监控项的参数"><span class="toc-number">1.3.</span> <span class="toc-text">输入表单中监控项的参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据预处理"><span class="toc-number">1.4.</span> <span class="toc-text">数据预处理</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>要在<code>Zabbix</code>管理页面创建一个监控项，请执行以下操作：</p>
+<ul>
+<li>进入到: <code>Configuration</code> → <code>Hosts</code></li>
+<li>在主机所在的行单击 <code>Items</code></li>
+<li>点击屏幕右上角的<code>Create item</code></li>
+<li>输入表单中监控项的参数</li>
+</ul>
+<a id="more"></a>
+<p>你也可以通过打开一个监控项，按<code>Clone</code> 按钮，然后以不同的名称保存。</p>
+<h4 id="进入到-Configuration-→-Hosts"><a href="#进入到-Configuration-→-Hosts" class="headerlink" title="进入到: Configuration → Hosts"></a>进入到: Configuration → Hosts</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Create-Item-1.jpg" title="Configuration → Hosts"></center>
+
+<h4 id="点击屏幕右上角的Create-item"><a href="#点击屏幕右上角的Create-item" class="headerlink" title="点击屏幕右上角的Create item"></a>点击屏幕右上角的Create item</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Create-Item-2.jpg" title="点击屏幕右上角的Create item"></center>
+
+<h4 id="输入表单中监控项的参数"><a href="#输入表单中监控项的参数" class="headerlink" title="输入表单中监控项的参数"></a>输入表单中监控项的参数</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Create-Item-3.jpg" title="输入表单中监控项的参数"></center>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Name</em></td>
+<td>这里命名监控项名称。可以使用以下宏：<strong>$1, $2…$9</strong> - 指的是监控项的第1、2…9个参数例如：$1上的可用磁盘空间如果监控项的key是 “vfs.fs.size[/,free]”, 说明将自动更改为 “Free disk space on /”</td>
+</tr>
+<tr>
+<td><em>Type</em></td>
+<td>监控项类型。参考单个 <a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/items/itemtypes" target="_blank" rel="noopener">监控项类型</a> 章节.</td>
+</tr>
+<tr>
+<td><em>Key</em></td>
+<td>监控项key.可支持的<a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/items/itemtypes" target="_blank" rel="noopener">监控项的key</a> 能够在各个监控项类型中找到。这个key在单个主机中必须是唯一的。如果key的类型是’Zabbix agent’、’Zabbix agent (active)’, ‘Simple check’ 或者 ‘Zabbix aggregate’, 则此key必须被 Zabbix agent 或者 Zabbix server支持。也可以查看: 正确的 <a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/items/item/key" target="_blank" rel="noopener">key的格式</a>.</td>
+</tr>
+<tr>
+<td><em>Host interface</em></td>
+<td>选择主机接口。编辑主机级别的监控项时，此字段可用。</td>
+</tr>
+<tr>
+<td><em>Type of information</em></td>
+<td>执行转换后存储在数据库中的数据类型（如果有）。<strong>Numeric (unsigned)</strong> - 64位无符号整数<strong>Numeric (float)</strong> - 浮点数可以存储负值。允许范围: -999999999999.9999 到 999999999999.9999.从Zabbix 2.2开始，也支持科学计数值。例如。 1e+7,1e-4。<strong>Character</strong> - 短文本数据<strong>Log</strong> - 具有可选日志相关属性的长文本数据(timestamp, source, severity, logeventid)<strong>Text</strong> - 长文本数据<em>下表表格列出了文本数据的限制。</em></td>
+</tr>
+<tr>
+<td><em>Units</em></td>
+<td>如果设置了单位符号，Zabbix将在收到数据后再加工处理，并使用设置单位后缀进行显示。默认情况下，如果原始值超过1000，则除以1000，并相应显示。 例如，如果设置 <em>bps</em> 并接收到值为881764，则将显示为881.76 Kbps。特殊处理用于B（字节），Bps（每秒字节数）单位，除以1024.因此，如果单位设置为B或Bps，Zabbix将显示：1 为 1B/1Bps1024 为 1KB/1KBps1536 为 1.5KB/1.5KBps如果使用以下与时间相关的单位，则使用特殊处理：<strong>unixtime</strong> - 转换成“yyyy.mm.dd hh：mm：ss”。 要正确转换，接收的值必须是数字（无符号）类型的信息。<strong>uptime</strong> - 转换为 “hh:mm:ss” 或者 “N days, hh:mm:ss”例如，如果你收到的值为881764（秒），则显示为“10天，04:56:04”<strong>s</strong> - 转换成“yyy mmm ddd hhh mmm sss ms”; 参数被视为秒数。例如，如果您收到的值为881764（秒），则显示为“10d 4h 56m”只显示3个主要单位，如“1m 15d 5h”或“2h 4m 46s”。 如果没有显示天数，则仅显示两个级别 - “1m 5h”（不显示分钟，秒或毫秒）。 如果该值小于0.001，将被转换成“&lt;1 ms”。请参阅 <a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/items/item#unit_blacklist" target="_blank" rel="noopener">单位黑名单</a>.</td>
+</tr>
+<tr>
+<td><em>Update interval (in sec)</em></td>
+<td>每N秒钟检索一次这个项目的新值。<em>注意</em>：如果设置为“0”，则不会轮询该项。 但是，如果自定义间隔（灵活/调度）也存在非零值，则会在自定义间隔持续时间期间轮询该项。</td>
+</tr>
+<tr>
+<td><em>Custom intervals</em></td>
+<td>你可以创建用于检查监控项的自定义规则：<strong>Flexible</strong> - 创建更新间隔的异常（间隔不同的频率）<strong>Scheduling</strong> - 创建自定义轮询时间表。详细信息请查看 <a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/items/item/custom_intervals" target="_blank" rel="noopener">自定义间隔</a>. 从Zabix 3.0.0开始支持时间表。<em>注意</em>: 不适用于Zabbix Agent的活动监控项。</td>
+</tr>
+<tr>
+<td><em>History storage period(in days)</em></td>
+<td>在数据库中保留详细历史记录的天数，housekeeper将删除较旧的数据。 从Zabbix 2.2开始，在Administration → General → <a href="https://www.zabbix.com/documentation/3.4/manual/web_interface/frontend_sections/administration/general#housekeeper" target="_blank" rel="noopener">Housekeeper</a> 中可以覆盖该值。 如果存在全局设置，将显示一条警告消息： <a href="https://www.zabbix.com/documentation/3.4/_detail/manual/config/override_item.png?id=zh%3Amanual%3Aconfig%3Aitems%3Aitem" target="_blank" rel="noopener"><img src="https://www.zabbix.com/documentation/3.4/_media/manual/config/override_item.png" alt="img"></a>建议保留最小可能天数的记录值，以减少数据库中的历史记录的大小。你可以保留较长的趋势数据，而不是保存长期的历史数据。参见历史和趋势。 请参考 <a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/items/history_and_trends" target="_blank" rel="noopener">历史与趋势</a>.</td>
+</tr>
+<tr>
+<td><em>Trend storage period(in days)</em></td>
+<td>在数据库中保留N天的详细历史记录（小时最小，最大，平均值，计数）。 housekeeper将删除较旧的数据。从Zabbix 2.2开始，在Administration → General → <a href="https://www.zabbix.com/documentation/3.4/zh/manual/web_interface/frontend_sections/administration/general#housekeeper" target="_blank" rel="noopener">Housekeeper</a>中可以覆盖该值。如果存在全局设置，将显示一条警告消息：<a href="https://www.zabbix.com/documentation/3.4/_detail/manual/config/override_trends.png?id=zh%3Amanual%3Aconfig%3Aitems%3Aitem" target="_blank" rel="noopener"><img src="https://www.zabbix.com/documentation/3.4/_media/manual/config/override_trends.png" alt="img"></a><em>注意:</em> 保持趋势不适用于非数字数据 - 字符，日志和文本。参考 <a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/items/history_and_trends" target="_blank" rel="noopener">历史与趋势</a>.</td>
+</tr>
+<tr>
+<td><em>Show value</em></td>
+<td>将值映射应用于此监控项。值映射不会改变收到的值，仅用于显示数据。它只适用于整数项。例如, “Windows service states”.</td>
+</tr>
+<tr>
+<td><em>Log time format</em></td>
+<td>仅适用于<strong>日志</strong>类型的监控项。 支持的占位符:<em> <strong>y</strong>: </em>Year (1970-2038)<strong> </strong>M<strong>: *Month (01-12)</strong> <strong>d</strong>: <em>Day (01-31)<strong> </strong>h**: </em>Hour (00-23)<strong> </strong>m<strong>: *Minute (00-59)</strong> <strong>s</strong>: <em>Second (00-59)</em>如果留空，则不会解析时间戳。例如，从Zabbix Agent日志文件中考虑以下几行：“23480：20100328：154718.045 Zabbix代理启动。 Zabbix 1.8.2（修订11211）。“它以PID的六个字符位置开始，后跟日期，时间和行的其余部分。该行的日志时间格式为“pppppp：yyyyMMdd：hhmmss”。请注意，“p”和“：”字符只是占位符，只能是“yMdhms”。</td>
+</tr>
+<tr>
+<td><em>New application</em></td>
+<td>输入监控项的新应用程序的名称。</td>
+</tr>
+<tr>
+<td><em>Applications</em></td>
+<td>将监控项链接到一个或多个现有应用程序。</td>
+</tr>
+<tr>
+<td><em>Populates host inventory field</em></td>
+<td>你可以选择项目的值将填充的主机资产字段，如果你为主机启用了自动发现模式 <a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/hosts/inventory" target="_blank" rel="noopener">资产管理</a>，这将会起作用。</td>
+</tr>
+<tr>
+<td><em>Description</em></td>
+<td>输入监控项描述。</td>
+</tr>
+<tr>
+<td><em>Enabled</em></td>
+<td>选中该复选框以启用该项目。</td>
+</tr>
+</tbody>
+</table>
+<p>当编辑主机级别上的现有模板级别的监控项时，多个字段是只读的。你可以使用表单标题中的链接并转到模板级别并在其中进行编辑，但请记住，模板级别上的更改将更改模板链接到的所有主机的项目。</p>
+<h4 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Create-Item-4.jpg" title="数据预处理"></center>
+
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Create-Item-5.jpg" title="数据预处理"></center>
+
+<p><code>Preprocessing</code> 选项卡允许为接收的值定义转换规则。在将值保存到数据库之前，可以进行一次或多次转换。 转换按照定义的顺序执行。 所有预处理都由<code>Zabbix</code>服务器完成。</p>
+<table>
+<thead>
+<tr>
+<th>转换</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Custom multiplier</em></td>
+<td>将值乘以指定的整数或浮点值。使用此选项将以KB，MBps等接收的值转换为B，Bps，否则Zabbix无法正确设置前缀（K，M，G等）。从Zabbix 2.2开始，也支持使用科学符号。 例如。 1e + 70。</td>
+</tr>
+<tr>
+<td><em>Right trim</em></td>
+<td>从值的末尾删除指定的字符。</td>
+</tr>
+<tr>
+<td><em>Left trim</em></td>
+<td>从值的起始处删除指定的字符。</td>
+</tr>
+<tr>
+<td><em>Trim</em></td>
+<td>从值的起始和结尾删除指定的字符。</td>
+</tr>
+<tr>
+<td><em>Regular expression</em></td>
+<td>将值与<pattern>正则表达式匹配，并用<output>替换值。 正则表达式支持用\N序列提取最多10个捕获的组。\ 参数:<strong>pattern</strong> - 正则表达式<strong>output</strong> - 输出格式化模板。一个\N（其中N = 1 … 9）转义序列被替换为第N个匹配组。</output></pattern></td>
+</tr>
+<tr>
+<td><em>Boolean to decimal</em></td>
+<td>将值从布尔格式转换为十进制。文本表示被转换为0或1.因此，“TRUE”存储为1，“FALSE”存储为0.所有值都以不区分大小写的方式进行匹配。当前被认为的布尔值值如下：<em>TRUE</em> - true, t, yes, y, on, up, running, enabled, available<em>FALSE</em> - false, f, no, n, off, down, unused, disabled, unavailable此外，任何非零数值都被认为是TRUE，0被认为是FALSE。</td>
+</tr>
+<tr>
+<td><em>Octal to decimal</em></td>
+<td>将八进制格式的值转换为十进制。</td>
+</tr>
+<tr>
+<td><em>Hexadecimal to decimal</em></td>
+<td>将值从十六进制格式转换为十进制。</td>
+</tr>
+<tr>
+<td><em>Delta</em></td>
+<td>计算当前值和上一个值之间的差值。评估为<strong>value-prev_value</strong>，其中 value - current value; prev_value - 以前收到的值每个项目只允许一个delta操作。</td>
+</tr>
+<tr>
+<td><em>Delta per second</em></td>
+<td>计算每秒速度的值变化（当前值和上一个值的差值）。计算为（value-prev_value）/（time-prev_time），其中 value - 当前值; prev_value - 当前收到的值; time - 当前时间戳，prev_time - 以前值的时间戳。这个设置是非常有用的，以获得每秒不断增长的速度值。 如果当前值小于上一个值，Zabbix将丢弃该差异（不存储）并等待另一个值。这有助于正常工作，例如，32位SNMP计数器的包装（溢出）。<em>注意</em>: 由于此计算可能产生浮点数，建议将’Type of information’ 设置为 <em>Numeric (float)</em>，即使传入的原始值是整数。 这对于小数部分尤其重要。 如果浮点值很大并且可能超过’float’字段长度，在这种情况下，整个值可能会丢失，实际上建议使用Numeric（无符号），因此只会修剪小数部分。每个监控项只允许一个delta操作。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>如果将信息类型设置为数字（无符号），将使用自定义乘数或存储值作为<code>Delta</code>（每秒速度），并且生成的计算值实际为浮点数，则计算值仍被接受为正确的值，通过修剪小数部分并将该值存储为整数。</p>
+</blockquote>
+<p>创建 <code>item</code> 快捷方法，编辑一个 <code>item</code>，然后克隆这个 <code>item</code>，修改 <code>name</code> 等等其它数据即可</p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/23/Zabbix-Create-Item/';
+var disqus_title = 'Zabbix：创建监控项items';
+var disqus_url = 'https://keeplearn.vip/2017/11/23/Zabbix-Create-Item/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>vcl：缓存策略配置工具 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Varnish/">Varnish</a></div><div class="post-time">2017-11-06</div></div></div><div class="container post-header"><h1>vcl：缓存策略配置工具</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有限状态机图解"><span class="toc-number">2.</span> <span class="toc-text">有限状态机图解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单请求处理"><span class="toc-number">2.1.</span> <span class="toc-text">简单请求处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#状态引擎"><span class="toc-number">2.2.</span> <span class="toc-text">状态引擎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据报文流向"><span class="toc-number">2.3.</span> <span class="toc-text">数据报文流向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结几种流向"><span class="toc-number">2.4.</span> <span class="toc-text">总结几种流向</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#两个特殊的引擎："><span class="toc-number">3.</span> <span class="toc-text">两个特殊的引擎：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vcl配置文件语法"><span class="toc-number">4.</span> <span class="toc-text">vcl配置文件语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三类主要语法："><span class="toc-number">5.</span> <span class="toc-text">三类主要语法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Keywords"><span class="toc-number">6.</span> <span class="toc-text">Keywords:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VCL的变量"><span class="toc-number">7.</span> <span class="toc-text">VCL的变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#内建变量："><span class="toc-number">7.1.</span> <span class="toc-text">内建变量：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自定义变量-set"><span class="toc-number">7.2.</span> <span class="toc-text">自定义变量: set</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用变量"><span class="toc-number">8.</span> <span class="toc-text">常用变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#操作符："><span class="toc-number">8.1.</span> <span class="toc-text">操作符：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#各变量在各vcl子例程的可用性：（R读，W写）"><span class="toc-number">8.2.</span> <span class="toc-text">各变量在各vcl子例程的可用性：（R读，W写）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备"><span class="toc-number">9.</span> <span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例1"><span class="toc-number">10.</span> <span class="toc-text">示例1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例2"><span class="toc-number">11.</span> <span class="toc-text">示例2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例3"><span class="toc-number">12.</span> <span class="toc-text">示例3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例4"><span class="toc-number">13.</span> <span class="toc-text">示例4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例5"><span class="toc-number">14.</span> <span class="toc-text">示例5</span></a></li></ol></details></div><div class="container post-content"><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><code>“域”</code>专用的编程语言或状态引擎(<code>state engine</code>)，用于配置缓存策略。</p>
+<p>若要配置缓存规则，则需要先了解varnish的缓存处理流程，各状态引擎(有限状态机)的工作方式。</p>
+<p> <code>VCL</code>存在多个状态引擎，状态之间有关联性，但彼此之间互相隔离，每个引擎使用<code>return</code>来退出当前状态，并转入下一状态。</p>
+<a id="more"></a>
+<h3 id="有限状态机图解"><a href="#有限状态机图解" class="headerlink" title="有限状态机图解"></a>有限状态机图解</h3><center><img src="https://houhaiyun.github.io/img/images/Varnish-VCL-1.svg" title="有限状态机"></center>
+
+<h4 id="简单请求处理"><a href="#简单请求处理" class="headerlink" title="简单请求处理"></a>简单请求处理</h4><ul>
+<li>对于可缓存的请求，有以下两种情况<ul>
+<li>（1）命中，通过缓存直接响应</li>
+<li>（2）未命中，到后端服务器取得响应内容后，进行以下判断<pre><code>- a) 可缓存,则缓存后再响应
+- b) 不可缓,存则直接响应
+</code></pre></li>
+</ul>
+</li>
+<li>不可缓存的请求<ul>
+<li>到后端服务器取得相应内容，响应给客户端</li>
+</ul>
+</li>
+</ul>
+<h4 id="状态引擎"><a href="#状态引擎" class="headerlink" title="状态引擎"></a>状态引擎</h4><p><strong>前端引擎：</strong></p>
+<ul>
+<li><code>vcl_recv</code>: 接收请求，<code>return</code>一个<code>lookup</code>值转入<code>vcl_hash</code>            </li>
+<li><code>vcl_hash</code>：解析请求方式，而后return一个状态值转入下一状态引擎</li>
+</ul>
+<p>可以<code>return</code>的状态值有<code>hit</code>,<code>miss</code>,<code>purge</code>,<code>pipe</code>,pass<code>,</code>hit-for-pass<code>,</code>busy`</p>
+<ul>
+<li><code>vcl_hit</code>：缓存命中(hit)时需转入的状态引擎</li>
+<li><code>vcl_miss</code>：缓存未命中(miss)时转入的状态引擎</li>
+<li><code>vcl_purge</code>：请求缓存修剪(purge)需要转入的状态引擎</li>
+<li><code>vcl_pipe</code>：hash后无法理解的请求方式需要转入的状态引擎</li>
+<li><code>vcl_pass</code>：需要到后端服务器取数据时要转入的状态引擎</li>
+<li><code>vcl_deliver</code>：将请求资源响应给客户端的状态引擎</li>
+</ul>
+<p><strong>后端服务器引擎：</strong></p>
+<ul>
+<li><code>vcl_backend_fetch</code>：接收前端状态引擎数据请求的后端状态引擎</li>
+<li><code>vcl_backend_response</code>：在后端获取到数据后要正常响应的状态引擎</li>
+<li><code>vcl-backend_error</code>：在后端无法获得数据要响应错误信息的状态引擎</li>
+</ul>
+<h4 id="数据报文流向"><a href="#数据报文流向" class="headerlink" title="数据报文流向"></a>数据报文流向</h4><p>数据报文处理流向：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vcl_recv –&gt;</span><br><span class="line">            vcl_hash</span><br><span class="line">                hit –&gt; vcl_hit –&gt;</span><br><span class="line">                        a) vcl_deliver</span><br><span class="line">                        b) vcl_pass</span><br><span class="line">                </span><br><span class="line">                miss –&gt; vcl_miss –&gt;</span><br><span class="line">                        a) vcl_pass</span><br><span class="line">                        b) vcl_backend_fetch</span><br><span class="line">                </span><br><span class="line">                purge –&gt; vcl_purge –&gt;</span><br><span class="line">                        vcl_synth</span><br><span class="line">            </span><br><span class="line">                pipe –&gt; vcl_pipe</span><br><span class="line"></span><br><span class="line">        vcl_backend_fetch –&gt;</span><br><span class="line">            a) vcl_backend_response –&gt; vcl_deliver</span><br><span class="line">            b) vcl_backend_error</span><br></pre></td></tr></table></figure></p>
+<h4 id="总结几种流向"><a href="#总结几种流向" class="headerlink" title="总结几种流向"></a>总结几种流向</h4><ul>
+<li><p>（1）<code>recv</code>接收请求，处理后交由<code>hash</code>缓存查找，若缓存命中，则转入<code>deliver</code>，将响应内容投递给客户端  </p>
+</li>
+<li><p>（2）<code>recv</code>接收请求，处理后交由<code>hash</code>缓存查找，若缓存未命中，则转入<code>pass</code>，<code>pass</code>转到后端<code>fetch</code>数据，取得数据后，判断是否可以缓存，可缓存则缓存后<code>deliver</code>，否则直接<code>deliver</code></p>
+</li>
+<li><p>（3）<code>recv</code>接收请求，处理后发现请求是<code>purge</code>，交由<code>hash</code>，<code>hash return purge</code>，转入<code>purge</code>状态引擎，而后由<code>synth</code>完成缓存修剪</p>
+</li>
+<li><p>（4）<code>recv</code>接收请求，处理后发现无法理解请求方法，交由<code>hash</code>，<code>hash return pipe</code>，直接通过管道传递给后端服务器，由后端服务器处理</p>
+</li>
+</ul>
+<h3 id="两个特殊的引擎："><a href="#两个特殊的引擎：" class="headerlink" title="两个特殊的引擎："></a>两个特殊的引擎：</h3><ul>
+<li><code>vcl_init</code>：在处理任何请求之前要执行的<code>vcl</code>代码：主要用于初始化<code>VMODs</code>；</li>
+<li><code>vcl_fini</code>：所有的请求都已经结束，在<code>vcl</code>配置被丢弃时调用；主要用于清理<code>VMODs</code>；</li>
+</ul>
+<h3 id="vcl配置文件语法"><a href="#vcl配置文件语法" class="headerlink" title="vcl配置文件语法"></a>vcl配置文件语法</h3><p>vcl的语法格式：</p>
+<ul>
+<li>(1) <code>VCL files start with vcl 4.0</code>;表名版本</li>
+<li>(2) <code>//</code>, <code>#</code>单行蛛丝； <code>/*</code> 和 <code>*/</code> 多行注释的开始和结束;</li>
+<li>(3) <code>Subroutines are declared with the sub keyword</code>; 例如sub vcl_recv { …}；</li>
+<li>(4) <code>No loops(不支持循环), state-limited variables</code>（受限于引擎的内建变量）；</li>
+<li>(5) <code>Terminating statements with a keyword for next action as argument of the return() function</code>, <code>i.e.</code>:<code>return(action)</code>；用于实现状态引擎转换(每一个状态结束需要加return，return后面加下一个状态)； </li>
+<li>(6) <code>Domain-specific</code>（域专有的language）;</li>
+</ul>
+<h3 id="三类主要语法："><a href="#三类主要语法：" class="headerlink" title="三类主要语法："></a>三类主要语法：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 第一种</span><br><span class="line">sub subroutine &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 第二种</span><br><span class="line">if CONDITION &#123;</span><br><span class="line">	...</span><br><span class="line">&#125; else &#123;	</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 第三种</span><br><span class="line">return(), hash_data()</span><br></pre></td></tr></table></figure>
+<h3 id="Keywords"><a href="#Keywords" class="headerlink" title="Keywords:"></a>Keywords:</h3><p><code></code>call subroutine<code>，</code>return(action)<code>，</code>new<code>，</code>set<code>，</code>unset`</p>
+<h3 id="VCL的变量"><a href="#VCL的变量" class="headerlink" title="VCL的变量"></a>VCL的变量</h3><h4 id="内建变量："><a href="#内建变量：" class="headerlink" title="内建变量："></a>内建变量：</h4><ul>
+<li><p><code>req.*</code>: 由客户端发来的http请求相关</p>
+<ul>
+<li><code>req.http.*</code>: 请求报文各首部</li>
+</ul>
+</li>
+<li><p><code>ereq.*</code>: 由varnish向benkend主机发出的http请求</p>
+<ul>
+<li><code>bereq.http.*</code>: 向backend主机请求报各首部</li>
+</ul>
+</li>
+<li><p><code>beresq.*</code>: 由backend主机发来的http响应报文</p>
+<ul>
+<li><code>beresp.http.*</code>: backend主机响应报文首部</li>
+</ul>
+</li>
+<li><p><code>resp.*</code>: 由varnish响应给client的http的响应报文</p>
+<ul>
+<li><code>resp.http.*</code>: 响应报文的各首部</li>
+</ul>
+</li>
+<li><p><code>obj.*</code>: 存储在缓存空间中的缓存对象属性（只读）</p>
+<ul>
+<li><code>obj.hits</code>: 缓存项命中的次数</li>
+</ul>
+</li>
+<li><p><code>client.*</code>, <code>server.*</code>, <code>storage.*</code> 可用在所有的client例程（即非 <code>backend</code>例程）</p>
+</li>
+</ul>
+<h4 id="自定义变量-set"><a href="#自定义变量-set" class="headerlink" title="自定义变量: set"></a>自定义变量: set</h4><p>如自定义响应报文<code>http</code>首部：<code>set resp.http.X-Cache = “HIT”</code>; </p>
+<h3 id="常用变量"><a href="#常用变量" class="headerlink" title="常用变量"></a>常用变量</h3><p><code>berep</code>: 向<code>backend</code>主机请求相关变量</p>
+<ul>
+<li><code>bereq.http.HEADERS</code>: 请求首部</li>
+<li><code>bereq.method</code>: 请求方法</li>
+<li><code>bereq.url</code>: 请求backend主机的url</li>
+<li><code>bereq.proto</code>: 请求的协议版本</li>
+<li><code>bereq.backend</code>: 指明要调用的后端主机</li>
+</ul>
+<p><code>bresp</code>: <code>backend</code>主机响应相关变量</p>
+<ul>
+<li><code>beresp.proto</code>: 响应协议版本</li>
+<li><code>beresp.status</code>: 响应状态码    </li>
+<li><code>beresp.reason</code>: 响应原因短语</li>
+<li><code>beresp.backend.name</code>: 后端服务器名称</li>
+<li><code>beresp.http.HEADERS</code>: 响应首部</li>
+<li><code>beresp.ttl</code>: 后端服务器响应内容的余下生存时长</li>
+</ul>
+<p><code>obj</code>: 缓存项相关变量</p>
+<ul>
+<li><code>obj.hits</code>：在缓存中命中的次数</li>
+<li><code>obj.ttl</code>：缓存时长</li>
+</ul>
+<p><code>server</code>: 缓存服务端先关变量</p>
+<ul>
+<li><code>server.ip</code></li>
+<li><code>server.hostname</code></li>
+</ul>
+<p><code>req</code>： 客户端请求先关变量</p>
+<ul>
+<li><code>req.url</code>: 客户端请求的url</li>
+</ul>
+<p><code>resp</code>: 由缓存服务器响应客户端的相关变量</p>
+<ul>
+<li><code>resp.proto</code>: 响应协议版本</li>
+</ul>
+<h4 id="操作符："><a href="#操作符：" class="headerlink" title="操作符："></a>操作符：</h4><p><code>==, !=, ~, &gt;, &gt;=, &lt;, &lt;=</code></p>
+<ul>
+<li>逻辑操作符：<code>&amp;&amp;</code>, <code>||</code>, <code>!</code></li>
+<li>变量赋值：<code>=</code></li>
+</ul>
+<h4 id="各变量在各vcl子例程的可用性：（R读，W写）"><a href="#各变量在各vcl子例程的可用性：（R读，W写）" class="headerlink" title="各变量在各vcl子例程的可用性：（R读，W写）"></a>各变量在各vcl子例程的可用性：（R读，W写）</h4><center><img src="https://houhaiyun.github.io/img/images/Varnish-VCL-2.jpg" title="操作符"></center><br><center><img src="https://houhaiyun.github.io/img/images/Varnish-VCL-3.jpg" title="操作符"></center>
+
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>在后续Varnish的实验中，基本上都是此结构。</p>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>系统版本</th>
+<th>软件版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>httpd</td>
+<td>192.168.8.11</td>
+<td>CentOS release 6.9 (Final)</td>
+<td>httpd-2.2.15(yum安装)</td>
+<td>提供web服务</td>
+</tr>
+<tr>
+<td>varnish</td>
+<td>192.168.8.15</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>varnish-4.0.4(yum安装)</td>
+<td>提供缓存服务</td>
+</tr>
+</tbody>
+</table>
+<h3 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h3><p>添加响应报文，如果从缓存命中了就显示<code>&quot;Hit via&quot; + server.ip</code>；如果没命中就显示<code>&quot;Miss from&quot; + server.ip</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/varnish/default.vcl      # 修改配置文件；</span><br><span class="line">sub vcl_deliver &#123;</span><br><span class="line">    if (obj.hits&gt;0) &#123;</span><br><span class="line">        set resp.http.C-Cache = &quot;Hit via&quot; + server.ip;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">    set resp.http.X-Cache = &quot;Miss from&quot; + server.ip;</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082</span><br><span class="line">200        </span><br><span class="line">-----------------------------</span><br><span class="line">Varnish Cache CLI 1.0</span><br><span class="line">-----------------------------</span><br><span class="line">Linux,3.10.0-514.el7.x86_64,x86_64,-smalloc,-smalloc,-hcritbit</span><br><span class="line">varnish-4.0.4 revision 386f712</span><br><span class="line"></span><br><span class="line">Type &apos;help&apos; for command list.</span><br><span class="line">Type &apos;quit&apos; to close CLI session.</span><br><span class="line"></span><br><span class="line">vcl.list            # 列出所有配置文件；</span><br><span class="line">200        </span><br><span class="line">available       0 boot</span><br><span class="line">available       0 test22</span><br><span class="line">active          0 test23</span><br><span class="line"></span><br><span class="line">vcl.load test24 default.vcl         # 加载配置文件；</span><br><span class="line">200        </span><br><span class="line">VCL compiled.</span><br><span class="line">vcl.list</span><br><span class="line">200        </span><br><span class="line">available       0 boot</span><br><span class="line">available       0 test22</span><br><span class="line">active          0 test23</span><br><span class="line">available       0 test24</span><br><span class="line">    </span><br><span class="line">vcl.use test24          # 启用配置文件；</span><br><span class="line">200        </span><br><span class="line">VCL &apos;test24&apos; now active</span><br><span class="line">vcl.list        # 列出所有配置文件；</span><br><span class="line">200        </span><br><span class="line">available       0 boot</span><br><span class="line">available       0 test22</span><br><span class="line">available       0 test23</span><br><span class="line">active          0 test24</span><br></pre></td></tr></table></figure></p>
+<center><img src="https://houhaiyun.github.io/img/images/Varnish-VCL-4.gif" title="访问测试"></center>
+
+<h3 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h3><p>强制访问某资源不检查缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"># 在后台web服务器上创建目录和默认访问网页；</span><br><span class="line">[root@web ~]# cd /var/www/html/</span><br><span class="line">[root@web html]# ls</span><br><span class="line">10.html  1.html  2.html  3.html  4.html  5.html  6.html  7.html  8.html  9.html  index.html</span><br><span class="line">[root@web html]# mkdir login</span><br><span class="line">[root@web html]# echo &quot;login&quot; &gt; login/index.html</span><br><span class="line">[root@web html]# cat login/index.html</span><br><span class="line">login</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# vim /etc/varnish/default.vcl      # 修改配置文件；</span><br><span class="line">sub vcl_recv &#123;      # 定义访问login和admin时，就不检查缓存；</span><br><span class="line">if (req.url ~ &quot;(?i)^/(login|admin)&quot;);    # ?代表忽略字符大小写，~代表开始正则匹配；</span><br><span class="line">    return(pass);</span><br><span class="line">&#125;</span><br><span class="line">sub vcl_recv &#123;       # 定义访问login和admin时，就不检查缓存；</span><br><span class="line">if (req.url ~ &quot;(?i)^/(login|admin)&quot;)&#123;       # ?代表忽略字符大小写，~代表开始正则匹配；</span><br><span class="line">    return(pass);</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082</span><br><span class="line">200        </span><br><span class="line">-----------------------------</span><br><span class="line">Varnish Cache CLI 1.0</span><br><span class="line">-----------------------------</span><br><span class="line">Linux,3.10.0-514.el7.x86_64,x86_64,-smalloc,-smalloc,-hcritbit</span><br><span class="line">varnish-4.0.4 revision 386f712</span><br><span class="line"></span><br><span class="line">Type &apos;help&apos; for command list.</span><br><span class="line">Type &apos;quit&apos; to close CLI session.</span><br><span class="line"></span><br><span class="line">vcl.list</span><br><span class="line">200        </span><br><span class="line">active          0 boot</span><br><span class="line"></span><br><span class="line">vcl.load test1 default.vcl</span><br><span class="line">200        </span><br><span class="line">VCL compiled.</span><br><span class="line">vcl.list</span><br><span class="line">200        </span><br><span class="line">active          0 boot</span><br><span class="line">available       0 test1</span><br><span class="line"></span><br><span class="line">vcl.use test1           # 使用test1；</span><br><span class="line">200        </span><br><span class="line">VCL &apos;test1&apos; now active</span><br><span class="line">vcl.list</span><br><span class="line">200        </span><br><span class="line">available       0 boot</span><br><span class="line">active          0 test1</span><br></pre></td></tr></table></figure>
+<p>测试效果</p>
+<center><img src="https://houhaiyun.github.io/img/images/Varnish-VCL-5.gif" title="访问测试"></center>
+
+
+<h3 id="示例3"><a href="#示例3" class="headerlink" title="示例3"></a>示例3</h3><p>对于特定类型的资源，例如公开的图片等，取消其私有标识，并强行设定其可以由<code>varnish</code>缓存的时长； 定义在<code>vcl_backend_response</code>中；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/varnish/default.vcl      # 修改配置文件；</span><br><span class="line">sub vcl_recv &#123;</span><br><span class="line">    if (beresp.http.cache-control !~ &quot;s-maxage&quot;) &#123;</span><br><span class="line">    	if (bereq.url ~ &quot;(?i)\.(jpg|jpeg|png|gif|css|js)$&quot;) &#123;</span><br><span class="line">    		unset beresp.http.Set-Cookie;</span><br><span class="line">    		set beresp.ttl = 3600s;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="示例4"><a href="#示例4" class="headerlink" title="示例4"></a>示例4</h3><p>告知<code>web server</code>真实的客户端地址；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/varnish/default.vcl      # 修改配置文件；</span><br><span class="line">sub vcl_recv &#123;</span><br><span class="line">if (req.restarts == 0) &#123;</span><br><span class="line">    if (req.http.X-Forwarded-For)&#123;</span><br><span class="line">            set req.http.X-Forwarded-For = req.http.X-Forwarded-For + &quot;,&quot; + clietn.ip;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            set req.http.X-Forwarded-For = client.ip;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082       # 重新加载配置文件；</span><br><span class="line">200        </span><br><span class="line">-----------------------------</span><br><span class="line">Varnish Cache CLI 1.0</span><br><span class="line">-----------------------------</span><br><span class="line">Linux,3.10.0-514.el7.x86_64,x86_64,-smalloc,-smalloc,-hcritbit</span><br><span class="line">varnish-4.0.4 revision 386f712</span><br><span class="line"></span><br><span class="line">Type &apos;help&apos; for command list.</span><br><span class="line">Type &apos;quit&apos; to close CLI session.</span><br><span class="line"></span><br><span class="line">vcl.list</span><br><span class="line">200        </span><br><span class="line">available       0 boot</span><br><span class="line">active          0 test1</span><br><span class="line"></span><br><span class="line">vcl.load test2 default.vcl</span><br><span class="line">200        </span><br><span class="line">VCL compiled.</span><br><span class="line">vcl.use test2</span><br><span class="line">200        </span><br><span class="line">VCL &apos;test2&apos; now active</span><br><span class="line">vcl.list</span><br><span class="line">200        </span><br><span class="line">available       0 boot</span><br><span class="line">available       0 test1</span><br><span class="line">active          0 test2</span><br><span class="line"></span><br><span class="line"># 修改后端web server；</span><br><span class="line">[root@web ~]# vim /etc/httpd/conf/httpd.conf        # 修改配置文件日志格式，添加X-Forwarded-For；</span><br><span class="line">LogFormat &quot;%h %l %u %t \&quot;%r\&quot; %&gt;s %b \&quot;%&#123;Referer&#125;i\&quot; \&quot;%&#123;User-Agent&#125;i\&quot; \&quot;%&#123;X-Forwarded-For&#125;i\&quot;&quot; varnish</span><br><span class="line">CustomLog logs/access_log varnish</span><br><span class="line">[root@web ~]# apachectl -t</span><br><span class="line">Syntax OK</span><br><span class="line">[root@web ~]# service httpd restart</span><br><span class="line">Stopping httpd:                                            [  OK  ]</span><br><span class="line">Starting httpd:                                            [  OK  ]</span><br><span class="line">[root@web ~]# tail -1  /var/log/httpd/access_log        # 查看日志，已经记录；</span><br><span class="line">192.168.8.15 - - [05/Nov/2017:21:59:25 +0800] &quot;GET /login/ HTTP/1.1&quot; 200 6 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36&quot; &quot;192.168.8.1,192.168.8.1&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="示例5"><a href="#示例5" class="headerlink" title="示例5"></a>示例5</h3><p>设定某一类(例如：图片缓存2小时)内容的缓存时长；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# vim /etc/varnish/default.vcl      # 修改配置文件；</span><br><span class="line">sub vcl_backend_response &#123;</span><br><span class="line">    if (bereq.url ~ &quot;(?i)\.(jgp|jpeg|png|gif)$&quot;)&#123;</span><br><span class="line">        unset beresp.http.Set-Cookie;</span><br><span class="line">        set beresp.ttl = 7200s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082</span><br><span class="line">200        </span><br><span class="line">-----------------------------</span><br><span class="line">Varnish Cache CLI 1.0</span><br><span class="line">-----------------------------</span><br><span class="line">Linux,3.10.0-514.el7.x86_64,x86_64,-smalloc,-smalloc,-hcritbit</span><br><span class="line">varnish-4.0.4 revision 386f712</span><br><span class="line"></span><br><span class="line">Type &apos;help&apos; for command list.</span><br><span class="line">Type &apos;quit&apos; to close CLI session.</span><br><span class="line"></span><br><span class="line">vcl.list</span><br><span class="line">200        </span><br><span class="line">available       0 boot</span><br><span class="line">available       0 test1</span><br><span class="line">active          0 test2</span><br><span class="line"></span><br><span class="line">vcl.load test3 default.vcl</span><br><span class="line">200        </span><br><span class="line">VCL compiled.</span><br><span class="line">vcl.use test3</span><br><span class="line">200        </span><br><span class="line">VCL &apos;test3&apos; now active</span><br><span class="line">vcl.list</span><br><span class="line">200        </span><br><span class="line">available       0 boot</span><br><span class="line">available       0 test1</span><br><span class="line">available       0 test2</span><br><span class="line">active          0 test3</span><br><span class="line"></span><br><span class="line"># 为后端web server准备图片；</span><br><span class="line">[root@web ~]# find /usr/share -iname &quot;*.jpg&quot;</span><br><span class="line">/usr/share/wallpapers/CentOS6/contents/images/simple_waves.jpg</span><br><span class="line">/usr/share/backgrounds/centos_1920x1200_logoonly.jpg</span><br><span class="line">/usr/share/backgrounds/centos_2048x1536_logoonly.jpg</span><br><span class="line">/usr/share/backgrounds/simple_waves.jpg</span><br><span class="line">[root@web ~]# cp /usr/share/backgrounds/simple_waves.jpg /var/www/html/test.jpg</span><br></pre></td></tr></table></figure>
+<p>访问测试：</p>
+<center><img src="https://houhaiyun.github.io/img/images/Varnish-VCL-6.gif" title="访问测试"></center>
+
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/06/Varnish-VCL/';
+var disqus_title = 'vcl：缓存策略配置工具';
+var disqus_url = 'https://keeplearn.vip/2017/11/06/Varnish-VCL/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

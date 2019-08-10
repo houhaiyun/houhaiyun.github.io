@@ -1,0 +1,57 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Tomcat web管理界面 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Tomcat/">Tomcat</a></div><div class="post-time">2017-11-05</div></div></div><div class="container post-header"><h1>Tomcat web管理界面</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#web管理界面"><span class="toc-number">1.</span> <span class="toc-text">web管理界面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#访问web界面Server-Status和Manager-App"><span class="toc-number">2.</span> <span class="toc-text">访问web界面Server Status和Manager App</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用Manager-App热部署"><span class="toc-number">2.1.</span> <span class="toc-text">使用Manager App热部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Status界面"><span class="toc-number">2.2.</span> <span class="toc-text">Server Status界面</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Host-Manager"><span class="toc-number">3.</span> <span class="toc-text">使用Host Manager</span></a></li></ol></details></div><div class="container post-content"><h3 id="web管理界面"><a href="#web管理界面" class="headerlink" title="web管理界面"></a>web管理界面</h3><p>当我们安装完成Tomcat，默认的web界面如下：</p>
+<center><img src="https://houhaiyun.github.io/img/images/Tomcat-Web-1.jpg" title="安装完成Tomcat，默认的web界面"></center>
+
+<a id="more"></a>
+<p>我们可以看到三个按钮，分别对应为：</p>
+<ul>
+<li><code>Server Status</code>：tomcat服务器状态，包括内存信息，进程信息等等。</li>
+<li><code>manager App</code>：Web App的管理页面，可以开、关、重载、部署、卸载 Web App。</li>
+<li><code>Host Manager</code>：虚拟主机的管理页面，可以对虚拟主机进行添加删除修改操作。</li>
+</ul>
+<center><img src="https://houhaiyun.github.io/img/images/Tomcat-Web-2.gif" title="点击按钮"></center>
+
+<p>为我们提供了帮助信息：</p>
+<center><img src="https://houhaiyun.github.io/img/images/Tomcat-Web-3.jpg" title="失败界面，为我们提供了帮助信息"></center>
+
+<p>角色对应的信息为：</p>
+<ul>
+<li>manager-gui - allows access to the HTML GUI and the status pages</li>
+<li>manager-script - allows access to the text interface and the status pages</li>
+<li>manager-jmx - allows access to the JMX proxy and the status pages</li>
+<li>manager-status - allows access to the status pages only</li>
+</ul>
+<h3 id="访问web界面Server-Status和Manager-App"><a href="#访问web界面Server-Status和Manager-App" class="headerlink" title="访问web界面Server Status和Manager App"></a>访问web界面Server Status和Manager App</h3><p>定义角色为<code>manager-gui</code>，用户和密码为<code>tomcat</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK ~]# vim /etc/tomcat/tomcat-users.xml          # 修改配置文件；</span><br><span class="line">&lt;role rolename=&quot;manager-gui&quot;/&gt;          </span><br><span class="line">&lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;manager-gui&quot;/&gt;</span><br><span class="line">[root@OpenJDK ~]# systemctl restart tomcat</span><br></pre></td></tr></table></figure></p>
+<p>登陆测试：</p>
+<center><img src="https://houhaiyun.github.io/img/images/Tomcat-Web-4.gif" title="登陆测试"></center>
+
+<h4 id="使用Manager-App热部署"><a href="#使用Manager-App热部署" class="headerlink" title="使用Manager App热部署"></a>使用Manager App热部署</h4><p>例如：部署的访问路径为<code>/app</code>，真实路径在<code>/app/test</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK ~]# cp -r test/ /app/         # 准备文件；</span><br><span class="line">[root@OpenJDK ~]# cd /app/test/</span><br><span class="line">[root@OpenJDK test]# ls</span><br><span class="line">classes  index.jsp  lib  META-INF  WEB-INF</span><br><span class="line">[root@OpenJDK test]# vim index.jsp </span><br><span class="line">[root@OpenJDK test]# cat index.jsp </span><br><span class="line">			&lt;%@ page language=&quot;java&quot; %&gt;</span><br><span class="line">			&lt;%@ page import=&quot;java.util.*&quot; %&gt;</span><br><span class="line">			&lt;html&gt;</span><br><span class="line">				&lt;head&gt;</span><br><span class="line">					&lt;title&gt;Test Page&lt;/title&gt;</span><br><span class="line">				&lt;/head&gt;</span><br><span class="line">				&lt;body&gt;</span><br><span class="line">					&lt;% out.println(&quot;hello app server&quot;);</span><br><span class="line">					%&gt;</span><br><span class="line">				&lt;/body&gt;</span><br><span class="line">			&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<center><img src="https://houhaiyun.github.io/img/images/Tomcat-Web-5.gif" title="访问测试"></center>
+
+
+<h4 id="Server-Status界面"><a href="#Server-Status界面" class="headerlink" title="Server Status界面"></a>Server Status界面</h4><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Web-6.jpg" title="Server Status界面"></center>
+
+<p><strong><code>JVM Memory Status</code></strong></p>
+<p><code>MAX memory</code>：大约为服务器最大内存的四分之一左右。可以自定义，最大不超过32G。</p>
+<p><code>Heap</code> 内存区分为：<code>Eden Space</code>（伊甸园）、<code>Survivor Space</code>(幸存者区)、<code>Tenured Gen</code>（老年代-养老区）。</p>
+<p>非<code>Heap</code> 内存区分为：<code>Code Cache</code>（代码缓存区）、<code>Compressed Class Space</code>（压缩的类区）、<code>Metaspace</code>（源数据区）</p>
+<p><code>AJP</code> 服务 和<code>HTTP</code>服务（默认<code>HTTPS</code>服务没有启用）</p>
+<p><code>AJP</code>(默认监听在8009端口）、<code>HTTP</code>（默认监听在8080端口）</p>
+<p>服务阶段（<code>Stage</code>）<br><code>P</code>: Parse and prepare request （解析和准备请求）<br><code>S</code>: Service （服务中）<br><code>F</code>: Finishing （完成服务）<br><code>R</code>: Ready （准备好）<br><code>K</code>: Keepalive（保持连接）</p>
+<h3 id="使用Host-Manager"><a href="#使用Host-Manager" class="headerlink" title="使用Host Manager"></a>使用Host Manager</h3><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Web-7.jpg" title="错误界面"></center><br>根据帮助页面来修改<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@OpenJDK ~]# vim /etc/tomcat/tomcat-users.xml          # 修改配置文件；</span><br><span class="line">&lt;role rolename=&quot;manager-gui&quot;/&gt;</span><br><span class="line">&lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;admin-gui,manager-gui&quot;/&gt; </span><br><span class="line">[root@OpenJDK ~]# systemctl restart tomcat.service</span><br></pre></td></tr></table></figure><br><br><center><img src="https://houhaiyun.github.io/img/images/Tomcat-Web-8.gif" title="访问测试"></center>
+
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/05/Tomcat-Web/';
+var disqus_title = 'Tomcat web管理界面';
+var disqus_url = 'https://keeplearn.vip/2017/11/05/Tomcat-Web/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

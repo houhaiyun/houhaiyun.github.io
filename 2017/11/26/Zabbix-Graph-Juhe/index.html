@@ -1,0 +1,123 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：聚合图形Graph | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-26</div></div></div><div class="container post-header"><h1>Zabbix：聚合图形Graph</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个聚合图形"><span class="toc-number">2.</span> <span class="toc-text">创建一个聚合图形</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#在-Zabbix-前端跳转到-监测中-→-聚合图形-→-Create-Screen"><span class="toc-number">2.1.</span> <span class="toc-text">在 Zabbix 前端跳转到 监测中 → 聚合图形 → Create Screen</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#填入属性信息"><span class="toc-number">2.2.</span> <span class="toc-text">填入属性信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#添加元素"><span class="toc-number">2.3.</span> <span class="toc-text">添加元素</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在<code>Zabbix</code>的聚合图形页面上，你可以把从各种来源的信息聚合到一起，以便在单个屏幕上快速查看。基本上聚合图形是一个表格，你选择每个表格中有多少个单元格以及单元格中要显示的元素。 可以显示以下元素：</p>
+<a id="more"></a>
+<ul>
+<li>简单图形；</li>
+<li>简单图形原型；</li>
+<li>用户定义的自定义图形；</li>
+<li>自定义图形原型；</li>
+<li>拓扑图；</li>
+<li>其他聚合图形；</li>
+<li>纯文本信息；</li>
+<li>服务器信息 （概述）；</li>
+<li>主机信息 （概述）；</li>
+<li>触发器信息 （概述）；</li>
+<li>主机/主机组问题 （触发器的状态）；</li>
+<li>系统状态；</li>
+<li>数据概述；</li>
+<li>时钟；</li>
+<li>事件历史；</li>
+<li>最近的动作历史；</li>
+<li>URL （从另一个位置获取的数据）。</li>
+</ul>
+<p>聚合图形在监测中 → 聚合图形中进行管理，可以对其进行配置，管理和查看。它们也可以添加到监测中 → 仪表盘的“收藏夹”部分。</p>
+<p>要配置屏幕，你必须首先通过定义其常规属性来创建它，然后在单元格中添加单个元素。</p>
+<p>Zabbix 的所有用户（包括非管理员用户）都可以创建聚合图形。聚合图形有一个所有者 - 创建它们的用户。</p>
+<p>聚合图形可以被公开或私有。所有用户都可以看到公开的聚合图形。</p>
+<p>私有的聚合图形只对其所有者可见。所有者可以向其他用户和用户组共享私有的聚合图形。常规（非超级管理员）用户只能与他们所属的组和用户共享。只要他们拥有所有聚合图形中元素的读取权限，私有屏幕将对其所有者和聚合图形共享的用户可见。只要管理员级用户对所有聚合图形中的元素都具有读取权限，就可以查看和编辑私有聚合图形，而不管所有者或所有者属于共享用户列表。</p>
+<blockquote>
+<p>对于公开和私有的聚合图形，用户必须至少具有所有聚合图形中元素的读取权限才能看到屏幕。 要向聚合图形中添加元素，用户还必须至少具有对其的读取权限。</p>
+</blockquote>
+<h3 id="创建一个聚合图形"><a href="#创建一个聚合图形" class="headerlink" title="创建一个聚合图形"></a>创建一个聚合图形</h3><ul>
+<li>在 <code>Zabbix</code> 前端跳转到 监测中 → 聚合图形 → Create Screen</li>
+<li>填入属性信息</li>
+<li>添加元素</li>
+</ul>
+<h4 id="在-Zabbix-前端跳转到-监测中-→-聚合图形-→-Create-Screen"><a href="#在-Zabbix-前端跳转到-监测中-→-聚合图形-→-Create-Screen" class="headerlink" title="在 Zabbix 前端跳转到 监测中 → 聚合图形 → Create Screen"></a>在 Zabbix 前端跳转到 监测中 → 聚合图形 → Create Screen</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-1.jpg" title="在 Zabbix 前端跳转到 监测中 → 聚合图形 → Create Screen"></center>
+
+<h4 id="填入属性信息"><a href="#填入属性信息" class="headerlink" title="填入属性信息"></a>填入属性信息</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-2.jpg" title="填入属性信息"></center>
+
+<p>给你的屏幕一个唯一的名称，并设置列数（垂直单元格）和行数（水平单元格）。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-3.jpg" title="给你的屏幕一个唯一的名称，并设置列数（垂直单元格）和行数（水平单元格）。"></center>
+
+<p><strong>分享标签</strong>页包含聚合图形类型以及专用聚合图形的共享选项（用户组，用户）：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>所有者</em></td>
+<td>选择聚合图形的所有者。</td>
+</tr>
+<tr>
+<td><em>类型</em></td>
+<td>选择聚合图形的类型：<strong>私有</strong> - 聚合图形只有对选定的用户组和用户可见。<strong>公开</strong> - 聚合图形对所有人可见。</td>
+</tr>
+<tr>
+<td><em>用户组共享列表</em></td>
+<td>选择可访问聚合图形的用户组。你可以赋予只读或读写权限。</td>
+</tr>
+<tr>
+<td><em>用户共享列表</em></td>
+<td>选择可访问聚合图形的用户。你可以赋予只读或读写权限。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="添加元素"><a href="#添加元素" class="headerlink" title="添加元素"></a>添加元素</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-4.jpg" title="添加元素"></center><br><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-5.jpg" title="添加元素"></center><br><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-6.jpg" title="添加元素"></center><br><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-7.jpg" title="添加元素"></center><br><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-8.jpg" title="添加元素"></center><br><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Graph-Juhe-9.jpg" title="添加元素"></center>
+
+<p><strong>聚合图形元素的属性：</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>资源</em></td>
+<td>在单元格中显示的信息：<strong>动作日志</strong> - 近期的动作日志<strong>时钟</strong> - 数字或模拟时钟显示当前服务器或本地时间。<strong>数据概述</strong> - 一组主机的最新数据<strong>图形</strong> - 单一的自定义图形<strong>图形原型</strong> - 自动发现（LLD）规则的自定义图形。<strong>事件历史</strong> - 最新的事件。<strong>主机组问题</strong> - 由主机组过滤的触发器状态（包括不含事件的触发器x，从Zabbix 2.2开始）<strong>主机信息</strong> - 高级主机的相关信息<strong>主机问题</strong> - 由主机过滤的触发器的状态（包括不含事件的触发器，自Zabbix 2.2起），从Zabbix 2.2开始）<strong>拓扑图</strong> - 单一的拓扑图<strong>纯文本</strong> - 纯文本数据<strong>聚合图形</strong> - 聚合图形（一个聚合图形内可能包含其他聚合图形）<strong>简单图形</strong> - 单一的简单图形<strong>简单图形原型</strong> - 基于自动发现（LLD）生成监控项的简单图形。<strong>Zabbix的状态</strong> - 关于 Zabbix 服务器的高级信息<strong>系统状态</strong> - 展示系统状态（类似于仪表盘） <strong>触发器信息</strong> - 高级触发器的相关信息。<strong>触发器概述</strong> - s主机组的触发器状态。<strong>URL</strong> - 包含来自外部资源的内容。</td>
+</tr>
+<tr>
+<td><em>水平对齐</em></td>
+<td>可能的值：<strong>居中**</strong>左侧<strong>**右侧</strong></td>
+</tr>
+<tr>
+<td><em>垂直对齐</em></td>
+<td>可能的值：<strong>居中**</strong>顶部<strong>**底部</strong></td>
+</tr>
+<tr>
+<td><em>列跨度</em></td>
+<td>将单元格扩展到多个列，与HTML列跨越的方式相同。</td>
+</tr>
+<tr>
+<td><em>行宽度</em></td>
+<td>将单元格扩展到多行，与HTML行跨越的方式相同。</td>
+</tr>
+</tbody>
+</table>
+<p>注意表格两边的“ + ”和“ - ”控件。</p>
+<p>点击表格上方的“ + ”将会添加一列。 点击表格下方的“ - ”将删除一列。</p>
+<p>点击表格左侧的“ + ”将会添加一行。 点击表格右侧的“ - ”将会删除一行。</p>
+<blockquote>
+<p>如果图形高度设置为小于120像素，则在图形中将不会显示任何图例。</p>
+</blockquote>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/26/Zabbix-Graph-Juhe/';
+var disqus_title = 'Zabbix：聚合图形Graph';
+var disqus_url = 'https://keeplearn.vip/2017/11/26/Zabbix-Graph-Juhe/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

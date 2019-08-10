@@ -1,0 +1,127 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>at命令 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Cron/">Cron</a></div><div class="post-time">2017-08-28</div></div></div><div class="container post-header"><h1>at命令</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#at命令简介"><span class="toc-number">1.</span> <span class="toc-text">at命令简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#语法"><span class="toc-number">2.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用选项"><span class="toc-number">3.</span> <span class="toc-text">常用选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#时间格式"><span class="toc-number">4.</span> <span class="toc-text">时间格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#at任务执行方式"><span class="toc-number">5.</span> <span class="toc-text">at任务执行方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#etc-at-allow-deny-控制用户是否能执行at任务"><span class="toc-number">6.</span> <span class="toc-text">/etc/at.{allow,deny}控制用户是否能执行at任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#at工作原理"><span class="toc-number">7.</span> <span class="toc-text">at工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#atd的启动"><span class="toc-number">8.</span> <span class="toc-text">atd的启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看是否安装at包"><span class="toc-number">9.</span> <span class="toc-text">查看是否安装at包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#范例"><span class="toc-number">10.</span> <span class="toc-text">范例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#范例一："><span class="toc-number">10.1.</span> <span class="toc-text">范例一：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#范例二："><span class="toc-number">10.2.</span> <span class="toc-text">范例二：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#范例三："><span class="toc-number">10.3.</span> <span class="toc-text">范例三：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#范例四："><span class="toc-number">10.4.</span> <span class="toc-text">范例四：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意事项："><span class="toc-number">11.</span> <span class="toc-text">注意事项：</span></a></li></ol></details></div><div class="container post-content"><h3 id="at命令简介"><a href="#at命令简介" class="headerlink" title="at命令简介"></a>at命令简介</h3><p><strong>Linux at命令可以让使用者指定在 TIME 这个特定时刻执行某个程序或指令</strong></p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>at [option] TIME</p>
+<a id="more"></a>
+<h3 id="常用选项"><a href="#常用选项" class="headerlink" title="常用选项"></a>常用选项</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-V 显示版本信息:</span><br><span class="line">-l: 列出指定队列中等待运行的作业；相当于atq</span><br><span class="line">-d: 删除指定的作业；相当于atrm</span><br><span class="line">-c: 查看具体作业任务</span><br><span class="line">-f /path/from/somefile：从指定的文件中读取任务</span><br><span class="line">-m:当任务被完成之后，将给用户发送邮件，即使没有标准输出</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>注意：作业执行命令的结果中的标准输出和错误以邮件通知给相关用户</strong></li>
+</ul>
+<p><strong>TIME：</strong> 定义出什么时候进行 at 这项任务的时间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HH:MM [YYYY-mm-dd]</span><br><span class="line">    noon（中午12:00）, midnight（午夜00:00）, teatime（4pm，下午4:00）</span><br><span class="line">    tomorrow（明天）</span><br><span class="line">    now+#&#123;minutes,hours,days, OR weeks&#125;，从现在开始多长时间之后</span><br></pre></td></tr></table></figure></p>
+<h3 id="时间格式"><a href="#时间格式" class="headerlink" title="时间格式"></a>时间格式</h3><ul>
+<li><code>HH:MM 02:00</code><br>  在今日的 HH:MM 进行，若该时刻已过，则明天此时执行任务</li>
+<li><code>HH:MM YYYY-MM-DD 02:00 2016-09-20</code><br>  规定在某年某月的某一天的特殊时刻进行该项任务</li>
+<li><code>HH:MM[am|pm] [Month] [Date]</code><br>  <code>04pm March 17</code>，3月17日下午4:00<br>  <code>17:20 tomorrow</code>，明天17:20</li>
+<li><code>HH:MM[am|pm] + number [minutes|hours|days|weeks]</code><br>  从现在开始多长时间之后才进行该项任务<br>  <code>now + 5 minutes</code>，从现在开始五分钟后<br>  <code>02pm + 3 days</code>，三天后的下午2:00</li>
+</ul>
+<h3 id="at任务执行方式"><a href="#at任务执行方式" class="headerlink" title="at任务执行方式"></a>at任务执行方式</h3><ol>
+<li><p><strong>交互式</strong> </p>
+<p>[root@centos6 ~]# at 12:00<br>at&gt; ifconfig<br>at&gt; <eot><br>job 1 at 2017-08-24 12:00</eot></p>
+</li>
+<li><p><strong>输入重定向</strong> </p>
+</li>
+</ol>
+<pre><code>[root@centos6 ~]# at 15:00 &lt;&lt; END
+&gt; ifconfig
+&gt; echo hello haiyun
+&gt; END
+job 2 at 2017-08-24 15:00
+</code></pre><ol start="3">
+<li><strong>at –f 文件</strong></li>
+</ol>
+<pre><code>[root@centos6 ~]# echo ifconfig &gt; at.txt
+[root@centos6 ~]# at 12:00 -f at.txt 
+job 3 at 2017-08-24 12:00
+</code></pre><h3 id="etc-at-allow-deny-控制用户是否能执行at任务"><a href="#etc-at-allow-deny-控制用户是否能执行at任务" class="headerlink" title="/etc/at.{allow,deny}控制用户是否能执行at任务"></a><code>/etc/at.{allow,deny}</code>控制用户是否能执行at任务</h3><p><code>/etc/at.{allow,deny}</code>控制用户是否能执行at任务</p>
+<ul>
+<li>白名单： <code>/etc/at.allow</code> 默认不存在，需要手动创建，只有该文件中的用户才能执行at命令，如果有<code>at.allow</code>文件那么/etc/at.deny将会失效</li>
+<li>黑名单： <code>/etc/at.deny</code> 默认存在，拒绝该文件中用户执行</li>
+<li>at命令， 而没有在at.deny 文件中的使用者则可执行</li>
+<li>如果两个文件都不存在，只有 root 可以执行 at 命令</li>
+</ul>
+<h3 id="at工作原理"><a href="#at工作原理" class="headerlink" title="at工作原理"></a>at工作原理</h3><p><strong>事实上，我们使用at这个命令来生成所要运行的工作，并将这个工作以文本文件的方式写入/var/spool/at目录内，该工作便能等待atd这个服务的去用与执行了。</strong></p>
+<p><strong>at队列存放在/var/spool/at目录中</strong></p>
+<h3 id="atd的启动"><a href="#atd的启动" class="headerlink" title="atd的启动"></a>atd的启动</h3><ul>
+<li><strong>依赖与atd服务,需要启动才能实现at任务</strong></li>
+<li>centos 6：<br>  [root@centos6 ~]# service atd start</li>
+<li>centos 7：<br>  [root@centos7 ~]# systemctl start atd</li>
+</ul>
+<h3 id="查看是否安装at包"><a href="#查看是否安装at包" class="headerlink" title="查看是否安装at包"></a>查看是否安装at包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# rpm -q at         &lt;==查看at包是否安装</span><br><span class="line">at-3.1.13-22.el7.x86_64</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# rpm -ql at        &lt;==查看at安装完成后生成的所有文件</span><br><span class="line">/etc/at.deny</span><br><span class="line">/etc/pam.d/atd</span><br><span class="line">/etc/sysconfig/atd</span><br><span class="line">/usr/bin/at</span><br><span class="line">/usr/bin/atq</span><br><span class="line">/usr/bin/atrm</span><br><span class="line">/usr/bin/batch</span><br><span class="line">/usr/lib/systemd/system/atd.service</span><br><span class="line">/usr/sbin/atd</span><br><span class="line">/usr/sbin/atrun</span><br><span class="line">/usr/share/doc/at-3.1.13</span><br><span class="line">/usr/share/doc/at-3.1.13/ChangeLog</span><br><span class="line">/usr/share/doc/at-3.1.13/Copyright</span><br><span class="line">/usr/share/doc/at-3.1.13/Problems</span><br><span class="line">/usr/share/doc/at-3.1.13/README</span><br><span class="line">/usr/share/doc/at-3.1.13/timespec</span><br><span class="line">/usr/share/man/man1/at.1.gz</span><br><span class="line">/usr/share/man/man1/atq.1.gz</span><br><span class="line">/usr/share/man/man1/atrm.1.gz</span><br><span class="line">/usr/share/man/man1/batch.1.gz</span><br><span class="line">/usr/share/man/man5/at.allow.5.gz</span><br><span class="line">/usr/share/man/man5/at.deny.5.gz</span><br><span class="line">/usr/share/man/man8/atd.8.gz</span><br><span class="line">/usr/share/man/man8/atrun.8.gz</span><br><span class="line">/var/spool/at</span><br><span class="line">/var/spool/at/.SEQ</span><br><span class="line">/var/spool/at/spool</span><br><span class="line"></span><br><span class="line">[root@centos7 ~]# rpm -qi at        &lt;==查看at包的相关信息</span><br><span class="line">Name        : at</span><br><span class="line">Version     : 3.1.13</span><br><span class="line">Release     : 22.el7</span><br><span class="line">Architecture: x86_64</span><br><span class="line">Install Date: Wed 23 Aug 2017 09:45:15 AM CST</span><br><span class="line">Group       : System Environment/Daemons</span><br><span class="line">Size        : 97524</span><br><span class="line">License     : GPLv3+ and GPLv2+ and ISC and MIT and Public Domain</span><br><span class="line">Signature   : RSA/SHA256, Mon 21 Nov 2016 01:07:58 AM CST, Key ID 24c6a8a7f4a80eb5</span><br><span class="line">Source RPM  : at-3.1.13-22.el7.src.rpm</span><br><span class="line">Build Date  : Sun 06 Nov 2016 02:16:27 AM CST</span><br><span class="line">Build Host  : worker1.bsys.centos.org</span><br><span class="line">Relocations : (not relocatable)</span><br><span class="line">Packager    : CentOS BuildSystem &lt;http://bugs.centos.org&gt;</span><br><span class="line">Vendor      : CentOS</span><br><span class="line">URL         : http://ftp.debian.org/debian/pool/main/a/at</span><br><span class="line">Summary     : Job spooling tools</span><br><span class="line">Description :</span><br><span class="line">At and batch read commands from standard input or from a specified</span><br><span class="line">file. At allows you to specify that a command will be run at a</span><br><span class="line">particular time. Batch will execute commands when the system load</span><br><span class="line">levels drop to a particular level. Both commands use user&apos;s shell.</span><br><span class="line"></span><br><span class="line">You should install the at package if you need a utility for</span><br><span class="line">time-oriented job control. Note: If it is a recurring job that will</span><br><span class="line">need to be repeated at the same time every day/week, etc. you should</span><br><span class="line">use crontab instead.</span><br></pre></td></tr></table></figure>
+<h3 id="范例"><a href="#范例" class="headerlink" title="范例"></a>范例</h3><h4 id="范例一："><a href="#范例一：" class="headerlink" title="范例一："></a>范例一：</h4><p>再过5分钟后，将/root/.bashrc寄给root自己</p>
+<pre><code>[root@centos6 ~]# at now + 5 minutes        &lt;==记得加s
+at&gt; /bin/mail/ root -s &quot;testing at job&quot; &lt; /root/.bashrc     &lt;==尽量写绝对路径，因为计划任务的PATH（环境变量）和我们当前bash的PATH是有区别的
+at&gt; &lt;EOT&gt;
+job 6 at 2017-08-23 16:49
+</code></pre><h4 id="范例二："><a href="#范例二：" class="headerlink" title="范例二："></a>范例二：</h4><p>将上述的第6项工作内容列出来查阅</p>
+<pre><code>[root@centos6 ~]# at -c 6
+#!/bin/sh
+# atrun uid=0 gid=0
+# mail root 0
+umask 22
+HOSTNAME=centos6.haiyun.com; export HOSTNAME
+SELINUX_ROLE_REQUESTED=; export SELINUX_ROLE_REQUESTED
+SHELL=/bin/bash; export SHELL
+HISTSIZE=1000; export HISTSIZE
+SSH_CLIENT=192.168.8.1\ 60005\ 22; export SSH_CLIENT
+SELINUX_USE_CURRENT_RANGE=; export SELINUX_USE_CURRENT_RANGE
+SSH_TTY=/dev/pts/0; export SSH_TTY
+USER=root; export USER
+。。。此处省略一些环境变量
+MAIL=/var/spool/mail/root; export MAIL
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin; export PATH
+PWD=/root; export PWD
+LANG=en_US.UTF-8; export LANG
+SELINUX_LEVEL_REQUESTED=; export SELINUX_LEVEL_REQUESTED
+HISTCONTROL=ignoredups; export HISTCONTROL
+SHLVL=1; export SHLVL
+HOME=/root; export HOME
+LOGNAME=root; export LOGNAME
+CVS_RSH=ssh; export CVS_RSH
+SSH_CONNECTION=192.168.8.1\ 60005\ 192.168.8.128\ 22; export SSH_CONNECTION
+LESSOPEN=\|\|/usr/bin/lesspipe.sh\ %s; export LESSOPEN
+G_BROKEN_FILENAMES=1; export G_BROKEN_FILENAMES
+cd /root || {
+     echo &apos;Execution directory inaccessible&apos; &gt;&amp;2
+     exit 1
+}
+${SHELL:-/bin/sh} &lt;&lt; &apos;marcinDELIMITER2eb18f7b&apos;
+/bin/mail/ root -s &quot;testing at job&quot; &lt; /root/.bashrc     &lt;==命令
+
+marcinDELIMITER2eb18f7b
+</code></pre><h4 id="范例三："><a href="#范例三：" class="headerlink" title="范例三："></a>范例三：</h4><p>计划在2017-10-08 20:00关机</p>
+<pre><code>[root@centos6 ~]# at 20:00 2017-10-08
+at&gt; /sbin/poweroff 
+at&gt; &lt;EOT&gt;
+job 7 at 2017-10-08 20:00
+</code></pre><h4 id="范例四："><a href="#范例四：" class="headerlink" title="范例四："></a>范例四：</h4><p>删除上面刚刚创建的计划任务</p>
+<pre><code>[root@centos6 ~]# at -l         &lt;==查看计划任务列表
+1    2017-08-24 12:00 a root
+7    2017-10-08 20:00 a root
+3    2017-08-24 12:00 a root
+2    2017-08-24 15:00 a root
+[root@centos6 ~]# at -d 7       &lt;==删除计划任务7
+[root@centos6 ~]# at -l         &lt;==再次查看已被删除
+1    2017-08-24 12:00 a root
+3    2017-08-24 12:00 a root
+2    2017-08-24 15:00 a root
+</code></pre><h3 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h3><ol>
+<li><code>atm -m</code> 命令，当任务被完成之后，将给用户发送邮件，即使没有标准输出。因为有些命令是没有标准输出的如：<code>useradd</code>，那么如果我们计划任务中写useradd添加用户，我们是看不到输出的，邮件也没有，此时<code>-m</code>选项就可以强制用户发送邮件。</li>
+<li>计划任务中，要使用绝对路径</li>
+<li><code>at.allow</code>要比<code>at.deny</code>优先级高。如果两个文件同时存在的话，那么<code>at.allow</code>生效。如果都不存在,那么就只有root用户可以使用at</li>
+<li><code>at</code>命令是有<code>SUID</code>权限的<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# ll /usr/bin/at</span><br><span class="line">-rwsr-xr-x. 1 root root 54464 Mar 22 08:13 /usr/bin/at</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/08/28/JiHuaRenWu-AT/';
+var disqus_title = 'at命令';
+var disqus_url = 'https://keeplearn.vip/2017/08/28/JiHuaRenWu-AT/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：批量更新主机信息 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-23</div></div></div><div class="container post-header"><h1>Zabbix：批量更新主机信息</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用批量更新"><span class="toc-number">2.</span> <span class="toc-text">使用批量更新</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#在主机中，在要更新的主机之前选中复选框并点击下方的Mass-update按钮"><span class="toc-number">2.1.</span> <span class="toc-text">在主机中，在要更新的主机之前选中复选框并点击下方的Mass update按钮</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#跳转到属性对应所需的选项卡-Host-Templates-IPMI-或者-Inventory"><span class="toc-number">2.2.</span> <span class="toc-text">跳转到属性对应所需的选项卡(Host, Templates, IPMI 或者 Inventory)</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>有时你可能想要一次更改多个主机的某些属性，那么你可以使用批量更新功能来代替打开每个主机进行编辑。</p>
+<a id="more"></a>
+<h3 id="使用批量更新"><a href="#使用批量更新" class="headerlink" title="使用批量更新"></a>使用批量更新</h3><p>要批量更新某些主机，请执行以下操作:</p>
+<ul>
+<li>在主机中，在要更新的主机之前选中复选框</li>
+<li>点击下方的 <code>Mass update</code> 按钮</li>
+<li>跳转到属性对应所需的选项卡(<code>Host</code>, <code>Templates</code>, <code>IPMI</code> 或者 <code>Inventory</code>)</li>
+<li>标记要更新的任何属性的复选框，并为其输入新值</li>
+</ul>
+<h4 id="在主机中，在要更新的主机之前选中复选框并点击下方的Mass-update按钮"><a href="#在主机中，在要更新的主机之前选中复选框并点击下方的Mass-update按钮" class="headerlink" title="在主机中，在要更新的主机之前选中复选框并点击下方的Mass update按钮"></a>在主机中，在要更新的主机之前选中复选框并点击下方的Mass update按钮</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Piliang-Host-1.jpg" title="在主机中，在要更新的主机之前选中复选框并点击下方的Mass update按钮"></center>
+
+<h4 id="跳转到属性对应所需的选项卡-Host-Templates-IPMI-或者-Inventory"><a href="#跳转到属性对应所需的选项卡-Host-Templates-IPMI-或者-Inventory" class="headerlink" title="跳转到属性对应所需的选项卡(Host, Templates, IPMI 或者 Inventory)"></a>跳转到属性对应所需的选项卡(Host, Templates, IPMI 或者 Inventory)</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Piliang-Host-2.jpg" title="跳转到属性对应所需的选项卡(Host, Templates, IPMI 或者 Inventory)"></center>
+
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Piliang-Host-3.jpg" title="跳转到属性对应所需的选项卡(Host, Templates, IPMI 或者 Inventory)"></center>
+
+
+<p><code>Replace</code> <code>host</code> <code>groups</code> 将从任何现有主机组中删除主机，并将其替换为该字段中指定的主&gt;机。</p>
+<p><code>Add new or existing host groups</code> 允许从现有主机组指定其它主机组，或为主机输入全新的主机组。</p>
+<p>这两个字段都是自动完成的 - 开始输入它们提供了匹配的主机组的下拉列表。 </p>
+<p>如果主机组是新的，它也会出现在下拉列表中，并在字符串后用(<code>new</code>)表示。 只需向下滚动即可选择。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Piliang-Host-4.jpg" title="如果主机组是新的，它也会出现在下拉列表中，并在字符串后用(`new`)表示。 只需向下滚动即可选择。"></center>
+
+<p><code>tes</code>选项卡中更新模板链接，请选择<code>Link</code> <code>templates</code>，并在自动填充字段中开始输入模板名称，直到出现一个提供匹配模板的下拉列表。 只需向下滚动即可选择要链接的模板。</p>
+<p><code>Replace</code>选项将允许链接新模板，同时取消链接到之前与主机链接的任何模板。 <code>Clear when unlinking</code>选项将不仅可以取消链接任何以前链接的模板，还可以删除所有继承自它们的元素<br>（监控项、触发器等）。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Piliang-Host-5.jpg" title="`Replace`选项将允许链接新模板，同时取消链接到之前与主机链接的任何模板。"></center>
+
+<p><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Piliang-Host-6.jpg" title="Replace`选项将允许链接新模板，同时取消链接到之前与主机链接的任何模板。"></center><br>完成所有必需的更改后，单击<code>Update</code>，所有选定主机的属性将相应更新。</p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/23/Zabbix-Piliang-Host/';
+var disqus_title = 'Zabbix：批量更新主机信息';
+var disqus_url = 'https://keeplearn.vip/2017/11/23/Zabbix-Piliang-Host/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

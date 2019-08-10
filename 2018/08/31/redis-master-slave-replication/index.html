@@ -1,0 +1,76 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Redis 主从复制原理 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Redis/">Redis</a></div><div class="post-time">2018-08-31</div></div></div><div class="container post-header"><h1>Redis 主从复制原理</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主从复制实现"><span class="toc-number">2.</span> <span class="toc-text">主从复制实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-初次主从复制"><span class="toc-number">2.1.</span> <span class="toc-text">1. 初次主从复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后续主从复制"><span class="toc-number">2.2.</span> <span class="toc-text">后续主从复制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主从配置"><span class="toc-number">3.</span> <span class="toc-text">主从配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Failover方案"><span class="toc-number">4.</span> <span class="toc-text">Failover方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis的两个特性"><span class="toc-number">5.</span> <span class="toc-text">Redis的两个特性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主服务器只在有至少-N-个从服务器的情况下，才执行写操作"><span class="toc-number">5.1.</span> <span class="toc-text">主服务器只在有至少 N 个从服务器的情况下，才执行写操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">6.</span> <span class="toc-text">致谢</span></a></li></ol></details></div><div class="container post-content"><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><a id="more"></a>
+<p>redis 支持简单且易用的主从复制（master-slave replication）功能， 该功能可以让从服务器(slave server)成为主服务器(master server)的精确复制品。 以下是关于 Redis 复制功能的几个重要方面：</p>
+<ul>
+<li>redis 使用异步复制。 异步复制就意味着master和slave之间会存在一致性问题，本文后半部分将详解redis是如何处理一致性问题的。</li>
+<li>redis支持多级主从（Chained Replication）同步。一个master可以有多个slave，salve也可以有自己的slave。</li>
+<li>复制功能不会阻塞master也不会阻塞slave。即使有一个或多个从服务器正在进行初次同步， 主服务器也可以继续处理命令请求。</li>
+<li>复制功能可以单纯地用于数据冗余（当master宕机时，slave可以接替master成为新的master），也可以通过让多个从服务器处理只读命令请求来提升扩展性(如繁重的 SORT 命令可以交给salve节点去执行）。</li>
+<li>可以通过复制功能来让备份数据而不需要主服务器执行持久化操作（只要关闭主服务器的持久化功能， 然后由从服务器去执行持久化操作即可）。</li>
+</ul>
+<h3 id="主从复制实现"><a href="#主从复制实现" class="headerlink" title="主从复制实现"></a>主从复制实现</h3><h4 id="1-初次主从复制"><a href="#1-初次主从复制" class="headerlink" title="1. 初次主从复制"></a>1. 初次主从复制</h4><p><strong>redis replication初次连接时主要执行下述6个步骤：</strong></p>
+<ul>
+<li>(1) 从服务器向主服务器发送 SYNC 命令。（redis 2.8 开始可以选择使用PSYNC或者SYNC）</li>
+<li>(2) 主服务器调用 BGSAVE 命令 ，创建一个.rdb 文件，并使用缓冲区记录接下来执行的所有写命令</li>
+<li>(3) 主服务器向从服务器发送 .rdb 文件</li>
+<li>(4) 从服务器接收.rdb文件并载入该文件</li>
+<li>(5) 主服务器将缓冲区储存的所有写命令发送给从服务器</li>
+<li>(6) 从服务器执行接收到的所有写命令</li>
+</ul>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/redis-Zhucong-Yuanli-1.PNG"></center>
+
+<p>无论是初次连接还是重新连接， 当建立一个从服务器时，从服务器都将向主服务器发送一个 <code>SYNC</code> 命令。接到 SYNC 命令的主服务器将开始执行 <code>BGSAVE</code> 命令 ， 并在 <code>BGSAVE</code> 执行期间，将所有新的主服务器的写入命令都保存到一个缓冲区里面。当 <code>BGSAVE</code> 命令执行完毕后，主服务器将执行所得的 .rdb 文件发送给从服务器， 从服务器接收这个 .rdb 文件，并将文件中的数据载入到内存中。之后主服务器会以 redis 命令协议的格式， 将写命令缓冲区中积累的所有写命令发送给从服务器。</p>
+<p>SYNC 命令执行示例 ：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/redis-Zhucong-Yuanli-2.PNG"></center>
+
+<p>当有多个从服务器同时向主服务器发送 SYNC ， 主服务器也只需执行一次 BGSAVE 命令，就可以处理所有这些从服务器的同步请求。</p>
+<p>在redis 2.8 版本之前，当从服务器断开连接后又重新连接上时，主从服务器之间会重新执行上述6个步骤进行主从同步，也就是执行一次完整重同步（full resynchronization）操作，主服务器发送完整的拷贝给从服务器。但是在这段掉线的时间里，主服务器可能只执行了有限次的写操作，没有必要发送主服务器的完整拷贝。从 redis 2.8 版本开始， 从服务器可以根据主服务器的情况来选择执行完整重同步还是部分重同步（partial resynchronization）。</p>
+<p>从 redis 2.8 开始， 在网络连接短暂性失效之后， 从服务器会重新连接， 并且向主服务器请求继续执行原来的复制进程：</p>
+<ul>
+<li>如果从服务器记录的主服务器 ID 和当前要连接的主服务器的 ID 相同， 那么只需同步未同步的数据。</li>
+<li>否则的话， 从服务器就要执行完整重同步操作。</li>
+</ul>
+<p>redis 2.8 的这个部分重同步特性会用到一个新增的 PSYNC 内部命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 如果主服务器是 redis 2.8 或以上版本，那么从服务器使用PSYNC 命令来进行同步</span><br><span class="line">2. 如果主服务器是 redis 2.8 之前的版本，那么从服务器使用SYNC 命令来进行同步</span><br></pre></td></tr></table></figure></p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/redis-Zhucong-Yuanli-3.PNG"></center>
+
+<p>如果主从服务器所处的网络环境并不是特别稳定的话（经常断线），推荐使用 redis 2.8 或以上版本，这可以节约大量网络资源、计算资源、内存资源 —— 这些消耗都来自重复创建和传输 RDB文件。</p>
+<h4 id="后续主从复制"><a href="#后续主从复制" class="headerlink" title="后续主从复制"></a>后续主从复制</h4><p>执行 SYNC 命令之后，主从服务器的数据库状态将达到一致状态（两个数据库都储存了相同的数据），但这种一致性只是暂时性的，因为一旦主服务器执行了新的写命令，主从服务器的数据库又会变得不一致。那么如何保持主从服务器的同步呢？</p>
+<p>在主从服务器完成同步之后，主服务器每执行一个写命令，它都会将被执行的写命令发送给从服务器执行，这个操作被称为“命令传播”（command propagate），命令传播是一个一直持续的操作。</p>
+<p>命令传播需要花费一段时间来完成，如果master和slave同时对外提供服务，因redis使用<strong>异步复制</strong>同步主从数据，那么在命令传播执行这段时间内会发生主从状态的不一致。考虑这样一种情况：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/redis-Zhucong-Yuanli-4.PNG"></center>
+
+<p>客户端与主服务器的连接非常快，而主从服务器之间的连接却非常慢。客户端向主服务器发送了命令 <code>SET 10086</code>，并在获得返回 <code>OK</code> 之后，向从服务器发送 <code>GET n</code> 。但是这时主服务器传播的 <code>SET n 10086</code> 因为网络原因仍然未到达从服务器，那么客户端获得的键 <code>n</code> 的值将是错误的（过期的）。</p>
+<p>由于目前为止redis只提供异步复制方式，因此只能保证数据的最终一致性，不能保证强一致性，在需要强一致性的应用场景下应该关闭从服务器的读操作。</p>
+<h3 id="主从配置"><a href="#主从配置" class="headerlink" title="主从配置"></a>主从配置</h3><p>redis的主从配置非常简单，只需要在slave的配置文件中添加如下一行配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slaveof 192.168.8.12 6379</span><br></pre></td></tr></table></figure></p>
+<p>其中<code>192.168.1.1</code>，<code>6379</code>分别是master的IP和端口号。</p>
+<p>另外一种方法是调用 SLAVEOF 命令， 输入主服务器的 IP 和端口， 然后同步就会开始：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379 &gt; SLAVEOF 192.168.8.12 10086</span><br></pre></td></tr></table></figure></p>
+<h3 id="Failover方案"><a href="#Failover方案" class="headerlink" title="Failover方案"></a>Failover方案</h3><p>redis主从复制的一个最大应用场景就是用来做failover,当master发生故障时，slave成为matser提供对外的服务。redis中用一个sentinel工具来具体执行failover的工作，从一堆slave中选择一个成为master，剩余的slave成为这个新的mater的slave。关于sentinel的原理将在另一篇文章中具体阐释。failover大致过程如下：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/Redis-Failover-1.PNG"></center>
+
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/Redis-Failover-2.PNG"></center>
+
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/Redis-Failover-3.PNG"></center>
+
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/Redis-Failover-4.PNG"></center>
+
+<h3 id="Redis的两个特性"><a href="#Redis的两个特性" class="headerlink" title="Redis的两个特性"></a>Redis的两个特性</h3><p>从 Redis 2.6 开始， 从服务器支持只读模式， 并且该模式为从服务器的默认模式。 只读模式由 redis.conf 文件中的 <code>slave-read-only</code> 选项控制， 也可以通过 <code>CONFIG SET</code> 命令来开启或关闭这个模式。</p>
+<p>只读从服务器会拒绝执行任何写命令， 所以不会出现因为操作失误而将数据不小心写入到了从服务器的情况。</p>
+<h4 id="主服务器只在有至少-N-个从服务器的情况下，才执行写操作"><a href="#主服务器只在有至少-N-个从服务器的情况下，才执行写操作" class="headerlink" title="主服务器只在有至少 N 个从服务器的情况下，才执行写操作"></a><strong>主服务器只在有至少 N 个从服务器的情况下，才执行写操作</strong></h4><p>从 Redis 2.8 开始， 为了保证数据的安全性， 可以通过配置， 让主服务器只在有至少 N 个当前已连接从服务器的情况下， 才执行写命令。</p>
+<p>从服务器以每秒一次的频率 PING 主服务器一次， 并报告复制流的处理情况。主服务器会记录各个从服务器最后一次向它发送 PING 的时间。用户可以通过配置 <code>min-slaves-max-lag</code>指定网络延迟的最大值 ， 以及执行写操作所需的至少从服务器数量<code>min-slaves-to-write</code> 。</p>
+<p>如果至少有 min-slaves-to-write 个从服务器， 并且这些服务器的延迟值都少于 min-slaves-max-lag 秒， 那么主服务器就会执行客户端请求的写操作。</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://zheming.wang/blog/2015/02/17/3388FE6B-359B-48C9-8D6E-EC1CAE64F143/" target="_blank" rel="noopener">Redis主从复制详解：http://zheming.wang/blog/2015/02/17/3388FE6B-359B-48C9-8D6E-EC1CAE64F143/</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/08/31/redis-master-slave-replication/';
+var disqus_title = 'Redis 主从复制原理';
+var disqus_url = 'https://keeplearn.vip/2018/08/31/redis-master-slave-replication/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

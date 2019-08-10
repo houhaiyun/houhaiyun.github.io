@@ -1,0 +1,61 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>CAP 定理的含义 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-time">2018-08-23</div></div></div><div class="container post-header"><h1>CAP 定理的含义</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、分布式系统的三个指标"><span class="toc-number">1.</span> <span class="toc-text">一、分布式系统的三个指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、Partition-tolerance"><span class="toc-number">2.</span> <span class="toc-text">二、Partition tolerance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、Consistency"><span class="toc-number">3.</span> <span class="toc-text">三、Consistency</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、Availability"><span class="toc-number">4.</span> <span class="toc-text">四、Availability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、Consistency-和-Availability-的矛盾"><span class="toc-number">5.</span> <span class="toc-text">五、Consistency 和 Availability 的矛盾</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">6.</span> <span class="toc-text">致谢</span></a></li></ol></details></div><div class="container post-content"><p>分布式系统（distributed system）正变得越来越重要，大型网站几乎都是分布式的。</p>
+<p>分布式系统的最大特点，就是各个节点的状态如何同步。CAP 定理是这方面的基本定理，也是理解分布式系统的起点。</p>
+<p>本节介绍该定理。它其实很好懂，而且是显而易见的。下面的内容主要参考了 Michael Whittaker 的<a href="https://mwhittaker.github.io/blog/an_illustrated_proof_of_the_cap_theorem/" target="_blank" rel="noopener">文章</a>。</p>
+<a id="more"></a>
+<h3 id="一、分布式系统的三个指标"><a href="#一、分布式系统的三个指标" class="headerlink" title="一、分布式系统的三个指标"></a>一、分布式系统的三个指标</h3><center><img src="https://houhaiyun.github.io/img/images/CAP-1.jpg" title=""></center>
+
+<p>1998 年，加州大学的计算机科学家 Eric Brewer 提出，分布式系统有三个指标。</p>
+<ul>
+<li>Consistency</li>
+<li>Availability</li>
+<li>Partition tolerance</li>
+</ul>
+<p>它们的第一个字母分别是 C、A、P。</p>
+<p>Eric Brewer 说，这三个指标不可能同时做到。这个结论就叫做 CAP 定理。</p>
+<h3 id="二、Partition-tolerance"><a href="#二、Partition-tolerance" class="headerlink" title="二、Partition tolerance"></a>二、Partition tolerance</h3><p>先看 Partition tolerance，中文叫做 “分区容错”。</p>
+<p>大多数分布式系统都分布在多个子网络。每个子网络就叫做一个区（partition）。分区容错的意思是，区间通信可能失败。比如，一台服务器放在中国，另一台服务器放在美国，这就是两个区，它们之间可能无法通信。</p>
+<center><img src="https://houhaiyun.github.io/img/images/CAP-2.png" title=""></center>
+
+<p>上图中，G1 和 G2 是两台跨区的服务器。G1 向 G2 发送一条消息，G2 可能无法收到。系统设计的时候，必须考虑到这种情况。</p>
+<p>一般来说，分区容错无法避免，因此可以认为 CAP 的 P 总是成立。CAP 定理告诉我们，剩下的 C 和 A 无法同时做到。</p>
+<h3 id="三、Consistency"><a href="#三、Consistency" class="headerlink" title="三、Consistency"></a>三、Consistency</h3><p>Consistency 中文叫做 “一致性”。意思是，写操作之后的读操作，必须返回该值。举例来说，某条记录是 vo，用户向 G1 发起一个写操作，将其改为 v1。</p>
+<center><img src="https://houhaiyun.github.io/img/images/CAP-3.png" title=""></center>
+
+<p>接下来，用户的写操作就会得到 v1。这就叫一致性。</p>
+<center><img src="https://houhaiyun.github.io/img/images/CAP-4.png" title=""></center>
+
+<p>问题是，用户有可能向 G2 发起读操作，由于 G2 的值没有发生变化，因此返回的是 vo。G1 和 G2 读操作的结果不一致，这就不满足一致性了。</p>
+<center><img src="https://houhaiyun.github.io/img/images/CAP-5.png" title=""></center>
+
+<p>为了让 G2 也能变为 v1，就要在 G1 写操作的时候，让 G1 向 G2 发送一条消息，要求 G2 也改成 v1.</p>
+<center><img src="https://houhaiyun.github.io/img/images/CAP-6.png" title=""></center>
+
+<p>这样的话，用户向 G2 发起读操作，也能得到 v1.</p>
+<center><img src="https://houhaiyun.github.io/img/images/CAP-7.png" title=""></center>
+
+<h3 id="四、Availability"><a href="#四、Availability" class="headerlink" title="四、Availability"></a>四、Availability</h3><p>Availability 中文叫做 “可用性”，意思是只要收到用户的请求，服务器就必须给出回应。</p>
+<p>用户可以选择向 G1 或 G2 发起读操作。不管是哪台服务器，只要收到请求，就必须告诉用户，到底是 vo 还是 v1，否则就不满足可用性。</p>
+<h3 id="五、Consistency-和-Availability-的矛盾"><a href="#五、Consistency-和-Availability-的矛盾" class="headerlink" title="五、Consistency 和 Availability 的矛盾"></a>五、Consistency 和 Availability 的矛盾</h3><p>一致性和可用性，为什么不能同时成立？答案很简单，因为可能通信失败（即出现分区容错）。</p>
+<p>如果保证 G2 的一致性，那么 G1 必须在写操作时，锁定 G2 的读操作和写操作。只有数据同步后，才能重新开发读写。锁定期间，G2 不能读写，没有可用性。</p>
+<p>如果保证 G2 的可用性，那么势必不能锁定 G2，所以一致性不成立。</p>
+<p>综上所述，G2 无法同时做到一致性和可用性。系统设计时只能选择一个目标。如果追求一致性，那么无法保证所有节点的可用性；如果追求所有节点的可用性，那就没法做到一致性。</p>
+<p><strong>在什么场合，可用性高于一致性？</strong></p>
+<p>举例来说，发布一张网页到 CDN，多个服务器有这张网页的副本。后来发现一个错误，需要更新网页，这时只能每个服务器都更新一遍。</p>
+<p>一般来说，网页的更新不是特别强调一致性。短时期内，一些用户拿到老版本，另一些用户拿到新版本，问题不会特别大。当然，所有人最终都会看到新版本。所以，这个场合就是可用性高于一致性。</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p>本文转自：<a href="http://www.ruanyifeng.com/blog/2018/07/cap.html" target="_blank" rel="noopener">阮一峰的网络日志：CAP 定理的含义</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/08/23/CAP/';
+var disqus_title = 'CAP 定理的含义';
+var disqus_url = 'https://keeplearn.vip/2018/08/23/CAP/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

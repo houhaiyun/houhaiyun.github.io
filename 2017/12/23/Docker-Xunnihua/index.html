@@ -1,0 +1,66 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/虚拟化技术介绍/">虚拟化技术介绍</a></div><div class="post-time">2017-12-23</div></div></div><div class="container post-header"><h1>Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#XEN"><span class="toc-number">1.</span> <span class="toc-text">XEN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenVZ"><span class="toc-number">2.</span> <span class="toc-text">OpenVZ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVM"><span class="toc-number">3.</span> <span class="toc-text">KVM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hyper-V"><span class="toc-number">4.</span> <span class="toc-text">Hyper-V</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VMWare"><span class="toc-number">5.</span> <span class="toc-text">VMWare</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVM、XEN、VMWare的对比"><span class="toc-number">6.</span> <span class="toc-text">KVM、XEN、VMWare的对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">7.</span> <span class="toc-text">致谢</span></a></li></ol></details></div><div class="container post-content"><h3 id="XEN"><a href="#XEN" class="headerlink" title="XEN"></a>XEN</h3><p><a href="http://xen.org/" target="_blank" rel="noopener">官网：http://xen.org/</a></p>
+<p><code>Xen</code> 由剑桥大学开发，它是基于硬件的完全分割，物理上有多少的资源就只能分配多少资源，因此很难超售。可分为<code>Xen-PV</code>（半虚拟化），和<code>Xen-HVM</code>（全虚拟化）。</p>
+<p><code>Xen</code>是不能超售内存和硬盘的，当母服务器只有16<code>G</code>内存以及100<code>G</code>硬盘时，当开 <code>Xen</code>架构（任意一个虚拟化）的1<code>G</code>内存、25<code>G</code>硬盘的子机时，会直接占用服务器1<code>G</code> 内存，以及25<code>G</code>硬盘，所以<code>Xen</code>的性能，相比<code>OpenVZ</code>在超售的情况下要好。</p>
+<a id="more"></a>
+<ul>
+<li><code>Xen-PV</code>：半虚拟化，所以它仅仅适用于<code>linux</code>系列<code>VPS</code>，但它的性能损失比较少，大概相对于母机的4%-8%左右。</li>
+<li><code>Xen-HVM</code>：全虚拟化，可以安装<code>windows</code>或自由挂载<code>ISO</code>文件安装任意系统，由于是全虚拟化，所以性能损失较大，大概相对于母机性能损失8%-20%左右。</li>
+</ul>
+<ul>
+<li><code>Xen</code>适用人群：预算较为充足，且希望<code>VPS</code>有较高性能的客户</li>
+<li><code>Xen</code>注意事项：注意<code>Xen-PV</code>和<code>Xen-HVM</code>的区别。</li>
+<li><code>Xen</code>可用系统：<code>Xen-PV</code>：纯<code>Linux</code>，<code>Xen-HVM</code>：支持<code>Windows</code>、<code>Linux</code>等。</li>
+<li><code>Xen</code>代表商家：<code>Linode.com</code></li>
+</ul>
+<h3 id="OpenVZ"><a href="#OpenVZ" class="headerlink" title="OpenVZ"></a>OpenVZ</h3><p><a href="http://openvz.org/" target="_blank" rel="noopener">官网：http://openvz.org/</a></p>
+<p><code>OpenVZ</code>（简 称<code>OVZ</code>）采用<code>SWsoft</code>的<code>Virutozzo</code>虚拟化服务器软件产品的内核，是基于<code>Linux</code>平台的操作系统级服务器虚拟化架构。这个架构直接调用母服务器（母机）中的内核，模拟生成出子服务器（<code>VPS</code><br>，小机），所以，它经过虚拟化后相对于母服务器，性能损失大概只有的1-3%。<br>当然 <code>OpenVZ</code>可以超售，意思味着一台服务器总共16<code>G</code>内存，他可以开出配置为1<code>G</code> 内存×17台以上的子服务器。因为他的虚拟架构关系属于：客户用多少，就扣除母服务器多少，所以<code>OpenVZ</code>架构的<code>VPS</code>较为便<br>宜。但由于存在超售因素，如果服务商毫无休止的超售会导致服务器的性能急剧下降。</p>
+<p><code>OpenVZ</code>另一个特点是，它是 <strong>直接调用母服务器的内核</strong> ，所以会导致部分软件无法使用，以及部分内核文件是无法修改。</p>
+<ul>
+<li><code>OpenVZ</code>适用人群：新手、低预算客户</li>
+<li><code>OpenVZ</code>注意事项：资源不是自己独有的，安装<code>VPN</code>服务需要注意检测虚拟网卡支持。</li>
+<li><code>OpenVZ</code>可用系统：<code>Linux</code>（不支持<code>Windows</code>）</li>
+<li><code>OpenVZ</code>代表商家：<code>Buyvm.net</code></li>
+</ul>
+<h3 id="KVM"><a href="#KVM" class="headerlink" title="KVM"></a>KVM</h3><p><a href="http://www.linux-kvm.org/" target="_blank" rel="noopener">网站：http://www.linux-kvm.org/</a></p>
+<p><code>KVM</code>是<code>Linux</code>下的全功能虚拟化架构，基于<code>KVM</code>架构的<code>VPS</code>，默认是没有系统的，可自己上传<code>ISO</code>或调用服务商自带的<code>ISO</code>手动安装系统。这个非常适合热爱<code>DIY</code>自己 <code>VPS</code>的客户。</p>
+<p>由于<code>KVM</code>架构全功能虚拟化架构，甚至拥有独立的<code>BIOS</code>控制，所以对母服务器性能影响较大，所以基于<code>KVM</code>的<code>VPS</code>较贵，但<code>KVM VPS</code>相对其它架构的<code>VPS</code>较为自由。</p>
+<ul>
+<li><code>KVM</code>适用人群：折腾帝</li>
+<li><code>KVM</code>注意事项：虚拟化性能比<code>Xen</code>略低</li>
+<li><code>KVM</code>可用系统：<code>Windows</code>、<code>Linux</code>系列</li>
+<li><code>KVM</code>代表商家：<code>Hostgation</code>.<code>com</code></li>
+</ul>
+<h3 id="Hyper-V"><a href="#Hyper-V" class="headerlink" title="Hyper-V"></a>Hyper-V</h3><p><a href="http://www.microsoft.com/zh-cn/server-cloud/" target="_blank" rel="noopener">网站：http://www.microsoft.com/zh-cn/server-cloud/</a></p>
+<p><code>Hyper-V</code>是微软的一款虚拟化产品，大部分国内的<code>VPS</code>服务商使用这个架构，主要是因为其转为<code>Windows</code>定制，管理起来较为方便。目前的<code>Hyper</code>-<code>V</code>也支持<code>Linux</code>，只不过性能损失比较严重。</p>
+<p><code>Hyper-V</code>完美支持<code>Windows</code>系统，包括32位和64位。如果大家选购<code>Hyper-V</code>架构的 <code>VPS</code>，强烈建议使用<code>Windows</code>。</p>
+<p><code>Hyper-V</code>目前不能超售内存，但可超售硬盘，硬盘是根据客户使用情况扣除。一般来说，服务器的硬盘不会100%用完，这点不用担心。</p>
+<ul>
+<li><code>Hyper-V</code>适用人群：<code>Windows</code>系统爱好者</li>
+<li><code>Hyper-V</code>注意事项：<code>Linux</code>操作系统性能较低</li>
+<li><code>Hyper-V</code>可用系统：<code>Windows</code>、<code>Linux</code></li>
+</ul>
+<h3 id="VMWare"><a href="#VMWare" class="headerlink" title="VMWare"></a>VMWare</h3><p><a href="http://www.vmware.com/" target="_blank" rel="noopener">网站：http://www.vmware.com/</a></p>
+<p><code>vSphere</code> 是<code>VMware</code>公司推出一套服务器虚拟化解决方案，目前的最新版本为5.0 。<code>vSphere</code>5 中的核心组件为 <code>VMware</code> <code>ESXi</code> 5.0.0（取代原<code>ESX</code>）, <code>ESXi</code>是一款可以独立安装和运行在祼机上的系统，因&gt;此与他我们以往见过的<code>VMware</code> <code>Workstation</code> 软件不同的是它不再依存于宿主操作系统之上。在<code>ESXi</code>安装好以后，我们可以通过<code>vSphere</code> <code>Client</code> 远程连接控制，在<code>ESXi</code> 服务器上创建多个<code>VM</code>（虚拟机），在为这些虚拟机安装好<code>Linux</code> /<code>Windows</code> <code>Server</code> 系统使之成为能提供各种网络应用服务的虚拟服务器，<code>ESXi</code> 也是从内核级支持硬件虚拟化，运行于其中的虚拟服务器在性能与稳定性上不亚于普通的硬件服<br>务器，而且更易于管理维护</p>
+<p><code>VMware vSphere</code> 是用于虚拟化的软件组件套件。这些组件包括 <code>ESXi</code>、<code>vCenter Server</code> 以及在 <code>vSphere</code> 环境中实现许多不同功能的其他软件组件。</p>
+<h3 id="KVM、XEN、VMWare的对比"><a href="#KVM、XEN、VMWare的对比" class="headerlink" title="KVM、XEN、VMWare的对比"></a>KVM、XEN、VMWare的对比</h3><center><img src="https://houhaiyun.github.io/img/images/Docker-Xunnihua-1.png" title="KVM、XEN、VMWare的对比"></center>
+
+
+
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://wiki.dreamrunner.org/public_html/Misc/Software/virtual-technology.html" target="_blank" rel="noopener">虚拟化技术：http://wiki.dreamrunner.org/public_html/Misc/Software/virtual-technology.html</a></p>
+<p><a href="http://openskill.cn/article/69" target="_blank" rel="noopener">XEN 、 VMware ESXi、Hyper-V 以及 KVM 特点比较：http://openskill.cn/article/69</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/12/23/Docker-Xunnihua/';
+var disqus_title = 'Xen、OpenVZ、KVM、Hyper-V、VMWare虚拟化技术介绍';
+var disqus_url = 'https://keeplearn.vip/2017/12/23/Docker-Xunnihua/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

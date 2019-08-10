@@ -1,0 +1,207 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：配置主机hosts和主机组 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-23</div></div></div><div class="container post-header"><h1>Zabbix：配置主机hosts和主机组</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置主机"><span class="toc-number">1.</span> <span class="toc-text">配置主机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#概述"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建一台主机"><span class="toc-number">1.2.</span> <span class="toc-text">创建一台主机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在表单中输入主机的相关参数"><span class="toc-number">1.3.</span> <span class="toc-text">在表单中输入主机的相关参数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Host-标签页包含了通用的主机属性"><span class="toc-number">1.3.1.</span> <span class="toc-text">Host 标签页包含了通用的主机属性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Templates标签页"><span class="toc-number">1.3.2.</span> <span class="toc-text">Templates标签页</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#IPMI标签页"><span class="toc-number">1.3.3.</span> <span class="toc-text">IPMI标签页</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Macros标签页"><span class="toc-number">1.3.4.</span> <span class="toc-text">Macros标签页</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Host-inventory标签页"><span class="toc-number">1.3.5.</span> <span class="toc-text">Host inventory标签页</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Encryption标签页"><span class="toc-number">1.3.6.</span> <span class="toc-text">Encryption标签页</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置主机组"><span class="toc-number">2.</span> <span class="toc-text">配置主机组</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#概述-1"><span class="toc-number">2.1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建主机组"><span class="toc-number">2.1.1.</span> <span class="toc-text">创建主机组</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#在表单中输入参数"><span class="toc-number">2.1.2.</span> <span class="toc-text">在表单中输入参数</span></a></li></ol></li></ol></li></ol></details></div><div class="container post-content"><h3 id="配置主机"><a href="#配置主机" class="headerlink" title="配置主机"></a>配置主机</h3><h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>按照以下步骤在<code>Zabbix</code>前端创建一台主机：</p>
+<ul>
+<li>定位到：<code>Configuration</code> → <code>Hosts</code></li>
+<li>在右侧点击 <code>Create host</code> (或者在主机名上编辑一台已有的主机)</li>
+<li>在表单中输入主机的相关参数</li>
+</ul>
+<a id="more"></a>
+<p>你可以在已经存在的主机上使用 <code>Clone</code> 和 <code>Full</code> <code>clone</code> 按钮的形式创建一个新的主机，点击 <code>Clone</code> 将保留所有的主机参数和模板链接（保留所有的模板入口），<code>Full clone</code> 将额外保留直属实体（应用集、监控项、触发器、视图、底层自动发现规则和<code>Web</code>定制的场景）。</p>
+<p><strong>注意</strong>: 当主机被克隆时，它将保留原来在模板上的所有模板实体. 在现有主机级别上（例如更改的监控间隔、修改正则表达式或添加原型到底层发现规则）所做的任何实体修改将不会克隆到新主机，而是与模板一致。</p>
+<h4 id="创建一台主机"><a href="#创建一台主机" class="headerlink" title="创建一台主机"></a>创建一台主机</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-1.jpg" title="创建一台主机"></center>
+
+
+<h4 id="在表单中输入主机的相关参数"><a href="#在表单中输入主机的相关参数" class="headerlink" title="在表单中输入主机的相关参数"></a>在表单中输入主机的相关参数</h4><h5 id="Host-标签页包含了通用的主机属性"><a href="#Host-标签页包含了通用的主机属性" class="headerlink" title="Host 标签页包含了通用的主机属性"></a>Host 标签页包含了通用的主机属性</h5><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-2.jpg" title="Host 标签页包含了通用的主机属性"></center>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Host name</em></td>
+<td>输入一个唯一的主机名。允许有字母、空格、圆点、破折号和下划线。<em>注意：</em> 由于 Zabbix agent 运行在你所配置的那台主机上，所以此 agent 配置文件的参数 <em>Hostname</em> 必须和这里输入的主机名是一致的。 在配置 主动代理检查 的过程中参数中的主机名也是需要的。</td>
+</tr>
+<tr>
+<td><em>Visible name</em></td>
+<td>显示名称。如果你设置了这个名称，它将会在列表、拓扑图等地方显示。此属性支持 UTF-8 。</td>
+</tr>
+<tr>
+<td><em>Groups</em></td>
+<td>选择主机所属主机组。一个主机必须至少属于一个主机组。</td>
+</tr>
+<tr>
+<td><em>New host group</em></td>
+<td>可以创建一个新的组并和主机关联。如果为空表示忽略。</td>
+</tr>
+<tr>
+<td><em>Interfaces</em></td>
+<td>支持这几种主机接口类型: <em>Agent</em>, <em>SNMP</em>, <em>JMX</em> 和 <em>IPMI</em>.要增加一个新接口，在 <em>Interfaces</em> 区域点击 <em>Add</em> ，输入 <em>IP/DNS</em>, <em>Connect to</em> 和 <em>Port</em> 信息。<em>注意:</em> 用在任何监控项的接口都不能被删除，并且<em>Remove</em>链接是灰色的。在 SNMP 接口使用 <em>Use bulk requests</em> 选项来为每个接口启用和禁用SNMP请求的 批量处理。</td>
+</tr>
+<tr>
+<td><em>IP address</em></td>
+<td>主机的IP地址（可选）。</td>
+</tr>
+<tr>
+<td><em>DNS name</em></td>
+<td>主机的DNS名称（可选）。</td>
+</tr>
+<tr>
+<td><em>Connect to</em></td>
+<td>点击对应的按钮告诉Zabbix服务器采用哪种模式从代理端获取数据:<strong>IP</strong> - 连接到主机的IP地址（推荐）<strong>DNS</strong> - 连接到主机的DNS名称</td>
+</tr>
+<tr>
+<td><em>Port</em></td>
+<td>TCP/UDP 端口. 默认端口：Zabbix agent 10050, SNMP agent 161 , JMX 12345 ， IPMI 623.</td>
+</tr>
+<tr>
+<td><em>Default</em></td>
+<td>选择单选按钮设置默认接口.</td>
+</tr>
+<tr>
+<td><em>Description</em></td>
+<td>填写主机描述。</td>
+</tr>
+<tr>
+<td><em>Monitored by proxy</em></td>
+<td>主机可以被Zabbix服务器或者Zabbix代理服务器监控:<strong>(no proxy)</strong> - Zabbix服务器监控主机<strong>Proxy name</strong> - Zabbix代理服务器“代理服务器名称”监控主机</td>
+</tr>
+<tr>
+<td><em>Enabled</em></td>
+<td>选中此项激活主机，准备接受监控。如果没选中，表示主机未激活，不能被监控。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Templates标签页"><a href="#Templates标签页" class="headerlink" title="Templates标签页"></a>Templates标签页</h5><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-3.jpg" title="Templates标签页"></center>
+
+<p><code>Templates</code> 选项卡允许你将<code>templates</code> 链接到主机。所有实体（监控项, 触发器, 图表和应&gt;用集）将从模板继承。</p>
+<p>要链接一个新模板，请开始在<code>Link</code> <code>new</code> <code>templates</code> 区域键入，直到匹配键入的模板列表出<br>现。向下滚动选择你希望链接的模板。当所有的模板链接完成后，单击<code>Add</code>.<br>要取消链接模板，请使用<code>Linked</code> <code>templates</code>区域的两个选项之一:</p>
+<ul>
+<li><code>Unlink</code> - 取消链接模板，但保留它的监控项、触发器和图表</li>
+<li><code>Unlink</code> <code>and</code> <code>clear</code> - 取消链接模板并删除所有它的监控项、触发器和图表</li>
+</ul>
+<p>列出的模板名可以点击跳转到模板配置表单。</p>
+<h5 id="IPMI标签页"><a href="#IPMI标签页" class="headerlink" title="IPMI标签页"></a>IPMI标签页</h5><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-4.jpg" title="IPMI标签页"></center>
+
+<p>IPMI标签页包含<code>IPMI</code>管理属性</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Authentication algorithm</em></td>
+<td>选择认证算法。</td>
+</tr>
+<tr>
+<td><em>Privilege level</em></td>
+<td>选择权限级别。</td>
+</tr>
+<tr>
+<td><em>Username</em></td>
+<td>认证用户名.</td>
+</tr>
+<tr>
+<td><em>Password</em></td>
+<td>认证用户密码.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Macros标签页"><a href="#Macros标签页" class="headerlink" title="Macros标签页"></a>Macros标签页</h5><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-5.jpg" title="Macros标签页"></center>
+
+<p><code>Macros</code> 选项卡允许你定义主机级别的 用户宏. 如果你选择了 <code>Inherited</code> 和 <code>host macros</code> 选项，你也可以在这里查看模板级的宏以及全局宏。那里是为主机定义全部用户宏的地方，用户宏显示解析的值以及来源。</p>
+<p>为方便考虑，提供了相应模板和全局宏配置的链接。还可以在主机级别编辑一个模板/全局宏，有效地创建主机上宏的副本。</p>
+<h5 id="Host-inventory标签页"><a href="#Host-inventory标签页" class="headerlink" title="Host inventory标签页"></a>Host inventory标签页</h5><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-6.jpg" title="Host inventory标签页"></center>
+
+<p><code>Host inventory</code> 选项卡允许你为主机手工输入 库存 信息。你还可以选择启用 自动 库存量,或者禁用此主机的库存量。</p>
+<h5 id="Encryption标签页"><a href="#Encryption标签页" class="headerlink" title="Encryption标签页"></a>Encryption标签页</h5><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-7.jpg" title="Encryption标签页"></center>
+
+<p><code>Encryption</code> 选项卡允许你请求与主机 加密的 链接。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Connections to host</em></td>
+<td>Zabbix服务器或Zabbix代理服务器如何连接到主机上的Zabbix Agent：无加密（默认）；使用PSK（预共享密钥）或者证书。</td>
+</tr>
+<tr>
+<td><em>Connections from host</em></td>
+<td>从主机选择允许的连接类型（例如Zabbix agent和Zabbix Sender）。可以同时选择多种连接类型（对于测试及切换至其他连接类型时有帮助）。默认是“No encryption”。</td>
+</tr>
+<tr>
+<td><em>Issuer</em></td>
+<td>允许颁发证书。证书首先会通过CA（认证机构）认证。如果是有效的，则由CA签名，然后可以使用Issuer字段来进一步限制允许的CA。如果你的Zabbix安装使用多个CA证书，则该字段可以被重复使用。如果这个字段为空，那么任何CA都是可以被接受的。</td>
+</tr>
+<tr>
+<td><em>Subject</em></td>
+<td>允许的证书主题。证书首先通过CA验证。如果它是有效的，由CA签名，则Subject字段可以用于仅允许一个Subject字符串值。如果此字段为空，则接受由配置的CA签名的任何有效证书。</td>
+</tr>
+<tr>
+<td><em>PSK identity</em></td>
+<td>预共享密钥身份字符串.</td>
+</tr>
+<tr>
+<td><em>PSK</em></td>
+<td>预共享密钥（hex-string）。如果Zabbix使用GnuTLS或者OpenSSL库，最大长度：512位十六进制数，如果Zabbix使用mbed（PolarSSL）库，则是64位十六进制（32字节PSK）。示例: 1f87b595725ac58dd977beef14b97461a7c1045b9a1c963065002c5473194952</td>
+</tr>
+</tbody>
+</table>
+<h3 id="配置主机组"><a href="#配置主机组" class="headerlink" title="配置主机组"></a>配置主机组</h3><h4 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h4><p>要在<code>Zabbix</code>页面配置主机组，请执行以下步骤:</p>
+<ul>
+<li>进入: <code>Configuration</code> → <code>Host groups</code></li>
+<li>在页面右上方单击 <code>Create Group</code></li>
+<li>在表单中输入参数</li>
+</ul>
+<h5 id="创建主机组"><a href="#创建主机组" class="headerlink" title="创建主机组"></a>创建主机组</h5><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-8.jpg" title="创建主机组"></center>
+
+<h5 id="在表单中输入参数"><a href="#在表单中输入参数" class="headerlink" title="在表单中输入参数"></a>在表单中输入参数</h5><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Add-Host-9.jpg" title="在表单中输入参数"></center>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Group name</em></td>
+<td>输入唯一的主机组名称。要创建一个嵌套的主机组，请使用 ‘/‘ 正斜杠分隔符，例如<code>Europe/Latvia/Riga/Zabbix servers</code>. 即使不存在这3个父主机组(<code>Europe/Latvia/Riga</code>) ，你也可以创建该组。在这种情况下，创建父主机组取决于使用者；它们不会自动创建。不允许有正反斜杠，不支持反斜杠转义’/‘。Zabbix 3.2.0支持主机组的嵌套。</td>
+</tr>
+<tr>
+<td><em>Hosts</em></td>
+<td>选择主机、组成员。主机组可能有0个、1个或多个主机。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>嵌套主机组的权限：</strong></p>
+<ul>
+<li>当将子主机组创建到现有的父主机组时，对该子进程的用户组 权限将从父级继承, (例如,如果<code>Riga</code> 已经存在，创建 <code>Riga</code>/<code>Zabbix</code> <code>servers</code>)</li>
+<li>将父主机组创建到现有的子主机组时，不会设置父级的权限 (例如, 如果<code>Riga</code>/<code>Zabbix servers</code>已经存在，创建<code>Riga</code>)</li>
+</ul>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/23/Zabbix-Add-Host/';
+var disqus_title = 'Zabbix：配置主机hosts和主机组';
+var disqus_url = 'https://keeplearn.vip/2017/11/23/Zabbix-Add-Host/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

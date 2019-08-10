@@ -1,0 +1,108 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：触发器trigger严重性 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-23</div></div></div><div class="container post-header"><h1>Zabbix：触发器trigger严重性</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#触发器trigger严重性"><span class="toc-number">1.</span> <span class="toc-text">触发器trigger严重性</span></a></li></ol></details></div><div class="container post-content"><h3 id="触发器trigger严重性"><a href="#触发器trigger严重性" class="headerlink" title="触发器trigger严重性"></a>触发器trigger严重性</h3><p>触发器严重性定义了触发器的重要程度，Zabbix支持以下触发器的严重程度：</p>
+<a id="more"></a>
+<table>
+<thead>
+<tr>
+<th>SEVERITY</th>
+<th>DEFINITION</th>
+<th>COLOUR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Not classified</strong></td>
+<td>Unknown severity.</td>
+<td>Grey</td>
+</tr>
+<tr>
+<td><strong>Information</strong></td>
+<td>For information purposes.</td>
+<td>Light blue</td>
+</tr>
+<tr>
+<td><strong>Warning</strong></td>
+<td>Be warned.</td>
+<td>Yellow</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>Average problem.</td>
+<td>Orange</td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td>Something important has happened.</td>
+<td>Light red</td>
+</tr>
+<tr>
+<td><strong>Disaster</strong></td>
+<td>Disaster. Financial losses, etc.</td>
+<td>Red</td>
+</tr>
+</tbody>
+</table>
+<p><strong>中文版</strong></p>
+<table>
+<thead>
+<tr>
+<th>SEVERITY</th>
+<th>DEFINITION</th>
+<th>颜色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not classified</td>
+<td>未知.</td>
+<td>灰色</td>
+</tr>
+<tr>
+<td>Information</td>
+<td>一般信息.</td>
+<td>浅绿</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>警告</td>
+<td>黄色</td>
+</tr>
+<tr>
+<td>Average</td>
+<td>一般问题.</td>
+<td>橙色</td>
+</tr>
+<tr>
+<td>High</td>
+<td>严重问题.</td>
+<td>红色</td>
+</tr>
+<tr>
+<td>Disaster</td>
+<td>灾难,会带来损失的那种.</td>
+<td>深红</td>
+</tr>
+</tbody>
+</table>
+<p>严重程度的用途为：</p>
+<ul>
+<li>触发器的可视化表现，不同的颜色代表不同的严重程度。</li>
+<li>全局报警音频。不同的音频代表不同的严重程度。</li>
+<li>用户媒介，不同的用户媒介（通知渠道）代表不同的严重程度。例如，<code>SMS</code>表示高严重性， <code>email</code>表示其他严重性。</li>
+<li>根据触发严重程度的情况来限定不同的<code>actions</code>动作。</li>
+</ul>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/23/Zabbix-Tirigger-Yanzhongxin/';
+var disqus_title = 'Zabbix：触发器trigger严重性';
+var disqus_url = 'https://keeplearn.vip/2017/11/23/Zabbix-Tirigger-Yanzhongxin/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

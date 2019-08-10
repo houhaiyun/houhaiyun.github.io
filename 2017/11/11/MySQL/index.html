@@ -1,0 +1,108 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>MySQL | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/MySQL/">MySQL</a></div><div class="post-time">2017-11-11</div></div></div><div class="container post-header"><h1>MySQL</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是MySQL？"><span class="toc-number">1.</span> <span class="toc-text">什么是MySQL？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL数据库实现模型"><span class="toc-number">2.</span> <span class="toc-text">MySQL数据库实现模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#系统特性"><span class="toc-number">3.</span> <span class="toc-text">系统特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用环境组合"><span class="toc-number">4.</span> <span class="toc-text">应用环境组合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储引擎"><span class="toc-number">5.</span> <span class="toc-text">存储引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ACID"><span class="toc-number">6.</span> <span class="toc-text">ACID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL替代产品"><span class="toc-number">7.</span> <span class="toc-text">MySQL替代产品</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">8.</span> <span class="toc-text">致谢</span></a></li></ol></details></div><div class="container post-content"><h3 id="什么是MySQL？"><a href="#什么是MySQL？" class="headerlink" title="什么是MySQL？"></a>什么是MySQL？</h3><p><code>MySQL</code>是一个关系型数据库管理系统，由瑞典 <code>MySQL AB</code> 公司开发，目前属于 <code>Oracle</code> 旗下公司。<code>MySQL</code> 最流行的关系型数据库管理系统，在 <code>WEB</code> 应用方面 <code>MySQL</code> 是最好的 RDBMS应用软件之一。<code>MySQL</code> 是一种关联数据库管理系统，关联数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。<code>MySQL</code> 所使用的 <code>SQL</code> 语言是用于访问数据库的最常用标准化语言。<code>MySQL</code> 软件采用了双授权政策（本词条“授权政策”），它分为社区版和商业版，由于其体积小、速度快、总体拥有成本低，尤其是开放源码这一特点，一般中小型网站的开发都选择 MySQL 作为网站数据库。由于其社区版的性能卓越，搭配 <code>PHP</code> 和 <code>Apache</code> 可组成良好的开发环境。</p>
+<a id="more"></a>
+<h3 id="MySQL数据库实现模型"><a href="#MySQL数据库实现模型" class="headerlink" title="MySQL数据库实现模型"></a>MySQL数据库实现模型</h3><center><img src="https://houhaiyun.github.io/img/images/MySQL-1.jpg" title="MySQL架构"></center>
+
+<p><strong>通过上图可以把数据库操作分为以下四个阶段：</strong></p>
+<ol>
+<li>用户通过本地或网络使用C、PHP等多种开发语言开发的接口连接MySQL数据库服务器。</li>
+<li>用户接入服务器后进入连接池，在连接池中实现用户认证、线程重用、并发连接数限制、内存检测、连接缓存等操作，而后数据处理结果进入下一层面，接受用户输入的指令，结合SQL接口，分析器，优化器，缓存缓存管理器，将指令处理后发送给数据库引擎完成数据库管理、维护、集群、配置等操作。</li>
+<li>数据库引擎接收到其能支持的数据处理命令后，对数据执行响应的查询、修改等操作，数据库引擎是直接数据处理层面。</li>
+<li>物理存储层面，数据的最终存储位置，根据数据库引擎的处理以索引顺序或者堆文件存储模式存储底层数据。</li>
+</ol>
+<p><strong>上图中的部分组件介绍：</strong></p>
+<ol>
+<li><code>Connectors</code>：是连接<code>mysql</code>的各种客户端和接口。</li>
+<li><code>Connection Pool</code>：用于创建用户连接，缓存连接线程，做连接池。还有鉴权、进行身份验证、线程重用、连接限制、检查内存、数据缓存、管理用户的连接，线程处理等需要缓存的需求。</li>
+<li><code>Management Serveices &amp; Utilities</code>：系统管理和控制工具备份和恢复的安全性，复制、集群、管理、配置和迁移元数据。</li>
+<li><code>SQL Interface</code>：<code>SQL</code>接口，接受用户的SQL命令，并且返回用户需要查询的结果。比如<code>select from</code>就是调用<code>SQL Interface</code>。进行<code>DML</code>、<code>DDL</code>、存储过程、视图、触发器等操作和管理；用户通过<code>SQL</code>命令查询所需结果。</li>
+<li><code>Parser</code>：解释器，<code>SQL</code>命令传递到解析器的时候会被解析器验证和解析。解析器是由<code>Lex</code>和<code>YACC</code>实现的，是一个很长的脚本。主要功能：<ol>
+<li>将<code>SQL</code>语句分解成数据结构，并将这个结构传递到后续步骤，以后SQL语句的传递和处理就是基于这个结构的</li>
+<li>如果在分解构成中遇到错误，那么就说明这个sql语句是不合理的</li>
+</ol>
+</li>
+<li><code>Optimizer</code>：查询优化器 <code>SQL</code>语句在查询之前会使用查询优化器对查询进行优化。它使用的是“选取-投影-联接”策略进行查询。<ul>
+<li>用一个例子就可以理解： <code>select uid,name from user where gender = 1</code>;这个<code>select</code> 查询先根据<code>where</code> 语句进行选取，而不是先将表全部查询出来以后再进行gender过滤，这个select查询先根据uid和name进行属性投影，而不是将属性全部取出以后再进行过滤将这两个查询条件联接起来生成最终查询结果</li>
+</ul>
+</li>
+<li><code>Cache</code>和<code>Buffer</code>：查询缓存，如果查询缓存有命中的查询结果，查询语法就可以直接去查村缓存中读取数据。这个缓存机制是由一系列小缓存组成的。比如表缓存，记录缓存，<code>key</code>缓存，权限缓存等。</li>
+<li><code>Engine</code>：存储引擎：存储引擎是<code>Mysql</code>中具体的与文件打交道的子系统。也就是Mysql最具有特色的一个地方。<code>Mysql</code>的存储引擎是插件式的它根据<code>Mysql AB</code>公司提供的文件访问层的一个抽象接口来定制一种文件访问机制（这种访问机制就叫存储引擎）现在有很多种存储引擎，各个引擎的优势各不一样，最常用的<code>MyISAM</code>,<code>InnoDB</code>,<code>NDB</code>,<code>Archive</code>,<code>Federated</code>,<code>Memory</code>,<code>Merge</code>,<code>Partner</code>,<code>Community</code>,<code>Custom</code>等等。</li>
+</ol>
+<h3 id="系统特性"><a href="#系统特性" class="headerlink" title="系统特性"></a>系统特性</h3><ul>
+<li>使用 <code>C</code>和 <code>C++</code>编写，并使用了多种编译器进行测试，保证了源代码的可移植性。 </li>
+<li>支持 <code>AIX</code>、<code>FreeBSD</code>、<code>HP-UX</code>、<code>Linux</code>、<code>Mac OS</code>、<code>NovellNetware</code>、<code>OpenBSD</code>、<code>OS/2 Wrap</code>、<code>Solaris</code>、<code>Windows</code>等多种操作系统。 </li>
+<li>为多种编程语言提供了 <code>API</code>。这些编程语言包括 <code>C</code>、<code>C++</code>、<code>Python</code>、<code>Java</code>、<code>Perl</code>、<code>PHP</code>、<code>Eiffel</code>、<code>Ruby</code>、<code>.NET</code>和 <code>Tcl</code> 等。 </li>
+<li>支持多线程，充分利用 <code>CPU</code> 资源。 </li>
+<li>优化的 <code>SQL</code>查询算法，有效地提高查询速度。 </li>
+<li>既能够作为一个单独的应用程序应用在客户端服务器网络环境中，也能够作为一个库而嵌入到其他的软件中。 </li>
+<li>提供多语言支持，常见的编码如中文的 <code>GB 2312</code>、<code>BIG5</code>，日文的 <code>Shift_JIS</code>等都可以用作数据表名和数据列名。 </li>
+<li>提供 <code>TCP/IP</code>、<code>ODBC</code> 和 <code>JDBC</code>等多种数据库连接途径。 </li>
+<li>提供用于管理、检查、优化数据库操作的管理工具。 </li>
+<li>支持大型的数据库。可以处理拥有上千万条记录的大型数据库。 </li>
+<li>支持多种存储引擎。 </li>
+<li><code>MySQL</code> 是开源的，所以你不需要支付额外的费用。 </li>
+<li><code>MySQL</code> 使用标准的 <code>SQL</code>数据语言形式。 </li>
+<li><code>MySQL</code> 对 <code>PHP</code> 有很好的支持，<code>PHP</code>是目前最流行的 <code>Web</code> 开发语言。 </li>
+<li><code>MySQL</code>是可以定制的，采用了 <code>GPL</code>协议，你可以修改源码来开发自己的 <code>MySQL</code> 系统。 </li>
+<li>在线 <code>DDL</code>/更改功能，数据架构支持动态应用程序和开发人员灵活性（5.6新增） </li>
+<li>复制全局事务标识，可支持自我修复式集群（5.6新增） </li>
+<li>复制无崩溃从机，可提高可用性（5.6新增） </li>
+<li>复制多线程从机，可提高性能（5.6新增）</li>
+</ul>
+<h3 id="应用环境组合"><a href="#应用环境组合" class="headerlink" title="应用环境组合"></a>应用环境组合</h3><p>与其他的大型数据库例如 <code>Oracle</code>、<code>DB2</code>、<code>SQL Server</code>等相比，<code>MySQL</code> 自有它的不足之处，但是这丝毫也没有减少它受欢迎的程度。对于一般的个人使用者和中小型企业来说，MySQL提供的功能已经绰绰有余，而且由于 <code>MySQ L</code>是开放源码软件，因此可以大大降低总体拥有成本。<code>Linux</code>作为操作系统，<code>Apache</code>和 <code>Nginx</code>作为 <code>Web</code> 服务器，<code>MySQL</code> 作为数据库，<code>PHP</code>/<code>Perl</code>/<code>Python</code>作为服务器端脚本解释器。由于这四个软件都是免费或开放源码软件（<code>FLOSS</code>)，因此使用这种方式不用花一分钱（除开人工成本）就可以建立起一个稳定、免费的网站系统，被业界称为<code>“LAMP“</code>或<code>“LNMP”</code>组合。</p>
+<h3 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h3><ul>
+<li><code>MyISAM</code>在<code>MySQL 5.0</code> 之前是默认数据库引擎，最为常用。拥有较高的插入，查询速度，但不支持事务 </li>
+<li><code>InnoDB</code>事务型数据库的首选引擎，支持ACID事务，支持行级锁定, <code>MySQL 5.5</code> 起成为默认数据库引擎 </li>
+<li><code>BDB</code>源 自 <code>Berkeley DB</code>，事务型数据库的另一种选择，支持<code>Commit</code> 和<code>Rollback</code> 等其他事务特性 </li>
+<li><code>Memory</code>所有数据置于内存的存储引擎，拥有极高的插入，更新和查询效率。但是会占用和数据量成正比的内存空间。并且其内容会在 <code>MySQL</code> 重新启动时丢失 </li>
+<li><code>Merge</code>将一定数量的 <code>MyISAM</code> 表联合而成一个整体，在超大规模数据存储时很有用 </li>
+<li><code>Archive</code>非常适合存储大量的独立的，作为历史记录的数据。因为它们不经常被读取。<code>Archive</code> 拥有高效的插入速度，但其对查询的支持相对较差 </li>
+<li><code>Federated</code>将不同的 <code>MySQL</code> 服务器联合起来，逻辑上组成一个完整的数据库。非常适合分布式应用 </li>
+<li><code>Cluster</code>/<code>NDB</code>高冗余的存储引擎，用多台数据机器联合提供服务以提高整体性能和安全性。适合数据量大，安全和性能要求高的应用 </li>
+<li><code>CSV</code>： 逻辑上由逗号分割数据的存储引擎。它会在数据库子目录里为每个数据表创建一个 <code>.csv</code> 文件。这是一种普通文本文件，每个数据行占用一个文本行。<code>CSV</code> 存储引擎不支持索引。 </li>
+<li><code>BlackHole</code>：黑洞引擎，写入的任何数据都会消失，一般用于记录 <code>binlog</code>做复制的中继 </li>
+<li><code>EXAMPLE</code> 存储引擎是一个不做任何事情的存根引擎。它的目的是作为 <code>MySQL</code> 源代码中的一个例子，用来演示如何开始编写一个新存储引擎。同样，它的主要兴趣是对开发者。<code>EXAMPLE</code> 存储引擎不支持编索引。</li>
+</ul>
+<h3 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h3><p><code>ACID</code>，指数据库事务正确执行的四个基本要素的缩写。包含：原子性（<code>Atomicity</code>）、一致性（<code>Consistency</code>）、隔离性（<code>Isolation</code>）、持久性（<code>Durability</code>）。一个支持事务（<code>Transaction</code>）的数据库，必需要具有这四种特性，否则在事务过程（Transaction <code>processing</code>）当中无法保证数据的正确性，交易过程极可能达不到交易方的要求。</p>
+<ul>
+<li>原子性<ul>
+<li>整个事务中的所有操作，要么全部完成，要么全部不完成，不可能停滞在中间某个环节。事务在执行过程中发生错误，会被回滚（<code>Rollback</code>）到事务开始前的状态，就像这个事务从来没有执行过一样。</li>
+</ul>
+</li>
+<li>一致性<ul>
+<li>在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。具体来说就是，比如表与表之间存在外键约束关系，那么你对数据库进行的修改操作就必需要满足约束条件，即如果你修改了一张表中的数据，那你还需要修改与之存在外键约束关系的其他表中对应的数据，以达到一致性。</li>
+</ul>
+</li>
+<li>隔离性<ul>
+<li>隔离状态执行事务，使它们好像是系统在给定时间内执行的唯一操作。如果有两个事务，运行在相同的时间内，执行相同的功能，事务的隔离性将确保每一事务在系统中认为只有该事务在使用系统。这种属性有时称为串行化，为了防止事务操作间的混淆，必须串行化或序列化请求，使得在同一时间仅有一个请求用于同一数据。</li>
+</ul>
+</li>
+<li>持久性<ul>
+<li>在事务完成以后，该事务所对数据库所作的更改便持久的保存在数据库之中，并不会被回滚。 由于一项操作通常会包含许多子操作，而这些子操作可能会因为硬件的损坏或其他因素产生问题，要正确实现<code>ACID</code>并不容易。<code>ACID</code>建议数据库将所有需要更新以及修改的资料一次操作完毕，但实际上并不可行。 </li>
+</ul>
+</li>
+</ul>
+<p> 目前主要有两种方式实现<code>ACID</code>：第一种是<code>Write ahead logging</code>，也就是日志式的方式。第二种是<code>Shadow paging</code>。</p>
+<h3 id="MySQL替代产品"><a href="#MySQL替代产品" class="headerlink" title="MySQL替代产品"></a>MySQL替代产品</h3><p>随着 <code>MySQL</code> 被 <code>Oracle</code> 收购，<code>MySQL</code> 的用户和开发者开始质疑开源数据库的命运，与此同时他们开始寻找替代品。</p>
+<ul>
+<li><code>MariaDB</code>：从 <code>MySQL</code> 转向 <code>MariaDB</code>的代表厂家：谷歌（2013年9月）、<code>RedHat</code>（2013年6月）、维基百科（2013年4月） 。<code>MariaDB</code>如同 <code>MySQL</code> 的影子版本，<code>MariaDB</code>是 <code>MySQL</code> 的一个分支版本（<code>branch</code>），而不是衍生版本（<code>folk</code>），提供的功能可和 <code>MySQL</code> 完全兼容。 </li>
+<li><code>PostgreSQL</code>：从 <code>MySQL</code> 转向 <code>PostgreSQL</code>的代表厂家：苹果（2011年） 。</li>
+<li><code>NoSQL</code>：(<code>NoSQL</code> = <code>Not Only SQL</code>)，意即 <strong>不仅仅是 SQL</strong> ，是一项全新的数据库革命性运动。<code>NoSQL</code>指的是非关系型的数据库。</li>
+</ul>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://www.jianshu.com/p/bc66ab95717c" target="_blank" rel="noopener">简书：mysql的架构</a></p>
+<p><a href="http://cuchadanfan.blog.51cto.com/9940284/1688364" target="_blank" rel="noopener">粗茶淡饭：MySQL（一）之通用二进制格式安装MySQL及数据库基本概念</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/11/MySQL/';
+var disqus_title = 'MySQL';
+var disqus_url = 'https://keeplearn.vip/2017/11/11/MySQL/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

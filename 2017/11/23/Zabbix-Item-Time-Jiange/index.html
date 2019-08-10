@@ -1,0 +1,223 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：监控项item自定义间隔 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-23</div></div></div><div class="container post-header"><h1>Zabbix：监控项item自定义间隔</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义间隔"><span class="toc-number">1.</span> <span class="toc-text">自定义间隔</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#灵活的间隔"><span class="toc-number">1.1.</span> <span class="toc-text">灵活的间隔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#调度间隔"><span class="toc-number">1.2.</span> <span class="toc-text">调度间隔</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="自定义间隔"><a href="#自定义间隔" class="headerlink" title="自定义间隔"></a>自定义间隔</h3><p>可以创建关于选中监控项的自定义时间规则。这两种方式是灵活的时间间隔：允许重新定义默认的更新间隔和调度，从而可以在特定时间或次序执行监控项的检查。</p>
+<a id="more"></a>
+<h4 id="灵活的间隔"><a href="#灵活的间隔" class="headerlink" title="灵活的间隔"></a>灵活的间隔</h4><p>灵活的间隔允许重定义特定时间段的默认更新间隔。灵活的间隔被定义为间隔和周期，其中：</p>
+<ul>
+<li>间隔 – 指定时间段的更新间隔</li>
+<li>周期 – 灵活间隔有效的时间段</li>
+</ul>
+<p>可以定义多达七个灵活的时间间隔。如果多个灵活间隔设置有冲突，则在冲突周期中使用最小的间隔值。请注意，如果灵活间隔的最小值为“0”，则不会进行轮询。在灵活间隔之外，使用默认更新间隔。</p>
+<p>请注意，如果灵活间隔等于周期的长度，则该监控项将被精确检查一次。如果灵活间隔大于周期，则可能会检查该监控项一次，或者完全不检查该监控项（因此不建议这样配置）。如果灵活间隔小于周期，监控项将至少被检查一次。</p>
+<p>如果灵活间隔设置为“0”，则在灵活间隔期间不轮询监控项，并在周期结束后根据默认更新间隔恢复轮询。示例：</p>
+<table>
+<thead>
+<tr>
+<th>间隔</th>
+<th>周期</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>1-5,09:00-18:00</td>
+<td>监控项将在工作时间内每10秒检查一次。</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1-7,00:00-7:00</td>
+<td>监控项不会在夜间检查。</td>
+</tr>
+<tr>
+<td>0</td>
+<td>7-7,00:00-24:00</td>
+<td>监控项在星期日不会被检查。</td>
+</tr>
+<tr>
+<td>60</td>
+<td>1-7,12:00-12:01</td>
+<td>监控项将在每天12:00点检查。请注意，这种被用作计划检查的一般性方法从Zabbix 3.0开始建议使用调度间隔来实现。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="调度间隔"><a href="#调度间隔" class="headerlink" title="调度间隔"></a>调度间隔</h4><p>调度间隔用于在特定时间检查监控项。虽然灵活间隔被设计为重新定义默认监控项的更新间隔，但是调度间隔用于指定独立执行的检查计划。</p>
+<p>调度间隔定义为: <code>md&lt;filter&gt;wd&lt;filter&gt;h&lt;filter&gt;m&lt;filter&gt;s&lt;filter&gt;</code>其中:</p>
+<ul>
+<li><code>md - month days</code></li>
+<li><code>wd - week days</code></li>
+<li><code>h - hours</code></li>
+<li><code>m - minutes</code></li>
+<li><code>s – seconds</code></li>
+</ul>
+<p><code>&lt;filter&gt;</code> 用于指定其前缀的值(<code>days</code>, <code>hours</code>, <code>minutes</code>, <code>seconds</code>) 并被定义为: <code>[&lt;from&gt;[-&lt;to&gt;]][/&lt;step&gt;][,&lt;filter&gt;]</code> 其中:</p>
+<ul>
+<li><code>&lt;from&gt;</code>和<code>&lt;to&gt;</code>定义匹配值的范围（包括）。 如果忽略<code>&lt;to&gt;</code>，则过滤器匹配<code>&lt;from&gt;</code> - <code>&lt;from&gt;</code>范围。 如果<code>&lt;from&gt;</code>也被省略，则过滤器匹配所有可能的值。</li>
+<li><code>&lt;step&gt;</code>通过该范围定义数字值的跳过。默认情况下，<code>&lt;step&gt;</code>的值为1，这意味着所有定义范围的值都匹配。</li>
+</ul>
+<p>虽然过滤器定义是可选的，但必须至少使用一个过滤器。过滤器必须有一个范围或定义的<code>&lt;step&gt;</code>值。</p>
+<p>如果没有定义低级过滤器，则一个空的<code>filter</code>既与“0”匹配，又匹配所有可能的值。例如，如果省略小时过滤器，仅当分钟和秒的过滤器也被省略则只有“0”小时将匹配，否则空的小时过滤器将匹配所有小时值。</p>
+<p>它们各自的过滤器前缀的有效<code>&lt;from&gt;</code>和<code>&lt;to&gt;</code>值分别为：</p>
+<table>
+<thead>
+<tr>
+<th>前缀</th>
+<th>描述</th>
+<th><em><from></from></em></th>
+<th><em><to></to></em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>md</td>
+<td>Month days</td>
+<td>1-31</td>
+<td>1-31</td>
+</tr>
+<tr>
+<td>wd</td>
+<td>Week days</td>
+<td>1-7</td>
+<td>1-7</td>
+</tr>
+<tr>
+<td>h</td>
+<td>Hours</td>
+<td>0-23</td>
+<td>0-23</td>
+</tr>
+<tr>
+<td>m</td>
+<td>Minutes</td>
+<td>0-59</td>
+<td>0-59</td>
+</tr>
+<tr>
+<td>s</td>
+<td>Seconds</td>
+<td>0-59</td>
+<td>0-59</td>
+</tr>
+</tbody>
+</table>
+<p><code>&lt;from&gt;</code>值必须小于或等于<code>&lt;to&gt;</code>值。 <code>&lt;step&gt;</code>值必须大于或等于1且小于或等于<code>&lt;to&gt;</code> - <code>&lt;from&gt;</code>。</p>
+<p>单个数字月份、小时、分钟和秒值可以前缀为0.例如<code>md01-31</code>和<code>h/02</code>是有效间隔，但<code>md01-031</code>和<code>wd01-07</code>不是。</p>
+<p>在<code>Zabbix</code>管理<code>Web</code>端，多个调度间隔以单独的行输入。在<code>Zabbix API</code>中，它们以分号“；”连接成单个字符串作为分隔符。</p>
+<p>如果时间匹配了几个间隔，则只执行一次。例如，<code>wd1h9</code>; <code>h9</code>将在星期一上午9点执行一次。</p>
+<p><strong>实例</strong></p>
+<table>
+<thead>
+<tr>
+<th>间隔</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m0-59</td>
+<td>每分钟执行一次</td>
+</tr>
+<tr>
+<td>h9-17/2</td>
+<td>从9:00开始每2小时执行一次（9:00，11:00 …）</td>
+</tr>
+<tr>
+<td>m0,30 or m/30</td>
+<td>在每小时的hh:00 和 hh:30执行</td>
+</tr>
+<tr>
+<td>m0,5,10,15,20,25,30,35,40,45,50,55 or m/5</td>
+<td>每5分钟执行</td>
+</tr>
+<tr>
+<td>wd1-5h9</td>
+<td>每周一至周五9:00</td>
+</tr>
+<tr>
+<td>wd1-5h9-18</td>
+<td>每个星期一到星期五在9：00,10：00，…，18:00</td>
+</tr>
+<tr>
+<td>h9,10,11 or h9-11</td>
+<td>每天上午9:00，10:00和11:00</td>
+</tr>
+<tr>
+<td>md1h9m30</td>
+<td>每个月的第一天在9:30</td>
+</tr>
+<tr>
+<td>md1wd1h9m30</td>
+<td>如果是星期一，每个月的第一天在9:30执行</td>
+</tr>
+<tr>
+<td>h9m/30</td>
+<td>在9:00，9:30执行</td>
+</tr>
+<tr>
+<td>h9m0-59/30</td>
+<td>在9:00，9:30执行</td>
+</tr>
+<tr>
+<td>h9,10m/30</td>
+<td>在9:00，9:30，10:00，10:30执行</td>
+</tr>
+<tr>
+<td>h9-10m30</td>
+<td>在9:30，10:30执行</td>
+</tr>
+<tr>
+<td>h9m10-40/30</td>
+<td>在9:10，9:40执行</td>
+</tr>
+<tr>
+<td>h9,10m10-40/30</td>
+<td>在9:10，9:40，10:10，10:40执行</td>
+</tr>
+<tr>
+<td>h9-10m10-40/30</td>
+<td>在9:10，9:40，10:10，10:40执行</td>
+</tr>
+<tr>
+<td>h9m10-40</td>
+<td>在9:10，9:11，9:12，… 9:40执行</td>
+</tr>
+<tr>
+<td>h9m10-40/1</td>
+<td>在9:10，9:11，9:12，… 9:40执行</td>
+</tr>
+<tr>
+<td>h9-12,15</td>
+<td>在9:00，10:00，11:00，12:00，15:00执行</td>
+</tr>
+<tr>
+<td>h9-12,15m0</td>
+<td>在9:00，10:00，11:00，12:00，15:00执行</td>
+</tr>
+<tr>
+<td>h9-12,15m0s30</td>
+<td>在上午9时30分，上午10时30分，11时30分，12时30分，15时30分执行</td>
+</tr>
+<tr>
+<td>h9-12s30</td>
+<td>在9:00:30，9:01:30，9:02:30 … 12:58:30，12:59:30执行</td>
+</tr>
+<tr>
+<td>h9m/30;h10</td>
+<td>在9:00，9:30，10:00执行</td>
+</tr>
+</tbody>
+</table>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/23/Zabbix-Item-Time-Jiange/';
+var disqus_title = 'Zabbix：监控项item自定义间隔';
+var disqus_url = 'https://keeplearn.vip/2017/11/23/Zabbix-Item-Time-Jiange/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

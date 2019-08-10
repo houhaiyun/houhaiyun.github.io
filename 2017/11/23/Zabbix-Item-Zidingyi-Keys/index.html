@@ -1,0 +1,95 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：监控项item中自定义key | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-23</div></div></div><div class="container post-header"><h1>Zabbix：监控项item中自定义key</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#用户自定义参数"><span class="toc-number">1.</span> <span class="toc-text">用户自定义参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#用户参数示例"><span class="toc-number">1.1.</span> <span class="toc-text">用户参数示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#灵活的用户参数"><span class="toc-number">1.2.</span> <span class="toc-text">灵活的用户参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例1"><span class="toc-number">1.3.</span> <span class="toc-text">示例1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例2"><span class="toc-number">1.4.</span> <span class="toc-text">示例2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例3"><span class="toc-number">1.5.</span> <span class="toc-text">示例3</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令结果"><span class="toc-number">1.6.</span> <span class="toc-text">命令结果</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="用户自定义参数"><a href="#用户自定义参数" class="headerlink" title="用户自定义参数"></a>用户自定义参数</h3><p>有时你可能想要运行一个代理检查，它不是用<code>Zabbix</code>预定义的，这时你会用到用户参数来帮忙。</p>
+<p>我们可以在客户端配置文件 zabbix_angentd.conf 编写一个命令来检索所需的数据，并将其包含在用户参数代理配置文件中 (‘<code>UserParameter</code>‘ 配置参数)。</p>
+<p>用户参数具有以下语法：</p>
+<blockquote>
+<p>UserParameter=<key>,<command></key></p>
+</blockquote>
+<a id="more"></a>
+<p>如你看到的，用户参数还包含一个<code>Key</code>。 一个用户参数包含一个<code>Key</code>。输入你选择的<code>Key</code>，这将很容易引用（它在主机中必须是唯一的）。重新启动代理。</p>
+<p>然后，当 配置一个监控项时, 输入要从执行的用户参数中引用该命令的<code>Key</code>。</p>
+<p>用户参数是由<code>Zabbix</code>代理执行的命令。最多可以返回<code>512KB</code>的数据。 <code>/bin/sh</code> 在<code>UNIX</code>操作系统下用于命令行解释器。用户参数满足代理检查超时，如果达到超时，则分支用户参数进程终止。</p>
+<h4 id="用户参数示例"><a href="#用户参数示例" class="headerlink" title="用户参数示例"></a>用户参数示例</h4><p><strong>简单的命令:</strong></p>
+<blockquote>
+<p>UserParameter=ping,echo 1</p>
+</blockquote>
+<p>代理将始终使用<code>&#39;ping&#39;</code>键为一个监控项返回<code>&#39;1&#39;</code>。</p>
+<p><strong>一个更复杂的例子:</strong></p>
+<blockquote>
+<p>UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive</p>
+</blockquote>
+<p>如果MySQL服务器是活动状态，代理将返回’1’，否则为0。</p>
+<h4 id="灵活的用户参数"><a href="#灵活的用户参数" class="headerlink" title="灵活的用户参数"></a>灵活的用户参数</h4><p>灵活的用户参数使用<code>Key</code>接受参数。这样一个灵活的用户参数可以作为创建几个监控项的基础。</p>
+<p>灵活的用户参数具有以下语法：</p>
+<blockquote>
+<p>UserParameter=key[*],command</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Key</strong></td>
+<td>唯一的监控项Key。[*]定义该Key接收括号内的参数。在配置监控项时给出参数。</td>
+</tr>
+<tr>
+<td><strong>Command</strong></td>
+<td>执行命令以评估Key的值。<em>仅适用于灵活的用户参数</em>:你可以使用命令中的位置引用$ 1 … $ 9来引用监控项Key中的相应参数。Zabbix解析监控项Key的[]中包含的参数，并相应地替换$ 1，…，$ 9。$ 0将由原始命令（在扩展$ 0，…，$ 9之前）替换为运行。不管它们是用双引号(“)还是单引号(‘)括起来，都会解析位置引用。要使用位置引用不变，请指定双美元符号 - 例如，awk’{print $$2}’。 在这种情况下，执行命令时，“$$2”实际上会变成“$2”。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>使用$符号的位置引用仅由灵活的用户参数搜索并由Zabbix代理替代。对于简单的用户参数，跳过此类引用处理，因此任何$号引用都不是必需的。</p>
+</blockquote>
+<blockquote>
+<p>默认情况下，用户参数中不允许使用某些符号。</p>
+</blockquote>
+<h4 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h4><p>有些事情很简单：</p>
+<blockquote>
+<p>UserParameter=ping[*],echo $1</p>
+</blockquote>
+<p>我们可以定义无限数量的监控项，用于监视所有具有格式<code>ping [something]</code>的设置。</p>
+<ul>
+<li><code>ping[0]</code> - 总是返回 <code>&#39;0&#39;</code></li>
+<li><code>ping[aaa]</code> - 总是返回 <code>&#39;aaa&#39;</code></li>
+</ul>
+<h4 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h4><p>让我们增添更多的意义！</p>
+<blockquote>
+<p>UserParameter=mysql.ping[*],mysqladmin -u$1 -p$2 ping | grep -c alive</p>
+</blockquote>
+<p>此参数可用于监视<code>MySQL</code>数据库的可用性。我们可以传递用户名和密码：</p>
+<blockquote>
+<p>mysql.ping[zabbix,our_password]</p>
+</blockquote>
+<h4 id="示例3"><a href="#示例3" class="headerlink" title="示例3"></a>示例3</h4><p>有多少行匹配文件中的正则表达式？</p>
+<blockquote>
+<p>UserParameter=wc[*],grep -c “$2” $1</p>
+</blockquote>
+<p>此参数可用于计算文件中的行数。</p>
+<blockquote>
+<p>wc[/etc/passwd,root]<br>wc[/etc/services,zabbix]</p>
+</blockquote>
+<h4 id="命令结果"><a href="#命令结果" class="headerlink" title="命令结果"></a>命令结果</h4><p>命令的返回值与标准错误一起按照标准输出。</p>
+<blockquote>
+<p>在标准错误输出的情况下，文本（字符、日志或文本信息类型）监控项将被支持。</p>
+</blockquote>
+<p>返回文本（字符、日志、文本信息类型）的用户参数可以返回空格。 在无效结果的情况下，或执行退出代码不匹配0（零）的监控项将不被支持。</p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/23/Zabbix-Item-Zidingyi-Keys/';
+var disqus_title = 'Zabbix：监控项item中自定义key';
+var disqus_url = 'https://keeplearn.vip/2017/11/23/Zabbix-Item-Zidingyi-Keys/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

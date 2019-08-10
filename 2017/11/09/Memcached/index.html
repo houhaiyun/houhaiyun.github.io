@@ -1,0 +1,54 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Memcached | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Memcached/">Memcached</a></div><div class="post-time">2017-11-09</div></div></div><div class="container post-header"><h1>Memcached</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Memcached"><span class="toc-number">1.</span> <span class="toc-text">Memcached</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-number">2.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Memcached的工作过程"><span class="toc-number">3.</span> <span class="toc-text">Memcached的工作过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Slab-Allocation的工作机制"><span class="toc-number">4.</span> <span class="toc-text">Slab Allocation的工作机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Memcached的删除机制"><span class="toc-number">5.</span> <span class="toc-text">Memcached的删除机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Memcached的分布式算法"><span class="toc-number">6.</span> <span class="toc-text">Memcached的分布式算法</span></a></li></ol></details></div><div class="container post-content"><center><img src="https://houhaiyun.github.io/img/images/Memcached-1.jpg" title="Memcached"></center>
+
+<a id="more"></a>
+<h3 id="Memcached"><a href="#Memcached" class="headerlink" title="Memcached"></a>Memcached</h3><ul>
+<li><code>Memcached</code>是以<code>LiveJournal</code>旗下<code>Danga Interactive</code>公司的<code>Brad Fitzpatric</code>为首开发的一款软件。</li>
+<li>免费和开放源代码的高性能分布式内存对象缓存系统，本质上是通用的，但旨在通过减轻数据库负载来加速动态<code>Web</code>应用程序。</li>
+<li><code>Memcached</code>是内存中的键值存储，用于从数据库调用，<code>API</code>调用或页面呈现的结果中为小块任意数据（字符串，对象）。</li>
+<li><code>Memcached</code>简单而强大。其简单的设计促进了快速部署，易于开发，并解决了大数据缓存面临的许多问题。它的<code>API</code>适用于大多数流行的语言。</li>
+<li>其守护进程（<code>daemon</code> ）是用<code>C</code>写的，但是客户端可以用任何语言来编写，并通过<code>memcached</code>协议与守护进程通信。</li>
+<li>Memcached官网：<a href="http://memcached.org/" target="_blank" rel="noopener">http://memcached.org/</a></li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ol>
+<li>重启<code>memcached</code>服务器或者操作系统会使数据消失。</li>
+<li>内存容量达到指定值之后，就会使用<code>LRU</code>算法自动删除不使用或者很少使用的缓存。</li>
+</ol>
+<h3 id="Memcached的工作过程"><a href="#Memcached的工作过程" class="headerlink" title="Memcached的工作过程"></a>Memcached的工作过程</h3><p><code>Memcached</code>是一种<code>C/S</code>模式，在服务器端启动服务守护进程，此时可以指定监听的<code>IP</code>地址、端口号以及使用多少内存来处理客户端的请求等几个关键参数。服务器端的服务启动后就一直处于等待处理客户端的连接状态。<code>Memcached</code> 是由<code>C</code>语言来实现的，采用的是<strong>异步<code>I/O</code></strong>，其实现方式是基于事件的单进程和单线程的。使用 <strong><code>libevent</code> 作为事件通知机制</strong> ，多个服务器端可以协同工作，但这些服务器端之间没有任何通信关系，每个服务器端只对自己的数据进行管理。客户端通过指定服务器的IP地址和端口进行通信。</p>
+<p>需要被缓存的对象或数据以 <strong><code>key/value</code>对</strong> 的形式保存在服务器端，每个被缓存的对象或数据都有唯一的标识符key，存取操作通过这个key 进行。保存到 <code>Memcached</code> 中的对象或数据放置在内存中，并不会作为文件存储在磁盘上，所以存取速度非常快。由于没有对这些对象进行持久性存储，因此在服务器端的服务重启之后存储在内存中的这些数据就会消失。而且当存储的容量达到启动时设定的值时，就自动使用 <strong><code>LRU</code>算法</strong> 删除不用的缓存。<code>Memcached</code>是为缓存而设计的服务器，因此在设计之初并没有过多考虑数据的永久性问题。<code>Memcached</code> <strong>支持各种语言编写的客户端<code>API</code></strong> ，目前包括 Perl、PHP、Python、Ruby、Java、C#和C等。</p>
+<p><a href="https://yq.aliyun.com/articles/174199#" target="_blank" rel="noopener">本节书摘来自华章社区《高性能Linux服务器构建实战》一书中的第3章，第3.2节剖析Memcached的工作原理，作者：高俊峰</a></p>
+<h3 id="Slab-Allocation的工作机制"><a href="#Slab-Allocation的工作机制" class="headerlink" title="Slab Allocation的工作机制"></a>Slab Allocation的工作机制</h3><p> <strong><code>Memcached</code>利用<code>Slab Allocation</code>机制来分配和管理内存</strong> 。传统的内存管理方式是：使用完通过<code>malloc</code>分配的内存后通过<code>free</code>来回收内存。这种方式容易产生内存碎片并降低操作系统对内存的管理效率。<code>Slab Allocation</code>机制不存在这样的问题，它按照预先规定的大小，将分配的内存分割成特定长度的内存块，再把尺寸相同的内存块分成组，这些内存块不会释放，可以重复利用。</p>
+<p><code>Memcached</code>服务器端保存着一个空闲的内存块列表，当有数据存入时根据接收到的数据大小，分配一个能存下这个数据的最小内存块。这种方式有时会造成内存浪费，例如：将一个200字节的数据存入一个300字节的内存块中，会有100字节内存被浪费掉，不能使用。避免浪费内存的办法是，预先计算出应用存入的数据大小，或把同一业务类型的数据存入一个<code>Memcached</code>服务器中，确保存入的数据大小相对均匀，这样就可以减少对内存的浪费。还有一种办法是，在启动时指定“-f”参数，能在某种程度上控制内存组之间的大小差异。在应用中使用Memcached时，通常可以不重新设置这个参数，使用默认值1.25进行部署。如果想优化<code>Memcached</code>对内存的使用，可以考虑重新计算数据的预期平均长度，调整这个参数来获得合适的设置值。</p>
+<p><a href="https://yq.aliyun.com/articles/174199#" target="_blank" rel="noopener">本节书摘来自华章社区《高性能Linux服务器构建实战》一书中的第3章，第3.2节剖析Memcached的工作原理，作者：高俊峰</a></p>
+<h3 id="Memcached的删除机制"><a href="#Memcached的删除机制" class="headerlink" title="Memcached的删除机制"></a>Memcached的删除机制</h3><p>上一节已经介绍过，<code>Memcached</code>不会释放已分配的内存空间，在数据过期后，客户端不能通过<code>key</code>取出它的值，其存储空间被重新利用。</p>
+<p><code>Memcached</code>使用的是一种<code>Lazy Expiration</code>策略，自己不会监控存入的<code>key/value</code>对是否过期，而是在获取<code>key</code>值时查看记录的时间戳，检查<code>key/value</code>对空间是否过期。这种策略不会在过期检测上浪费<code>CPU</code>资源。<br><code>Memcached</code>在分配空间时，优先使用已经过期的<code>key/value</code>对空间，当空间占满时，<code>Memcached</code>就会使用<code>LRU</code>算法来分配空间，删除最近最少使用的<code>key/value</code>对，将其空间分配给新的<code>key/value</code>对。在某些情况下，如果不想使用LRU算法，那么可以通过<code>“-M”</code>参数来启动<code>Memcached</code>，这样，<code>Memcached</code>在内存耗尽时，会返回一个报错信息。</p>
+<p><a href="https://yq.aliyun.com/articles/174199#" target="_blank" rel="noopener">本节书摘来自华章社区《高性能Linux服务器构建实战》一书中的第3章，第3.2节剖析Memcached的工作原理，作者：高俊峰</a></p>
+<h3 id="Memcached的分布式算法"><a href="#Memcached的分布式算法" class="headerlink" title="Memcached的分布式算法"></a>Memcached的分布式算法</h3><p>前面已经介绍过，Memcached的分布式是通过客户端的程序库来实现的。下面举例描述其工作过程。<br>假设有node1、node2、node2三台Memcached服务器，应用程序要实现保存名为“tokyo”、“ tokyo1”、“ tokyo2”、“ tokyo3”的数据，如图3-2所示。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Memcached-2.png" title="有node1、node2、node2三台Memcached服务器，应用程序要实现保存名为“tokyo”、“ tokyo1”、“ tokyo2”、“ tokyo3”的数据"></center>
+
+<p>向Memcached中存入“tokyo”，将“tokyo”传给客户端程序后，客户端实现的算法就会根据这个“键”来决定保存数据的Memcached服务器，选定服务器后，就命令该服务器保存“tokyo”及其值，如图3-3所示。<br>同样，存入“tokyo1”、“ tokyo2”和“ tokyo3”的过程都是先通过客户端的算法选择服务器再保存数据。<br>接下来获取保存的数据。获取保存的key/value对时也要将要获取的键“tokyo”传递给函数库。函数库通过与存取数据操作相同的算法，根据“键”来选择服务器。只要使用的算法相同，就能确定存入在哪一台服务器上，然后发送get命令。只要数据没有因为某些原因被删除，就能获得保存的值，如图3-4所示。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Memcached-3.png" title="3-4"></center>
+
+<p>将不同的键保存到不同的服务器上，就实现了Memcached的分布式算法。部署多台Memcached服务器时，将键分散保存到这些服务器上，当某一台Memcached服务器发生故障无法连接时，只有分散到这台服务器上的key/values对不能访问，其他key/value对不受影响。</p>
+<p>目前有两种分布式算法使用得最多，一种是根据余数来计算分布，另一种是根据一致性散列算法来计算分布。根据余数分布式算法先求得键的整数散列值，再除以服务器台数，根据余数来选择将键存放到哪一台服务器上。这种方法虽然计算简单，效率很高，但在服务器增加或减少时，会导致几乎所有的缓存失效，所以在大规模部署中，很少使用这种方法。一致性散列的原理如图3-5所示，先算出Memcached服务器（节点）的散列值，并将其分散到0到2的32次方的圆上，然后用同样的方法算出存储数据的键的散列值并映射到圆上，最后从数据映射到的位置开始顺时针查找，将数据保存到查找到的第一个服务器上。如果超过232仍然找不到服务器，就会将数据保存到第一台Memcached服务器上。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Memcached-4.png" title="两种分布式算法"></center>
+
+<p>当需要添加一台Memcached服务器时，由于保存键的服务器的个数发生了变化，因此余数分布式算法的余数结果也会发生巨大变化，几乎所有的键都找不到之前存入的服务器，导致所有的缓存失效。但在采用一致性散列算法时，添加服务器后，只有在圆上增加服务器地点的逆时针方向的第一台服务器上的键会受到影响，如图3-6所示。<br>一致性散列算法对数据的存储是不均匀的，但可以最大限度地减少缓存的失效量。在大规模部署Memcached时，容灾和扩容一定要使用一致性散列算法，以确保在出现故障或容量问题时减小对数据库的影响。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Memcached-5.png" title="3-6"></center>
+
+<p><a href="https://yq.aliyun.com/articles/174199#" target="_blank" rel="noopener">本节书摘来自华章社区《高性能Linux服务器构建实战》一书中的第3章，第3.2节剖析Memcached的工作原理，作者：高俊峰</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/09/Memcached/';
+var disqus_title = 'Memcached';
+var disqus_url = 'https://keeplearn.vip/2017/11/09/Memcached/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

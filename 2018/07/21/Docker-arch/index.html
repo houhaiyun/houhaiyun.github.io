@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Docker 架构概览 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Docker/">Docker</a></div><div class="post-time">2018-07-21</div></div></div><div class="container post-header"><h1>Docker 架构概览</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-架构概览"><span class="toc-number">1.</span> <span class="toc-text">Docker 架构概览</span></a></li></ol></details></div><div class="container post-content"><h3 id="Docker-架构概览"><a href="#Docker-架构概览" class="headerlink" title="Docker 架构概览"></a>Docker 架构概览</h3><a id="more"></a>
+<p>Docker使用了传统的client-server架构模式，总架构图如下图所示。用户通过Docker client与Docker daemon建立通信，并将请求发送给后者。而Docker的后端是松耦合结构，不同模块各司其职，有机组合完成用户的请求。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-10.png" title="图1-8 Docker架构总览"></center>
+
+
+<p>从上图中可以看出，Docker daemmon是Docker架构中的主要用户接口。首先，它提供了API Server用于接收来自Docker client的请求，其后根据不同的请求分发给Docker daemon的不同模块执行相应的工作，其中对容器运行时、volume、镜像以及网络方面的具体实现已经放在daemon意外的模块或项目中。值得注意的是，Docker一直致力于将其自己进一步解耦，削减Docker daemon的功能。</p>
+<p>Docker通过driver模块来实现对Docker容器执行环境的创建和管理。当需要闯进啊DOcker容器时，可通过镜像管理（image management）部分的distribution和registry模块从Docker registry中下载镜像，并通过镜像管理的image、reference和layer存储镜像的元数据，通过镜像存储驱动graphdriver将镜像文件存储于具体的文件系统中；当需要为Docker容器创建网络环境时，通过网络模块network调用libnetwork创建并配置Docker容器的网络环境；当需要为容器创建数据卷volume时，则通过volume模块调用某个具体的volumedrive，来创建一个数据卷并负责后续的挂载操作；当需要限制Docker容器运行资源或执行用户指令操作时，则通过execdrive来完成。libcontainer是对cgroups和namespace的二次封装，execdrive是通过libcontainer来实现对容器的具体管理，包括利用UTS、IPC、PID、Network、Mount、User等namespace实现容器之间的资源隔离和利用cgroups实现对容器的资源限制。当运行容器的命令执行完毕后，一个实际的容器就处于运行状态，该容器具有独立的文件系统、相对安全且相互隔离的运行环境。Docker 1.9版本以后，volume和network的生命周期都是独立于容器的，与容器一样是Docker的一等公民，Docker用户可以单独增删该查volume或者network，然后在创建容器的时候根据需要配置给容器。</p>
+<p>在对各个模块进行深入探讨之前，我们首先对各个模块的功能进行简单介绍。</p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/07/21/Docker-arch/';
+var disqus_title = 'Docker 架构概览';
+var disqus_url = 'https://keeplearn.vip/2018/07/21/Docker-arch/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

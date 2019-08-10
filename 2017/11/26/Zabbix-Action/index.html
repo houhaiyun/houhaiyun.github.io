@@ -1,0 +1,95 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：事件 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-26</div></div></div><div class="container post-header"><h1>Zabbix：事件</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看事件"><span class="toc-number">2.</span> <span class="toc-text">查看事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#触发器事件生成"><span class="toc-number">3.</span> <span class="toc-text">触发器事件生成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#问题事件-Problem-event"><span class="toc-number">3.1.</span> <span class="toc-text">问题事件(Problem event)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#正常-OK-时间"><span class="toc-number">3.2.</span> <span class="toc-text">正常(OK)时间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#发现事件"><span class="toc-number">3.3.</span> <span class="toc-text">发现事件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#主动式客户端自动发现事件"><span class="toc-number">3.4.</span> <span class="toc-text">主动式客户端自动发现事件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内部事件"><span class="toc-number">3.5.</span> <span class="toc-text">内部事件</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在<code>Zabbix</code>可以生成以下几种类型的事件：</p>
+<ul>
+<li><code>trigger events</code> - 触发器事件，当触发器改变他的状态时（<code>OK</code>→<code>PROBLEM</code>→<code>OK</code>）；</li>
+<li><code>discovery events</code> - 发现事件，当主机或服务被检测到；</li>
+<li><code>auto registration events</code> - 自动注册事件，当主动的<code>agents</code>被自动注册到<code>server</code>时</li>
+<li><code>internal events</code> - 内部事件，当监控项<code>item</code>/自动发现规则<code>low</code>-<code>level discovery rule</code>变得不受支持或触发器进入了一个未知状态。</li>
+</ul>
+<p>事件是以时间戳的，并可以发送电子邮件等动作得得基础。</p>
+<a id="more"></a>
+<h3 id="查看事件"><a href="#查看事件" class="headerlink" title="查看事件"></a>查看事件</h3><p>要查看前端事件的详细信息，点击<code>Monitoring</code> → <code>Problems</code>。那里你可以点击事件的日期和事件来查看事件的详细信息。</p>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Action-1.jpg" title="查看事件"></center>
+
+<h3 id="触发器事件生成"><a href="#触发器事件生成" class="headerlink" title="触发器事件生成"></a>触发器事件生成</h3><p>触发器状态的变化是事件最常见和最重要的来源。每次触发器的状态改变时，都会生成一个事件。该事件包含了触发器状态变更的详细信息、发生时间以及信息的状态。</p>
+<p>触发器会创建两种类型的事件：问题（<code>Problem</code>）和正常（<code>OK</code>）。</p>
+<h4 id="问题事件-Problem-event"><a href="#问题事件-Problem-event" class="headerlink" title="问题事件(Problem event)"></a>问题事件(Problem event)</h4><p>在以下情况下，一个问题事件（<code>Problem event</code>）将被创建：</p>
+<ul>
+<li>当触发器状态为正常（<code>OK</code>）时，触发器表达式的计算结果为<code>TRUE</code>.</li>
+<li>如果为触发器启用了多重问题事件生成，那么每次触发器表达式计算结果为<code>TRUE</code>。</li>
+</ul>
+<h4 id="正常-OK-时间"><a href="#正常-OK-时间" class="headerlink" title="正常(OK)时间"></a>正常(OK)时间</h4><p>一个正常事件（<code>OK event</code>）关闭关联的问题事件（<code>Problem event</code>），可由以下三个部分创建：</p>
+<ul>
+<li>触发器 - 基于“正常事件迭代（<code>OK event generation</code>）”和“正常事件关闭（<code>OK event closes</code>）”的设置；</li>
+<li>关联项事件；</li>
+<li>任务管理器 - 当事件被手动关闭。</li>
+</ul>
+<h4 id="发现事件"><a href="#发现事件" class="headerlink" title="发现事件"></a>发现事件</h4><p>Zabbix定期扫描网络发现规则中定义的IP范围，可以为每个规则单独配置检查频率。一旦发现主机或服务，就会生成一个发现事件（或多个事件）。</p>
+<p>Zabbix可以生成以下事件：</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Service Up</td>
+<td>每当Zabbix检测到活跃的服务。</td>
+</tr>
+<tr>
+<td>Service Down</td>
+<td>每当Zabbix无法检测到服务。</td>
+</tr>
+<tr>
+<td>Host Up</td>
+<td>如果活跃的服务中至少有一个IP。</td>
+</tr>
+<tr>
+<td>Host Down</td>
+<td>如果所有的服务都没有响应。</td>
+</tr>
+<tr>
+<td>Service Discovered</td>
+<td>如果服务在维护时间之后恢复或者第一次被发现。</td>
+</tr>
+<tr>
+<td>Service Lost</td>
+<td>如果服务在运行后丢失。</td>
+</tr>
+<tr>
+<td>Host Discovered</td>
+<td>如果主机在维护时间滞后恢复或者第一次被发现。</td>
+</tr>
+<tr>
+<td>Host Lost</td>
+<td>如果主机在运行后丢失。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="主动式客户端自动发现事件"><a href="#主动式客户端自动发现事件" class="headerlink" title="主动式客户端自动发现事件"></a>主动式客户端自动发现事件</h4><p>主动式客户端自动注册会在<code>Zabbix</code>创建事件。</p>
+<p>如果配置了自动注册，当以前未知的主动式客户端向服务器发起请求时，服务器将会自动注册该主动式客户端。服务器使用主动式客户端请求的<code>IP</code>地址和端口，添加到自动注册的主机里。</p>
+<h4 id="内部事件"><a href="#内部事件" class="headerlink" title="内部事件"></a>内部事件</h4><p>在下面的情境下，就会发生内部事件：</p>
+<ul>
+<li>监控项的状态从“正常”变为“不支持的”；</li>
+<li>监控项的状态从“不支持的”变为“正常”；</li>
+<li>自动发现规则的状态从“正常”变为“不支持的”；</li>
+<li>自动发现规则的状态从“不支持的”变为“正常”；- 触发器的状态从“正常”变为“未知的”；</li>
+<li>触发器的状态从“未知的”变为“正常”。</li>
+</ul>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/26/Zabbix-Action/';
+var disqus_title = 'Zabbix：事件';
+var disqus_url = 'https://keeplearn.vip/2017/11/26/Zabbix-Action/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

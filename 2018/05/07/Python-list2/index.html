@@ -1,0 +1,155 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Python常用数据类型-列表2 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Python基础/">Python基础</a></div><div class="post-time">2018-05-07</div></div></div><div class="container post-header"><h1>Python常用数据类型-列表2</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#对数字列表执行简单的统计计算"><span class="toc-number">1.</span> <span class="toc-text">对数字列表执行简单的统计计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#切片"><span class="toc-number">2.</span> <span class="toc-text">切片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历切片"><span class="toc-number">3.</span> <span class="toc-text">遍历切片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制列表"><span class="toc-number">4.</span> <span class="toc-text">复制列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python列表脚本操作符"><span class="toc-number">5.</span> <span class="toc-text">Python列表脚本操作符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python列表函数-amp-方法"><span class="toc-number">6.</span> <span class="toc-text">Python列表函数&amp;方法</span></a></li></ol></details></div><div class="container post-content"><center><img src="https://houhaiyun.github.io/img/images/Python-list2.png" title="Python常用数据类型-列表2"></center>
+
+
+<a id="more"></a>
+<h3 id="对数字列表执行简单的统计计算"><a href="#对数字列表执行简单的统计计算" class="headerlink" title="对数字列表执行简单的统计计算"></a>对数字列表执行简单的统计计算</h3><p>有几个专门用于处理数字列表的Python函数。例如，你可以轻松地找出数字列表的最大值、最小值和总和：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; digits = [1,2,3,4,5,6,7,8,9,10]</span><br><span class="line">&gt;&gt;&gt; min(digits)</span><br><span class="line">1</span><br><span class="line">&gt;&gt;&gt; max(digits)</span><br><span class="line">10</span><br><span class="line">&gt;&gt;&gt; sum(digits)</span><br><span class="line">55</span><br></pre></td></tr></table></figure>
+<h3 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h3><p>要创建切片，可指定要使用的第一个元素的索引和最后一个元素的索引加1。与函数range()一样，Python在到达你指定的第二个索引前面的元素后停止。要输出列表中的前三个元素，需要指定索引0~3，这将输出分别为0、1和2的元素。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; languages = [&quot;C&quot;,&quot;C++&quot;,&quot;Python&quot;,&quot;Java&quot;,&quot;PHP&quot;]</span><br><span class="line">&gt;&gt;&gt; print(languages[0:3])</span><br><span class="line">[&apos;C&apos;, &apos;C++&apos;, &apos;Python&apos;]</span><br></pre></td></tr></table></figure>
+<p>你可以生成列表的任何子集，例如，如果你要提取列表的第2~4个元素，可将起始索引指定为1，并将终止索引指定为4：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; languages = [&quot;C&quot;,&quot;C++&quot;,&quot;Python&quot;,&quot;Java&quot;,&quot;PHP&quot;]</span><br><span class="line">&gt;&gt;&gt; print(languages[1:4])</span><br><span class="line">[&apos;C++&apos;, &apos;Python&apos;, &apos;Java&apos;]</span><br></pre></td></tr></table></figure>
+<p>如果你没有指定第一个索引，Python将自动从列表开头开始：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; languages = [&quot;C&quot;,&quot;C++&quot;,&quot;Python&quot;,&quot;Java&quot;,&quot;PHP&quot;]</span><br><span class="line">&gt;&gt;&gt; print(languages[:3])</span><br><span class="line">[&apos;C&apos;, &apos;C++&apos;, &apos;Python&apos;]</span><br></pre></td></tr></table></figure>
+<p>要让切片终止于列表末尾，也可使用类似的语法。例如，如果要提取从第三个元素到列表末尾的所有元素，可将起始索引指定为2，并省略终止索引：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; languages = [&quot;C&quot;,&quot;C++&quot;,&quot;Python&quot;,&quot;Java&quot;,&quot;PHP&quot;]</span><br><span class="line">&gt;&gt;&gt; print(languages[2:])</span><br><span class="line">[&apos;Python&apos;, &apos;Java&apos;, &apos;PHP&apos;]</span><br></pre></td></tr></table></figure>
+<p>负数索引会返回离列表末尾相应距离的元素，因此你可以输出列表末尾的任何切片。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; languages = [&quot;C&quot;,&quot;C++&quot;,&quot;Python&quot;,&quot;Java&quot;,&quot;PHP&quot;]</span><br><span class="line">&gt;&gt;&gt; print(languages[-4:])</span><br><span class="line">[&apos;C++&apos;, &apos;Python&apos;, &apos;Java&apos;, &apos;PHP&apos;]</span><br></pre></td></tr></table></figure>
+<h3 id="遍历切片"><a href="#遍历切片" class="headerlink" title="遍历切片"></a>遍历切片</h3><p>如果要遍历列表中的部分元素，可在for循环中使用切片，入下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">languages = [&quot;python&quot;,&quot;java&quot;,&quot;c&quot;,&quot;c++&quot;,&quot;php&quot;,&quot;perl&quot;]</span><br><span class="line"></span><br><span class="line">print(&quot;Languages:&quot;)</span><br><span class="line">for i in languages[-3:]:</span><br><span class="line">    print(i.title())</span><br></pre></td></tr></table></figure>
+<h3 id="复制列表"><a href="#复制列表" class="headerlink" title="复制列表"></a>复制列表</h3><p>要复制列表，可创建一个包含整个列表的切片，方法是同时省略起始和终止索引<code>([:])</code>。这让Python创建一个始于第一个元素，终止于最后一个元素的切片，即复制整个列表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; languages = [&quot;C&quot;,&quot;C++&quot;,&quot;Python&quot;,&quot;Java&quot;,&quot;PHP&quot;]</span><br><span class="line">&gt;&gt;&gt; languages_copy = languages[:]</span><br><span class="line">&gt;&gt;&gt; languages_copy</span><br><span class="line">[&apos;C&apos;, &apos;C++&apos;, &apos;Python&apos;, &apos;Java&apos;, &apos;PHP&apos;]</span><br></pre></td></tr></table></figure>
+<h3 id="Python列表脚本操作符"><a href="#Python列表脚本操作符" class="headerlink" title="Python列表脚本操作符"></a>Python列表脚本操作符</h3><p>列表对<code>+</code>和<code>*</code>的操作符与字符串相似。<code>+</code>号用于组合列表，<code>*</code>号用于重复列表。</p>
+<table>
+<thead>
+<tr>
+<th>Python 表达式</th>
+<th>结果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>len([1, 2, 3])</td>
+<td>3</td>
+<td>长度</td>
+</tr>
+<tr>
+<td>[1, 2, 3] + [4, 5, 6]</td>
+<td>[1, 2, 3, 4, 5, 6]</td>
+<td>组合</td>
+</tr>
+<tr>
+<td>[‘Hi!’] * 4</td>
+<td>[‘Hi!’, ‘Hi!’, ‘Hi!’, ‘Hi!’]</td>
+<td>重复</td>
+</tr>
+<tr>
+<td>3 in [1, 2, 3]</td>
+<td>True</td>
+<td>元素是否存在于列表中</td>
+</tr>
+<tr>
+<td>for x in [1, 2, 3]: print(x, end=” “)</td>
+<td>1 2 3</td>
+<td>迭代</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Python列表函数-amp-方法"><a href="#Python列表函数-amp-方法" class="headerlink" title="Python列表函数&amp;方法"></a>Python列表函数&amp;方法</h3><p>Python包含以下函数：</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>len(list)列表元素个数</td>
+</tr>
+<tr>
+<td>2</td>
+<td>max(list)返回列表元素最大值</td>
+</tr>
+<tr>
+<td>3</td>
+<td>min(list)返回列表元素最小值</td>
+</tr>
+<tr>
+<td>4</td>
+<td>list(seq)将元组转换为列表</td>
+</tr>
+</tbody>
+</table>
+<p>Python包含以下方法：</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>list.append(obj)在列表末尾添加新的对象</td>
+</tr>
+<tr>
+<td>2</td>
+<td>list.count(obj)统计某个元素在列表中出现的次数</td>
+</tr>
+<tr>
+<td>3</td>
+<td>list.extend(seq)在列表末尾一次性追加另一个序列中的多个值（用新列表扩展原来的列表）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>list.index(obj)从列表中找出某个值第一个匹配项的索引位置</td>
+</tr>
+<tr>
+<td>5</td>
+<td>list.insert(index, obj)将对象插入列表</td>
+</tr>
+<tr>
+<td>6</td>
+<td>list.pop(obj=list[-1])移除列表中的一个元素（默认最后一个元素），并且返回该元素的值</td>
+</tr>
+<tr>
+<td>7</td>
+<td>list.remove(obj)移除列表中某个值的第一个匹配项</td>
+</tr>
+<tr>
+<td>8</td>
+<td>list.reverse()反向列表中元素</td>
+</tr>
+<tr>
+<td>9</td>
+<td>list.sort([func])对原列表进行排序</td>
+</tr>
+<tr>
+<td>10</td>
+<td>list.clear()清空列表</td>
+</tr>
+<tr>
+<td>11</td>
+<td>list.copy()复制列表</td>
+</tr>
+</tbody>
+</table>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/05/07/Python-list2/';
+var disqus_title = 'Python常用数据类型-列表2';
+var disqus_url = 'https://keeplearn.vip/2018/05/07/Python-list2/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

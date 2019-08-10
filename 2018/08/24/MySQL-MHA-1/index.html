@@ -1,0 +1,129 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>MHA工作原理 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/MySQL高可用MHA/">MySQL高可用MHA</a></div><div class="post-time">2018-08-24</div></div></div><div class="container post-header"><h1>MHA工作原理</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#MHA技术介绍"><span class="toc-number">1.</span> <span class="toc-text">MHA技术介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MHA的优点"><span class="toc-number">2.</span> <span class="toc-text">MHA的优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MHA工作流程"><span class="toc-number">3.</span> <span class="toc-text">MHA工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MHA如何监控master和故障转移？"><span class="toc-number">3.1.</span> <span class="toc-text">MHA如何监控master和故障转移？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MHA如何在线快速切换master？"><span class="toc-number">3.2.</span> <span class="toc-text">MHA如何在线快速切换master？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MHA组件介绍"><span class="toc-number">4.</span> <span class="toc-text">MHA组件介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">5.</span> <span class="toc-text">致谢</span></a></li></ol></details></div><div class="container post-content"><h3 id="MHA技术介绍"><a href="#MHA技术介绍" class="headerlink" title="MHA技术介绍"></a>MHA技术介绍</h3><a id="more"></a>
+<p><code>MHA</code>（<code>Master High Availability</code>）目前在<code>MySQL</code>高可用方面是一个相对成熟的解决方案，它由日本<code>DeNA</code>公司<code>youshimaton</code>（现就职于<code>Facebook</code>公司）开发，是一套优秀的作为<code>MySQL</code>高可用性环境下故障切换和主从提升的高可用软件。在<code>MySQL</code>故障切换过程中，<code>MHA</code>能做到在0~30秒之内自动完成数据库的故障切换操作，并且在进行故障切换的过程中，<code>MHA</code>能在最大程度上保证数据的一致性，以达到<br>真正意义上的高可用。除了<code>failover</code>之外，<code>MHA</code>还支持在线<code>master</code>切换，非常安全和高效，大概只需<br>要（0.5 ~ 2秒）的阻塞写时间。</p>
+<p>该软件由两部分组成：<code>MHA Manager</code>（管理节点）和<code>MHA Node</code>（数据节点）。<code>MHA Manager</code>可 以单独部署在一台独立的机器上管理多个<code>master</code>-<code>slave</code>集群，也可以部署在一台<code>slave</code>节点上。<code>MHA Node</code>运行在每台<code>MySQL</code>服务器上，<code>MHA Manager</code>会定时探测集群中的<code>master</code>节点，当<code>master</code> 出现故障时，它可以自动将最新数据的<code>slave</code>提升为新的<code>master</code>，然后将所有其他的<code>slave</code>重新指向 新的<code>master</code>。整个故障转移过程对应用程序完全透明。</p>
+<h3 id="MHA的优点"><a href="#MHA的优点" class="headerlink" title="MHA的优点"></a>MHA的优点</h3><ol>
+<li><p><code>master failover</code>和<code>slave promotion</code>非常快速。</p>
+</li>
+<li><p>自动探测，多重检测，切换过程中支持调用其他脚本的接口。</p>
+</li>
+<li><p><code>master crash</code>不会导致数据不一致，自动补齐数据，维护数据一致性。</p>
+</li>
+<li><p>不需要修改复制的任何设置，简单易部署，对现有架构无影响。</p>
+</li>
+<li><p>不需要增加很多额外的机器来部署MHA，支持多实例集中管理。</p>
+</li>
+<li><p>没有任何性能影响。</p>
+</li>
+<li><p>支持在线切换。</p>
+</li>
+<li><p>跨存储引擎，支持任何引擎。</p>
+</li>
+</ol>
+<p>官方介绍：<a href="https://code.google.com/p/mysql-master-ha/" target="_blank" rel="noopener">https://code.google.com/p/mysql-master-ha</a></p>
+<h3 id="MHA工作流程"><a href="#MHA工作流程" class="headerlink" title="MHA工作流程"></a>MHA工作流程</h3><p>下图展示了如何通过<code>MHA Manager</code>管理多组主从复制，可以将<code>MHA</code>工作原理总结为如下：</p>
+<center><img src="http://ovuhiuqqd.bkt.clouddn.com/MHA-Gongzuo-Yuanli.png"></center>
+
+
+
+<h4 id="MHA如何监控master和故障转移？"><a href="#MHA如何监控master和故障转移？" class="headerlink" title="MHA如何监控master和故障转移？"></a>MHA如何监控master和故障转移？</h4><p>下面的流程，就是masterha_manager做的事情</p>
+<p><strong>1.1 验证复制设置以及确认当前master状态</strong></p>
+<ul>
+<li>连接所有hosts，MHA自动来确认当前master是哪个，配置文件中无需指定哪个是master。</li>
+<li>如果其中有任何一个slave挂了，脚本立即退出，停止监控。</li>
+<li>如果有一些必要的脚本没有在MHA Node节点安装，那么MHA在这个阶段终止，且停止监控。</li>
+</ul>
+<p><strong>1.2 监控master</strong></p>
+<ul>
+<li>监控master，直到master挂了。</li>
+</ul>
+<p>这个阶段，MHA不会监控slave，Stopping/Restarting/Adding/Removing操作在slave上，不会影响当前的MHA监控进程。当你添加或者删除slave的时候，请更新好配置文件，最好重启MHA。</p>
+<p><strong>1.3 检测master是否失败</strong></p>
+<ul>
+<li>如果MHA Manger三次间隔时间都没办法连接master server，就会进入这个阶段。</li>
+<li>如果你设置了secondary_check_script ，那么MHA会调用脚本做二次检测来判断master是否是真的挂了。</li>
+</ul>
+<p>接下来的步骤，就是masterha_master_switch的工作流程了。</p>
+<p><strong>1.4 再次验证slave的配置</strong></p>
+<ul>
+<li>如果发现任何不合法的复制配置（有些slave的master不是同一个），那么MHA会停止监控，且报错。可以设置ignore_fail忽略。</li>
+</ul>
+<p>这一步是处于安全考虑，很有可能，复制的配置文件已经被改掉了，所以double check是比较推荐的做法。</p>
+<ul>
+<li>检查最后一次failover（故障转移）的状态</li>
+</ul>
+<p>如果上一次的failover报错，或者上一次的failover结束的太近（默认3天），MHA停止监控，停止failover，那么在masterha_manager命令中设置ignore_last_failover，wait_on_failover_error来改变这一检测。这么做，也是出于安全考虑。频繁的failover，检查下是否网络出问题，或者其他错误呢？</p>
+<p><strong>1.5 关掉失败的master的服务器（可选）</strong></p>
+<ul>
+<li>如果在配置文件中定义了master_ip_failover_script and/or shutdown_script ，MHA会调用这些的脚本。</li>
+<li>关闭dead master，避免脑裂（值得商榷）。</li>
+</ul>
+<p><strong>1.6 恢复一台新master</strong></p>
+<ul>
+<li>从crashed master服务器上保存binlog到Manager（如果可以的话</li>
+</ul>
+<p>如果dead master可以SSH的话，拷贝binary logs从最新的slave上的end_log_pos(Read_Master_Log_Pos)位置开始拷贝。</p>
+<ul>
+<li>选举新master</li>
+</ul>
+<p>一般根据配置文件的设置来决定选举谁，如果想设置一些候选master，设置candidate_master=1；如果想设置一些host，永远都不会选举，设置no_master=1；确认最新的slave （这台slave拥有最新的relay-log）。</p>
+<ul>
+<li>恢复和提升新master</li>
+</ul>
+<p>根据老master binlog生成差异日志，应用日志到new master，如果这一步发生错误（如：duplicate key error），MHA停止恢复，并且其余的slave也停止恢复。</p>
+<h4 id="MHA如何在线快速切换master？"><a href="#MHA如何在线快速切换master？" class="headerlink" title="MHA如何在线快速切换master？"></a>MHA如何在线快速切换master？</h4><p>下面的步骤，就是masterha_master_switch—master_state=alive做的事情。</p>
+<p><strong>2.1 验证复制设置以及确认当前master状态</strong></p>
+<ul>
+<li>连接配置文件中列出的所有hosts，MHA自动来确认当前master是哪个，配置文件中无需指定哪个是master。</li>
+<li>执行 flush tables 命令在master上（可选）. 这样可以缩短FLUSH TABLES WITH READ LOCK的时间。</li>
+<li>既不监控master，也不会failover。</li>
+<li>检查下面的条件是否满足。</li>
+</ul>
+<p>A. IO线程是否在所有slave上都是running。</p>
+<p>B. SQL线程是否在所有slave上都是running。</p>
+<p>C. Seconds_Behind_Master 是否低于2秒（—running_updates_limit=N）。</p>
+<p>D. master上是否没有长的更新语句大于2秒。</p>
+<p><strong>2.2 确认新master</strong></p>
+<ul>
+<li>新master需要设置： –new_master_host参数。</li>
+<li>原来的master和新的master必须要有同样的复制过滤条件（binlog-do-db and binlog-ignore-db）。</li>
+</ul>
+<p><strong>2.3 当前master停写</strong></p>
+<ul>
+<li>如果你在配置中定义了master_ip_online_change_script，MHA会调用它。可以通过设置SET GLOBAL read_only=1来完美的阻止写入。</li>
+<li>在老master上执行FLUSH TABLES WITH READ LOCK来阻止所有的写（–skip_lock_all_tables可以忽略这一步）。</li>
+</ul>
+<p><strong>2.4 等待其他slave追上当前master，同步无延迟</strong></p>
+<ul>
+<li>调用这个函数MASTER_LOG_POS()。</li>
+</ul>
+<p><strong>2.5 确保新master可写</strong></p>
+<ul>
+<li>执行SHOW MASTER STATUS来确定新master的binary log文件名和position。</li>
+<li>如果设置了master_ip_online_change_script，会调用它。可以创建写权限的用户，SET GLOBAL read_only=0。</li>
+</ul>
+<p><strong>2.6 让其他slave指向新master</strong></p>
+<ul>
+<li>并行执行CHANGE MASTER, START SLAVE。</li>
+</ul>
+<h3 id="MHA组件介绍"><a href="#MHA组件介绍" class="headerlink" title="MHA组件介绍"></a>MHA组件介绍</h3><p><code>MHA</code>软件由两部分组成，<code>Manager</code>工具包和<code>Node</code>工具包，具体的说明如下。<br><code>Manager</code>工具包主要包括以下几个工具：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">masterha_check_ssh              # 检查MHA的SSH配置状况;</span><br><span class="line">masterha_check_repl             # 检查MySQL复制状况;</span><br><span class="line">masterha_manger                 # 启动MHA;</span><br><span class="line">masterha_check_status           # 检测当前MHA运行状态;</span><br><span class="line">masterha_master_monitor         # 检测master是否宕机;</span><br><span class="line">masterha_master_switch          # 控制故障转移(自动或者手动);</span><br><span class="line">masterha_conf_host              # 添加或删除配置的server信息;</span><br></pre></td></tr></table></figure>
+<p><code>Node</code>工具包（这些工具通常由<code>MHA Manager</code>的脚本触发，无需人为操作）主要包括以下几个工具：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">save_binary_logs                # 保存和复制master的二进制日志;</span><br><span class="line">apply_diff_relay_logs           # 识别差异的中继日志事件并将其差异的事件应用于其他的slave;</span><br><span class="line">filter_mysqlbinlog              # 去除不必要的ROLLBACK事件（MHA已不再使用这个工具）;</span><br><span class="line">purge_relay_logs                # 清除中继日志（不会阻塞SQL线程）;</span><br></pre></td></tr></table></figure>
+<p>注意：为了尽可能的减少主库硬件损坏宕机造成的数据丢失，因此在配置<code>MHA</code>的同时建议配置成<code>MySQL</code>半同步复制。关于半同步复制原理各位自己进行查阅（不是必须）。</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://www.ywnds.com/?p=8094" target="_blank" rel="noopener">MySQL基于MHA高可用理论篇：http://www.ywnds.com/?p=8094</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/08/24/MySQL-MHA-1/';
+var disqus_title = 'MHA工作原理';
+var disqus_url = 'https://keeplearn.vip/2018/08/24/MySQL-MHA-1/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

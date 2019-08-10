@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>网站加载 Waiting (TTFB) 时间过长的原因和解决办法 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Web/">Web</a></div><div class="post-time">2018-11-25</div></div></div><div class="container post-header"><h1>网站加载 Waiting (TTFB) 时间过长的原因和解决办法</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是Waiting（TTFB）时间"><span class="toc-number">1.</span> <span class="toc-text">什么是Waiting（TTFB）时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TTFB时间多长算长？"><span class="toc-number">2.</span> <span class="toc-text">TTFB时间多长算长？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TTFB过长的原因"><span class="toc-number">3.</span> <span class="toc-text">TTFB过长的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Waiting（TTFB）时间过长的解决办法"><span class="toc-number">4.</span> <span class="toc-text">Waiting（TTFB）时间过长的解决办法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#致谢"><span class="toc-number">5.</span> <span class="toc-text">致谢</span></a></li></ol></details></div><div class="container post-content"><h3 id="什么是Waiting（TTFB）时间"><a href="#什么是Waiting（TTFB）时间" class="headerlink" title="什么是Waiting（TTFB）时间"></a>什么是Waiting（TTFB）时间</h3><a id="more"></a>
+<p>TTFB 是 Time to First Byte 的缩写，指的是浏览器开始收到服务器响应数据的时间（后台处理时间+重定向时间），是反映服务端响应速度的重要指标。就像你问朋友一个问题，你的朋友思考了一会儿才给你答案，你朋友思考的时间就相当于TTFB。你朋友思考的时间越短，就说明你朋友越聪明或者对你的问题越熟悉。对服务器来说，TTFB 时间越短，就说明服务器响应越快。</p>
+<h3 id="TTFB时间多长算长？"><a href="#TTFB时间多长算长？" class="headerlink" title="TTFB时间多长算长？"></a>TTFB时间多长算长？</h3><p>因为每个服务器的硬件和网络环境都不同，每个服务器的TTFB时间也不相同。如果想知道你的服务器可以优化到说明程度，大家可以上传一些静态的HTML页面到服务器，然后打开这些静态页面，看一些这些TTFB时间，大多数服务器的TTFB时间都在50ms以下，这个时间就是我们优化可以追求的时间。下面两个图中的TTFB时间分别是本站所在服务器的静态和动态网页TTFB等待时间。</p>
+<p>根据我们的测试，TTFB时间如果超过了500ms，用户在打开网页的时候就会感觉到明显的等待。我们可以把500ms以上认为是TTFB时间过长。</p>
+<h3 id="TTFB过长的原因"><a href="#TTFB过长的原因" class="headerlink" title="TTFB过长的原因"></a>TTFB过长的原因</h3><p>我们知道，对于动态网页来说，服务器收到用户打开一个页面的请求时，首先要从数据库中读取该页面需要的数据，然后把这些数据传入到模板中，模板渲染后，再返回给用户。由于查询数据和渲染模板需要一定的时间，在这个过程没有完成之前，浏览器就一直处于等待接受服务器的响应的状态。有些服务的性能比较低，或者优化没做好，这个时间就会比较长。</p>
+<p>当然，如果服务器到用户之间的网络不好，（比如，服务器在欧洲，用户在中国，用户打开网页的时候，请求需要跨越千山万水才能达到服务器），服务器接受到用户请求的时间过长，也是导致TTFB时间过长的原因。</p>
+<p>有时候，页面在用户的浏览器中保存了过多的Cookie，每次请求，这些Cookie都要发送到服务器，服务器都要处理这些 Cookie，这也是导致TTFB时间过长的原因之一。</p>
+<h3 id="Waiting（TTFB）时间过长的解决办法"><a href="#Waiting（TTFB）时间过长的解决办法" class="headerlink" title="Waiting（TTFB）时间过长的解决办法"></a>Waiting（TTFB）时间过长的解决办法</h3><p>知道了原因，解决的办法就显而易见了，那就是缩短服务器响应时间，最简单直接并且有效的方式就是使用缓存，把 PHP 和 MySQL的执行时间最小化，一些缓存插件可以把SQL查询结果缓存起来，把几十次查询结果转换为几次；一些缓存插件可以直接把用户所请求的页面静态化，用户打开网页时，相当于直接从服务器上下载了静态页面。</p>
+<p>如果是网络原因，换一个服务器是比较直接的解决办法。如果因为一些原因不能换服务器，可以使用一个CDN，把页面同步到离用户比较近的CDN节点上，也是一个不错的解决办法。</p>
+<p>如果是 Cookie 的原因，可以通过修改应用程序，删除一些不必要的 Cookie，或者精简Cookie内容，缩短Cookie的有效期等，都是解决办法。</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="https://blog.csdn.net/xiaoxiansweety/article/details/79122735" target="_blank" rel="noopener">CSDN：网站加载 Waiting (TTFB) 时间过长的原因和解决办法</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/11/25/Web-Waiting-TTFB/';
+var disqus_title = '网站加载 Waiting (TTFB) 时间过长的原因和解决办法';
+var disqus_url = 'https://keeplearn.vip/2018/11/25/Web-Waiting-TTFB/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

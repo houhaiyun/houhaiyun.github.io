@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>开源WIKI：DokuWIKI | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/WIKI/">WIKI</a></div><div class="post-time">2018-05-04</div></div></div><div class="container post-header"><h1>开源WIKI：DokuWIKI</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装dokuwiki"><span class="toc-number">2.</span> <span class="toc-text">安装dokuwiki</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#环境"><span class="toc-number">2.1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装php-fpm、nginx"><span class="toc-number">2.2.</span> <span class="toc-text">安装php-fpm、nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改nginx配置文件"><span class="toc-number">2.3.</span> <span class="toc-text">修改nginx配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下载dokuwiki并解压dokuwiki"><span class="toc-number">2.4.</span> <span class="toc-text">下载dokuwiki并解压dokuwiki</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#赋予访问权限"><span class="toc-number">2.5.</span> <span class="toc-text">赋予访问权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#启动nginx、php-fpm，并配置默认页面，访问测试"><span class="toc-number">2.6.</span> <span class="toc-text">启动nginx、php-fpm，并配置默认页面，访问测试</span></a></li></ol></li></ol></details></div><div class="container post-content"><center><img src="https://houhaiyun.github.io/img/images/dokuwiki-3.jpg" title="DokuWIKI"></center>
+
+
+<a id="more"></a>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><a href="https://www.dokuwiki.org/" target="_blank" rel="noopener">dokuwiki官网:https://www.dokuwiki.org/</a></p>
+<p>DokuWiki 是一个使用，用途多样的开源 Wiki 软件，并且不需要数据库。它因简洁易读的语法受到用户的喜爱。而容易维护、备份和整合则使它成为管理员的最爱。内置的访问控制列表和认证连接器使 DokuWiki 在企业环境下特别有用，由充满活力的社区贡献的众多插件则令它拥有比传统维基更广阔的应用范围。</p>
+<h3 id="安装dokuwiki"><a href="#安装dokuwiki" class="headerlink" title="安装dokuwiki"></a>安装dokuwiki</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><table>
+<thead>
+<tr>
+<th>服务</th>
+<th>IP</th>
+<th>系统版本</th>
+<th>软件版本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nginx</td>
+<td>10.6.168.31/24</td>
+<td>CentOS Linux release 7.3.1611 (Core)</td>
+<td>php 1.2</td>
+<td>WIKI</td>
+</tr>
+</tbody>
+</table>
+<h4 id="安装php-fpm、nginx"><a href="#安装php-fpm、nginx" class="headerlink" title="安装php-fpm、nginx"></a>安装php-fpm、nginx</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@dokuwiki ~]# yum install -y  nginx        # 安装nginx</span><br><span class="line"># 安装php72，注意最新版dokuwiki要求php版本不能低于5.4</span><br><span class="line">[root@dokuwiki ~]# yum remove -y php* php-common   </span><br><span class="line">[root@dokuwiki ~]# rpm  -Uvh  https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</span><br><span class="line">[root@dokuwiki ~]# rpm  -Uvh  https://mirror.webtatic.com/yum/el7/webtatic-release.rpm</span><br><span class="line">[root@dokuwiki ~]# yum install -y php72w* --skip-broken php72w-mysqlnd-7.2.1-1.w7.x86_64</span><br></pre></td></tr></table></figure>
+<h4 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@dokuwiki ~]# vim /etc/nginx/conf.d/wiki.conf</span><br><span class="line">server &#123;</span><br><span class="line">	listen 80 default_server ;</span><br><span class="line">	server_name wiki.zeforce.cn;</span><br><span class="line">	root /data/dokuwiki;</span><br><span class="line">	index index.html index.php;</span><br><span class="line">	</span><br><span class="line">	location ~ \.php$ &#123;</span><br><span class="line">	root /data/dokuwiki;</span><br><span class="line">	fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">	fastcgi_index index.php;</span><br><span class="line">	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">	include fastcgi_params;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="下载dokuwiki并解压dokuwiki"><a href="#下载dokuwiki并解压dokuwiki" class="headerlink" title="下载dokuwiki并解压dokuwiki"></a>下载dokuwiki并解压dokuwiki</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@dokuwiki ~]# wget https://download.dokuwiki.org/out/dokuwiki-8a269cc015a64b40e4c918699f1e1142.tgz</span><br><span class="line">[root@dokuwiki ~]# mkdir  /data</span><br><span class="line">[root@dokuwiki ~]# tar xf dokuwiki-8a269cc015a64b40e4c918699f1e1142.tgz -C /data</span><br></pre></td></tr></table></figure>
+<h4 id="赋予访问权限"><a href="#赋予访问权限" class="headerlink" title="赋予访问权限"></a>赋予访问权限</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@dokuwiki ~]# chown -R apache.apache /data/</span><br><span class="line">[root@dokuwiki ~]# chmod 777 -R /data       # 测试环境授权777，在生产环境可不要这么做！</span><br></pre></td></tr></table></figure>
+<h4 id="启动nginx、php-fpm，并配置默认页面，访问测试"><a href="#启动nginx、php-fpm，并配置默认页面，访问测试" class="headerlink" title="启动nginx、php-fpm，并配置默认页面，访问测试"></a>启动nginx、php-fpm，并配置默认页面，访问测试</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@dokuwiki ~]# systemctl start nginx php-fpm</span><br></pre></td></tr></table></figure>
+<center><img src="https://houhaiyun.github.io/img/images/dokuwiki-1.gif" title="测试访问"></center>
+
+
+<center><img src="https://houhaiyun.github.io/img/images/dokuwiki-2.gif" title="测试访问"></center>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/05/04/dokuwiki/';
+var disqus_title = '开源WIKI：DokuWIKI';
+var disqus_url = 'https://keeplearn.vip/2018/05/04/dokuwiki/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

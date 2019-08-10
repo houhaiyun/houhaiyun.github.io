@@ -1,0 +1,40 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Kubernetes | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Kubernetes/">Kubernetes</a></div><div class="post-time">2018-07-26</div></div></div><div class="container post-header"><h1>Kubernetes</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Kubernetes-是什么？"><span class="toc-number">1.</span> <span class="toc-text">Kubernetes 是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要用-Kubernetes？"><span class="toc-number">2.</span> <span class="toc-text">为什么要用 Kubernetes？</span></a></li></ol></details></div><div class="container post-content"><h3 id="Kubernetes-是什么？"><a href="#Kubernetes-是什么？" class="headerlink" title="Kubernetes 是什么？"></a>Kubernetes 是什么？</h3><a id="more"></a>
+<p>Kubernetes是一个完备的分布式系统支撑平台。Kuberntes具有完备的集群管理能力，包括多层次的安全防护和准入机制、多租户应用支撑能力、透明的服务注册和服务发现机制、内建智能负载均衡器、强大的故障发现和自我修复能力、服务滚动升级和在线扩容能力、可扩展的资源自动调度机制，以及多粒度的资源配额管理能力。同时，Kubernetes提供了完善的管理工具，这些工具涵盖了包括开发、部署测试、运维架构在内的各个环节。因此，Kubernetes是一个全新的基于容器技术的分布式架构解决方案，并且是一个一站式的完备的分布式系统开发和支撑平台。</p>
+<p>在正式开始本章的 Hello World 之旅之前，我们首先要学习 Kuberntes 的一些基本知识，这样我们才能理解 Kubernetes 提供的解决方案。</p>
+<p>在 Kubernetes 中，Service（服务）是分布式集群架构的核心，一个 Service 对象拥有如下关键特征。</p>
+<ul>
+<li>拥有一个唯一指定的名字（比如 mysql-server）</li>
+<li>拥有一个虚拟 IP（Cluster IP、Service IP 或 VIP）和端口号。</li>
+<li>能够提供某种远程服务能力。</li>
+<li>被映射到了提供这种服务能力的一组容器应用上。</li>
+</ul>
+<p>Service 的服务进程目前都基于 Socket 通信方式对外提供服务，比如 Redis、Memcache、MySQL、Web Server，或者是实现了某个具体业务的一个特定的 TCP Server 进程。虽然一个 Service 通常由多个相关的服务进程来提供服务，每个服务进程都有一个独立的 Endpoint（IP+Port）访问点，但 Kuberntes 能够让我们通过 Service（虚拟 Cluster IP+Service Port）连接到指定的 Service 上。有了 Kubernetes 内建的透明负载均衡和故障恢复机制，不管后端有多少服务进程，也不管某个服务进程是否会由于发生故障而重新部署到其他机器，都不会影响到我们对服务的正常调用。更重要的是这个 Service 本身一旦创建就不再变化，者意味着，在 Kubernetes 集群中，我们再也不用为了服务的 IP 地址变来变去而头疼了。</p>
+<p>容器提供了强大的隔离功能，所以有必要为 Service 提供服务的这组进程放入容器中进行隔离。为此，Kubernetes 设计了 Pod 对象，将每个服务进程包装到相应的 Pod 中，使其成为 Pod 中运行的一个容器（Container）。为了建立 Service 和 Pod 间的关联关系，Kubernetes 首先给每个 Pod 贴上一个标签（Label），给运行 MySQL 的 Pod 贴上 name=mysql 便签，给运行 PHP 的 Pod 贴上 name=php 标签，然后给相应的 Service 定义标签选择器（Label Selector），比如 MySQL Service 的标签选择器的选择条件为 name=mysql，意为该 Service 要作用于所有包含 name=mysql Label 的  Pod 上。这样一来，就巧妙地解决了 Service 与 Pod 的关联问题。</p>
+<p>说到 Pod，我们这里先简单介绍其概念。首先，Pod 运行在一个我们称之为节点（Node）的环境中，这个节点既可以是物理机，也可以是私有云或者公有云中的一个虚拟机，通常在一个节点上运行几百个 Pod；其次，每个 Pod 里运行着一个特殊的被称之为 Pause 的容器，其他容器则为业务容器，这些业务容器共享 Pause 容器的网络栈和 Volume 挂在卷，因此它们之间的通信和数据交换更为高效，在设计时我们可以充分利用这一特性将一组密切相关的服务进程放入同一个 Pod 中；最后，需要注意的是，并不是每个 Pod 和它里面运行的容器都能 “映射” 到一个 Service 上，只有那些需要提供服务（无论是对内还是对外）的一组 Pod 才会被 “映射” 成一个服务。</p>
+<p>在集群管理方面，Kubernetes 将集群中的机器划分为一个 Master 节点和一群工作节点（Node）。其中，在 Master 节点上运行着集群管理相关的一组进程 Kube-apiserver、kube-controller-manager 和 kube-scheduler，这些进程实现了整个集群的资源管理、Pod 调度、弹性伸缩、安全控制、系统监控和纠错等管理功能，并且都是全自动完成的。Node 作为集群中的工作节点，运行真正的应用程序，在 Node 上 Kubernetes 管理的最小运行单元是 Pod。Node 上运行着 Kubernetes 的 kubelt、kube-proxy 服务进程，这些服务进程负责 Pod 的创建、启动、监控、重启、销毁，以及实现软件模式的负载均衡器。</p>
+<p>最后，我们再来看看传统的 IT 系统中服务扩容和服务升级这两个难题，以及 Kubernetes 所提供的全新解决思路。服务的扩容涉及资源分配（选择哪个节点进行扩容）、实例部署和启动等环节，在一个复杂的业务系统中，这两个问题基本上靠人工一步步操作才得以完成，费时费力难以保证实施质量。</p>
+<p>在 Kubernetes 急群中，你只需要扩容的 Service 关联的 Pod 创建一个 Replication Controller（简称 RC），则该 Service 的扩容以至于后来的 Service 升级等头疼问题都迎刃而解。在一个 RC 定义文件中包括以下 3 个关键信息。</p>
+<p>在创建好 RC （系统将自动创建好 Pod）后，Kubernetes 会通过 RC中定义的 Label 筛选出对应的 Pod 实例并实时监控其状态的数量，如果实例数量少于定义的副本数量（Replicas），则会根据 RC 中定义的 Pod 模板来创建一个新的 Pod，然后将此 Pod 调度到合适的 Node 上启动运行，直到 Pod 实例的数量达到预定目标。这个过程完全是自动化的，无需人工干预。有了 RC，服务扩容就变成了一个纯粹的简单数字游戏了，只要修改 RC 中的副本数量即可。</p>
+<h3 id="为什么要用-Kubernetes？"><a href="#为什么要用-Kubernetes？" class="headerlink" title="为什么要用 Kubernetes？"></a>为什么要用 Kubernetes？</h3><p>使用 Kubernetes 的理由很多，最根本的一个理由就是：IT 从来都是一个由新技术驱动的行业。</p>
+<p>Docker 这个新兴的容器化技术当前已经被很多公司所采用，其从单机走向集群已经成为必然，而云计算的蓬勃发展正在加速这一进程。Kubernetes 作为当前唯一被业界广泛认可和看好的 Docker 分布式系统解决方案，可以预见，在未来几年内，会有大量的新系统选择它，不管这些系统是运行在企业本地服务器还是被托管到公有云上。</p>
+<p>使用了 Kubernetes 又会收获那些好处呢？</p>
+<p>首先，最直接的感受就是我们可以 “轻装上阵” 地开发复杂系统了。以前动不动就需要十几个人而且团队里需要不少技术达人一起分工协作才能设计实现和运维的分布式系统，在采用 Kubernetes 解决方案之后，只需要一个精悍的小团队就能轻松应对。在这个团队里，一名架构师专注于系统中 “服务组件” 的提炼，几名开发工程师专注于业务代码的开发，一名系统兼运维工程师负责 Kubernetes 的部署和运维，从此再也不用 “996”  了，这并不是因为我们少做了什么，而是因为 Kubernetes 已经帮我们做了很多。</p>
+<p>其次，使用 Kubernetes 就是在全面拥抱微服务架构。微服务架构的核心是将一个巨大的单体应用分解成为很多小的互相连接的微服务，一个微服务背后可能由多个实例副本在支撑，副本的数量可能会随着系统的负荷变化而进行调整，内嵌的负载均衡器在这里发挥了重要作用。微服务架构使得每个服务都可以由专门的开发团来开发，开发者可以自由选择开发技术，这对于大规模团队来说很有价值，另外每个微服务独立开发、升级、扩展，因此系统具备很高的稳定性和快速迭代能力。谷歌、亚马逊、eBay、NetFilx 等众多大型互联网公司都采用了微服务架构，此次谷歌更是将微服务架构的基础设施直接打包到 Kubernetes 解决方案中，让我们有机会直接应用微服务架构解决复杂业务系统的架构问题。</p>
+<p>然后，我们的系统可以随时地整体 “搬迁” 到公有云上。Kubernetes 最初的目标就是运行在谷歌自家的公有云 GCE 中，未来会支持更多的公有云及基于 OpenStack 的私有云。同时，在 Kubernetes 的架构方案中，底层网络的细节完全被屏蔽，基于服务的 Cluster IP 甚至都无须我们改变运行时期的配置文件，就能将系统从物理机环境中无缝迁移到公有云中，或者在服务高峰期将部分服务对应的 Pod 副本放入到公有云中以提升系统的吞吐量，不仅节省了公司的硬件投入，还大大改善了客户体验。我们熟知的铁道部的 12306 购票系统，在春节高峰期就租用了阿里云进行分流。</p>
+<p>最后，Kubernetes 系统架构具备了超强的横向扩容能力。对于互联网公司来说，用户规模就等价于资产，谁拥有更多的用户，谁就能在竞争中胜出，因此超强的横向扩容能力是互联网业务关键指标之一。不用修改代码，一个 Kubernetes 集群即可从只包含几个 Node 的小集群平滑完成集群扩容。只要我们微服务设计得好，结合硬件或者公有云资源的线性增加，系统就能够承受大量用户并发访问所带来的巨大压力。</p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/07/26/Kubernetes/';
+var disqus_title = 'Kubernetes';
+var disqus_url = 'https://keeplearn.vip/2018/07/26/Kubernetes/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

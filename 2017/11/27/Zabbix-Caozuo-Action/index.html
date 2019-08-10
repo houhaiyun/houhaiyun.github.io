@@ -1,0 +1,68 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：操作Actions | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-27</div></div></div><div class="container post-header"><h1>Zabbix：操作Actions</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置动作"><span class="toc-number">2.</span> <span class="toc-text">配置动作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#进入-配置-gt-操作-并-点击-创建-action"><span class="toc-number">2.1.</span> <span class="toc-text">进入 配置 - &gt;操作 并 点击 创建 action</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从Event-source下拉单中选择所需的来源"><span class="toc-number">2.2.</span> <span class="toc-text">从Event source下拉单中选择所需的来源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#一般动作属性"><span class="toc-number">2.3.</span> <span class="toc-text">一般动作属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择-operations-来执行"><span class="toc-number">2.4.</span> <span class="toc-text">选择 operations 来执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择recovery-operations来执行"><span class="toc-number">2.5.</span> <span class="toc-text">选择recovery operations来执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看Acknowledgement-operations"><span class="toc-number">2.6.</span> <span class="toc-text">查看Acknowledgement operations</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>如果您希望由于事件而发生某些操作（例如发送通知），则需要配置操作。</p>
+<p>可以根据所有支持的类型的事件来定义操作：</p>
+<ul>
+<li>触发事件 - 当<code>trigger</code>的状态从<code>OK</code> 转到 <code>PROBLEM</code> 或者转回时</li>
+<li>发现事件 - 发生网络发现时</li>
+<li>自动注册事件 -当新的活动代理自动注册</li>
+<li>内部事件 - 当项目不受支持或触发器进入未知状态</li>
+</ul>
+<a id="more"></a>
+<h3 id="配置动作"><a href="#配置动作" class="headerlink" title="配置动作"></a>配置动作</h3><p>要配置操作，请执行以下操作：</p>
+<ul>
+<li>进入 配置 - &gt;操作</li>
+<li>从<code>Event source</code>下拉单中选择所需的来源</li>
+<li>点击 创建 <code>action</code></li>
+<li>一般动作属性</li>
+<li>选择 <code>operations</code> 来执行</li>
+<li>选择<code>recovery operations</code>来执行</li>
+</ul>
+<h4 id="进入-配置-gt-操作-并-点击-创建-action"><a href="#进入-配置-gt-操作-并-点击-创建-action" class="headerlink" title="进入 配置 - &gt;操作 并 点击 创建 action"></a>进入 配置 - &gt;操作 并 点击 创建 action</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Caozuo-Action-1.jpg" title="进入 配置 - >操作 并 点击 创建 action"></center>
+
+<h4 id="从Event-source下拉单中选择所需的来源"><a href="#从Event-source下拉单中选择所需的来源" class="headerlink" title="从Event source下拉单中选择所需的来源"></a>从Event source下拉单中选择所需的来源</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Caozuo-Action-2.jpg" title="从Event source下拉单中选择所需的来源"></center>
+
+
+<h4 id="一般动作属性"><a href="#一般动作属性" class="headerlink" title="一般动作属性"></a>一般动作属性</h4><p>因为要执行sudo命令所以需要修改被监控端的sudo配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix-client1 ~]# visudo</span><br><span class="line">zabbix  ALL=(ALL)   NOPASSWD: ALL</span><br><span class="line">#Defaults   requiretty</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@zabbix-client1 ~]# vim /etc/zabbix/zabbix_agentd.conf     # 修改agent配置文件，允许执行远程命令；</span><br><span class="line">EnableRemoteCommands=1</span><br><span class="line"></span><br><span class="line">LogRemoteCommands=1</span><br><span class="line">[root@zabbix-client1 ~]# systemctl restart zabbix-agent.service     # 重启服务使其生效；</span><br></pre></td></tr></table></figure></p>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Caozuo-Action-3.jpg" title="一般动作属性"></center>
+
+<p><a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/notifications/action/operation" target="_blank" rel="noopener">属性信息请参见:https://www.zabbix.com/documentation/3.4/zh/manual/config/notifications/action/operation</a></p>
+<h4 id="选择-operations-来执行"><a href="#选择-operations-来执行" class="headerlink" title="选择 operations 来执行"></a>选择 operations 来执行</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Caozuo-Action-4.jpg" title="选择 operations 来执行"></center><br><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Caozuo-Action-5.jpg" title="operations"></center>
+
+<p><a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/notifications/action/operation/message" target="_blank" rel="noopener">属性信息请参见:https://www.zabbix.com/documentation/3.4/zh/manual/config/notifications/action/operation/message</a></p>
+<h4 id="选择recovery-operations来执行"><a href="#选择recovery-operations来执行" class="headerlink" title="选择recovery operations来执行"></a>选择recovery operations来执行</h4><p>恢复操作允许在问题解决时通知您。</p>
+<p>恢复操作支持消息和远程命令。恢复操作不支持升级 - 所有操作都分配到一个步骤。</p>
+<p>配置恢复操作：</p>
+<ul>
+<li>进入<code>action</code>配置中的恢复操作标签</li>
+<li>点击操作块中的<code>New</code></li>
+<li>编辑操作详情并且点击 <code>Add</code></li>
+</ul>
+<center><img src="https://houhaiyun.github.io/img/images/Zabbix-Caozuo-Action-6.jpg" title="配置恢复操作"></center><br><a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/notifications/action/recovery_operations" target="_blank" rel="noopener">属性信息请参见:https://www.zabbix.com/documentation/3.4/zh/manual/config/notifications/action/recovery_operations</a><br><br><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Caozuo-Action-7.jpg" title="配置恢复操作"></center>
+
+<h4 id="查看Acknowledgement-operations"><a href="#查看Acknowledgement-operations" class="headerlink" title="查看Acknowledgement operations"></a>查看Acknowledgement operations</h4><center><img src="https://houhaiyun.github.io/img/images/Zabbix-Caozuo-Action-8.jpg" title="查看Acknowledgement operations"></center>
+
+<p>通过<code>Escalations</code>，您可以创建发送通知或执行远程命令的自定义场景。</p>
+<p>实际应用中，这意味着：</p>
+<ul>
+<li>用户可以立即收到新问题通知</li>
+<li>通知可以重复，直到问题解决</li>
+<li>发送通知可以延时</li>
+<li>通知可以升级到另一个“较高”的用户组</li>
+<li>可以立即执行远程命令，或者长时间不解决问题</li>
+</ul>
+<p><a href="https://www.zabbix.com/documentation/3.4/zh/manual/config/notifications/action/escalations" target="_blank" rel="noopener">关于更多Acknowledgement operations相关内容请参见：https://www.zabbix.com/documentation/3.4/zh/manual/config/notifications/action/escalations</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/27/Zabbix-Caozuo-Action/';
+var disqus_title = 'Zabbix：操作Actions';
+var disqus_url = 'https://keeplearn.vip/2017/11/27/Zabbix-Caozuo-Action/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

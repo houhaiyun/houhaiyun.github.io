@@ -1,0 +1,53 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Zabbix：触发器trigger单位符号 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Zabbix/">Zabbix</a></div><div class="post-time">2017-11-23</div></div></div><div class="container post-header"><h1>Zabbix：触发器trigger单位符号</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#单位符号"><span class="toc-number">1.</span> <span class="toc-text">单位符号</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#触发器表达式"><span class="toc-number">1.1.</span> <span class="toc-text">触发器表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#你可以使用如下时间单位后缀："><span class="toc-number">1.1.1.</span> <span class="toc-text">你可以使用如下时间单位后缀：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#对于内存大小你可以使用如下单位后缀："><span class="toc-number">1.1.2.</span> <span class="toc-text">对于内存大小你可以使用如下单位后缀：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#可以使用的其他单位后缀"><span class="toc-number">1.1.3.</span> <span class="toc-text">可以使用的其他单位后缀</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用案例"><span class="toc-number">1.2.</span> <span class="toc-text">使用案例</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="单位符号"><a href="#单位符号" class="headerlink" title="单位符号"></a>单位符号</h3><p>在<code>Zabbix</code>，不得不使用一些较大的数字，例如“<code>86400</code>”秒代表一天，这些数字既然不便又容易出错。所以可以使用一些适当的单位符号（或后缀）来简化<code>Zabbix</code>触发器和监控项的键值。</p>
+<p>上例中，你可以输入“<code>1d</code>”来代替“<code>86400</code>”即可。后缀为乘法函数。</p>
+<a id="more"></a>
+<h4 id="触发器表达式"><a href="#触发器表达式" class="headerlink" title="触发器表达式"></a>触发器表达式</h4><p>触发器<code>expression</code>常量和函数参数支持时间和内存大小的后缀</p>
+<h5 id="你可以使用如下时间单位后缀："><a href="#你可以使用如下时间单位后缀：" class="headerlink" title="你可以使用如下时间单位后缀："></a>你可以使用如下时间单位后缀：</h5><ul>
+<li><code>s</code> - 秒 (通常情况下，不带任何时间单位后缀就表示s)</li>
+<li><code>m</code> - 分钟</li>
+<li><code>h</code> - 小时</li>
+<li><code>d</code> - 天</li>
+<li><code>w</code> - 周</li>
+</ul>
+<p>时间单位后缀也受<code>zabbix[queue,&lt;from&gt;,&lt;to&gt;]</code>的<code>internal item</code>的参数和<code>aggregate checks</code>最后一个参数的支持。</p>
+<h5 id="对于内存大小你可以使用如下单位后缀："><a href="#对于内存大小你可以使用如下单位后缀：" class="headerlink" title="对于内存大小你可以使用如下单位后缀："></a>对于内存大小你可以使用如下单位后缀：</h5><ul>
+<li><code>K</code> - <code>kilobyte</code></li>
+<li><code>M</code> - <code>megabyte</code></li>
+<li><code>G</code> - <code>gigabyte</code></li>
+<li><code>T</code> - <code>terabyte</code></li>
+</ul>
+<h5 id="可以使用的其他单位后缀"><a href="#可以使用的其他单位后缀" class="headerlink" title="可以使用的其他单位后缀"></a>可以使用的其他单位后缀</h5><p>单位符号也用在前端数据的可读表述。</p>
+<p>在<code>Zabbix Server</code>和前端都支持这些符号：</p>
+<ul>
+<li><code>K</code> - <code>kilo</code></li>
+<li><code>M</code> - <code>mega</code></li>
+<li><code>G</code> - <code>giga</code></li>
+<li><code>T</code> - <code>tera</code></li>
+</ul>
+<p>当前端展示的<code>item</code>值为<code>B</code>、<code>Bps</code>时，那么使用<code>base 2</code>（<code>1K=1024</code>）。反之使用<code>base 10</code>（<code>1K=1000</code>） 另外前端也支持如下符号展示：</p>
+<ul>
+<li><code>P</code> - <code>peta</code></li>
+<li><code>E</code> - <code>exa</code></li>
+<li><code>Z</code> - <code>zetta</code></li>
+<li><code>Y</code> - <code>yotta</code></li>
+</ul>
+<h4 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h4><p>通过使用一些适当的后缀，你可以编写易懂和易维护的触发器表达式，例如下面这些表达式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;host:zabbix[proxy,zabbix_proxy,lastaccess]&#125;&gt;120</span><br><span class="line">&#123;host:system.uptime[].last()&#125;&lt;86400</span><br><span class="line">&#123;host:system.cpu.load.avg(600)&#125;&lt;10</span><br><span class="line">&#123;host:vm.memory.size[available].last()&#125;&lt;20971520</span><br></pre></td></tr></table></figure>
+<p>可以被修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;host:zabbix[proxy,zabbix_proxy,lastaccess]&#125;&gt;2m</span><br><span class="line">&#123;host:system.uptime.last()&#125;&lt;1d</span><br><span class="line">&#123;host:system.cpu.load.avg(10m)&#125;&lt;10</span><br><span class="line">&#123;host:vm.memory.size[available].last()&#125;&lt;20M</span><br></pre></td></tr></table></figure>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/11/23/Zabbix-Tirigger-Danweifuhao/';
+var disqus_title = 'Zabbix：触发器trigger单位符号';
+var disqus_url = 'https://keeplearn.vip/2017/11/23/Zabbix-Tirigger-Danweifuhao/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

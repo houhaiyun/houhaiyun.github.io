@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>终端 Terminal | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Terminal/">Terminal</a></div><div class="post-time">2017-07-05</div></div></div><div class="container post-header"><h1>终端 Terminal</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-设备终端"><span class="toc-number">1.1.</span> <span class="toc-text">1.设备终端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-物理终端"><span class="toc-number">1.2.</span> <span class="toc-text">2.物理终端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-虚拟终端"><span class="toc-number">1.3.</span> <span class="toc-text">3.虚拟终端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-图形终端（-dev-tty7）StartlX，xwindows"><span class="toc-number">1.4.</span> <span class="toc-text">4.图形终端（/dev/tty7）StartlX，xwindows</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-串行终端（-dev-ttyS-）"><span class="toc-number">1.5.</span> <span class="toc-text">5.串行终端（/dev/ttyS#）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-伪终端（pty：pseudo-tty，-dev-pts-）"><span class="toc-number">1.6.</span> <span class="toc-text">6.伪终端（pty：pseudo-tty，/dev/pts/#）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wall命令"><span class="toc-number">2.</span> <span class="toc-text">wall命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mesg命令"><span class="toc-number">3.</span> <span class="toc-text">mesg命令</span></a></li></ol></details></div><div class="container post-content"><center><img src="https://houhaiyun.github.io/img/images/Linux-Terminal.png" title="终端"></center>
+
+<a id="more"></a>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>终端（<code>Terminal</code>）也称终端设备，是计算机网络中处于网络最外围的设备，主要用于用户信息的输入以及处理结果的输出等。</p>
+<p>Linux系统的终端主要包括设备终端、物理终端、虚拟终端、图形终端、串行终端和伪终端</p>
+<p><strong>查看当前的终端设备：#tty</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@centos6 ~]# tty		#这就是一个伪终端</span><br><span class="line">/dev/pts/1</span><br><span class="line">[root@centos6 ~]#</span><br></pre></td></tr></table></figure>
+<h4 id="1-设备终端"><a href="#1-设备终端" class="headerlink" title="1.设备终端"></a>1.设备终端</h4><p>键盘鼠标显示器</p>
+<h4 id="2-物理终端"><a href="#2-物理终端" class="headerlink" title="2.物理终端"></a>2.物理终端</h4><p>在Unix系统中，计算机显示器通常被称为控制台终端。Console与虚拟终端相关联，内核将信息送到控制台上（/dev/console），通过与console相关联的虚拟终端将信息显示到屏幕上。</p>
+<h4 id="3-虚拟终端"><a href="#3-虚拟终端" class="headerlink" title="3.虚拟终端"></a>3.虚拟终端</h4><p>虚拟终端，ctrl+alt+f[1-6]切换的就是虚拟终端</p>
+<h4 id="4-图形终端（-dev-tty7）StartlX，xwindows"><a href="#4-图形终端（-dev-tty7）StartlX，xwindows" class="headerlink" title="4.图形终端（/dev/tty7）StartlX，xwindows"></a>4.图形终端（/dev/tty7）StartlX，xwindows</h4><p>Centos 6：Ctrl+Alt+F7</p>
+<p>Centos 7：在哪个终端启动，即位于那个虚拟终端</p>
+<h4 id="5-串行终端（-dev-ttyS-）"><a href="#5-串行终端（-dev-ttyS-）" class="headerlink" title="5.串行终端（/dev/ttyS#）"></a>5.串行终端（/dev/ttyS#）</h4><p>通过串口线连接的终端</p>
+<h4 id="6-伪终端（pty：pseudo-tty，-dev-pts-）"><a href="#6-伪终端（pty：pseudo-tty，-dev-pts-）" class="headerlink" title="6.伪终端（pty：pseudo-tty，/dev/pts/#）"></a>6.伪终端（pty：pseudo-tty，/dev/pts/#）</h4><p>pty,SSH远程连接</p>
+<h3 id="wall命令"><a href="#wall命令" class="headerlink" title="wall命令"></a>wall命令</h3><p><code>wall</code>命令用于向系统当前所有打开的终端上输出信息。通过<code>wall</code>命令可将信息发送给每位同意接收公众信息的终端机用户，若不给予其信息内容，则<code>wall</code>命令会从标准输入设备读取数据，然后再把所得到的数据传送给所有终端机用户。</p>
+<p><strong>语法</strong></p>
+<p><code>wall 参数（消息：指定广播消息）</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">示例：</span><br><span class="line">    [root@centos6 ~]# wall houhaiyum.com</span><br><span class="line">    [root@centos6 ~]# </span><br><span class="line">    Broadcast message from root@centos6.magedu.com (pts/5) (Fri Jul 14 22:28:19 2017):</span><br><span class="line">    </span><br><span class="line">    houhaiyun.com</span><br></pre></td></tr></table></figure>
+<h3 id="mesg命令"><a href="#mesg命令" class="headerlink" title="mesg命令"></a>mesg命令</h3><p> mesg命令用于设置当前终端的写权限，即是否让其他用户向本终端发信息。将mesg设置y时，其他用户可利用write命令将信息直接显示在您的屏幕上。</p>
+<p><strong>语法</strong></p>
+<p><code>mesg 参数</code></p>
+<p>y/n：y表示运行向当前终端写信息，n表示禁止向当前终端写信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">示例：</span><br><span class="line">    [root@centos6 ~]# mesg y    #允许系统用户将信息直接显示在你的屏幕上。</span><br><span class="line">    [root@centos6 ~]# mesg n    #不允许系统用户将信息直接显示在你的屏幕上。</span><br></pre></td></tr></table></figure>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2017/07/05/Linux-Terminal/';
+var disqus_title = '终端 Terminal';
+var disqus_url = 'https://keeplearn.vip/2017/07/05/Linux-Terminal/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>cgroups资源限制 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Docker/">Docker</a></div><div class="post-time">2018-07-21</div></div></div><div class="container post-header"><h1>cgroups资源限制</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-cgroups是什么"><span class="toc-number">1.</span> <span class="toc-text">1. cgroups是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-cgroups的作用"><span class="toc-number">2.</span> <span class="toc-text">2. cgroups的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-cgroups术语表"><span class="toc-number">3.</span> <span class="toc-text">3. cgroups术语表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-组织结构与基本规则"><span class="toc-number">4.</span> <span class="toc-text">4. 组织结构与基本规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-子系统简介"><span class="toc-number">5.</span> <span class="toc-text">5. 子系统简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-cgroups实现方式及工作原理简介"><span class="toc-number">6.</span> <span class="toc-text">6. cgroups实现方式及工作原理简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#cgroups如何判断资源超出限额之后的措施"><span class="toc-number">6.1.</span> <span class="toc-text">cgroups如何判断资源超出限额之后的措施</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cgroup与任务之间的关联关系"><span class="toc-number">6.2.</span> <span class="toc-text">cgroup与任务之间的关联关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Docker在使用cgroup时的注意事项"><span class="toc-number">6.3.</span> <span class="toc-text">Docker在使用cgroup时的注意事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sys-fs-cgroup-cpu-docker-下文件的作用"><span class="toc-number">6.4.</span> <span class="toc-text">/sys/fs/cgroup/cpu/docker/下文件的作用</span></a></li></ol></li></ol></details></div><div class="container post-content"><p>上一节中，我们了解了Docker背后使用额资源隔离技术namespace，通过系统调用构建一个相对隔离的shell环境，也可以称之为简单的“容器”。这一届将讲解另一个强大的内核工具——cgroups。它不仅可以限制被namespace隔离起来的资源，还可以为资源设置权重、计算使用量、操控任务（进程或线程）启停等。在本节最后介绍完基本概念后，将详细讲解Docker中使用到的cgroups内容。</p>
+<blockquote>
+<p>注意：在Linux系统中，内核本身的调度和管理并不对进程和线程进行区分，只根据clone创建时传入参数的不同，来从概念上区别进程和线程，所以本节同一称之为任务。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="1-cgroups是什么"><a href="#1-cgroups是什么" class="headerlink" title="1. cgroups是什么"></a>1. cgroups是什么</h3><p>cgroups最初名为process container，由Google工程师Paul Menage和Rohit Seth于2006年提出，后来由于container有多重含义容易引起误解，就在2007年更名为control groups，并整合进Linux内核，顾名思义就是把任务放到一个组里面同一加以控制。官方的定义如下：</p>
+<p>cgroups是Linux内核提供的一种机制，这种机制可以根据需求把一系列系统任务及其子任务整合（或分隔）到按资源划分等级的不同组内，从而为系统资源管理提供一个同一的框架。</p>
+<p>通俗地说，cgroups可以限制、记录任务组所使用的物理资源（包括CPU、Menory、IO等），为容器实现虚拟化提供了基本保证，是构建Docker等一系列虚拟化管理工具的基石。</p>
+<p>对开发者来说，cgroups有如下4个特点。</p>
+<ul>
+<li>cgroups的API以一个伪文件系统的方式实现，用户态的程序可以通过文件操作实现cgroups的组织管理。</li>
+<li>cgroups的组织管理操作单元可以细粒度到线程级别，另外用户可以创建和销毁cgroups，从而实现资源再分配和管理。</li>
+<li>所有资源管理的功能都以子系统的方式实现，接口同一。</li>
+<li>子任务创建之初与其父任务处于同一个cgroups的控制组。</li>
+</ul>
+<p>本质上来说，cgroups是内核附加在程序上的一系列钩子（hook），通过程序运行时对资源的调度触发相应的钩子以达到资源追踪和限制的目的。</p>
+<h3 id="2-cgroups的作用"><a href="#2-cgroups的作用" class="headerlink" title="2. cgroups的作用"></a>2. cgroups的作用</h3><p>实现cgroups的主要目的是为不同用户层面的资源管理，提供一个统一化的接口。从单个任务的资源控制到操作系统层面的虚拟化，cgroups提供了以下四大功能。</p>
+<ul>
+<li>资源限制：cgroups可以对任务使用的资源总额进行限制。如设定应用运行时使用内存的上限，一旦超过这个配额就发出OOM（Out of Memorg）提示。</li>
+<li>优先级分配：通过分配的CPU时间片数量及磁盘IO带宽的大小，实际上就相当于控制了任务运行的优先级。</li>
+<li>资源统计：cgroups可以统计系统的资源使用量，如CPU使用时长、内存使用量扽给，这个功能非常适用于计费。</li>
+<li>任务控制：cgroups可以对任务执行挂起、恢复等操作。</li>
+</ul>
+<p>过去有一段时间，内核开发者甚至把namespace也作为一个cgroups的子系统加入进来，也就是说cgroups曾经甚至还包含了资源隔离的能力。但是资源隔离会给cgroups带来许多问题，如pid namespace加入后，PID在循环出现的时候，cgroup会出现命名冲突、cgroup创建后进入新的namespace导致其他子系统资源脱离了控制等，所以在2011年就被移除了。</p>
+<h3 id="3-cgroups术语表"><a href="#3-cgroups术语表" class="headerlink" title="3. cgroups术语表"></a>3. cgroups术语表</h3><ul>
+<li>task（任务）：在cgroups的术语中，任务表示系统的一个进程或线程。</li>
+<li>cgroup（控制组）：cgroups中的资源控制都以cgroup为单位实现。cgroup表示按某种资源控制标准划分而成的任务组，还包含一个或多个子系统。一个任务可以加入某个cgroup，也可以从某个cgroup迁移到另外一个cgroup。</li>
+<li>subsystem（子系统）：cgroups中的子系统就是一个资源调度控制器。比如CPU子系统可以控制CPU时间分配，内存子系统可以限制cgroup内存使用量。</li>
+<li>hierarchy（层级）：层级由一系列cgroup以一个树状结构排雷而成，每个层级通过绑定对应的子系统进行资源控制。层级中的cgroup节点可以包含零或多个子节点，子节点继承父节点挂载的子系统。整个操作系统可以有多个层级。</li>
+</ul>
+<h3 id="4-组织结构与基本规则"><a href="#4-组织结构与基本规则" class="headerlink" title="4. 组织结构与基本规则"></a>4. 组织结构与基本规则</h3><p>在前面已经介绍过，传统的Unix任务管理，实际上是先启动init任务作为根节点，再有init节点创建自惹怒我作为子节点，而每个子节点又可以创建新的子节点，如此往复，形成一个树状结构。而系统中的多个cgroup也构成类似的树状结构，字节点从父节点继承属性。</p>
+<p>它们最大的不同在于，系统中的多个cgroup构成的层级并非单根结构，可以允许存在多个。如果任务模型是由init作为根节点构成的一棵树，那么系统中的多个cgroup则是由多个层级构成的森林。这样做的目的很好理解，如果只有一个层级，那么所有任务都将被迫绑定其上的所欲子系统，这会给某些任务造成不必要的限制。在Docker中，每个子系统独自构成一个层级，这样做非常易于管理。</p>
+<p>了解了cgroups的组织结构，再来了解cgroups、任务、子系统、层级四者间的关系及其基本规则。</p>
+<ul>
+<li>规则1：同一个层级可以附加一个或多个子系统。如图1-4所示，CPU和Memory的子系统功能附加到了一个层级。</li>
+</ul>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-6.png" title="图1-4 同一层级可以附加一个或多个子系统"></center>
+
+
+<ul>
+<li>规则2：一个子系统可以附加到多个层级，并且仅当目标层级只有唯一一个子系统时。图1-5中小圈中的数字表示子系统附加的时间顺序，CPU子系统附加到层级A的同时不能再附加到层级B，因为层级B已经附加了内存子系统。如果层级B没有附加过子系统，那么CPU子系统同时附加到两个层级时允许的。</li>
+</ul>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-7.png" title="图1-5 一个已经附加在某个层级上的子系统不能附加到其他含有别的子系统的层级上"></center>
+
+<ul>
+<li>规则3：系统每次新建一个层级时，该系统上的所有任务默认加入这个新建层级的初始化cgroup，这个cgroup也被称为root cgroup。对于创建的每个层级，任务只能存在于其中一个cgroup中，即一个任务不能存在于同一个层级的不同cgroup中，但一个任务可以存在于不同层级的多个cgroup中如果操作时把一个任务添加到同一个层级中的另一个cgroup中，则会将它从第一个cgroup中移除。从图1-6可以看到，httpd任务已经加入到层级A中的/cg1，而不能加入同一个层级中的/cg2，但是可以加入层级B中的/cg3。</li>
+</ul>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-8.png" title="图1-6 一个任务不能属于同一个层级的不同cgroup"></center>
+
+
+<ul>
+<li>规则4：任务再fork/clone自身时创建的子任务默认与原任务再同一个cgroup中，但是子任务允许被移动到不同的cgroup中。即fork/clone完成后，父子任务间字在cgroup方面是互不影响的。图1-7中小圈中的数字表示任务出现的时间顺序，当httpd刚fork出另一个httpd时，两者在同一个层级中的同一个cgroup中。但是随后如果ID为4840的httpd需要移动到其他cgroup也是可以的，因为父子任务间已经独立。总结起来就是：初始化时子任务与父任务在同一个cgroup，但是这种关系随后可以改变。</li>
+</ul>
+<center><img src="https://houhaiyun.github.io/img/images/Docker-9.png" title="图1-7 刚fork/clone出的子任务在初始状态与其父任务处于同一个cgroup"></center>
+
+
+<h3 id="5-子系统简介"><a href="#5-子系统简介" class="headerlink" title="5. 子系统简介"></a>5. 子系统简介</h3><p>子系统实际上就是cgroups的资源控制系统，每种子系统独立地控制一种资源，目前Docker使用如下9种子系统，其中，net_cls子系统在内核中已经广泛实现，但是Docker尚未采用，Docker在网络方面的控制方式在后续内容中有详细介绍，以下时它们的用途。</p>
+<ul>
+<li>blkio：可以为块设备设定输入/输出限制，比如物理驱动设备（包括磁盘、固态硬盘、USB等）。</li>
+<li>cpu：使用调度程序控制任务对CPU的使用。</li>
+<li>cpuacct：自动生成cgroup中任务对CPU资源使用情况的报告。</li>
+<li>cpuset：可以为cgroup中的任务分配独立的CPU（此处针对多处理器系统）和内存</li>
+<li>devices：可以开启或关闭cgroup中任务对设备的访问</li>
+<li>freezer：可以挂起或恢复cgroup中的任务</li>
+<li>memory：可以设定cgroup中任务对内存使用量的限定，并且自动生成这些任务对内存资源使用情况的报告。</li>
+<li>perf_event：使用后使cgroup中的任务可以进行统一的性能测试。</li>
+<li>net_cls：Docker没有直接使用它，它通过使用等级识别符（classid）标记网络数据包，从而允许Linux流量控制程序（Traffic Controller，TC）识别从具体cgroup中生成的数据包。</li>
+</ul>
+<p>Linux中cgroup的实现形式表现为一个文件系统，因此需要mount这个文件系统才能够使用（也有可能已经mount好了），挂载成功后，就能看到各类子系统。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#Centos 7.3</span><br><span class="line">[test@node1 test]$ mount -t cgroup</span><br><span class="line">cgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,xattr,release_agent=/</span><br><span class="line">usr/lib/systemd/systemd-cgroups-agent,name=systemd)cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,cpuacct,cpu)</span><br><span class="line">cgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,nosuid,nodev,noexec,relatime,hugetlb)</span><br><span class="line">cgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,memory)</span><br><span class="line">cgroup on /sys/fs/cgroup/blkio type cgroup (rw,nosuid,nodev,noexec,relatime,blkio)</span><br><span class="line">cgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,perf_event)</span><br><span class="line">cgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,cpuset)</span><br><span class="line">cgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,devices)</span><br><span class="line">cgroup on /sys/fs/cgroup/freezer type cgroup (rw,nosuid,nodev,noexec,relatime,freezer)</span><br><span class="line">cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,net_prio,net</span><br><span class="line">_cls)cgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,pids)</span><br></pre></td></tr></table></figure>
+<p>以cpu子系统为例，先看一下挂载了这个子系统的控制组下的文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[test@node1 test]$ ls /sys/fs/cgroup/cpu</span><br><span class="line">cgroup.clone_children  cpuacct.stat          cpu.cfs_quota_us   cpu.stat           system.slice</span><br><span class="line">cgroup.event_control   cpuacct.usage         cpu.rt_period_us   machine.slice      tasks</span><br><span class="line">cgroup.procs           cpuacct.usage_percpu  cpu.rt_runtime_us  notify_on_release  user.slice</span><br><span class="line">cgroup.sane_behavior   cpu.cfs_period_us     cpu.shares         release_agent</span><br></pre></td></tr></table></figure>
+<p>在/sys/fs/cgroup的cpu子目录下创建控制组，控制组目录创建成功后，它下面就会有很多类似的文件了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# cd /sys/fs/cgroup/cpu</span><br><span class="line">[root@node1 cpu]# mkdir cg1</span><br><span class="line">[root@node1 cpu]# ls cg1</span><br><span class="line">cgroup.clone_children  cpuacct.usage         cpu.rt_period_us   notify_on_release</span><br><span class="line">cgroup.event_control   cpuacct.usage_percpu  cpu.rt_runtime_us  tasks</span><br><span class="line">cgroup.procs           cpu.cfs_period_us     cpu.shares</span><br><span class="line">cpuacct.stat           cpu.cfs_quota_us      cpu.stat</span><br></pre></td></tr></table></figure>
+<p>下面的例子展示了如何限制PID为18828的进程的cpu使用配额：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 限制18828进程</span><br><span class="line">[root@node1 cpu]# echo 18828 &gt;&gt; /sys/fs/cgroup/cpu/cg1/tasks</span><br><span class="line"># 将cpu限制为最高使用20%</span><br><span class="line">[root@node1 cpu]# echo 20000 &gt;&gt; /sys/fs/cgroup/cpu/cg1/cpu.cfs_quota_us</span><br></pre></td></tr></table></figure>
+<p>在Docker的实现中，Docker daemon会在单独挂载了每一个子系统的控制组目录（比如/sys/fs/cgroup/cpu）下创建一个名为docker的控制组，然后在docker控制组里面，再为每个容器创建一个以容器ID为名称的容器控制组，这个容器里的所有进程的进程号都会写到该控制组tasks中，并且在控制文件（比如cpu.cfs_quota_us）中写入预设的限制参数值。</p>
+<h3 id="6-cgroups实现方式及工作原理简介"><a href="#6-cgroups实现方式及工作原理简介" class="headerlink" title="6. cgroups实现方式及工作原理简介"></a>6. cgroups实现方式及工作原理简介</h3><p>在对cgroups规则和子系统有了一定了解以后，下面简单介绍操作系统内核级别上cgroups的工作原理，希望能有助于读者理解cgroups如何对Docker容器中的进程产生作用。</p>
+<p>cgroups的实现本质上是给任务挂上钩子，当任务运行的过程中涉及某种资源时，就会触发钩子上所附带的子系统进行检测，根据资源类别的不同，使用对应的技术进行资源限制和优先级分配。</p>
+<h4 id="cgroups如何判断资源超出限额之后的措施"><a href="#cgroups如何判断资源超出限额之后的措施" class="headerlink" title="cgroups如何判断资源超出限额之后的措施"></a>cgroups如何判断资源超出限额之后的措施</h4><p>对于不同的系统资源，cgroups提供了同一的接口对资源进行控制和统计，但限制的具体方式则不尽相同。比如memory子系统，会在描述内存状态的“mm_struct”结构体中记录它所属的cgroup，当进程需要申请更多内存时，就会触发cgroup用量检测，用量超过cgroup规定的限额，则拒绝用户的内存申请，否则就给予相应内存并在cgroup的统计信息中记录。实际实现要比以上描述复杂得多，不仅需要考虑内存的分配与回收，还需考虑不同类型的内存如cache（缓存）和swap（交换区内存拓展）等。</p>
+<p>进程所需的内存超过它所属的cgroup最大限额以后，如果设置了OOM Control（内存超限控制），那么进程就会收到OOM新后并结束；否则进程就会被挂起，进入睡眠状态，知道cgroup中其他进程释放了足够的内存资源为止。Docker中默认时开启OOM Control的。其他子系统的实现与此类似，cgroups提供了多种资源的限制策略供用户选择。</p>
+<h4 id="cgroup与任务之间的关联关系"><a href="#cgroup与任务之间的关联关系" class="headerlink" title="cgroup与任务之间的关联关系"></a>cgroup与任务之间的关联关系</h4><p>实现上，cgroup与任务之间时多对多的关系，所以它们并不直接关联，而是通过一个中间结构把双向的关联信息记录起来。每个任务结构体task_struct中都包含了一个指针，可以查询到对应cgroup的情况，同时也可以查询到各个子系统的状态，这些子系统状态中也包含了找到任务的指针，不同类型的子系统按需定义本身的控制信息结构体，最终在自定义的结构体中把子系统状态指针包含进去，然后内核通过container_of（这个宏可以通过一个结构体的成员找到结构体自身）等宏定义来获取对应的结构体，关联到业务，以此达到资源限制的目的。同时，为了让cgroups便于用户理解和使用，也为了用精简的内核代码为cgroup提供熟悉的权限和命名空间管理，内核开发者们按照Linux虚拟文件系统给转换器（Virtual Filssystem Switch，VFS）接口实现了一套名为cgroup的文件系统，非常巧妙地用来表示cgroups的层级概念，把各个子系统的实现都封装到文件系统的各项操作中。有兴趣的读者可以阅读VFS的相关内容，在此就不赘述了。</p>
+<h4 id="Docker在使用cgroup时的注意事项"><a href="#Docker在使用cgroup时的注意事项" class="headerlink" title="Docker在使用cgroup时的注意事项"></a>Docker在使用cgroup时的注意事项</h4><p>在实际的使用过程中，Docker需要通过挂载cgroup文件系统新建一个层级结构，挂载时指定要绑定的子系统。把cgroup文件系统挂在上以后，就可以像操作文件一样对cgroups的层级进行浏览和操作管理（包括权限管理、子文件管理等）。除了cgroup文件系统以外，内核没有为cgroups的访问和操作添加任何系统调用。</p>
+<p>如果新建的层级结构要要绑定的子系统与目前已经存在的层级结构完全相同，那么新的挂载会重用原来一斤给存在的那一套（指向相同的css_set）。否则，如果要绑定的子系统已经被别的层级绑定，就会返回挂载失败的错误。如果以切顺利，挂在完成后层级就被激活并与相应子系统关联起来，可以开始使用了。</p>
+<p>目前无法将一个新的子系统绑定到激活的层级上，或者从一个激活的层级中解除某个子系统的绑定。</p>
+<p>当一个顶层的cgroup文件系统被卸载（umount）时间，如果其中创建过深层次的后台cgroup目录，那么就算上层的cgroup被卸载了，层级也是激活状态，其后代cgroup中的配置依旧有效。只有递归式地卸载层级中的所有cgroup，哪个层级才会被真正删除。</p>
+<p>在创建的层级中创建文件夹，就类似于fork了一个后代cgroup，后代cgroup中默认继承原有cgroup中的配置属性，但似乎可以根据需求对配置参数进行调整。这样就把一个大的cgroup系统分割成一个个嵌套的、可动态变化的“软分区”。</p>
+<h4 id="sys-fs-cgroup-cpu-docker-下文件的作用"><a href="#sys-fs-cgroup-cpu-docker-下文件的作用" class="headerlink" title="/sys/fs/cgroup/cpu/docker/下文件的作用"></a>/sys/fs/cgroup/cpu/docker/<container-id>下文件的作用</container-id></h4><p>前面已经说过，以资源开头（比如cpu.shares）的文件系统都是用来限制这个cgroup下任务的可用配置文件。一个cgroup创建完成，不管绑定了任何子系统，其目录下都会生成一下几个文件，用来描述cgroup的相应信息。同样，把相应的信息写入这些配置文件就可以生效，内容如下。</p>
+<p>一个cgroup创建完成，不管绑定了任何子系统，其目录下都会生成以下几个文件，用来描述cgroup的相应信息。同样，把相应的信息写入这些配置文件就可以生效，内容如下。</p>
+<ul>
+<li>tasks：这个文件中罗列了所有在该cgroup中任务的TID，即所有进程或线程的ID。该文件并不保证任务的TID有序，把一个任务的TID写到这个文件中就意味着把这个任务加入这个cgroup中，如果这个任务所在的任务组与其不在同一个cgroup，那么会在cgroup.procs文件里记录一个该任务组的TGID值，但是该任务组的其他任务并不受影响啊。</li>
+<li>cgroup.procs：这个文件罗列所有在该cgroup中的TGID（进程组的ID），即线程组第一个进程的PID。该文件并不保证TGID有序和无重复。写一个TGID到这个文件就意味着把与其相关的线程都加入到这个cgroup中。</li>
+<li>notify_on_release：填0或1，表示是否在cgroup中最后一个任务退出时通知运行release agent，默认情况下是0，表示不运行。</li>
+<li>release_agent：指定release agent执行脚本的文件路径（该文件在最顶层cgroup目录中存在），这个脚本通常用于自动卸载无用的cgroup。</li>
+</ul>
+<p>本节由浅入深地讲解了cgroups，从cgroups是什么，到cgroups该怎么用，最后对大量的cgroup子系统配置参数进行了梳理。可以看到，内核对cgroups的支持已经较多，但是依旧有许多工作需要完善。如网络方面目前通过TC（Traffic Controller）来控制，未来需要统一整合；优先级调度方面依旧有很大的改进空间。</p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/07/21/Docker-cgroups/';
+var disqus_title = 'cgroups资源限制';
+var disqus_url = 'https://keeplearn.vip/2018/07/21/Docker-cgroups/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

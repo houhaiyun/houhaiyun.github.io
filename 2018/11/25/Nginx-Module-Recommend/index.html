@@ -1,0 +1,103 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Nginx模块推荐 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Nginx/">Nginx</a></div><div class="post-time">2018-11-25</div></div></div><div class="container post-header"><h1>Nginx模块推荐</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx-模块"><span class="toc-number">1.</span> <span class="toc-text">Nginx 模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GeoIP-Module"><span class="toc-number">1.1.</span> <span class="toc-text">GeoIP Module</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#incubator-pagespeed-ngx"><span class="toc-number">1.2.</span> <span class="toc-text">incubator-pagespeed-ngx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ModSecurity"><span class="toc-number">1.3.</span> <span class="toc-text">ModSecurity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#lua-nginx-moudel"><span class="toc-number">1.4.</span> <span class="toc-text">lua_nginx_moudel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VeryNginx"><span class="toc-number">1.5.</span> <span class="toc-text">VeryNginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ngx-http-google-filter-module"><span class="toc-number">1.6.</span> <span class="toc-text">ngx_http_google_filter_module</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ngx-lua-waf"><span class="toc-number">1.7.</span> <span class="toc-text">ngx_lua_waf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nginx-rtmp-module"><span class="toc-number">1.8.</span> <span class="toc-text">nginx-rtmp-module</span></a></li></ol></li></ol></details></div><div class="container post-content"><h3 id="Nginx-模块"><a href="#Nginx-模块" class="headerlink" title="Nginx 模块"></a>Nginx 模块</h3><a id="more"></a>
+<h4 id="GeoIP-Module"><a href="#GeoIP-Module" class="headerlink" title="GeoIP Module"></a>GeoIP Module</h4><p>通过 nginx GeoIP 模块 (IP地址识别)实现限制某些国家地区访问网站和基于区域的负载均衡。</p>
+<p><strong>URL</strong>：<a href="http://nginx.org/en/docs/stream/ngx_stream_geoip_module.html" target="_blank" rel="noopener">http://nginx.org/en/docs/stream/ngx_stream_geoip_module.html</a></p>
+<h4 id="incubator-pagespeed-ngx"><a href="#incubator-pagespeed-ngx" class="headerlink" title="incubator-pagespeed-ngx"></a>incubator-pagespeed-ngx</h4><p>Google开发的 高性能传输、低延时，基于nginx的页面加速。</p>
+<p>ngx_pagespeed可以自动将网页性能最佳做法应用于网页和相关资源（CSS，JavaScript，图片），从而加快您的网站速度并缩短网页加载时间，而无需修改现有内容或工作流程。功能包括：</p>
+<ul>
+<li>图像优化：剥离元数据，动态调整大小，重新压缩</li>
+<li>CSS和JavaScript缩小，连接，内联和大纲</li>
+<li>小资源内联</li>
+<li>延迟图像和JavaScript加载</li>
+<li>HTML重写</li>
+<li>缓存生存期延长</li>
+<li>和 <a href="https://developers.google.com/speed/docs/mod_pagespeed/config_filters" target="_blank" rel="noopener">更多</a></li>
+</ul>
+<p><strong>URL</strong>：<a href="http://ngxpagespeed.com/ngx_pagespeed_example/" target="_blank" rel="noopener">http://ngxpagespeed.com/ngx_pagespeed_example/</a></p>
+<p>Github：<a href="https://github.com/apache/incubator-pagespeed-ngx" target="_blank" rel="noopener">https://github.com/apache/incubator-pagespeed-ngx</a></p>
+<h4 id="ModSecurity"><a href="#ModSecurity" class="headerlink" title="ModSecurity"></a>ModSecurity</h4><p>ModSecurity是一个开源的，跨平台的Web应用程序防火墙（WAF）引擎，用于Apache，IIS和Nginx，由Trustwave的SpiderLabs开发。它具有强大的基于事件的编程语言，可以防止对Web应用程序的一系列攻击，并允许HTTP流量监控，日志记录和实时分析……</p>
+<p><strong>核心功能</strong>：</p>
+<ul>
+<li><strong>HTTP保护</strong> - 检测违反HTTP协议和本地定义的使用策略。</li>
+<li><strong>实时黑名单查询</strong> - 利用第三方IP信誉</li>
+<li><strong>基于Web的恶意软件检测</strong> - 通过检查Google安全浏览API来识别恶意网络内容。</li>
+<li><strong>HTTP拒绝服务保护</strong> - 防止HTTP泛洪和慢速HTTP DoS攻击。</li>
+<li><strong>常见Web攻击防护</strong> - 检测常见Web应用程序安全攻击。</li>
+<li><strong>自动化检测</strong> - 检测机器人，爬虫，扫描仪和其他表面恶意活动。</li>
+<li><strong>与AV扫描文件上传集成</strong> - 检测通过Web应用程序上传的恶意文件。</li>
+<li><strong>跟踪敏感数据</strong> - 跟踪信用卡使用情况并阻止泄漏。</li>
+<li><strong>特洛伊木马保护</strong> - 检测对特洛伊木马的访问。</li>
+<li><strong>识别应用程序缺陷</strong> - 应用程序错误配置警报。</li>
+<li><strong>错误检测和隐藏</strong> - 伪装服务器发送的错误消息。</li>
+</ul>
+<p><strong>URL</strong>：<a href="https://www.modsecurity.org/" target="_blank" rel="noopener">https://www.modsecurity.org/</a></p>
+<p><strong>Github</strong>：<a href="https://github.com/SpiderLabs/ModSecurity" target="_blank" rel="noopener">https://github.com/SpiderLabs/ModSecurity</a></p>
+<h4 id="lua-nginx-moudel"><a href="#lua-nginx-moudel" class="headerlink" title="lua_nginx_moudel"></a>lua_nginx_moudel</h4><p>将Lua的强大功能嵌入到Nginx HTTP服务器中。</p>
+<p><strong>URL</strong>：<a href="https://openresty.org/" target="_blank" rel="noopener">https://openresty.org/</a></p>
+<p><strong>Github</strong>：<a href="https://github.com/openresty/lua-nginx-module" target="_blank" rel="noopener">https://github.com/openresty/lua-nginx-module</a></p>
+<h4 id="VeryNginx"><a href="#VeryNginx" class="headerlink" title="VeryNginx"></a>VeryNginx</h4><p>VeryNginx基于<code>lua_nginx_module(openrestry)</code>。它实现了高级防火墙（waf），访问统计和一些其他功能。它增强了Nginx的功能，并提供友好的Web界面。</p>
+<p>功能</p>
+<ul>
+<li>Nginx 运行状态分析：每秒请求数、响应时间、净流量、Tcp connectinn num</li>
+<li>自定义操作：自定义操作由两部分组成，<code>Matcher</code>和<code>Action</code>。<code>Matcher</code>用于测试请求是否符合规则，<code>Action</code>是您要运行的逻辑。</li>
+<li>请求统计：VeryNginx可以记录URI的请求，包括每个URI的这些数据：<ul>
+<li>所有请求计数</li>
+<li>请求每个状态码的计数</li>
+<li>总字节数</li>
+<li>平均字节数</li>
+<li>总响应时间</li>
+<li>平均响应时间</li>
+</ul>
+</li>
+</ul>
+<p>Github：<a href="https://github.com/alexazhou/VeryNginx" target="_blank" rel="noopener">https://github.com/alexazhou/VeryNginx</a></p>
+<center><img src="https://houhaiyun.github.io/img/images/Nginx-module-1.jpg" title="VeryNginx"></center>
+
+<h4 id="ngx-http-google-filter-module"><a href="#ngx-http-google-filter-module" class="headerlink" title="ngx_http_google_filter_module"></a>ngx_http_google_filter_module</h4><p><code>ngx_http_google_filter_module</code>是一个过滤器模块，能够让谷歌镜像更便捷的部署。内建了正则表达式、<code>URI locations</code>和其他复杂的配置。原生<code>nginx</code>模块确保了更加高效地处理<code>cookies</code>, <code>gstatic scoures</code>和重定向。</p>
+<p><strong>Github</strong>：<a href="https://github.com/cuber/ngx_http_google_filter_module" target="_blank" rel="noopener">https://github.com/cuber/ngx_http_google_filter_module</a></p>
+<h4 id="ngx-lua-waf"><a href="#ngx-lua-waf" class="headerlink" title="ngx_lua_waf"></a>ngx_lua_waf</h4><p>ngx_lua_waf是一个基于lua-nginx-module(openresty)的web应用防火墙。</p>
+<p><strong>功能</strong>：</p>
+<ul>
+<li>防止sql注入，本地包含，部分溢出，fuzzing测试，xss,SSRF等web攻击</li>
+<li>防止svn/备份之类文件泄漏</li>
+<li>防止ApacheBench之类压力测试工具的攻击</li>
+<li>屏蔽常见的扫描黑客工具，扫描器</li>
+<li>屏蔽异常的网络请求</li>
+<li>屏蔽图片附件类目录php执行权限</li>
+<li>防止webshell上传</li>
+</ul>
+<p><strong>Github</strong>：<a href="https://github.com/loveshell/ngx_lua_waf" target="_blank" rel="noopener">https://github.com/loveshell/ngx_lua_waf</a></p>
+<h4 id="nginx-rtmp-module"><a href="#nginx-rtmp-module" class="headerlink" title="nginx-rtmp-module"></a>nginx-rtmp-module</h4><p>基于NGINX的媒体流媒体服务器。</p>
+<p><strong>特性</strong>：</p>
+<ul>
+<li>RTMP / HLS / MPEG-DASH直播</li>
+<li>RTMP视频点播FLV / MP4，从本地文件系统或HTTP播放</li>
+<li>对分布式流媒体的流中继支持：推拉模型</li>
+<li>在多个FLV中记录流</li>
+<li>H264 / AAC支持</li>
+<li>使用FFmpeg进行在线转码</li>
+<li>HTTP回调（发布/播放/记录/更新等）</li>
+<li>在某些事件上运行外部程序（exec）</li>
+<li>HTTP控制模块，用于录制音频/视频和丢弃客户端</li>
+<li>高级缓冲技术可将内存分配保持在最低水平，以实现更快的流式传输和更低的内存占用</li>
+<li>事实证明可以使用Wirecast，FMS，Wowza，JWPlayer，FlowPlayer，StrobeMediaPlayback，ffmpeg，avconv，rtmpdump，flvstreamer等等</li>
+<li>XML / XSL中的统计信息，以机器和人类可读的形式</li>
+<li>Linux的/ FreeBSD的/ MacOS的/视窗</li>
+</ul>
+<p><strong>URL</strong>：<a href="http://nginx-rtmp.blogspot.com/" target="_blank" rel="noopener">http://nginx-rtmp.blogspot.com/</a></p>
+<p><strong>Github</strong>：<a href="https://github.com/arut/nginx-rtmp-module" target="_blank" rel="noopener">https://github.com/arut/nginx-rtmp-module</a></p>
+</div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/11/25/Nginx-Module-Recommend/';
+var disqus_title = 'Nginx模块推荐';
+var disqus_url = 'https://keeplearn.vip/2018/11/25/Nginx-Module-Recommend/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>

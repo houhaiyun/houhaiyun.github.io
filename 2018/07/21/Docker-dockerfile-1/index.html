@@ -1,0 +1,58 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Peter's technology stack."><title>Dockerfile 实践心得 | Keep learn!</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/font.css"><link rel="stylesheet" type="text/css" href="/css/noise.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><article class="wrapper"><div class="post-main"><div class="nav"><nav class="container"><a class="sidebar-nav-item active" href="/">Home</a><a class="sidebar-nav-item" href="/archives">Archives</a><a class="sidebar-nav-item" href="/about">About</a></nav><div class="container post-meta"><div class="post-tags"><a class="post-tag-link" href="/tags/Docker/">Docker</a></div><div class="post-time">2018-07-21</div></div></div><div class="container post-header"><h1>Dockerfile 实践心得</h1></div><div class="container post-toc"><details class="toc"><summary class="toc-accordion">Table of Contents</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile-实践心得"><span class="toc-number">1.</span> <span class="toc-text">Dockerfile 实践心得</span></a></li></ol></details></div><div class="container post-content"><h3 id="Dockerfile-实践心得"><a href="#Dockerfile-实践心得" class="headerlink" title="Dockerfile 实践心得"></a>Dockerfile 实践心得</h3><a id="more"></a>
+<ol>
+<li>使用标签<ul>
+<li>给镜像打上标签，易读的镜像标签可以帮助了解镜像的功能，如 docker build -t=”ruby:2.0-onbuild”</li>
+</ul>
+</li>
+<li>谨慎选择基础镜像<ul>
+<li>选择基础镜像时，尽量选择当前官方镜像库中的镜像。不同镜像的大小不同，目前Linux镜像大小有如下关系：busybox &lt; debian &lt; centos &lt; ubuntu</li>
+<li>同时在构建自己的 Dcoekr 镜像时，只安装和更新必须使用的包。此外，相比 Ubuntu 镜像，更推荐使用 Debian 镜像，因为它非常轻量级（目前其大小事在 100MB以下），并且仍然是一个完整的发布版本</li>
+</ul>
+</li>
+<li>充分利用缓存<ul>
+<li>Docker daemon 会顺序执行 Dockerfile 中的指令，而且一旦缓存失效，后续命令将不能使用缓存。为了有效地利用缓存，需要保证指令的连续性，尽量将所有 Dockerfile 文件中的相同部分都放在前面，而将不同的部分放在后面。</li>
+</ul>
+</li>
+<li>正确使用ADD与COPY指令<ul>
+<li>尽管ADD与COPY用法和作用很相近，但COPY仍是首选。COPY相对于ADD而言，功能简单够用。COPY仅提供本地文件向容器的基本复制功能。ADD有额外的一些功能，比如支持复制本地压缩包（复制到容器中会自动解压）和URL远程资源。因此，ADD比较符合逻辑的使用方式是 ADD roots.tar.gz /。</li>
+<li>尽量使用docker volume共享文件，而不是使用ADD或COPY指令添加文件到镜像中。</li>
+</ul>
+</li>
+<li>RUN指令<ul>
+<li>不要在一行中单独使用指令 RUN apt-get update。当软件源更新后，这样做会引起缓存问题，导致 RUN apt-get install 指令运行失败。所以，RUN apt-get update &amp;&amp; apt-get install -y package-har package-foo package-baz</li>
+<li>避免使用指令 RUN apt-get upgrade 和 RUN apt-get dist-upgrade。因为在一个无特权的容器中，一些必要的包会更新失败。如果需要更新一个包（如foo），直接使用指令 RUN apt-get install -y foo</li>
+<li>在Docker 的核心概念中，提交镜像使廉价的，镜像之间有层级关系，像一棵树。不要害怕镜像的层数过多，我们在任意层创建一个容器。因此，不要将所有的命令卸载一个 RUN 指令中。RUN 指令分层符合 Docker 的核心概念，这很像源码控制。</li>
+</ul>
+</li>
+<li><p>CMD 和 ENTRYPOINT指令</p>
+<ul>
+<li>CMD 和 ENTRYPOINT 指令指定了容器运行的默认命令，推荐二者结合使用。使用exec格式的 ENTRYPOINT 指令设置固定的默认命令和参数，然后使用 CMD 指令设置可变的参数。</li>
+</ul>
+</li>
+<li><p>不要在 Dockerfile 中做端口映射</p>
+<ul>
+<li>Docker 的两个核心概念使可重复性和可移植性，镜像应该可以在任何主机上运行多次。使用 Dockerfile的 EXPOSE 指令，虽然可以将容器端口映射到主机端口上，但会破坏 Docker 的可移植性，且这样的镜像在一台主机上只能启动一个容器。所以端口映射应在docker run命令中用 -p 参数指定。</li>
+</ul>
+</li>
+<li>使用Dockerfile共享Docker镜像</li>
+</ol>
+<p>若要共享镜像，只需共享Dockerfile文件即可。共享Dcokerfile文件按具有以下优点。</p>
+<pre><code>Dockerfile 文件可以加入版本控制，这样可以追踪文件的变化和回滚错误。
+通过 Dockerfile 文件，可以清楚镜像构建的过程
+使用 Dockerfile 文件构建的镜像具有确定性。
+</code></pre></div></div><div class="post-main post-comment"><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'keeplearn';
+var disqus_identifier = '2018/07/21/Docker-dockerfile-1/';
+var disqus_title = 'Dockerfile 实践心得';
+var disqus_url = 'https://keeplearn.vip/2018/07/21/Docker-dockerfile-1/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+  $(".fancybox").fancybox();
+});
+</script></body></html>
